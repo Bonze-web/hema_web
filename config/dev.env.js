@@ -5,7 +5,7 @@ const prodEnv = require('./prod.env')
 module.exports = merge(prodEnv, {
   NODE_ENV: '"development"',
 
-  // 便宅家开发配置
+  // 开发配置
   TITLE: '"盒马WMS"',
   BASE_API: '"/wms/api"',
   // PRJ: '"SAAS"',
