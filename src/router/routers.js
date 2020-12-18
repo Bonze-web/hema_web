@@ -1,0 +1,205 @@
+import Layout from '@/views/layout/Layout'
+import AModule from '@/components/module'
+import PermIds from "@/api/permissionIds";
+
+/**
+ * hidden: true                   if `hidden:true` will not show in the sidebar(default is false)
+ * path: '',
+ * query: {},                     directly pass to router-link  
+ * alwaysShow: true               if set true, will always show the root menu, whatever its child routes length
+ *                                if not set alwaysShow, only more than one route under the children
+ *                                it will becomes nested mode, otherwise not show the root menu
+ * redirect: noredirect           if `redirect:noredirect` will no redirct in the breadcrumb
+ * name:'router-name'             the name is used by <keep-alive> (must set!!!)
+ * meta : {
+ *   title: 'title'               the name show in submenu and breadcrumb (recommend set)
+ *   icon: 'svg-name'             the icon show in the sidebar,
+ * }
+ */
+
+/** 静态路由 */
+export const constantRouterMap = [{
+    path: '/login',
+    component: () =>
+      import('@/views/login/index'),
+    hidden: true
+  },
+  {
+    path: '/404',
+    component: () =>
+      import('@/views/404'),
+    hidden: true
+  },
+  {
+    path: '/dashboard',
+    component: () =>
+      import('@/views/dashboard/index'),
+    hidden: true
+  }
+]
+
+/**
+ * 系统管理包
+ */
+const SystemPackage = {
+  path: '/sys',
+  component: Layout,
+  name: 'System',
+  alwaysShow: true,
+  meta: {
+    title: '系统管理',
+    icon: 'system'
+  },
+  children: [{
+      path: 'user',
+      name: 'User',
+      component: AModule,
+      meta: {
+        title: '用户',
+        icon: 'table',
+        permission: PermIds.SYS_USER
+      },
+      children: [{
+        path: '',
+        name: 'UserList',
+        component: () =>
+          import('@/views/sys/user/index'),
+        hidden: true,
+        meta: {
+          icon: 'table',
+          permission: PermIds.SYS_USER_VIEW
+        }
+      }, {
+        path: 'add',
+        name: 'UserAdd',
+        component: () =>
+          import('@/views/sys/user/userAdd'),
+        hidden: true,
+        meta: {
+          title: '新增用户',
+          icon: 'table',
+          permission: PermIds.SYS_USER_CREATE
+        }
+      }, {
+        path: 'edit',
+        name: 'UserEdit',
+        component: () =>
+          import('@/views/sys/user/userAdd'),
+        hidden: true,
+        meta: {
+          title: '编辑',
+          icon: 'table',
+          permission: PermIds.SYS_USER_UPDATE
+        }
+      }]
+    },
+    {
+      path: 'role',
+      name: 'Role',
+      component: AModule,
+      meta: {
+        title: '角色',
+        icon: 'table',
+        permission: PermIds.SYS_ROLE
+      },
+      children: [{
+        path: '',
+        name: 'RoleList',
+        hidden: true,
+        component: () =>
+          import('@/views/sys/role/index'),
+        meta: {
+          icon: 'table',
+          permission: PermIds.SYS_ROLE_VIEW
+        }
+      }, {
+        path: 'add',
+        name: 'RoleAdd',
+        hidden: true,
+        component: () =>
+          import('@/views/sys/role/roleAdd'),
+        meta: {
+          title: '新增角色',
+          icon: 'table',
+          permission: PermIds.SYS_ROLE_CREATE
+        }
+      }, {
+        path: 'authorManage',
+        name: 'AuthorManage',
+        hidden: true,
+        component: () =>
+          import('@/views/sys/role/authorManage'),
+        meta: {
+          title: '权限管理',
+          icon: 'table',
+          permission: PermIds.SYS_ROLE_EDIT_PERMISSION
+        }
+      }]
+    },
+    {
+      path: 'org',
+      name: 'Org',
+      component: AModule,
+      meta: {
+        title: '组织',
+        icon: 'table',
+        permission: PermIds.SYS_ORG
+      },
+      children: [{
+        path: '',
+        name: 'OrgList',
+        hidden: true,
+        component: () =>
+          import('@/views/sys/org/index'),
+        meta: {
+          title: '组织列表',
+          icon: 'table',
+          permission: PermIds.SYS_ORG_VIEW
+        }
+      }, {
+        path: 'add',
+        name: 'OrgAdd',
+        hidden: true,
+        component: () =>
+          import('@/views/sys/org/orgAdd'),
+        meta: {
+          title: '新增组织',
+          icon: 'table',
+          permission: PermIds.SYS_ORG_CREATE
+        }
+      }]
+    }, {
+      path: 'sysConfigure',
+      name: 'SysConfigure',
+      component: AModule,
+      meta: {
+        title: '系统配置',
+        icon: 'table',
+        permission: PermIds.SYS_OPTIONS_VIEW
+      },
+      children: [{
+        path: '',
+        name: 'SysConfigure',
+        component: () =>
+          import('@/views/sys/configure/sysConfigure'),
+        hidden: true,
+        meta: {
+          icon: 'table',
+          permission: PermIds.SYS_OPTIONS_VIEW
+        }
+      }]
+    }
+  ]
+}
+
+/**
+ * 动态路由
+ */
+export const asyncRouterMap = [
+  SystemPackage,
+  {
+    path: '*',
+    redirect: '/sys',
+    hidden: true
+  }
+]

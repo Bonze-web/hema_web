@@ -1,0 +1,279 @@
+/************************* 促销条件 *************************************/
+
+.condition {
+  font-size: 14px;
+  color: #48576a;
+}
+
+.condition .total,
+.action .total {
+  width: 130px;
+}
+
+.condition .tip,
+.action .tip,
+.if-then-exp .tip {
+  color: rgb(196, 196, 196);
+  font-size: 12px;
+  display: block;
+  line-height: normal;
+  margin: 0;
+  padding: 0;
+}
+
+.condition .del,
+.actions .del {
+  color: gray;
+  font-size: 12px;
+}
+
+.condition .del:hover,
+.actions .del:hover {
+  color: #000;
+}
+
+.actions .top {
+  padding: 0 0 10px 17px;
+}
+
+.actions .top .menu {
+  cursor: pointer;
+}
+
+.actions .table td {
+  padding: 10px 0;
+}
+
+/** 禁用状态下的icon不显示 */
+
+.el-input.is-disabled .el-input__icon {
+  display: none;
+}
+
+.el-input-number--small {
+  line-height: 28px;
+}
+
+/*************************** 交易时间范围条件 *****************************/
+
+/*************************** 门店范围 条件 ******************************/
+
+.store-condition {
+  .desc>span+span:before {
+    content: ", ";
+  }
+}
+
+/*************************** 业态范围 条件 ******************************/
+
+.business-condition {
+  .desc>span+span:before {
+    content: ", ";
+  }
+}
+
+/*************************** 商品数量促销条件 ****************************/
+
+.count-condition {
+  .step {
+    padding-top: 10px;
+  }
+}
+
+/*************************** 订单总金额促销条件 ****************************/
+
+.amount-condition {
+  .step {
+    padding-top: 10px;
+  }
+}
+
+/***************************  会员积分条件  ****************************/
+
+/***************************  会员等级条件  ****************************/
+
+/***************************  会员生日条件  ****************************/
+
+/*********************************** 商品条件 *******************************/
+
+.goods-condition .goods {
+  max-width: 300px;
+}
+
+/*********************************** 分类条件 *******************************/
+
+.category-condition .category {
+  max-width: 300px;
+}
+
+/*********************************** 品牌条件 *******************************/
+
+.brand-condition .brand {
+  max-width: 300px;
+}
+
+/*********************************** 事件条件 *******************************/
+
+.event-condition .config {
+  margin-top: 10px;
+}
+
+.event-condition .config>label {
+  margin-right: 10px;
+}
+
+.event-condition .browser {
+  max-width: 300px;
+}
+
+.event-condition .config.register>label {
+  float: left;
+}
+
+/******************************* 组合条件 ********************************/
+
+.composite-condition {
+  border: 1px dashed rgb(196, 196, 196);
+}
+
+.composite-condition .logical .title {
+  margin: 0 10px;
+}
+
+.composite-condition .logical .select {
+  width: 70px;
+}
+
+.composite-condition .top {
+  padding: 10px;
+}
+
+.composite-condition .top .menu {
+  margin: 10px;
+  cursor: pointer;
+}
+
+.composite-condition .table td {
+  padding: 10px 0;
+}
+
+.composite-condition .el-table__body tr:hover>td {
+  background: #FFF;
+}
+
+/******************************* 购物篮条件 ********************************/
+
+.basket-condition .tip {
+  margin-left: 10px;
+}
+
+.basket-condition .title {
+  font-size: 14px;
+}
+
+.basket-condition .exclude-goods .composite-condition .logical {
+  display: none;
+}
+
+/*************************** 动态促销促销条件 ****************************/
+
+.script-condition {
+  width: 100%;
+}
+
+.script-condition .lang {
+  width: 150px;
+  margin-bottom: 10px;
+}
+
+.script-condition .script {
+  width: 100%;
+}
+
+/****************************** 商品结果 ******************************/
+
+.goods-action .goods {
+  max-width: 300px;
+}
+
+/****************************** 奖品结果 ******************************/
+
+.prize-action .goods {
+  max-width: 300px;
+}
+
+/****************************** 券结果 ******************************/
+
+.coupon-action .coupon {
+  max-width: 300px;
+  display: inline-table;
+  margin-right: 10px;
+}
+
+/****************************** 用券结果 ******************************/
+
+.use-coupon-action .coupon {
+  max-width: 300px;
+  display: inline-table;
+  margin-right: 10px;
+}
+
+/******************************* 抵扣结果 *******************************/
+
+.deduction-action .unit {
+  margin-left: 5px;
+}
+
+/******************************* 积分结果 *******************************/
+
+.score-action .unit {
+  margin-left: 5px;
+}
+
+/******************************* 订单打折结果 *******************************/
+
+.discount-action .unit {
+  display: inline;
+  margin-left: 5px;
+}
+
+/******************************* 商品打折结果 *******************************/
+
+.goods-discount-action ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.goods-discount-action .discounts {
+  font-size: 12px;
+  display: block;
+  line-height: normal;
+  margin: 0;
+  padding: 0;
+}
+
+.goods-discount-action .discounts a {
+  color: #409EFF;
+}
+
+/******************************** 操作菜单 *******************************/
+
+.action-menu-items {
+  color: #48576a;
+  font-size: 13px;
+}
+
+/******************************* 步进信息 *******************************/
+
+.step-info .disable {
+  color: rgb(196, 196, 196);
+}
+
+.step-info .title {
+  margin-right: 10px;
+}
+
+.step-info .select {
+  width: 115px;
+}
