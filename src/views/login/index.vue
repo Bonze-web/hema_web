@@ -37,7 +37,7 @@
           <div class="version">当前版本 {{version}}</div>
         </el-form>
       </transition>
-      <div class="copyright">Copyright &copy; 2018 上海元芒数字科技有限公司 版权所有</div>
+      <!-- <div class="copyright">Copyright &copy; 2020 上海孚巽数字科技有限公司 版权所有</div> -->
     </div>
   </div>
 </template>

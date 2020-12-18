@@ -2,7 +2,7 @@
 module.exports = {
   NODE_ENV: '"production"',
   TITLE: '盒马WMS',
-  BASE_API: '"/newretail/api"',
+  BASE_API: '"/wms/api"',
   PRJ: '"TEST"',
   VERSION: '"develop"'
 }

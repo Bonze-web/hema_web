@@ -7,7 +7,7 @@ module.exports = merge(prodEnv, {
 
   // 便宅家开发配置
   TITLE: '"盒马WMS"',
-  BASE_API: '"/newretail/api"',
+  BASE_API: '"/wms/api"',
   // PRJ: '"SAAS"',
 
   APP_DOWNLOAD_URL: {

@@ -12,8 +12,9 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       /** 服务接口 */
-      '/newretail/': {
-        target: 'https://nrcoffee.ngrok.gomoretech.com',
+      '/wms/': {
+        // target: 'https://nrcoffee.ngrok.gomoretech.com',
+        target: 'http://localhost:8080',
         changeOrigin: true,
         secure: false,
         // pathRewrite: { '^/api': '' }
