@@ -192,11 +192,54 @@ const SystemPackage = {
   ]
 }
 
+const BasicInfoPackage = {
+  path: '/basicinfo',
+  component: Layout,
+  name: 'BasicInfo',
+  alwaysShow: true,
+  meta: {
+    title: '基本资料',
+    icon: 'basic-info',
+    permission: PermIds.REPORT_DYNAMIC
+  },
+  children: [{
+    path: "suppliers",
+    name: "Suppliers",
+    component: AModule,
+    meta: {
+      title: '供应商列表',
+      icon: 'table'
+    },
+    children: [{
+      path: "",
+      name: "View",
+      component: () =>
+        import('@/views/basic-info/suppliers/index'),
+        hidden: true,
+      meta: {
+        title: '',
+        icon: 'table'
+      }
+    }, {
+      path: "edit",
+      name: "Edit",
+      component: () =>
+        import('@/views/basic-info/suppliers/edit'),
+        hidden: true,
+      meta: {
+        title: '供应商',
+        icon: 'table'
+      }
+    }] 
+  }]     
+}
+
 /**
  * 动态路由
  */
 export const asyncRouterMap = [
   SystemPackage,
+  BasicInfoPackage,
   {
     path: '*',
     redirect: '/sys',
