@@ -2,17 +2,17 @@
     <div>
         <router-link :to="{ path: '/basicinfo/suppliers/edit', query:{ status: 'create'} }">
             <!-- <span v-if="child.meta&&child.meta.title" :title="child.meta.title">{{child.meta.title}}</span> -->
-            <el-button style="float:right;margin:18px 10px" type="primary">新增供应商</el-button>
+            <el-button style="float:right;margin:18px 10px" type="primary">新建供应商</el-button>
         </router-link>
         
         <div class="select-head">
             <el-form ref="form" style="display:flex" :model="form" label-width="60px" label-position="right">
                 <el-form-item label="供应商">
-                    <el-input type='text' placeholder="请输入供应商编号/名称" v-model="form.name" class="input-width"></el-input>
+                    <el-input type='text' placeholder="请输入供应商编号/名称" v-model="form.nameOrCode" class="input-width"></el-input>
                 </el-form-item>
                 <el-form-item label="状态">
                     <el-select v-model="form.status" placeholder="请选择状态">
-                    <el-option label="全部" value="ALL"></el-option>
+                    <el-option label="全部" value=""></el-option>
                     <el-option label="启用" value="OPEN"></el-option>
                     <el-option label="停用" value="COLOSED"></el-option>
                     </el-select>
@@ -28,23 +28,26 @@
             <el-table
                 :data="suppliersData"
                 style="width: 100%;text-align:center"
-                @selection-change="allSelectionChange"
             >
-                <el-table-column
+                <!-- <el-table-column
                     type="selection"
                     width="55">
-                </el-table-column>
+                </el-table-column> -->
                 <el-table-column fixed prop="code" label="代码">
                     <template slot-scope="scope">
-                        <router-link :to="{ path: '/basicinfo/suppliers/edit', query:{ status: 'read', id: scope.row.id} }">
+                        <router-link style="color:#409EFF" :to="{ path: '/basicinfo/suppliers/edit', query:{ status: 'read', id: scope.row.id} }">
                             <span>{{ scope.row.code }}</span>
                         </router-link>
                     </template>
                 </el-table-column>
-                <el-table-column prop="name" label="名称" width="50"></el-table-column>
+                <el-table-column prop="name" label="名称"></el-table-column>
                 <el-table-column prop="anotherName" label="简称"></el-table-column>
                 <el-table-column prop="address" label="地址"></el-table-column>
-                <el-table-column prop="sourceType" label="来源方式" ></el-table-column>
+                <el-table-column prop="sourceType" label="来源方式" >
+                  <template slot-scope="scope">
+                    {{ scope.row.sourceType | sourceType }}
+                  </template>
+                </el-table-column>
                 <el-table-column
                 fixed="right"
                 label="状态"
@@ -53,7 +56,9 @@
                     <el-switch
                         v-model="scope.row.status"
                         active-color="#13ce66"
-                        inactive-color="#ff4949">
+                        active-text="启用"
+                        @change="statusChange(scope.row.status, scope.row.id)"
+                        inactive-color="#eee">
                     </el-switch>
                 </template>
                 </el-table-column>
@@ -73,7 +78,7 @@
 </template>
 
 <script>
-import SellerService from "@/api/service/SellerService";
+import BasicService from "@/api/service/BasicService";
 // import { mapGetters } from "vuex";
 
 export default {
@@ -89,7 +94,7 @@ export default {
         pageSize: 10,
         totalCount: 0,
         form: {
-          name: '',
+          nameOrCode: '',
           status: ''
         },
         suppliersData: [],
@@ -103,87 +108,69 @@ export default {
         this.page = 1
         this.$refs.form.validate(result => {
         if (result) {
-          this.getRegistList(true)
+          this.getSuppliersList()
         }
       })
       },
-      getSellerInfo: function(sellerId) {
-        this.sellerInfo = true
-        SellerService.getSellerInfo(sellerId)
-        .then((res) => {
-          this.mbrInfo = res
-        })
+      statusChange: function(status, id) {
+        // 修改供应商状态
+        console.log(status)
+        if (!status) {
+          BasicService.closeSuppliers(id)
+          .then((res) => {
+            this.getSuppliersList()
+          })
+          .catch((err) => {
+            this.$message.error("禁用失败" + err)
+          })
+        } else {
+          BasicService.openSuppliers(id)
+          .then((res) => {
+            this.getSuppliersList()
+          })
+          .catch((err) => {
+            this.$message.error("启用失败" + err)
+          })
+        }
       },
       clearInput: function() {
         this.form = {
-          mobile: '',
-          name: '',
-          registStatus: '',
-          registTime: ''
+          nameOrCode: '',
+          status: ''
         }
       },
-      notAgreeClick: function(sellerId) {
-        if (this.reason === '') {
-          this.$message.error('请输入拒绝理由')
-          return
-        }
-        SellerService.notAgree(this.sellerId, this.reason)
-        .then((res) => {
-          this.$message.success('审核成功')
-          this.getRegistList(true)
-          this.dialogFormVisible = false
-          this.reason = ''
-        })
-        .catch((err) => {
-          this.$message.error('审核失败' + err)
-        })
-      },
-      notAgree: function(sellerId) {
-        if (this.dialogFormVisible) {
-          this.reason = ''
-        }
-        this.dialogFormVisible = true
-        this.sellerId = sellerId
-      },
-      getRegistList: function(reset) {
+      getSuppliersList: function(reset) {
+        // 获取供应商列表
         const _this = this
         const data = {
           page: this.page,
           pageSize: this.pageSize,
-          searchCount: true
+          searchCount: true,
+          codeOrNameEquals: this.form.nameOrCode,
+          status: this.form.status
         }
-        const startTime = new Date(this.form.registTime[0])
-        const endTime = new Date(this.form.registTime[1])
-        if (reset) {
-          data.name = this.form.name
-          data.mobile = this.form.mobile
-          data.status = this.form.registStatus
-          data.applicationTimeBegin = startTime.getFullYear() + '-' + (startTime.getMonth() + 1) + '-' + startTime.getDate() + ' ' + '00:00:00'
-          data.applicationTimeEnd = endTime.getFullYear() + '-' + (endTime.getMonth() + 1) + '-' + endTime.getDate() + ' ' + '00:00:00'
-        }
-        SellerService.getRegistSeller(data)
+        BasicService.getSuppliersList(data)
         .then((res) => {
-          _this.registData = []
+          _this.suppliersData = []
           console.log(res)
           this.totalCount = res.totalCount
           for (const item in res.records) {
+            // 处理供应商数据
             const obj = {
+              id: res.records[item].id,
+              code: res.records[item].code,
               name: res.records[item].name,
-              mobile: res.records[item].mobile,
-              cityAndDistrict: res.records[item].city + res.records[item].district,
+              anotherName: res.records[item].anotherName,
               status: res.records[item].status,
-              registTime: res.records[item].applicationTime,
-              mbrName: res.records[item].nickName,
-              headUrl: res.records[item].avatar,
-              reviewTime: res.records[item].reviewTime,
-              sellerId: res.records[item].id
+              address: res.records[item].address,
+              sourceType: res.records[item].sourceType
             }
-            if (res.records[item].status !== 'UNDER_REVIEW') {
-              obj.canAction = true
+            if (obj.status === "OPEN") {
+              obj.status = true
             } else {
-              obj.canAction = false
+              obj.status = false
             }
-            _this.registData.push(obj)
+            _this.suppliersData.push(obj)
           }
         })
       },
@@ -196,28 +183,25 @@ export default {
         this.page = 1
         this.getRegistList(true)
       },
-      passRegist: function(sellerId) {
-        SellerService.agreeRegist(sellerId)
-        .then((res) => {
-          this.$message.success('审核成功')
-          this.getRegistList()
-        })
-        .catch((err) => {
-          this.$message.error('审核失败' + err)
-        })
-      },
-      addSuppliers: function() {
-          
-      },
       allSelectionChange(val) {
-          console.log(val)
+        console.log(val)
         this.multipleSelection = val;
       }
   },
   created() {
-    this.getRegistList()
+    this.getSuppliersList()
   },
   filters: {
+    sourceType(type) {
+      switch (type) {
+        case "HAND":
+          return "手动创建"
+        case "IMPORT":
+          return "文件导入"
+        default:
+          return '未知';
+      }
+    }
   }
 };
 </script>

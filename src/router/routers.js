@@ -224,13 +224,42 @@ const BasicInfoPackage = {
       path: "edit",
       name: "Edit",
       component: () =>
-        import('@/views/basic-info/suppliers/edit'),
+        import('@/views/basic-info/suppliers/index'),
         hidden: true,
       meta: {
         title: '供应商',
         icon: 'table'
       }
     }] 
+  }, {
+    path: "category",
+    name: "Category",
+    component: AModule,
+    meta: {
+      title: '商品类别',
+      icon: 'table'
+    },
+    children: [{
+      path: "",
+      name: "View",
+      component: () =>
+        import('@/views/basic-info/category/index'),
+        hidden: true,
+      meta: {
+        title: '',
+        icon: 'table'
+      }
+    }, {
+      path: "edit",
+      name: "edit",
+      component: () =>
+        import('@/views/basic-info/category/edit'),
+        hidden: true,
+      meta: {
+        title: '',
+        icon: 'table'
+      }
+    }]
   }]     
 }
 
