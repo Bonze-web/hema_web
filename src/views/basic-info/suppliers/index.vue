@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="table-index">
         <router-link :to="{ path: '/basicinfo/suppliers/edit', query:{ status: 'create'} }">
             <!-- <span v-if="child.meta&&child.meta.title" :title="child.meta.title">{{child.meta.title}}</span> -->
             <el-button style="float:right;margin:18px 10px" type="primary">新建供应商</el-button>
@@ -48,18 +48,18 @@
                     {{ scope.row.sourceType | sourceType }}
                   </template>
                 </el-table-column>
+                <el-table-column prop="status" label="状态" >
+                  <template slot-scope="scope">
+                    {{ scope.row.status | sourceType }}
+                  </template>
+                </el-table-column>
                 <el-table-column
                 fixed="right"
-                label="状态"
+                label="操作"
                 width="200">
                 <template slot-scope="scope">
-                    <el-switch
-                        v-model="scope.row.status"
-                        active-color="#13ce66"
-                        active-text="启用"
-                        @change="statusChange(scope.row.status, scope.row.id, scope.row.version)"
-                        inactive-color="#eee">
-                    </el-switch>
+                  <el-button :disabled="scope.row.status" size="mini" type="text" @click="statusChange(scope.row.status, scope.row.id, scope.row.version)">启用</el-button>
+                  <el-button :disabled="!scope.row.status" size="mini" type="text" @click="statusChange(scope.row.status, scope.row.id, scope.row.version)">禁用</el-button>
                 </template>
                 </el-table-column>
             </el-table>
@@ -110,9 +110,10 @@ export default {
       statusChange: function(status, id, version) {
         // 修改供应商状态
         console.log(status)
-        if (!status) {
+        if (status) {
           BasicService.closeSuppliers(id, version)
           .then((res) => {
+            this.$message.success("禁用成功")
             this.getSuppliersList()
           })
           .catch((err) => {
@@ -122,6 +123,7 @@ export default {
         } else {
           BasicService.openSuppliers(id, version)
           .then((res) => {
+            this.$message.success("启用成功")
             this.getSuppliersList()
           })
           .catch((err) => {
@@ -199,6 +201,16 @@ export default {
         default:
           return '未知';
       }
+    },
+    suppliersStatus(status) {
+      switch (status) {
+        case true:
+          return "启用"
+        case false:
+          return "禁用"
+        default:
+          return '未知';
+      }
     }
   }
 };
@@ -206,32 +218,10 @@ export default {
 
 <style lang="scss" scoped>
 @import "src/styles/mixin.scss";
-.box-title{
-  width: 100px;
-  text-align: right;
-}
-.input-width{
-    width: 200px;
-}
-.select-head{
-    background: #fff;
-    padding: 15px 0 8px 0;
-    border-radius: 12px;
-    border: 1px #eee solid;
-}
-.info-box{
-  display: flex;
-  justify-content: left;
-  flex-wrap: wrap;
-  margin: 10px;
-}
-/deep/ .el-table td, .el-table th.is-leaf {
-  text-align: center;
-}
-/deep/ .el-table th, .el-table tr  {
-  text-align: center !important;
-}
-/deep/ .el-dialog{
-  width: 600px;
+</style>
+<style lang="scss">
+.table-index{
+@import "src/styles/mixin.scss";
+@include elTable;
 }
 </style>

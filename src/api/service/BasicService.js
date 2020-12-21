@@ -16,8 +16,11 @@ export default {
   /**
   * 分页查询供应商列表
   */
+  // getSuppliersList(data) {
+  //   return request.get('/product/productSupplier/query?page=' + data.page + '&pageSize=' + data.pageSize + '&searchCount=true' + '&codeOrNameEquals=' + (data.codeOrNameEquals ? data.codeOrNameEquals : '') + '&statusEquals=' + (data.status ? data.status : ''))
+  // },
   getSuppliersList(data) {
-    return request.get('/product/productSupplier/query?page=' + data.page + '&pageSize=' + data.pageSize + '&searchCount=true' + '&codeOrNameEquals=' + (data.codeOrNameEquals ? data.codeOrNameEquals : '') + '&statusEquals=' + (data.status ? data.status : ''))
+    return request.get('/product/productSupplier/query', {param: data})
   },
   /**
    * 获取供应商详情
@@ -77,8 +80,11 @@ export default {
   /**
    * 分页查询类别
    */
+  // getCateGoryQuery(data) {
+  //   return request.get('/product/productCategory/query?page=' + data.page + '&pageSize=' + data.pageSize + '&searchCount=true' + '&codeOrNameLike=' + (data.codeOrNameLike ? data.codeOrNameLike : '') + '&parentIdEquals=' + (data.parentIdEquals ? data.parentIdEquals : '') + '&statusEquals=' + (data.statusEquals ? data.statusEquals : '') + '&levelEquals=' + (data.levelEquals ? data.levelEquals : '') + '&lowerLevelEquals=' + (data.lowerLevelEquals ? data.lowerLevelEquals : ''))
+  // },
   getCateGoryQuery(data) {
-    return request.get('/product/productCategory/query?page=' + data.page + '&pageSize=' + data.pageSize + '&searchCount=true' + '&codeOrNameLike=' + (data.codeOrNameLike ? data.codeOrNameLike : '') + '&parentIdEquals=' + (data.parentIdEquals ? data.parentIdEquals : '') + '&statusEquals=' + (data.statusEquals ? data.statusEquals : '') + '&levelEquals=' + (data.levelEquals ? data.levelEquals : '') + '&lowerLevelEquals=' + (data.lowerLevelEquals ? data.lowerLevelEquals : ''))
+    return request.get('/product/productCategory/query', {param: data})
   },
   /**
    * 查询类别详情
@@ -106,6 +112,16 @@ export default {
       ...data
     }
     return request.put('/product/productCategory/update', param)
+  },
+
+  /**
+   * 仓库资料接口 
+   */
+  /**
+   * 获取所有仓库资料
+   */
+  getWrhQuery(data) {
+    return request.get('')
   }
 }
 

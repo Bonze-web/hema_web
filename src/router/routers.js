@@ -260,6 +260,35 @@ const BasicInfoPackage = {
         icon: 'table'
       }
     }]
+  }, {
+    path: "dc",
+    name: "Dc",
+    component: AModule,
+    meta: {
+      title: '物流中心',
+      icon: 'table'
+    },
+    children: [{
+      path: "",
+      name: "View",
+      component: () =>
+        import('@/views/basic-info/dc/index'),
+        hidden: true,
+      meta: {
+        title: '',
+        icon: 'table'
+      }
+    }, {
+      path: "edit",
+      name: "edit",
+      component: () =>
+        import('@/views/basic-info/dc/edit'),
+        hidden: true,
+      meta: {
+        title: '',
+        icon: 'table'
+      }
+    }]
   }]     
 }
 

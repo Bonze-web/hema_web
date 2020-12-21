@@ -1,18 +1,20 @@
 <template>
-    <div class="table-index">        
+    <div class="table-index">
+        <router-link :to="{ path: '/basicinfo/suppliers/edit', query:{ status: 'create'} }">
+            <!-- <span v-if="child.meta&&child.meta.title" :title="child.meta.title">{{child.meta.title}}</span> -->
+            <el-button style="float:right;margin:18px 10px" type="primary">新建供应商</el-button>
+        </router-link>
+        
         <div class="select-head">
-            <el-form ref="form" style="display:flex" :model="form" label-width="80px" label-position="right">
-                <el-form-item label="类别">
-                    <el-input type='text' placeholder="请输入类别编号/名称" v-model="form.nameOrCode" class="input-width"></el-input>
-                </el-form-item>
-                <el-form-item label="上级类别">
-                    <el-input type='text' placeholder="请输入上级类别编号/名称" v-model="form.parentEquals" class="input-width"></el-input>
+            <el-form ref="form" style="display:flex" :model="form" label-width="60px" label-position="right">
+                <el-form-item label="供应商">
+                    <el-input type='text' placeholder="请输入供应商编号/名称" v-model="form.nameOrCode" class="input-width"></el-input>
                 </el-form-item>
                 <el-form-item label="状态">
                     <el-select v-model="form.status" placeholder="请选择状态">
-                      <el-option label="全部" value=""></el-option>
-                      <el-option label="启用" value="enabled"></el-option>
-                      <el-option label="禁用" value="disabled"></el-option>
+                    <el-option label="全部" value=""></el-option>
+                    <el-option label="启用" value="OPEN"></el-option>
+                    <el-option label="停用" value="COLOSED"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item>
@@ -22,43 +24,32 @@
             </el-form>
         </div>
         <div style="height:20px" />
-        <div style="background:#fff">
-          <el-row>
-            <router-link :to="{ path: '/basicinfo/category/edit', query:{ status: 'create'} }">
-                <!-- <span v-if="child.meta&&child.meta.title" :title="child.meta.title">{{child.meta.title}}</span> -->
-                <el-button style="margin:18px 10px" type="primary">新建类别</el-button>
-            </router-link>
-          </el-row>
+        <div>
             <el-table
                 :data="suppliersData"
                 style="width: 100%;text-align:center"
-                :row-style="{height: '16px',padding: '-4px'}"
             >
                 <!-- <el-table-column
                     type="selection"
                     width="55">
                 </el-table-column> -->
-                <el-table-column fixed prop="code" label="代码" style="height:20px">
+                <el-table-column fixed prop="code" label="代码">
                     <template slot-scope="scope">
-                        <router-link style="color:#409EFF" :to="{ path: '/basicinfo/category/edit', query:{ status: 'read', id: scope.row.id} }">
+                        <router-link style="color:#409EFF" :to="{ path: '/basicinfo/suppliers/edit', query:{ status: 'read', id: scope.row.id} }">
                             <span>{{ scope.row.code }}</span>
                         </router-link>
                     </template>
                 </el-table-column>
                 <el-table-column prop="name" label="名称"></el-table-column>
-                <el-table-column prop="anotherName" label="上级类别">
+                <el-table-column prop="anotherName" label="简称"></el-table-column>
+                <el-table-column prop="sourceType" label="类型" >
                   <template slot-scope="scope">
-                    {{ scope.row.parentName ? scope.row.parentName : "&lt;空&gt;" }}
+                    {{ scope.row.sourceType | sourceType }}
                   </template>
                 </el-table-column>
-                <el-table-column prop="level" label="级别">
+                <el-table-column prop="status" label="状态" >
                   <template slot-scope="scope">
-                    {{ scope.row.level | categoryLevel }}
-                  </template>
-                </el-table-column>
-                <el-table-column prop="anotherName" label="状态">
-                  <template slot-scope="scope">
-                    {{ scope.row.status | categoryStatus }}
+                    {{ scope.row.status | sourceType }}
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -66,8 +57,8 @@
                 label="操作"
                 width="200">
                 <template slot-scope="scope">
-                  <el-button :disabled="scope.row.status" size="mini" type="text" @click="statusChange(scope.row.status, scope.row.id, scope.row.version)">启用</el-button>
-                  <el-button :disabled="!scope.row.status" size="mini" type="text" @click="statusChange(scope.row.status, scope.row.id, scope.row.version)">禁用</el-button>
+                  <el-button :disabled="scope.row.status" @click="statusChange(scope.row.status, scope.row.id, scope.row.version)">启用</el-button>
+                  <el-button :disabled="!scope.row.status" @click="statusChange(scope.row.status, scope.row.id, scope.row.version)">禁用</el-button>
                 </template>
                 </el-table-column>
             </el-table>
@@ -98,8 +89,7 @@ export default {
         totalCount: 0,
         form: {
           nameOrCode: '',
-          status: '',
-          parentEquals: ''
+          status: ''
         },
         suppliersData: [],
         multipleSelection: [] // 选择的列表
@@ -112,7 +102,7 @@ export default {
         this.page = 1
         this.$refs.form.validate(result => {
         if (result) {
-          this.getCateGoryQuery()
+          this.getSuppliersList()
         }
       })
       },
@@ -120,24 +110,24 @@ export default {
         // 修改供应商状态
         console.log(status)
         if (status) {
-          BasicService.closeCategory(id, version)
+          BasicService.closeSuppliers(id, version)
           .then((res) => {
             this.$message.success("禁用成功")
-            this.getCateGoryQuery()
+            this.getSuppliersList()
           })
           .catch((err) => {
             this.$message.error("禁用失败" + err)
-            this.getCateGoryQuery()
+            this.getSuppliersList()
           })
         } else {
-          BasicService.openCategory(id, version)
+          BasicService.openSuppliers(id, version)
           .then((res) => {
             this.$message.success("启用成功")
-            this.getCateGoryQuery()
+            this.getSuppliersList()
           })
           .catch((err) => {
             this.$message.error("启用失败" + err)
-            this.getCateGoryQuery()
+            this.getSuppliersList()
           })
         }
       },
@@ -147,34 +137,34 @@ export default {
           status: ''
         }
       },
-      getCateGoryQuery: function(reset) {
+      getSuppliersList: function(reset) {
         // 获取供应商列表
         const _this = this
         const data = {
           page: this.page,
           pageSize: this.pageSize,
           searchCount: true,
-          codeOrNameLike: this.form.nameOrCode,
-          statusEquals: this.form.status,
-          parentIdEquals: this.form.parentEquals
+          codeOrNameEquals: this.form.nameOrCode,
+          status: this.form.status
         }
-        BasicService.getCateGoryQuery(data)
+        BasicService.getSuppliersList(data)
         .then((res) => {
           _this.suppliersData = []
           console.log(res)
           this.totalCount = res.totalCount
           for (const item in res.records) {
-            // 处理商品类别数据
+            // 处理供应商数据
             const obj = {
               id: res.records[item].id,
               code: res.records[item].code,
               name: res.records[item].name,
+              anotherName: res.records[item].anotherName,
               status: res.records[item].status,
+              address: res.records[item].address,
               sourceType: res.records[item].sourceType,
-              level: res.records[item].level,
-              parentName: res.records[item].parentName
+              version: res.records[item].version
             }
-            if (obj.status === "enabled") {
+            if (obj.status === "OPEN") {
               obj.status = true
             } else {
               obj.status = false
@@ -198,7 +188,7 @@ export default {
       }
   },
   created() {
-    this.getCateGoryQuery()
+    this.getSuppliersList()
   },
   filters: {
     sourceType(type) {
@@ -211,21 +201,7 @@ export default {
           return '未知';
       }
     },
-    categoryLevel(level) {
-      switch (level) {
-        case "one":
-          return "一级"
-        case "two":
-          return "二级"
-        case "three":
-          return "三级"
-        case "four":
-          return "四级"
-        default:
-          return '未知';
-      }
-    },
-    categoryStatus(status) {
+    suppliersStatus(status) {
       switch (status) {
         case true:
           return "启用"

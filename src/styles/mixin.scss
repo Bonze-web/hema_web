@@ -56,3 +56,42 @@
   z-index: 99;
   box-shadow: rgb(241, 241, 241) 0px 7px 5px -5px;
 }
+
+@mixin  elTable {
+   .el-table--small td, .el-table--small th {
+      padding: 2px 0 !important;
+    }
+    .el-table .cell{
+      line-height: 16px;
+    }
+    .box-title{
+      width: 100px;
+      text-align: right;
+    }
+    .input-width{
+        width: 200px;
+    }
+    .select-head{
+        background: #fff;
+        padding: 15px 0 8px 0;
+        border-radius: 12px;
+        border: 1px #eee solid;
+    }
+    .info-box{
+      display: flex;
+      justify-content: left;
+      flex-wrap: wrap;
+    }
+    .el-table td, .el-table th.is-leaf {
+      text-align: center;
+    }
+    .el-table th, .el-table tr  {
+      text-align: center !important;
+    }
+    .el-dialog{
+      width: 600px;
+    }
+}
+// /deep/ .el-table--small td, .el-table--small th {
+//   padding: 4px 0 !important;
+// }
