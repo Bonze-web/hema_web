@@ -1,7 +1,8 @@
 <template>
     <div>
         <div class="head" v-if="status === 'create' || status === 'edit'">
-            <div style="margin-top:8px">新建供应商</div>
+            <div style="margin-top:8px" v-if="status === 'create'">新建供应商</div>
+            <div style="margin-top:8px" v-else>编辑供应商</div>
             <div>
                 <el-button @click="back">取消</el-button>
                 <el-button type="primary" @click="createSuppliers">确认</el-button>
@@ -137,23 +138,23 @@
                             </el-col>
                             <el-col :span="6" class="info-box">
                                 <div>邮编:</div>
-                                <div>{{ suppliersInfo.postCode }}</div>
+                                <div>{{ suppliersInfo.postCode ? suppliersInfo.postCode : "&lt;空&gt;" }}</div>
                             </el-col>
                             <el-col :span="6" class="info-box">
                                 <div>主页:</div>
-                                <div>{{ suppliersInfo.homePage }}</div>
+                                <div>{{ suppliersInfo.homePage ? suppliersInfo.homePage : "&lt;空&gt;" }}</div>
                             </el-col>
                             <el-col :span="6" class="info-box">
                                 <div>经营者备案:</div>
-                                <div>{{ suppliersInfo.recordCode }}</div>
+                                <div>{{ suppliersInfo.recordCode ? suppliersInfo.recordCode : "&lt;空&gt;" }}</div>
                             </el-col>
                             <el-col :span="6" class="info-box">
                                 <div>自定义字段1:</div>
-                                <div>{{ suppliersInfo.customField }}</div>
+                                <div>{{ suppliersInfo.customField ? suppliersInfo.customField : "&lt;空&gt;" }}</div>
                             </el-col>
                             <el-col class="info-box">
                                 <div>备注:</div>
-                                <div>{{ suppliersInfo.remark }}</div>
+                                <div>{{ suppliersInfo.remark ? suppliersInfo.remark : "&lt;空&gt;" }}</div>
                             </el-col>
                         </el-tab-pane>
                         <!-- <el-tab-pane label="配送中心范围" name="range">配置管理</el-tab-pane>
@@ -187,7 +188,8 @@ export default {
           homePage: '',
           recordCode: '',
           customField: '',
-          remark: ''
+          remark: '',
+          version: ''
         },
         suppliersInfo: {}, // 供应商信息
         createRules: {

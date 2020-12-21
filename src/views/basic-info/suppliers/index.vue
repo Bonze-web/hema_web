@@ -57,7 +57,7 @@
                         v-model="scope.row.status"
                         active-color="#13ce66"
                         active-text="启用"
-                        @change="statusChange(scope.row.status, scope.row.id)"
+                        @change="statusChange(scope.row.status, scope.row.id, scope.row.version)"
                         inactive-color="#eee">
                     </el-switch>
                 </template>
@@ -85,11 +85,6 @@ export default {
   data() {
       return {
         suppliersId: '',
-        sellerInfo: false,
-        mbrInfo: {}, // 卖家详情
-        reason: '', // 拒绝理由
-        sellerId: '', // 卖家Id
-        dialogFormVisible: false, // 填写拒绝理由
         page: 1,
         pageSize: 10,
         totalCount: 0,
@@ -112,11 +107,11 @@ export default {
         }
       })
       },
-      statusChange: function(status, id) {
+      statusChange: function(status, id, version) {
         // 修改供应商状态
         console.log(status)
         if (!status) {
-          BasicService.closeSuppliers(id)
+          BasicService.closeSuppliers(id, version)
           .then((res) => {
             this.getSuppliersList()
           })
@@ -125,7 +120,7 @@ export default {
             this.getSuppliersList()
           })
         } else {
-          BasicService.openSuppliers(id)
+          BasicService.openSuppliers(id, version)
           .then((res) => {
             this.getSuppliersList()
           })
@@ -165,7 +160,8 @@ export default {
               anotherName: res.records[item].anotherName,
               status: res.records[item].status,
               address: res.records[item].address,
-              sourceType: res.records[item].sourceType
+              sourceType: res.records[item].sourceType,
+              version: res.records[item].version
             }
             if (obj.status === "OPEN") {
               obj.status = true

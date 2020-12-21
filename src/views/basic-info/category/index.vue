@@ -46,7 +46,7 @@
                 <el-table-column prop="name" label="名称"></el-table-column>
                 <el-table-column prop="anotherName" label="上级类别">
                   <template slot-scope="scope">
-                    {{ scope.row.anotherName ? scope.row.anotherName : "<空>" }}
+                    {{ scope.row.parentName ? scope.row.parentName : "&lt;空&gt;" }}
                   </template>
                 </el-table-column>
                 <el-table-column prop="level" label="级别">
@@ -63,7 +63,7 @@
                         v-model="scope.row.status"
                         active-color="#13ce66"
                         active-text="启用"
-                        @change="statusChange(scope.row.status, scope.row.id)"
+                        @change="statusChange(scope.row.status, scope.row.id, scope.row.version)"
                         inactive-color="#eee">
                     </el-switch>
                 </template>
@@ -91,10 +91,6 @@ export default {
   data() {
       return {
         suppliersId: '',
-        mbrInfo: {}, // 卖家详情
-        reason: '', // 拒绝理由
-        sellerId: '', // 卖家Id
-        dialogFormVisible: false, // 填写拒绝理由
         page: 1,
         pageSize: 10,
         totalCount: 0,
@@ -118,11 +114,11 @@ export default {
         }
       })
       },
-      statusChange: function(status, id) {
+      statusChange: function(status, id, version) {
         // 修改供应商状态
         console.log(status)
         if (!status) {
-          BasicService.closeCategory(id)
+          BasicService.closeCategory(id, version)
           .then((res) => {
             this.getCateGoryQuery()
           })
@@ -131,7 +127,7 @@ export default {
             this.getCateGoryQuery()
           })
         } else {
-          BasicService.openCategory(id)
+          BasicService.openCategory(id, version)
           .then((res) => {
             this.getCateGoryQuery()
           })
@@ -171,7 +167,8 @@ export default {
               name: res.records[item].name,
               status: res.records[item].status,
               sourceType: res.records[item].sourceType,
-              level: res.records[item].level
+              level: res.records[item].level,
+              parentName: res.records[item].parentName
             }
             if (obj.status === "enabled") {
               obj.status = true

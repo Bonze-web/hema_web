@@ -1,7 +1,8 @@
 <template>
     <div>
         <div class="head" v-if="status === 'create' || status === 'edit'">
-            <div style="margin-top:8px">新建供类别</div>
+            <div style="margin-top:8px" v-if="status === 'create'">新建类别</div>
+            <div style="margin-top:8px" v-else>编辑类别</div>
             <div>
                 <el-button @click="back">取消</el-button>
                 <el-button type="primary" @click="createCategory">确认</el-button>
@@ -22,7 +23,7 @@
             </div>
             <div>
                 <el-button @click="back">返回</el-button>
-                <el-button type="primary" @click="editSupplier">编辑</el-button>
+                <el-button type="primary" @click="editCategory">编辑</el-button>
             </div>
         </div>
         <div style="height:20px" />
@@ -89,7 +90,7 @@
                             </el-col>
                             <el-col :span="6" class="info-box">
                                 <div>级别:</div>
-                                <div>{{ categoryInfo.anotherName }}</div>
+                                <div>{{ categoryInfo.level | categoryLevel }}</div>
                             </el-col>
                             <!-- <el-col :span="6" class="info-box">
                                 <div>货主:</div>
@@ -97,11 +98,11 @@
                             </el-col> -->
                             <el-col :span="6" class="info-box">
                                 <div>上级类别:</div>
-                                <div>{{ categoryInfo.contactName }}</div>
+                                <div>{{ categoryInfo.parentName ? categoryInfo.parentName : "&lt;空&gt;" }}</div>
                             </el-col>
                             <el-col class="info-box">
                                 <div>备注:</div>
-                                <div>{{ categoryInfo.remark }}</div>
+                                <div>{{ categoryInfo.remark ? categoryInfo.remark : "&lt;空&gt;" }}</div>
                             </el-col>
                         </el-tab-pane>
                         <!-- <el-tab-pane label="配送中心范围" name="range">配置管理</el-tab-pane>
@@ -129,7 +130,7 @@ export default {
           id: '',
           code: '',
           name: '',
-          level: '',
+          level: 'one',
           parentId: '',
           remark: ''
         },
@@ -194,6 +195,9 @@ export default {
           } else {
             this.categoryInfo.status = false
           }
+          if (res.level !== "one") {
+            this.level = res.level
+          }
         })
         .catch((err) => {
           this.$message.error("获取详情失败" + err)
@@ -221,11 +225,11 @@ export default {
               })
             } else {
               if (this.form.status) {
-                this.form.status = "OPEN"
+                this.form.status = "enabled"
               } else {
-                this.form.status = "CLOSED"
+                this.form.status = "disabled"
               }
-              BasicService.createCategory(this.form)
+              BasicService.updateCategory(this.form)
               .then(res => {
                 console.log(res)
                 this.$message.success("更新成功")
@@ -240,10 +244,13 @@ export default {
           }
         })
       },
-      editSupplier() {
+      editCategory() {
         this.status = "edit"
         this.form = Object.assign(this.form, this.categoryInfo)
         console.log(this.form)
+        if (this.level !== "one") {
+          this.getParentCategory()
+        }
       },
       levelChange() {
         this.level = this.form.level
@@ -251,6 +258,9 @@ export default {
           return
         }
         this.form.parentId = ""
+        this.getParentCategory()
+      },
+      getParentCategory() {
         const data = {
           page: this.page,
           pageSize: 0,

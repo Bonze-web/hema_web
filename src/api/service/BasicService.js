@@ -37,14 +37,14 @@ export default {
   /**
    * 启用供应商
    */
-  openSuppliers(id) {
-    return request.put('/product/productSupplier/open?id=' + id)
+  openSuppliers(id, version) {
+    return request.put('/product/productSupplier/open?id=' + id + '&version=' + version)
   },
   /**
    * 禁用用供应商
    */
-  closeSuppliers(id) {
-    return request.put('/product/productSupplier/close?id=' + id)
+  closeSuppliers(id, version) {
+    return request.put('/product/productSupplier/close?id=' + id + '&version=' + version)
   },
   /**
    * 删除供应商
@@ -89,14 +89,23 @@ export default {
   /**
    * 启用商品类别
    */
-  openCategory(id) {
-    return request.put('/product/productCategory/enable?id=' + id)
+  openCategory(id, version) {
+    return request.put('/product/productCategory/enable?id=' + id + '&version=' + version)
   },
   /**
    * 禁用商品类别
    */
-  closeCategory(id) {
-    return request.put('/product/productCategory/disable?id=' + id)
+  closeCategory(id, version) {
+    return request.put('/product/productCategory/disable?id=' + id + '&version=' + version)
+  },
+  /**
+   * 更新商品类别
+   */
+  updateCategory(data) {
+    const param = {
+      ...data
+    }
+    return request.put('/product/productCategory/update', param)
   }
 }
 
