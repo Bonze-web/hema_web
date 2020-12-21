@@ -121,7 +121,34 @@ export default {
    * 获取所有仓库资料
    */
   getWrhQuery(data) {
-    return request.get('')
+    return request.get('/sys/dc/query', {param: data})
+  },
+  /**
+   * 仓库启用
+   */
+  openDc(id, version) {
+    return request.get('/sys/dc/on?id=' + id + '&version=' + version)
+  },
+  /**
+   * 仓库禁用
+   */
+  closeDc(id, version) {
+    return request.get('/sys/dc/off?id=' + id + '&version=' + version)
+  },
+  /**
+   * 新建仓库
+   */
+  creatDc(postData) {
+    const param = {
+      ...postData
+    }
+    return request.post('/sys/dc/create', param)
+  },
+  /**
+   * 查询仓库详情
+   */
+  getDcDetail(id) {
+    return request.get('/sys/dc/getById?id=' + id)
   }
 }
 

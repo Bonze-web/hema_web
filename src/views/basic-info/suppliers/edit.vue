@@ -2,7 +2,7 @@
     <div>
         <div class="head" v-if="status === 'create' || status === 'edit'">
             <div style="margin-top:8px" v-if="status === 'create'">新建供应商</div>
-            <div style="margin-top:8px" v-else>编辑供应商</div>
+            <div style="margin-top:8px" v-else>编辑</div>
             <div>
                 <el-button @click="back">取消</el-button>
                 <el-button type="primary" @click="createSuppliers">确认</el-button>

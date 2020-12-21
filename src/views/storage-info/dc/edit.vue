@@ -1,8 +1,8 @@
 <template>
     <div>
         <div class="head" v-if="status === 'create' || status === 'edit'">
-            <div style="margin-top:8px" v-if="status === 'create'">新建供应商</div>
-            <div style="margin-top:8px" v-else>编辑供应商</div>
+            <div style="margin-top:8px" v-if="status === 'create'">新建配置中心</div>
+            <div style="margin-top:8px" v-else>编辑</div>
             <div>
                 <el-button @click="back">取消</el-button>
                 <el-button type="primary" @click="createSuppliers">确认</el-button>
@@ -36,12 +36,33 @@
                             <el-form :model="form" :rules="createRules" ref="form" label-width="100px" class="demo-ruleForm">
                                 <el-row :gutter="20">
                                     <el-col :span="6" class="info-box">
+                                        <el-form-item label="类型" prop="type">
+                                          <el-select v-model="form.type" placeholder="请选择类型" @change="dcChange">
+                                            <el-option label="中心仓" value="dc"></el-option>
+                                            <el-option label="网格仓" value="frontwrh"></el-option>
+                                          </el-select>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="6" class="info-box" v-if="form.type === 'frontwrh'">
+                                        <el-form-item label="所属仓库" prop="type">
+                                          <el-select v-model="form.type" placeholder="请选择类型">
+                                            <el-option label="中心仓" value="dc"></el-option>
+                                            <el-option label="网格仓" value="frontwrh"></el-option>
+                                          </el-select>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="6" class="info-box">
                                         <el-form-item label="代码" prop="code">
                                             <el-input v-model="form.code"></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="名称" prop="name">
+                                            <el-input v-model="form.name"></el-input>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="6" class="info-box">
+                                        <el-form-item label="来源代码" prop="name">
                                             <el-input v-model="form.name"></el-input>
                                         </el-form-item>
                                     </el-col>
@@ -71,23 +92,13 @@
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
+                                        <el-form-item label="经营面积(m2)">
+                                            <el-input placeholder="0.0000" v-model="form.homePage"></el-input>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="6" class="info-box">
                                         <el-form-item label="邮编">
                                             <el-input v-model="form.postCode"></el-input>
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col :span="6" class="info-box">
-                                        <el-form-item label="主页">
-                                            <el-input v-model="form.homePage"></el-input>
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col :span="6" class="info-box">
-                                        <el-form-item label="经营者备案码">
-                                            <el-input v-model="form.recordCode"></el-input>
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col :span="6" class="info-box">
-                                        <el-form-item label="自定义字段1">
-                                            <el-input v-model="form.customField"></el-input>
                                         </el-form-item>
                                     </el-col>
                                 </el-row>

@@ -192,6 +192,10 @@ const SystemPackage = {
   ]
 }
 
+/**
+ * 基础资料管理包
+ */
+
 const BasicInfoPackage = {
   path: '/basicinfo',
   component: Layout,
@@ -260,19 +264,35 @@ const BasicInfoPackage = {
         icon: 'table'
       }
     }]
-  }, {
+  }]     
+}
+
+/**
+ * 仓储资料管理包
+ */
+const StorageInfoPackage = {
+  path: '/storageinfo',
+  component: Layout,
+  name: 'StorageInfo',
+  alwaysShow: true,
+  meta: {
+    title: '仓储资料',
+    icon: 'storage-info',
+    permission: PermIds.REPORT_DYNAMIC
+  },
+  children: [{
     path: "dc",
     name: "Dc",
     component: AModule,
     meta: {
-      title: '物流中心',
+      title: '配送中心',
       icon: 'table'
     },
     children: [{
       path: "",
       name: "View",
       component: () =>
-        import('@/views/basic-info/dc/index'),
+        import('@/views/storage-info/dc/index'),
         hidden: true,
       meta: {
         title: '',
@@ -280,16 +300,16 @@ const BasicInfoPackage = {
       }
     }, {
       path: "edit",
-      name: "edit",
+      name: "Edit",
       component: () =>
-        import('@/views/basic-info/dc/edit'),
+        import('@/views/storage-info/dc/edit'),
         hidden: true,
       meta: {
         title: '',
         icon: 'table'
       }
-    }]
-  }]     
+    }] 
+  }]
 }
 
 /**
@@ -298,6 +318,7 @@ const BasicInfoPackage = {
 export const asyncRouterMap = [
   SystemPackage,
   BasicInfoPackage,
+  StorageInfoPackage,
   {
     path: '*',
     redirect: '/sys',

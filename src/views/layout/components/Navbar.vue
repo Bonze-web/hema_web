@@ -3,7 +3,7 @@
     <div class="navbar-content">
       <el-menu class="navbar" mode="horizontal">
         <div class="logo-container" :class="{open: sidebar.opened}">
-          <img src="/static/imgs/share_images/36524/logo-coffee.png" alt />
+          <img src="/static/imgs/share_images/36524/hema.png" alt />
         </div>
         <hamburger class="hamburger-container" :toggleClick="toggleSideBar" :isActive="sidebar.opened">
         </hamburger>

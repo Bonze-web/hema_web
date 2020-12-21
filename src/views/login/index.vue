@@ -1,7 +1,7 @@
 <template>
   <div class="login-container">
     <div class="login-logo">
-      <img src="/static/imgs/share_images/36524/logo-coffee.png" alt />
+      <img src="/static/imgs/share_images/36524/hema.png" alt />
     </div>
     <div class="login-main">
       <transition name="imgshow">

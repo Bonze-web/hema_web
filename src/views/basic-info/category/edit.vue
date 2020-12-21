@@ -2,7 +2,7 @@
     <div>
         <div class="head" v-if="status === 'create' || status === 'edit'">
             <div style="margin-top:8px" v-if="status === 'create'">新建类别</div>
-            <div style="margin-top:8px" v-else>编辑类别</div>
+            <div style="margin-top:8px" v-else>编辑</div>
             <div>
                 <el-button @click="back">取消</el-button>
                 <el-button type="primary" @click="createCategory">确认</el-button>
@@ -184,7 +184,7 @@ export default {
           this.getCategory(this.id)
         }
       },
-      getCategory: function(id) {
+      getDc: function(id) {
         // 获取商品类别详情
         BasicService.getCategoryDatail(id)
         .then((res) => {
@@ -269,6 +269,10 @@ export default {
         BasicService.getCateGoryQuery(data)
         .then((res) => {
           this.parentList = res.records
+          for (const item in res.records) {
+            // 处理供应商数据
+            this.parentList[item].name = '[' + this.parentList[item].code + ']' + this.parentList[item].name
+          }
         })
         .catch((err) => {
             this.$message.error("加载父级列表失败，请刷新页面重新尝试" + err)
