@@ -1,9 +1,5 @@
 <template>
     <div class="table-index">
-        <router-link :to="{ path: '/basicinfo/suppliers/edit', query:{ status: 'create'} }">
-            <!-- <span v-if="child.meta&&child.meta.title" :title="child.meta.title">{{child.meta.title}}</span> -->
-            <el-button style="float:right;margin:18px 10px" type="primary">新建供应商</el-button>
-        </router-link>
         
         <div class="select-head">
             <el-form ref="form" style="display:flex" :model="form" label-width="60px" label-position="right">
@@ -18,13 +14,19 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" @click="onSubmit">立即搜索</el-button>
-                    <el-button  @click="clearInput">重置</el-button>
+                    <el-button type="primary" @click="onSubmit" size="mini">立即搜索</el-button>
+                    <el-button  @click="clearInput" size="mini">重置</el-button>
                 </el-form-item>
             </el-form>
         </div>
         <div style="height:20px" />
-        <div>
+        <div style="background:#fff">
+          <el-row>
+            <router-link :to="{ path: '/basicinfo/suppliers/edit', query:{ status: 'create'} }">
+            <!-- <span v-if="child.meta&&child.meta.title" :title="child.meta.title">{{child.meta.title}}</span> -->
+            <el-button style="margin:18px 10px" type="primary" size="mini">新建供应商</el-button>
+        </router-link>
+          </el-row>
             <el-table
                 :data="suppliersData"
                 style="width: 100%;text-align:center"
@@ -57,8 +59,8 @@
                 label="操作"
                 width="200">
                 <template slot-scope="scope">
-                  <el-button :disabled="scope.row.status" @click="statusChange(scope.row.status, scope.row.id, scope.row.version)">启用</el-button>
-                  <el-button :disabled="!scope.row.status" @click="statusChange(scope.row.status, scope.row.id, scope.row.version)">禁用</el-button>
+                  <el-button :disabled="scope.row.status" size="mini" type="text" @click="statusChange(scope.row.status, scope.row.id, scope.row.version)">启用</el-button>
+                  <el-button :disabled="!scope.row.status" size="mini" type="text" @click="statusChange(scope.row.status, scope.row.id, scope.row.version)">禁用</el-button>
                 </template>
                 </el-table-column>
             </el-table>

@@ -16,8 +16,8 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" @click="onSubmit">立即搜索</el-button>
-                    <el-button  @click="clearInput">重置</el-button>
+                    <el-button type="primary" size="mini" @click="onSubmit">立即搜索</el-button>
+                    <el-button size="mini"  @click="clearInput">重置</el-button>
                 </el-form-item>
             </el-form>
         </div>
@@ -26,7 +26,7 @@
           <el-row>
             <router-link :to="{ path: '/basicinfo/category/edit', query:{ status: 'create'} }">
                 <!-- <span v-if="child.meta&&child.meta.title" :title="child.meta.title">{{child.meta.title}}</span> -->
-                <el-button style="margin:18px 10px" type="primary">新建类别</el-button>
+                <el-button style="margin:18px 10px" type="primary" size="mini">新建类别</el-button>
             </router-link>
           </el-row>
             <el-table

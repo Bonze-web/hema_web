@@ -317,7 +317,7 @@ export default {
     padding: 15px 12px;
 }
 .info-box{
-    margin: 12px 0;
+    margin: 4px 0;
     font-size: 12px;
     display: flex;
     justify-content: left;
