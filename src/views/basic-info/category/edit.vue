@@ -1,19 +1,19 @@
 <template>
     <div>
         <div class="head" v-if="status === 'create' || status === 'edit'">
-            <div style="margin-top:8px">新建供应商</div>
+            <div style="margin-top:8px">新建供类别</div>
             <div>
                 <el-button @click="back">取消</el-button>
-                <el-button type="primary" @click="createSuppliers">确认</el-button>
+                <el-button type="primary" @click="createCategory">确认</el-button>
                 <!-- <el-button type="primary" v-if="status === 'create'">确认并创建</el-button> -->
             </div>
         </div>
         <div class="head" v-if="status === 'read'">
             <div class="head-title">
-                <div style="margin-right:8px">{{ '[' + suppliersInfo.code + ']' + suppliersInfo.name }}</div>
+                <div style="margin-right:8px">{{ '[' + categoryInfo.code + ']' + categoryInfo.name }}</div>
                 <template>
                     <el-switch
-                        v-model="suppliersInfo.status"
+                        v-model="categoryInfo.status"
                         @change="statusChange"
                         active-color="#13ce66"
                         inactive-color="#eee">
@@ -30,7 +30,7 @@
             <div>
                 <template>
                     <el-tabs v-model="tabActiveName" @tab-click="tabClick">
-                        <el-tab-pane label="供应商" name="suppliers">
+                        <el-tab-pane label="商品类别" name="category">
                             <div class="info-title">基本信息</div>
                             <el-form :model="form" :rules="createRules" ref="form" label-width="100px" class="demo-ruleForm">
                                 <el-row :gutter="20">
@@ -45,48 +45,20 @@
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
-                                        <el-form-item label="简称">
-                                            <el-input v-model="form.anotherName"></el-input>
+                                        <el-form-item label="级别" prop="level">
+                                            <el-select v-model="form.level" placeholder="请选择级别" @change="levelChange">
+                                                <el-option label="一级" value="one"></el-option>
+                                                <el-option label="二级" value="two"></el-option>
+                                                <el-option label="三级" value="three"></el-option>
+                                                <el-option label="四级" value="four "></el-option>
+                                            </el-select>
                                         </el-form-item>
                                     </el-col>
-                                    <!-- <el-col :span="6" class="info-box">
-                                        <el-form-item label="货主" prop="name">
-                                            <el-input></el-input>
-                                        </el-form-item>
-                                    </el-col> -->
-                                    <el-col :span="6" class="info-box">
-                                        <el-form-item label="联系人" prop="contactName">
-                                            <el-input v-model="form.contactName"></el-input>
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col :span="6" class="info-box">
-                                        <el-form-item label="联系方式" prop="mobile">
-                                            <el-input v-model="form.mobile"></el-input>
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col :span="6" class="info-box">
-                                        <el-form-item label="地址" prop="address">
-                                            <el-input v-model="form.address"></el-input>
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col :span="6" class="info-box">
-                                        <el-form-item label="邮编">
-                                            <el-input v-model="form.postCode"></el-input>
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col :span="6" class="info-box">
-                                        <el-form-item label="主页">
-                                            <el-input v-model="form.homePage"></el-input>
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col :span="6" class="info-box">
-                                        <el-form-item label="经营者备案码">
-                                            <el-input v-model="form.recordCode"></el-input>
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col :span="6" class="info-box">
-                                        <el-form-item label="自定义字段1">
-                                            <el-input v-model="form.customField"></el-input>
+                                    <el-col :span="6" class="info-box" v-if="level !== 'one'">
+                                        <el-form-item label="上级类别">
+                                            <el-select v-model="form.parentId">
+                                                <el-option v-for="item in parentList" :key="item.value" :label="item.name" :value="item.id"></el-option>
+                                            </el-select>
                                         </el-form-item>
                                     </el-col>
                                 </el-row>
@@ -105,55 +77,31 @@
             <div>
                 <template>
                     <el-tabs v-model="tabActiveName" @tab-click="tabClick">
-                        <el-tab-pane label="供应商" name="suppliers">
+                        <el-tab-pane label="商品类别" name="category">
                             <div class="info-title">基本信息</div>
                             <el-col :span="6" class="info-box">
                                 <div>代码:</div>
-                                <div>{{ suppliersInfo.code }}</div>
+                                <div>{{ categoryInfo.code }}</div>
                             </el-col>
                             <el-col :span="6" class="info-box">
                                 <div>名称:</div>
-                                <div>{{ suppliersInfo.name }}</div>
+                                <div>{{ categoryInfo.name }}</div>
                             </el-col>
                             <el-col :span="6" class="info-box">
-                                <div>简称:</div>
-                                <div>{{ suppliersInfo.anotherName }}</div>
+                                <div>级别:</div>
+                                <div>{{ categoryInfo.anotherName }}</div>
                             </el-col>
                             <!-- <el-col :span="6" class="info-box">
                                 <div>货主:</div>
                                 <div></div>
                             </el-col> -->
                             <el-col :span="6" class="info-box">
-                                <div>联系人:</div>
-                                <div>{{ suppliersInfo.contactName }}</div>
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>联系方式:</div>
-                                <div>{{ suppliersInfo.mobile }}</div>
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>地址:</div>
-                                <div>{{ suppliersInfo.address }}</div>
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>邮编:</div>
-                                <div>{{ suppliersInfo.postCode }}</div>
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>主页:</div>
-                                <div>{{ suppliersInfo.homePage }}</div>
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>经营者备案:</div>
-                                <div>{{ suppliersInfo.recordCode }}</div>
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>自定义字段1:</div>
-                                <div>{{ suppliersInfo.customField }}</div>
+                                <div>上级类别:</div>
+                                <div>{{ categoryInfo.contactName }}</div>
                             </el-col>
                             <el-col class="info-box">
                                 <div>备注:</div>
-                                <div>{{ suppliersInfo.remark }}</div>
+                                <div>{{ categoryInfo.remark }}</div>
                             </el-col>
                         </el-tab-pane>
                         <!-- <el-tab-pane label="配送中心范围" name="range">配置管理</el-tab-pane>
@@ -172,39 +120,31 @@ import BasicService from "@/api/service/BasicService";
 export default {
   data() {
       return {
+        parentList: [], // 父级类别列表
+        level: "one", // 新建类别级别
         status: '', // 页面状态
-        id: '', // 供应商ID
-        tabActiveName: 'suppliers', // tab栏名称
+        id: '', // 商品类别ID
+        tabActiveName: 'category', // tab栏名称
         form: {
           id: '',
           code: '',
           name: '',
-          anotherName: '',
-          contactName: '',
-          mobile: '',
-          address: '',
-          postCode: '',
-          homePage: '',
-          recordCode: '',
-          customField: '',
+          level: '',
+          parentId: '',
           remark: ''
         },
-        suppliersInfo: {}, // 供应商信息
+        page: 0,
+        pageSize: 10,
+        categoryInfo: {}, // 供应商信息
         createRules: {
           code: [
             { required: true, message: '请输入类别代码', trigger: 'blur' }
           ],
           name: [
-            { required: true, message: '请输入供应商名称', trigger: 'blur' }
+            { required: true, message: '请输入类别名称', trigger: 'blur' }
           ],
-          mobile: [
-            { required: true, message: '请输入联系方式', trigger: 'blur' }
-          ],
-          contactName: [
-            { required: true, message: '请输入联系人名称', trigger: 'blur' }
-          ],
-          address: [
-            { required: true, message: '请输入地址', trigger: 'blur' }
+          level: [
+            { required: true, message: '请选择类别级别', trigger: 'blur' }
           ]
         }
       }
@@ -217,24 +157,22 @@ export default {
       },
       statusChange: function() {
         // 修改供应商状态
-        console.log(this.suppliersInfo.status)
-        if (!this.suppliersInfo.status) {
+        console.log(this.categoryInfo.status)
+        if (!this.categoryInfo.status) {
           BasicService.closeSuppliers(this.id)
           .then((res) => {
-            this.getSuppliers(this.id)
+            this.getCategory(this.id)
           })
           .catch((err) => {
             this.$message.error("禁用失败" + err)
-            this.getSuppliers(this.id)
           })
         } else {
           BasicService.openSuppliers(this.id)
           .then((res) => {
-            this.getSuppliers(this.id)
+            this.getCategory(this.id)
           })
           .catch((err) => {
             this.$message.error("启用失败" + err)
-            this.getSuppliers(this.id)
           })
         }
       },
@@ -242,19 +180,19 @@ export default {
         this.status = this.$route.query.status
         if (this.status === 'read') {
           this.id = this.$route.query.id
-          this.getSuppliers(this.id)
+          this.getCategory(this.id)
         }
       },
-      getSuppliers: function(id) {
-        // 获取供应商详情
-        BasicService.getSuppliersDetail(id)
+      getCategory: function(id) {
+        // 获取商品类别详情
+        BasicService.getCategoryDatail(id)
         .then((res) => {
-          this.suppliersInfo = res
+          this.categoryInfo = res
           // 根据状态修改供应商开启switch
-          if (this.suppliersInfo.status === "OPEN") {
-            this.suppliersInfo.status = true
+          if (this.categoryInfo.status === "enabled") {
+            this.categoryInfo.status = true
           } else {
-            this.suppliersInfo.status = false
+            this.categoryInfo.status = false
           }
         })
         .catch((err) => {
@@ -263,12 +201,16 @@ export default {
       },
       tabClick: function() {  
       },
-      createSuppliers: function() {
-        // 创建新的供应商
+      createCategory: function() {
+        // 创建新的类别
         this.$refs.form.validate(valid => {
           if (valid) {
+            if (this.level !== 'one' && !this.form.parentId) {
+              this.$message.error("请选择一个父级类别")
+              return
+            }
             if (this.status === 'create') {
-              BasicService.createSuppliers(this.form)
+              BasicService.createCategory(this.form)
               .then(res => {
                 console.log(res)
                 this.$message.success("创建成功")
@@ -283,7 +225,7 @@ export default {
               } else {
                 this.form.status = "CLOSED"
               }
-              BasicService.updateSupplier(this.form)
+              BasicService.createCategory(this.form)
               .then(res => {
                 console.log(res)
                 this.$message.success("更新成功")
@@ -300,15 +242,47 @@ export default {
       },
       editSupplier() {
         this.status = "edit"
-        this.form = Object.assign(this.form, this.suppliersInfo)
+        this.form = Object.assign(this.form, this.categoryInfo)
         console.log(this.form)
+      },
+      levelChange() {
+        this.level = this.form.level
+        if (this.form.level === "one") {
+          return
+        }
+        this.form.parentId = ""
+        const data = {
+          page: this.page,
+          pageSize: 0,
+          lowerLevelEquals: this.form.level
+        }
+        BasicService.getCateGoryQuery(data)
+        .then((res) => {
+          this.parentList = res.records
+        })
+        .catch((err) => {
+            this.$message.error("加载父级列表失败，请刷新页面重新尝试" + err)
+        })
       }
     },
     created() {
       this.getQueryStatus()
     },
     filters: {
-    
+      categoryLevel(level) {
+        switch (level) {
+          case "one":
+            return "一级"
+          case "two":
+            return "二级"
+          case "three":
+            return "三级"
+          case "four":
+            return "四级"
+          default:
+            return '未知';
+        }
+      }
     }
 };
 </script>
