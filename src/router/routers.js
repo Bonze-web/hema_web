@@ -224,7 +224,7 @@ const BasicInfoPackage = {
       path: "edit",
       name: "Edit",
       component: () =>
-        import('@/views/basic-info/suppliers/index'),
+        import('@/views/basic-info/suppliers/edit'),
         hidden: true,
       meta: {
         title: '供应商',
