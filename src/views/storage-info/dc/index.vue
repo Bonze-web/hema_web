@@ -9,15 +9,15 @@
                 <el-form-item label="状态">
                     <el-select v-model="form.status" placeholder="请选择状态">
                     <el-option label="全部" value=""></el-option>
-                    <el-option label="启用" value="OPEN"></el-option>
-                    <el-option label="停用" value="COLOSED"></el-option>
+                    <el-option label="启用" value="ON"></el-option>
+                    <el-option label="停用" value="OFF"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="类型">
                     <el-select v-model="form.type" placeholder="请选择类型">
                     <el-option label="全部" value=""></el-option>
-                    <el-option label="中心仓" value="dc"></el-option>
-                    <el-option label="网格仓" value="frontwrh"></el-option>
+                    <el-option label="中心仓" value="CENTER"></el-option>
+                    <el-option label="前置仓" value="FRONT"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item>
@@ -112,34 +112,46 @@ export default {
         this.page = 1
         this.$refs.form.validate(result => {
         if (result) {
-          this.getSuppliersList()
+          this.getDcList()
         }
       })
       },
       statusChange: function(status, id, version) {
         // 修改供应商状态
         console.log(status)
-        if (status) {
+        const _this = this
+        this.$confirm('此操作将改变物流中心仓库状态, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          if (status) {
           BasicService.closeDc(id, version)
           .then((res) => {
-            this.$message.success("禁用成功")
-            this.getDcList()
+            _this.$message.success("禁用成功")
+            _this.getDcList()
           })
           .catch((err) => {
-            this.$message.error("禁用失败" + err)
-            this.getDcList()
+            _this.$message.error("禁用失败" + err)
+            _this.getDcList()
           })
         } else {
           BasicService.openDc(id, version)
           .then((res) => {
-            this.$message.success("启用成功")
-            this.getDcList()
+            _this.$message.success("启用成功")
+            _this.getDcList()
           })
           .catch((err) => {
-            this.$message.error("启用失败" + err)
-            this.getDcList()
+            _this.$message.error("启用失败" + err)
+            _this.getDcList()
           })
         }
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })         
+        });
       },
       clearInput: function() {
         this.form = {
@@ -183,6 +195,9 @@ export default {
             _this.dcData.push(obj)
           }
         })
+        .catch((err) => {
+          this.$message.error('获取配送中心列表失败' + err.message)
+        })
       },
       handleCurrentChange: function(e) {
         this.page = Number(e)
@@ -205,7 +220,7 @@ export default {
     dcType(type) {
       switch (type) {
         case "CENTER":
-          return "配送中心"
+          return "中心仓"
         case "FRONT":
           return "前置仓"
         default:

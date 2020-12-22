@@ -285,7 +285,7 @@ const StorageInfoPackage = {
     name: "Dc",
     component: AModule,
     meta: {
-      title: '配送中心',
+      title: '物流中心',
       icon: 'table'
     },
     children: [{
