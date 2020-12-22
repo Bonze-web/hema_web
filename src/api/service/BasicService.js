@@ -113,6 +113,58 @@ export default {
     }
     return request.put('/product/productCategory/update', param)
   },
+  /**
+   * 容器类型接口
+   */
+
+  /**
+   * 获取容器类型列表
+   */
+  getContainerTypeList(data) {
+    return request.get('/wms/containerType/query', {params: data})
+  },
+  /**
+   * 启用容器类型
+   */
+  openContainerType(data) {
+    const param = {
+      data
+    }
+    return request.post('/wms/containerType/batchOn', param)
+  },
+  /**
+   * 禁用容器类型
+   */
+  closeContainerType(data) {
+    const param = {
+      data
+    }
+    return request.post('/wms/containerType/batchOff', param)
+  },
+  /**
+   * 获取容器类型详情
+   */
+  getContainerTypeDetail(id) {
+    return request.get('/wms/containerType/getDetail?id=' + id)
+  },
+  /**
+   * 新建容器类型
+   */
+  createContainerType(postData) {
+    const param = {
+      ...postData
+    }
+    return request.post('/wms/containerType/create', param)
+  },
+  /**
+   * 更新容器类型
+   */
+  updateContainerType(postData) {
+    const param = {
+      ...postData
+    }
+    return request.post('/wms/containerType/update', param)
+  },
 
   /**
    * 仓库资料接口 

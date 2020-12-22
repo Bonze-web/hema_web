@@ -85,6 +85,7 @@ const SystemPackage = {
         import('@/views/sys/user/index'),
       hidden: true,
       meta: {
+        title: '用户',
         icon: 'table',
         permission: PermIds.SYS_USER_VIEW
       }
@@ -232,7 +233,7 @@ const BasicInfoPackage = {
     name: "Suppliers",
     component: AModule,
     meta: {
-      title: '供应商列表',
+      title: '供应商',
       icon: 'table'
     },
     children: [{
@@ -242,7 +243,7 @@ const BasicInfoPackage = {
         import('@/views/basic-info/suppliers/index'),
       hidden: true,
       meta: {
-        title: '供应商列表',
+        title: '供应商',
         icon: 'table'
       }
     }, {
@@ -252,7 +253,17 @@ const BasicInfoPackage = {
         import('@/views/basic-info/suppliers/edit'),
       hidden: true,
       meta: {
-        title: '供应商',
+        title: '查看供应商',
+        icon: 'table'
+      }
+    }, {
+      path: "add",
+      name: "SuppliersAdd",
+      component: () =>
+        import('@/views/basic-info/suppliers/add'),
+      hidden: true,
+      meta: {
+        title: '新建供应商',
         icon: 'table'
       }
     }]
@@ -281,7 +292,95 @@ const BasicInfoPackage = {
         import('@/views/basic-info/category/edit'),
       hidden: true,
       meta: {
-        title: '',
+        title: '查看商品类别',
+        icon: 'table'
+      }
+    }, {
+      path: "add",
+      name: "CategoryAdd",
+      component: () =>
+        import('@/views/basic-info/category/add'),
+      hidden: true,
+      meta: {
+        title: '新建商品类别',
+        icon: 'table'
+      }
+    }]
+  }, {
+    path: "containertype",
+    name: "ContainerType",
+    component: AModule,
+    meta: {
+      title: '容器类型',
+      icon: 'table'
+    },
+    children: [{
+      path: "",
+      name: "ContainerTypeView",
+      component: () =>
+        import('@/views/basic-info/container-type/index'),
+      hidden: true,
+      meta: {
+        title: '容器类型',
+        icon: 'table'
+      }
+    }, {
+      path: "edit",
+      name: "ContainerTypeEdit",
+      component: () =>
+        import('@/views/basic-info/container-type/edit'),
+      hidden: true,
+      meta: {
+        title: '查看容器类型',
+        icon: 'table'
+      }
+    }, {
+      path: "add",
+      name: "ContainerTypeAdd",
+      component: () =>
+        import('@/views/basic-info/container-type/add'),
+      hidden: true,
+      meta: {
+        title: '新建容器类型',
+        icon: 'table'
+      }
+    }]
+  }, {
+    path: "dc",
+    name: "Dc",
+    component: AModule,
+    meta: {
+      title: '物流中心',
+      icon: 'table'
+    },
+    children: [{
+      path: "",
+      name: "DcView",
+      component: () =>
+        import('@/views/basic-info/dc/index'),
+      hidden: true,
+      meta: {
+        title: '物流中心',
+        icon: 'table'
+      }
+    }, {
+      path: "edit",
+      name: "DcEdit",
+      component: () =>
+        import('@/views/basic-info/dc/edit'),
+      hidden: true,
+      meta: {
+        title: '查看物流中心',
+        icon: 'table'
+      }
+    }, {
+      path: "add",
+      name: "DcAdd",
+      component: () =>
+        import('@/views/basic-info/dc/edit'),
+      hidden: true,
+      meta: {
+        title: '新建物流中心',
         icon: 'table'
       }
     }]
@@ -302,38 +401,8 @@ const StorageInfoPackage = {
     permission: PermIds.REPORT_DYNAMIC
   },
   children: [{
-    path: "dc",
-    name: "Dc",
-    component: AModule,
-    meta: {
-      title: '物流中心',
-      icon: 'table'
-    },
-    children: [{
-      path: "",
-      name: "View",
-      component: () =>
-        import('@/views/storage-info/dc/index'),
-      hidden: true,
-      meta: {
-        title: '配送中心',
-        icon: 'table'
-      }
-    }, {
-      path: "edit",
-      name: "Edit",
-      component: () =>
-        import('@/views/storage-info/dc/edit'),
-      hidden: true,
-      meta: {
-        title: '',
-        icon: 'table'
-      }
-    }]
-  },
-  {
-    path: "potion",
-    name: "Potion",
+    path: "warehouse",
+    name: "Warehouse",
     component: AModule,
     meta: {
       title: '仓库',
@@ -343,7 +412,7 @@ const StorageInfoPackage = {
       path: "",
       name: "View",
       component: () =>
-        import('@/views/storage-info/potion/index'),
+        import('@/views/storage-info/warehouse/index'),
       hidden: true,
       meta: {
         title: '',
@@ -353,14 +422,48 @@ const StorageInfoPackage = {
       path: "edit",
       name: "Edit",
       component: () =>
-        import('@/views/storage-info/potion/edit'),
+        import('@/views/storage-info/warehouse/edit'),
       hidden: true,
       meta: {
         title: '',
         icon: 'table'
       }
     }]
-  }]
+  },
+  {
+    path: "locationtype",
+    name: "LocationType",
+    component: AModule,
+    meta: {
+      title: '货位类型',
+      icon: 'table'
+    },
+    children: [
+      {
+        path: "",
+        name: "View",
+        component: () =>
+          import('@/views/storage-info/location-type/index'),
+        hidden: true,
+        meta: {
+          title: '',
+          icon: 'table'
+        }
+      },
+      {
+        path: "edit",
+        name: "Edit",
+        component: () =>
+          import('@/views/storage-info/location-type/edit'),
+        hidden: true,
+        meta: {
+          title: '',
+          icon: 'table'
+        }
+      }
+    ]
+  }
+  ]
 }
 
 /**

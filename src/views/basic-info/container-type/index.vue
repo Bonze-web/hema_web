@@ -1,33 +1,34 @@
 <template>
-    <div class="table-index">        
+    <div class="table-index">
+        
         <div class="select-head">
-            <el-form ref="form" style="display:flex" :model="form" label-width="60px" label-position="right">
-                <el-form-item label="供应商">
-                    <el-input type='text' placeholder="请输入供应商编号/名称" v-model="form.nameOrCode" class="input-width"></el-input>
+            <el-form ref="form" style="display:flex" :model="form" label-width="80px" label-position="right">
+                <el-form-item label="容器类型">
+                    <el-input type='text' placeholder="请输入代码/名称" v-model="form.nameOrCode" class="input-width"></el-input>
                 </el-form-item>
                 <el-form-item label="状态">
                     <el-select v-model="form.status" placeholder="请选择状态">
                     <el-option label="全部" value=""></el-option>
-                    <el-option label="启用" value="OPEN"></el-option>
-                    <el-option label="禁用" value="COLOSED"></el-option>
+                    <el-option label="启用" value="ON"></el-option>
+                    <el-option label="停用" value="OFF"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" size="mini" @click="onSubmit">立即搜索</el-button>
-                    <el-button size="mini"  @click="clearInput">重置</el-button>
+                    <el-button type="primary" @click="onSubmit" size="mini">立即搜索</el-button>
+                    <el-button  @click="clearInput" size="mini">重置</el-button>
                 </el-form-item>
             </el-form>
         </div>
         <div style="height:20px" />
         <div style="background:#fff">
           <el-row>
-            <router-link :to="{ path: '/basicinfo/suppliers/add', query:{ status: 'create'} }">
+            <router-link :to="{ path: '/basicinfo/containertype/add', query:{ status: 'create'} }">
             <!-- <span v-if="child.meta&&child.meta.title" :title="child.meta.title">{{child.meta.title}}</span> -->
             <el-button style="margin:18px 10px" type="primary" size="mini">新建</el-button>
         </router-link>
           </el-row>
             <el-table
-                :data="suppliersData"
+                :data="dcData"
                 style="width: 100%;text-align:center"
             >
                 <!-- <el-table-column
@@ -36,22 +37,21 @@
                 </el-table-column> -->
                 <el-table-column prop="code" label="代码">
                     <template slot-scope="scope">
-                        <router-link style="color:#409EFF" :to="{ path: '/basicinfo/suppliers/edit', query:{ status: 'read', id: scope.row.id} }">
+                        <router-link style="color:#409EFF" :to="{ path: '/basicinfo/containertype/edit', query:{ status: 'read', id: scope.row.id} }">
                             <span>{{ scope.row.code }}</span>
                         </router-link>
                     </template>
                 </el-table-column>
                 <el-table-column prop="name" label="名称"></el-table-column>
-                <el-table-column prop="anotherName" label="简称"></el-table-column>
-                <el-table-column prop="address" label="地址"></el-table-column>
-                <el-table-column prop="sourceType" label="来源方式" >
-                  <template slot-scope="scope">
-                    {{ scope.row.sourceType | sourceType }}
-                  </template>
-                </el-table-column>
+                <el-table-column prop="barcodeprefix" label="条码前缀"></el-table-column>
+                <el-table-column prop="inLWH" label="内长/宽/高(cm)"></el-table-column>
+                <el-table-column prop="outLWH" label="外长/宽/高(cm)"></el-table-column>
+                <el-table-column prop="weight" label="自重"></el-table-column>
+                <el-table-column prop="bearingweight" label="承重"></el-table-column>
+                <el-table-column prop="plotratio" label="容积率"></el-table-column>
                 <el-table-column prop="status" label="状态" >
                   <template slot-scope="scope">
-                    {{ scope.row.status | suppliersStatus }}
+                    {{ scope.row.status | dcStatus }}
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -91,7 +91,7 @@ export default {
           nameOrCode: '',
           status: ''
         },
-        suppliersData: [],
+        dcData: [],
         multipleSelection: [] // 选择的列表
       }
     },
@@ -102,44 +102,50 @@ export default {
         this.page = 1
         this.$refs.form.validate(result => {
         if (result) {
-          this.getSuppliersList()
+          this.getContainerTypeList()
         }
       })
       },
       statusChange: function(status, id, version) {
         // 修改供应商状态
-        this.$confirm('此操作将改变供应商状态, 是否继续?', '提示', {
+        console.log(status)
+        const _this = this
+        this.$confirm('此操作将改变容器类型状态, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
+          const data = [{
+            id,
+            version
+          }]
           if (status) {
-          BasicService.closeSuppliers(id, version)
+          BasicService.closeContainerType(data)
           .then((res) => {
-            this.$message.success("禁用成功")
-            this.getSuppliersList()
+            _this.$message.success("禁用成功")
+            _this.getContainerTypeList()
           })
           .catch((err) => {
-            this.$message.error("禁用失败" + err.message)
-            this.getSuppliersList()
+            _this.$message.error("禁用失败" + err.message)
+            _this.getContainerTypeList()
           })
         } else {
-          BasicService.openSuppliers(id, version)
+          BasicService.openContainerType(data)
           .then((res) => {
-            this.$message.success("启用成功")
-            this.getSuppliersList()
+            _this.$message.success("启用成功")
+            _this.getContainerTypeList()
           })
           .catch((err) => {
-            this.$message.error("启用失败" + err.message)
-            this.getSuppliersList()
+            _this.$message.error("启用失败" + err.message)
+            _this.getContainerTypeList()
           })
         }
         }).catch(() => {
           this.$message({
             type: 'info',
-            message: '已取消'
-          })        
-        })
+            message: '已取消删除'
+          })         
+        });
       },
       clearInput: function() {
         this.form = {
@@ -147,19 +153,19 @@ export default {
           status: ''
         }
       },
-      getSuppliersList: function(reset) {
-        // 获取供应商列表
+      getContainerTypeList: function(reset) {
+        // 获取配送中心列表
         const _this = this
         const data = {
           page: this.page,
           pageSize: this.pageSize,
           searchCount: true,
-          codeOrNameEquals: this.form.nameOrCode,
-          status: this.form.status
+          nameOrCodeEquals: this.form.nameOrCode,
+          statusEquals: this.form.status
         }
-        BasicService.getSuppliersList(data)
+        BasicService.getContainerTypeList(data)
         .then((res) => {
-          _this.suppliersData = []
+          _this.dcData = []
           console.log(res)
           this.totalCount = res.totalCount
           for (const item in res.records) {
@@ -168,29 +174,35 @@ export default {
               id: res.records[item].id,
               code: res.records[item].code,
               name: res.records[item].name,
-              anotherName: res.records[item].anotherName,
+              barcodeprefix: res.records[item].barcodeprefix,
+              inLWH: res.records[item].inlength + '/' + res.records[item].inwidth + '/' + res.records[item].inheight,
+              outLWH: res.records[item].outlength + '/' + res.records[item].outwidth + '/' + res.records[item].outheight,
+              weight: res.records[item].weight,
+              bearingweight: res.records[item].bearingweight,
+              plotratio: res.records[item].plotratio,
               status: res.records[item].status,
-              address: res.records[item].address,
-              sourceType: res.records[item].sourceType,
               version: res.records[item].version
             }
-            if (obj.status === "OPEN") {
+            if (obj.status === "ON") {
               obj.status = true
             } else {
               obj.status = false
             }
-            _this.suppliersData.push(obj)
+            _this.dcData.push(obj)
           }
+        })
+        .catch((err) => {
+          this.$message.error('获取容器类别列表失败' + err.message)
         })
       },
       handleCurrentChange: function(e) {
         this.page = Number(e)
-        this.getSuppliersList(true)
+        this.getContainerTypeList(true)
       },
       handleSizeChange: function(e) {
         this.pageSize = Number(e)
         this.page = 1
-        this.getSuppliersList(true)
+        this.getContainerTypeList(true)
       },
       allSelectionChange(val) {
         console.log(val)
@@ -198,20 +210,10 @@ export default {
       }
   },
   created() {
-    this.getSuppliersList()
+    this.getContainerTypeList()
   },
   filters: {
-    sourceType(type) {
-      switch (type) {
-        case "HAND":
-          return "手动创建"
-        case "IMPORT":
-          return "文件导入"
-        default:
-          return '未知';
-      }
-    },
-    suppliersStatus(status) {
+    dcStatus(status) {
       switch (status) {
         case true:
           return "启用"

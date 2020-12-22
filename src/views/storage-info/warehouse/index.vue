@@ -46,41 +46,39 @@
 
     <div style="background: #fff">
       <el-row>
-        <router-link :to="{ path: '/storageinfo/potion/edit', query:{ status: 'create'} }" >
+        <router-link :to="{ path: '/storageinfo/warehouse/edit', query:{ status: 'create'} }" >
           <el-button style="margin: 18px 10px" type="primary" size="mini"
             >新建</el-button
           >
         </router-link>
       </el-row>
+
       <el-table
-        :data="suppliersData"
+        :data="listData"
         style="width: 100%; text-align: center"
         :row-style="{ height: '16px', padding: '-4px' }"
       >
         <el-table-column fixed prop="code" label="代码" style="height: 20px">
           <template slot-scope="scope">
-            <router-link
-              style="color: #409eff"
-              :to="{
-                path: '/storageinfo/potion/edit',
-                query: { status: 'read', id: scope.row.id },
-              }"
-            >
+            <router-link style="color: #409eff" :to="{ path: '/storageinfo/warehouse/edit', query: { status: 'read', id: scope.row.id }, }" >
               <span>{{ scope.row.code }}</span>
             </router-link>
           </template>
         </el-table-column>
         <el-table-column prop="name" label="名称"></el-table-column>
-        <el-table-column prop="anotherName" label="上级类别">
+        <!-- <el-table-column prop="anotherName" label="上级类别">
           <template slot-scope="scope">
             {{ scope.row.parentName ? scope.row.parentName : "&lt;空&gt;" }}
           </template>
-        </el-table-column>
-        <el-table-column prop="level" label="级别">
+        </el-table-column> -->
+        
+        <el-table-column prop="level" label="配送中心">
           <template slot-scope="scope">
-            {{ scope.row.level | categoryLevel }}
+            {{ scope.row.dcId }}
+            <!-- {{ scope.row.dcId | categoryLevel }} -->
           </template>
         </el-table-column>
+
         <el-table-column prop="anotherName" label="状态">
           <template slot-scope="scope">
             {{ scope.row.status | categoryStatus }}
@@ -109,12 +107,23 @@
           </template>
         </el-table-column>
       </el-table>
+
+      <el-pagination
+          style="float:right"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="1"
+          :page-sizes="[10, 20, 30, 50]"
+          :page-size="pageSize"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="totalCount">
+      </el-pagination>
     </div>
   </div>
 </template>
 
 <script>
-import BasicService from "@/api/service/BasicService";
+import StorageService from "@/api/service/StorageService";
 
 export default {
   data() {
@@ -126,9 +135,8 @@ export default {
       form: {
         nameOrCode: "",
         status: ""
-        // parentEquals: "",
       },
-      suppliersData: [],
+      listData: [], // 列表数据
       multipleSelection: [] // 选择的列表
     };
   },
@@ -138,40 +146,48 @@ export default {
       this.page = 1;
 
       this.$refs.form.validate((result) => {
-        console.log(result)
         if (result) {
           this.getCateGoryQuery();
         }
       });
     },
     statusChange: function(status, id, version) {
-      // 修改供应商状态
-      if (status) {
-        this.suppliersData[id].status = false
-      } else {
-        this.suppliersData[id].status = true
-      }
-      if (status) {
-        BasicService.closeCategory(id, version)
+      // 修改仓库状态
+      const _this = this;
+      this.$confirm('是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        if (status) {
+          // 禁用
+          StorageService.closeWarehouse(id, version)
           .then((res) => {
-            this.$message.success("禁用成功");
-            this.getCateGoryQuery();
+            _this.$message.success("禁止用成功")
+            _this.warehouseInit();
           })
           .catch((err) => {
-            this.$message.error("禁用失败" + err);
-            this.getCateGoryQuery();
-          });
-      } else {
-        BasicService.openCategory(id, version)
+            _this.$message.error("禁用失败" + err)
+            _this.warehouseInit();
+          })
+        } else {
+          // 启用
+          StorageService.openWarehouse(id, version)
           .then((res) => {
-            this.$message.success("启用成功");
-            this.getCateGoryQuery();
+            _this.$message.success("启用成功")
+            _this.warehouseInit();
           })
           .catch((err) => {
-            this.$message.error("启用失败" + err);
-            this.getCateGoryQuery();
-          });
-      }
+            _this.$message.error("启用失败" + err)
+            _this.warehouseInit();
+          })
+        }
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消'
+        })        
+      })
     },
     clearInput: function() {
       this.form = {
@@ -179,60 +195,38 @@ export default {
         status: ""
       };
     },
-    getCateGoryQuery: function(reset) {
+    warehouseInit: function(reset) {
+      // 获取仓库列表
       this.suppliersData = []
 
       // 获取供应商列表
-      // const _this = this;
-      // const data = {
-      //   page: this.page,
-      //   pageSize: this.pageSize,
-      //   searchCount: true,
-      //   codeOrNameLike: this.form.nameOrCode,
-      //   statusEquals: this.form.status
-      //   // parentIdEquals: this.form.parentEquals,
-      // };
+      const _this = this;
+      const data = {
+        page: this.page,
+        pageSize: this.pageSize,
+        searchCount: true,
+        codeOrNameLike: this.form.nameOrCode,
+        statusEquals: this.form.status || null
+      };
 
-      for (let i = 0; i < 10; i++) {
-        const obj = {
-            id: i,
-            code: i + 'code',
-            name: i + 'name',
-            status: i,
-            sourceType: i + 'sourceType',
-            level: i + 'level',
-            parentName: i + 'parentName'
-          };
-          if (obj.status % 2 === 0) {
-            obj.status = true;
+      StorageService.warehouseInit(data).then((res) => {
+        const records = res.records;
+        const listData = [];
+        console.log(res)
+        this.totalCount = res.totalCount;
+
+        records.forEach((item, index) => {
+          if (item.status === 'OFF') {
+            item.status = true
           } else {
-            obj.status = false;
+            item.status = false
           }
-          this.suppliersData.push(obj);
-      }
-      // BasicService.getCateGoryQuery(data).then((res) => {
-      //   _this.suppliersData = [];
-      //   console.log(res);
-      //   this.totalCount = res.totalCount;
-      //   for (const item in res.records) {
-      //     // 处理商品类别数据
-      //     const obj = {
-      //       id: res.records[item].id,
-      //       code: res.records[item].code,
-      //       name: res.records[item].name,
-      //       status: res.records[item].status,
-      //       sourceType: res.records[item].sourceType,
-      //       level: res.records[item].level,
-      //       parentName: res.records[item].parentName,
-      //     };
-      //     if (obj.status === "enabled") {
-      //       obj.status = true;
-      //     } else {
-      //       obj.status = false;
-      //     }
-      //     _this.suppliersData.push(obj);
-      //   }
-      // });
+          listData.push(item)
+        })
+
+        _this.listData = listData;
+        console.log(_this.listData)
+      });
     },
     handleCurrentChange: function(e) {
       this.page = Number(e);
@@ -249,19 +243,9 @@ export default {
     }
   },
   created() {
-    this.getCateGoryQuery();
+    this.warehouseInit();
   },
   filters: {
-    sourceType(type) {
-      switch (type) {
-        case "HAND":
-          return "手动创建";
-        case "IMPORT":
-          return "文件导入";
-        default:
-          return "未知";
-      }
-    },
     categoryLevel(level) {
       switch (level) {
         case "one":
@@ -279,9 +263,9 @@ export default {
     categoryStatus(status) {
       switch (status) {
         case true:
-          return "启用";
-        case false:
           return "禁用";
+        case false:
+          return "启用";
         default:
           return "未知";
       }
