@@ -19,6 +19,14 @@ import PermIds from "@/api/permissionIds";
 
 /** 静态路由 */
 export const constantRouterMap = [{
+    path: '/redirect',
+    component: Layout,
+    hidden: true,
+    children: [{
+      path: '/redirect/:path(.*)',
+      component: () => import('@/views/redirect/index')
+    }]
+  }, {
     path: '/login',
     component: () =>
       import('@/views/login/index'),
@@ -31,10 +39,21 @@ export const constantRouterMap = [{
     hidden: true
   },
   {
-    path: '/dashboard',
-    component: () =>
-      import('@/views/dashboard/index'),
-    hidden: true
+    path: '/',
+    component: Layout,
+    redirect: '/dashboard',
+    name: 'Dashboard',
+    hidden: true,
+    children: [{
+      path: 'dashboard',
+      name: 'dashboard',
+      component: () =>
+        import('@/views/dashboard/index'),
+      meta: {
+        title: '首页',
+        affix: true
+      }
+    }]
   }
 ]
 
@@ -66,6 +85,7 @@ const SystemPackage = {
           import('@/views/sys/user/index'),
         hidden: true,
         meta: {
+          title: '用户',
           icon: 'table',
           permission: PermIds.SYS_USER_VIEW
         }
@@ -109,6 +129,7 @@ const SystemPackage = {
         component: () =>
           import('@/views/sys/role/index'),
         meta: {
+          title: '角色',
           icon: 'table',
           permission: PermIds.SYS_ROLE_VIEW
         }
@@ -184,6 +205,7 @@ const SystemPackage = {
           import('@/views/sys/configure/sysConfigure'),
         hidden: true,
         meta: {
+          title: '系统配置',
           icon: 'table',
           permission: PermIds.SYS_OPTIONS_VIEW
         }
@@ -216,25 +238,25 @@ const BasicInfoPackage = {
     },
     children: [{
       path: "",
-      name: "View",
+      name: "SuppliersView",
       component: () =>
         import('@/views/basic-info/suppliers/index'),
-        hidden: true,
+      hidden: true,
       meta: {
-        title: '',
+        title: '供应商列表',
         icon: 'table'
       }
     }, {
       path: "edit",
-      name: "Edit",
+      name: "SuppliersEdit",
       component: () =>
         import('@/views/basic-info/suppliers/edit'),
-        hidden: true,
+      hidden: true,
       meta: {
         title: '供应商',
         icon: 'table'
       }
-    }] 
+    }]
   }, {
     path: "category",
     name: "Category",
@@ -245,26 +267,26 @@ const BasicInfoPackage = {
     },
     children: [{
       path: "",
-      name: "View",
+      name: "CategoryView",
       component: () =>
         import('@/views/basic-info/category/index'),
-        hidden: true,
+      hidden: true,
       meta: {
-        title: '',
+        title: '商品类别',
         icon: 'table'
       }
     }, {
       path: "edit",
-      name: "edit",
+      name: "CategoryEdit",
       component: () =>
         import('@/views/basic-info/category/edit'),
-        hidden: true,
+      hidden: true,
       meta: {
         title: '',
         icon: 'table'
       }
     }]
-  }]     
+  }]
 }
 
 /**
@@ -293,9 +315,9 @@ const StorageInfoPackage = {
       name: "View",
       component: () =>
         import('@/views/storage-info/dc/index'),
-        hidden: true,
+      hidden: true,
       meta: {
-        title: '',
+        title: '配送中心',
         icon: 'table'
       }
     }, {
@@ -303,12 +325,12 @@ const StorageInfoPackage = {
       name: "Edit",
       component: () =>
         import('@/views/storage-info/dc/edit'),
-        hidden: true,
+      hidden: true,
       meta: {
         title: '',
         icon: 'table'
       }
-    }] 
+    }]
   }]
 }
 
