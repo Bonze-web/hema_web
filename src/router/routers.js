@@ -264,7 +264,8 @@ const BasicInfoPackage = {
         icon: 'table'
       }
     }]
-  }]     
+  }
+]     
 }
 
 /**
@@ -280,7 +281,8 @@ const StorageInfoPackage = {
     icon: 'storage-info',
     permission: PermIds.REPORT_DYNAMIC
   },
-  children: [{
+  children: [
+    {
     path: "dc",
     name: "Dc",
     component: AModule,
@@ -309,7 +311,68 @@ const StorageInfoPackage = {
         icon: 'table'
       }
     }] 
-  }]
+  },
+  {
+    path: "wharf",
+    name: "Wharf",
+    component: AModule,
+    meta: {
+      title: '码头',
+      icon: 'table'
+    },
+    children: [{
+      path: "",
+      name: "WharfView",
+      component: () =>
+        import('@/views/storage-info/wharf/index'),
+        hidden: true,
+      meta: {
+        title: '码头展示',
+        icon: 'table'
+      }
+    }, {
+      path: "edit",
+      name: "WharfEdit",
+      component: () =>
+        import('@/views/storage-info/wharf/edit'),
+        hidden: true,
+      meta: {
+        title: '编辑',
+        icon: 'table'
+      }
+    }] 
+  },
+  {
+    path: "sortdivision",
+    name: "Sortdivision",
+    component: AModule,
+    meta: {
+      title: '拣货分区设置',
+      icon: 'table'
+    },
+    children: [{
+      path: "",
+      name: "SortdivisionView",
+      component: () =>
+        import('@/views/storage-info/sortdivision/index'),
+        hidden: true,
+      meta: {
+        title: '拣货分区设置展示',
+        icon: 'table'
+      }
+    }, {
+      path: "edit",
+      name: "SortdivisionEdit",
+      component: () =>
+        import('@/views/storage-info/sortdivision/edit'),
+        hidden: true,
+      meta: {
+        title: '编辑',
+        icon: 'table'
+      }
+    }] 
+  }
+]
 }
 
 /**

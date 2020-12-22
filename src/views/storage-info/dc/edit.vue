@@ -312,7 +312,8 @@ export default {
         })
       },
       editSupplier() {
-        this.status = "edit"
+        this.status = "edit";
+        console.log(this.form);
         this.form = Object.assign(this.form, this.suppliersInfo)
         console.log(this.form)
       }
