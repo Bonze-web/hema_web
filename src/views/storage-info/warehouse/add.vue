@@ -167,7 +167,7 @@ export default {
       statusChange: function() {
         // 修改仓库状态
         const _this = this;
-        this.$confirm('是否继续?', '提示', {
+        this.$confirm('此操作将改变仓库状态，是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'

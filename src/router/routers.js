@@ -456,7 +456,7 @@ const StorageInfoPackage = {
           import('@/views/storage-info/location-type/index'),
         hidden: true,
         meta: {
-          title: '',
+          title: '货位类型',
           icon: 'table'
         }
       },
@@ -467,7 +467,18 @@ const StorageInfoPackage = {
           import('@/views/storage-info/location-type/edit'),
         hidden: true,
         meta: {
-          title: '',
+          title: '货位详情',
+          icon: 'table'
+        }
+      },
+      {
+        path: "add",
+        name: "Add",
+        component: () =>
+          import('@/views/storage-info/location-type/edit'),
+        hidden: true,
+        meta: {
+          title: '新建货位',
           icon: 'table'
         }
       }
