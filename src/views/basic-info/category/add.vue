@@ -118,7 +118,7 @@ export default {
             _this.getCategory(_this.id)
           })
           .catch((err) => {
-            _this.$message.error("禁用失败" + err)
+            _this.$message.error("禁用失败" + err.message)
             _this.getCategory(_this.id)
           })
         } else {
@@ -128,7 +128,7 @@ export default {
             _this.getCategory(_this.id)
           })
           .catch((err) => {
-            _this.$message.error("启用失败" + err)
+            _this.$message.error("启用失败" + err.message)
             _this.getCategory(_this.id)
           })
         }
@@ -143,7 +143,6 @@ export default {
         this.status = this.$route.query.status
         if (this.status === 'read') {
           this.id = this.$route.query.id
-          this.getCategory(this.id)
         }
       },
       tabClick: function() {  
@@ -165,7 +164,7 @@ export default {
                 this.$router.go(-1)
               })
               .catch(err => {
-                this.$message.error("创建失败" + err)
+                this.$message.error("创建失败" + err.message)
               })
             } else {
               if (this.form.status) {
@@ -181,7 +180,7 @@ export default {
                 this.$router.go(-1)
               })
               .catch(err => {
-                this.$message.error("更新失败" + err)
+                this.$message.error("更新失败" + err.message)
               })
             }
           } else {
@@ -212,12 +211,18 @@ export default {
           }
         })
         .catch((err) => {
-            this.$message.error("加载父级列表失败，请刷新页面重新尝试" + err)
+            this.$message.error("加载父级列表失败，请刷新页面重新尝试" + err.message)
         })
       }
     },
     created() {
       this.getQueryStatus()
+    },
+    beforeRouteEnter(to, from, next) {
+      next(vm => {
+        // 通过 `vm` 访问组件实例
+        vm.getQueryStatus();
+      })
     },
     filters: {
       categoryLevel(level) {

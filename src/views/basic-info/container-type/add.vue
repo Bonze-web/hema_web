@@ -286,7 +286,6 @@ export default {
         this.status = this.$route.query.status
         if (this.status === 'read') {
           this.id = this.$route.query.id
-          this.getContainerTypeDetail(this.id)
         }
       },
       tabClick: function() {  
@@ -329,6 +328,12 @@ export default {
     },
     created() {
       this.getQueryStatus()
+    },
+    beforeRouteEnter(to, from, next) {
+      next(vm => {
+        // 通过 `vm` 访问组件实例
+        vm.getQueryStatus();
+      })
     },
     filters: {
       recycletype(type) {

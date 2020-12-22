@@ -212,6 +212,12 @@ export default {
   created() {
     this.getContainerTypeList()
   },
+  beforeRouteEnter(to, from, next) {
+      next(vm => {
+        // 通过 `vm` 访问组件实例
+        vm.getContainerTypeList();
+      })
+    },
   filters: {
     dcStatus(status) {
       switch (status) {
