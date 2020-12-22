@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="head" v-if="status === 'create' || status === 'edit'">
-            <div style="margin-top:8px" v-if="status === 'create'">新建配置中心</div>
+            <div style="margin-top:8px" v-if="status === 'create'">新建物流中心</div>
             <div style="margin-top:8px" v-else>编辑</div>
             <div>
                 <el-button @click="back">取消</el-button>
@@ -35,7 +35,7 @@
             <div>
                 <template>
                     <el-tabs v-model="tabActiveName" @tab-click="tabClick">
-                        <el-tab-pane label="供应商" name="dc">
+                        <el-tab-pane label="物流中心" name="dc">
                             <div class="info-title">基本信息</div>
                             <el-form :model="form" :rules="createRules" ref="form" label-width="100px" class="demo-ruleForm">
                                 <el-row :gutter="20">
@@ -49,8 +49,8 @@
                                     </el-col>
                                     <el-col :span="6" class="info-box" v-if="form.type === 'FRONT'">
                                         <el-form-item label="所属仓库" prop="type">
-                                          <el-select v-model="form.dcId" placeholder="请选择类型">
-                                            <el-option v-for="item in dcList" :key="item.id" :label="item.name" :value="item.id"></el-option>
+                                          <el-select v-model="form.dcId" placeholder="请选择仓库">
+                                            <el-option v-for="item in dcList" :key="item.id" :label="'[' + item.code + ']' + item.name" :value="item.id"></el-option>
                                           </el-select>
                                         </el-form-item>
                                     </el-col>
@@ -96,7 +96,7 @@
                                     </el-col>
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="经营面积(m2)">
-                                            <el-input @change="areaChange" placeholder="0.000" v-model="form.operatingArea"></el-input>
+                                            <el-input @change="areaChange" type="number" placeholder="0.000" v-model="form.operatingArea"></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
@@ -125,7 +125,7 @@
             <div>
                 <template>
                     <el-tabs v-model="tabActiveName" @tab-click="tabClick">
-                        <el-tab-pane label="供应商" name="dc">
+                        <el-tab-pane label="物流中心" name="dc">
                             <div class="info-title">基本信息</div>
                             <el-col :span="6" class="info-box">
                                 <div>类型:</div>
@@ -209,6 +209,7 @@ export default {
           code: '',
           name: '',
           dcId: '',
+          dcName: '',
           type: '',
           sourceCode: '',
           shortName: '',
@@ -249,7 +250,6 @@ export default {
     },
     methods: {
       back: function() {
-        this.$store.dispatch("tagsView/delView", this.$route);
         this.$router.go(-1)
       },
       areaChange: function() {
@@ -324,8 +324,6 @@ export default {
           page: this.page,
           pageSize: 0,
           searchCount: true,
-          nameOrCodeLike: this.form.nameOrCode,
-          statusEquals: this.form.status,
           typeEquals: "CENTER"
         }
         BasicService.getWrhQuery(data)
@@ -345,7 +343,6 @@ export default {
               .then(res => {
                 console.log(res)
                 this.$message.success("创建成功")
-                this.$store.dispatch("tagsView/delView", this.$route);
                 this.$router.go(-1)
               })
               .catch(err => {
@@ -361,7 +358,6 @@ export default {
               .then(res => {
                 console.log(res)
                 this.$message.success("更新成功")
-                this.$store.dispatch("tagsView/delView", this.$route);
                 this.$router.go(-1)
               })
               .catch(err => {
@@ -377,6 +373,7 @@ export default {
         this.status = "edit"
         this.form = Object.assign(this.form, this.dcInfo)
         console.log(this.form)
+        this.getDcCenter()
       }
     },
     created() {

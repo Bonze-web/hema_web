@@ -252,7 +252,7 @@ const BasicInfoPackage = {
         import('@/views/basic-info/suppliers/edit'),
       hidden: true,
       meta: {
-        title: '供应商',
+        title: '修改供应商',
         icon: 'table'
       }
     }]
@@ -261,7 +261,7 @@ const BasicInfoPackage = {
     name: "Category",
     component: AModule,
     meta: {
-      title: '商品类别',
+      title: '商品类别列表',
       icon: 'table'
     },
     children: [{
@@ -279,6 +279,64 @@ const BasicInfoPackage = {
       name: "CategoryEdit",
       component: () =>
         import('@/views/basic-info/category/edit'),
+      hidden: true,
+      meta: {
+        title: '修改商品类别',
+        icon: 'table'
+      }
+    }]
+  }, {
+    path: "containertype",
+    name: "ContainerType",
+    component: AModule,
+    meta: {
+      title: '容器类型列表',
+      icon: 'table'
+    },
+    children: [{
+      path: "",
+      name: "ContainerTypeIndex",
+      component: () =>
+        import('@/views/basic-info/container-type/index'),
+      hidden: true,
+      meta: {
+        title: '容器类型',
+        icon: 'table'
+      }
+    }, {
+      path: "edit",
+      name: "ContainerTypeEdit",
+      component: () =>
+        import('@/views/basic-info/container-type/edit'),
+      hidden: true,
+      meta: {
+        title: '修改容器类型',
+        icon: 'table'
+      }
+    }]
+  }, {
+    path: "dc",
+    name: "Dc",
+    component: AModule,
+    meta: {
+      title: '物流中心',
+      icon: 'table'
+    },
+    children: [{
+      path: "",
+      name: "View",
+      component: () =>
+        import('@/views/basic-info/dc/index'),
+      hidden: true,
+      meta: {
+        title: '配送中心',
+        icon: 'table'
+      }
+    }, {
+      path: "edit",
+      name: "Edit",
+      component: () =>
+        import('@/views/basic-info/dc/edit'),
       hidden: true,
       meta: {
         title: '',
@@ -302,36 +360,6 @@ const StorageInfoPackage = {
     permission: PermIds.REPORT_DYNAMIC
   },
   children: [{
-    path: "dc",
-    name: "Dc",
-    component: AModule,
-    meta: {
-      title: '物流中心',
-      icon: 'table'
-    },
-    children: [{
-      path: "",
-      name: "View",
-      component: () =>
-        import('@/views/storage-info/dc/index'),
-      hidden: true,
-      meta: {
-        title: '配送中心',
-        icon: 'table'
-      }
-    }, {
-      path: "edit",
-      name: "Edit",
-      component: () =>
-        import('@/views/storage-info/dc/edit'),
-      hidden: true,
-      meta: {
-        title: '',
-        icon: 'table'
-      }
-    }]
-  },
-  {
     path: "potion",
     name: "Potion",
     component: AModule,

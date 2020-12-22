@@ -29,7 +29,7 @@
         <div style="height:20px" />
         <div style="background:#fff">
           <el-row>
-            <router-link :to="{ path: '/storageinfo/dc/edit', query:{ status: 'create'} }">
+            <router-link :to="{ path: '/basicinfo/dc/edit', query:{ status: 'create'} }">
             <!-- <span v-if="child.meta&&child.meta.title" :title="child.meta.title">{{child.meta.title}}</span> -->
             <el-button style="margin:18px 10px" type="primary" size="mini">新建</el-button>
         </router-link>
@@ -44,7 +44,7 @@
                 </el-table-column> -->
                 <el-table-column fixed prop="code" label="代码">
                     <template slot-scope="scope">
-                        <router-link style="color:#409EFF" :to="{ path: '/storageinfo/dc/edit', query:{ status: 'read', id: scope.row.id} }">
+                        <router-link style="color:#409EFF" :to="{ path: '/basicinfo/dc/edit', query:{ status: 'read', id: scope.row.id} }">
                             <span>{{ scope.row.code }}</span>
                         </router-link>
                     </template>
