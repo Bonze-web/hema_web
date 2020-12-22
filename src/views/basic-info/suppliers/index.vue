@@ -51,7 +51,7 @@
                 </el-table-column>
                 <el-table-column prop="status" label="状态" >
                   <template slot-scope="scope">
-                    {{ scope.row.status | sourceType }}
+                    {{ scope.row.status | suppliersStatus }}
                   </template>
                 </el-table-column>
                 <el-table-column
