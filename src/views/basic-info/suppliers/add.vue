@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="head" v-if="status === 'create' || status === 'edit'">
+      <div class="head" v-if="status === 'create' || status === 'edit'">
             <div style="margin-top:8px" v-if="status === 'create'">新建供应商</div>
             <div style="margin-top:8px" v-else>编辑</div>
             <div>
@@ -9,28 +9,7 @@
                 <!-- <el-button type="primary" v-if="status === 'create'">确认并创建</el-button> -->
             </div>
         </div>
-        <div class="head" v-if="status === 'read'">
-            <div class="head-title">
-                <div style="margin:8px">{{ '[' + suppliersInfo.code + ']' + suppliersInfo.name }}</div>
-                <!-- <template>
-                    <el-switch
-                        v-model="suppliersInfo.status"
-                        @change="statusChange"
-                        active-color="#13ce66"
-                        inactive-color="#eee">
-                    </el-switch>
-                </template> -->
-                <template>
-                  <el-button type="text" @click="statusChange" v-if="suppliersInfo.status">禁用</el-button>
-                  <el-button type="text" @click="statusChange" v-if="!suppliersInfo.status">启用</el-button>
-                </template>
-            </div>
-            <div>
-                <el-button @click="back">返回</el-button>
-                <el-button type="primary" @click="editSupplier">编辑</el-button>
-            </div>
-        </div>
-        <div style="height:20px" />
+      <div style="height:20px" />
         <div class="info-content" v-if="status === 'create' || status === 'edit'">
             <div>
                 <template>
@@ -106,67 +85,6 @@
                 </template>
             </div>
         </div>
-        <div class="info-content" v-if="status === 'read'">
-            <div>
-                <template>
-                    <el-tabs v-model="tabActiveName" @tab-click="tabClick">
-                        <el-tab-pane label="供应商" name="suppliers">
-                            <div class="info-title">基本信息</div>
-                            <el-col :span="6" class="info-box">
-                                <div>代码:</div>
-                                <div>{{ suppliersInfo.code }}</div>
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>名称:</div>
-                                <div>{{ suppliersInfo.name }}</div>
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>简称:</div>
-                                <div>{{ suppliersInfo.anotherName }}</div>
-                            </el-col>
-                            <!-- <el-col :span="6" class="info-box">
-                                <div>货主:</div>
-                                <div></div>
-                            </el-col> -->
-                            <el-col :span="6" class="info-box">
-                                <div>联系人:</div>
-                                <div>{{ suppliersInfo.contactName }}</div>
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>联系方式:</div>
-                                <div>{{ suppliersInfo.mobile }}</div>
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>地址:</div>
-                                <div>{{ suppliersInfo.address }}</div>
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>邮编:</div>
-                                <div>{{ suppliersInfo.postCode ? suppliersInfo.postCode : "&lt;空&gt;" }}</div>
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>主页:</div>
-                                <div>{{ suppliersInfo.homePage ? suppliersInfo.homePage : "&lt;空&gt;" }}</div>
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>经营者备案:</div>
-                                <div>{{ suppliersInfo.recordCode ? suppliersInfo.recordCode : "&lt;空&gt;" }}</div>
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>自定义字段1:</div>
-                                <div>{{ suppliersInfo.customField ? suppliersInfo.customField : "&lt;空&gt;" }}</div>
-                            </el-col>
-                            <el-col class="info-box">
-                                <div>备注:</div>
-                                <div>{{ suppliersInfo.remark ? suppliersInfo.remark : "&lt;空&gt;" }}</div>
-                            </el-col>
-                        </el-tab-pane>
-                        <!-- <el-tab-pane label="配送中心范围" name="range">配置管理</el-tab-pane>
-                        <el-tab-pane label="操作日志" name="log">角色管理</el-tab-pane> -->
-                    </el-tabs>
-                </template>
-            </div>
-        </div>
     </div>
 </template>
 
@@ -223,64 +141,11 @@ export default {
         this.$store.dispatch("tagsView/delView", this.$route);
         this.$router.go(-1)
       },
-      statusChange: function() {
-        // 修改供应商状态
-        const _this = this
-        this.$confirm('此操作将改变供应商状态, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          if (_this.suppliersInfo.status) {
-          BasicService.closeSuppliers(_this.id, _this.suppliersInfo.version)
-          .then((res) => {
-            _this.$message.success("禁用成功")
-            _this.getSuppliers(_this.id)
-          })
-          .catch((err) => {
-            _this.$message.error("禁用失败" + err.message)
-            _this.getSuppliers(_this.id)
-          })
-        } else {
-          BasicService.openSuppliers(_this.id, _this.suppliersInfo.version)
-          .then((res) => {
-            _this.$message.success("启用成功")
-            _this.getSuppliers(_this.id)
-          })
-          .catch((err) => {
-            _this.$message.error("启用失败" + err.message)
-            _this.getSuppliers(_this.id)
-          })
-        }
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消'
-          })          
-        })
-      },
       getQueryStatus: function() {
         this.status = this.$route.query.status
         if (this.status === 'read') {
           this.id = this.$route.query.id
-          this.getSuppliers(this.id)
         }
-      },
-      getSuppliers: function(id) {
-        // 获取供应商详情
-        BasicService.getSuppliersDetail(id)
-        .then((res) => {
-          this.suppliersInfo = res
-          // 根据状态修改供应商开启switch
-          if (this.suppliersInfo.status === "OPEN") {
-            this.suppliersInfo.status = true
-          } else {
-            this.suppliersInfo.status = false
-          }
-        })
-        .catch((err) => {
-          this.$message.error("获取详情失败" + err.message)
-        })
       },
       tabClick: function() {  
       },
@@ -320,11 +185,6 @@ export default {
             console.log(2)
           }
         })
-      },
-      editSupplier() {
-        this.status = "edit"
-        this.form = Object.assign(this.form, this.suppliersInfo)
-        console.log(this.form)
       }
     },
     created() {

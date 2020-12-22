@@ -128,6 +128,26 @@ const user = {
     },
 
     /**
+     * 修改工作组织
+     */
+    ChangeWorkingOrg({
+      dispatch,
+      commit
+    }, userInfo) {
+      return new Promise((resolve, reject) => {
+        UserService.changeWorkingOrg(userInfo.username, userInfo.workingOrgId)
+          .then(resp => {
+            commit('SET_TOKEN', resp.accessToken);
+            // dispatch("RefreshToken", resp);
+            resolve(resp);
+          })
+          .catch(error => {
+            reject(error)
+          })
+      })
+    },
+
+    /**
      * 获取用户信息
      * @param {*} param0 
      */

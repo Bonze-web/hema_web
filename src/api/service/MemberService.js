@@ -151,12 +151,12 @@ export default {
   /**
    * 保存用户角色   
    * @param {*} userId 用户ID
-   * @param {*} roleIds 角色ID
+   * @param {*} roles 角色列表
    */
-  updateRoles(userId, roleIds = []) {
+  updateRoles(userId, roles = []) {
     return request.put('/sys/user/updateRoles', {
       userId: userId,
-      roleIds: roleIds
+      roles: roles
     });
   },
 

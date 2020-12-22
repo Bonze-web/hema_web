@@ -11,14 +11,18 @@
         </div>
         <div class="head" v-if="status === 'read'">
             <div class="head-title">
-                <div style="margin-right:8px">{{ '[' + warehouseInfo.code + ']' + warehouseInfo.name }}</div>
-                <template>
+                <div style="margin:8px">{{ '[' + warehouseInfo.code + ']' + warehouseInfo.name }}</div>
+                <!-- <template>
                     <el-switch
                         v-model="warehouseInfo.status"
                         @change="statusChange"
                         active-color="#13ce66"
                         inactive-color="#eee">
                     </el-switch>
+                </template> -->
+                <template>
+                  <el-button type="text" @click="statusChange" v-if="warehouseInfo.status">禁用</el-button>
+                  <el-button type="text" @click="statusChange" v-if="!warehouseInfo.status">启用</el-button>
                 </template>
             </div>
             <div>
@@ -32,7 +36,7 @@
             <div>
                 <template>
                     <el-tabs v-model="tabActiveName" @tab-click="tabClick">
-                        <el-tab-pane label="商品类别" name="category">
+                        <el-tab-pane label="仓库" name="category">
                             <div class="info-title">基本信息</div>
                             <el-form :model="form" :rules="createRules" ref="form" label-width="100px" class="demo-ruleForm">
                                 <el-row :gutter="20">
@@ -47,14 +51,17 @@
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
-                                        <el-form-item label="配送中心" prop="dcId">
+                                      <el-form-item label="配送中心" prop="dcId">
+                                          <el-input v-model="form.dcId"></el-input>
+                                      </el-form-item>
+                                        <!-- <el-form-item label="配送中心" prop="dcId">
                                             <el-select v-model="form.dcId" placeholder="情选择配送中心" @change="levelChange">
                                                 <el-option label="配送中心1" value="0001"></el-option>
                                                 <el-option label="配送中心2" value="0002"></el-option>
                                                 <el-option label="配送中心3" value="0003"></el-option>
                                                 <el-option label="配送中心4" value="0004 "></el-option>
                                             </el-select>
-                                        </el-form-item>
+                                        </el-form-item> -->
                                     </el-col>
                                     <!-- <el-col :span="6" class="info-box" v-if="level !== 'one'">
                                         <el-form-item label="上级类别">
@@ -158,27 +165,42 @@ export default {
         this.$router.go(-1)
       },
       statusChange: function() {
-        console.log(this.warehouseInfo.id, this.warehouseInfo.version)
         // 修改仓库状态
-        if (!this.warehouseInfo.status) {
-          StorageService.closeWarehouse(this.warehouseInfo.id, this.warehouseInfo.version)
-          .then((res) => {
-            console.log(res)
-            // this.getCategory(this.id)
-          })
-          .catch((err) => {
-            this.$message.error("禁用失败" + err)
-          })
-        } else {
-          StorageService.openWarehouse(this.warehouseInfo.id, this.warehouseInfo.version)
-          .then((res) => {
-            console.log(res)
-            // this.getCategory(this.id)
-          })
-          .catch((err) => {
-            this.$message.error("启用失败" + err)
-          })
-        }
+        const _this = this;
+        this.$confirm('是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          if (_this.warehouseInfo.status) {
+            // 禁用
+            StorageService.closeWarehouse(_this.warehouseInfo.id, _this.warehouseInfo.version)
+            .then((res) => {
+              _this.$message.success("禁止用成功")
+              _this.getCategory(_this.id)
+            })
+            .catch((err) => {
+              _this.$message.error("禁用失败" + err)
+              _this.getCategory(_this.id)
+            })
+          } else {
+            // 启用
+            StorageService.openWarehouse(_this.warehouseInfo.id, _this.warehouseInfo.version)
+            .then((res) => {
+              _this.$message.success("启用成功")
+              _this.getCategory(_this.id)
+            })
+            .catch((err) => {
+              _this.$message.error("启用失败" + err)
+              _this.getCategory(_this.id)
+            })
+          }
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消'
+          })        
+        })
       },
       getQueryStatus: function() {
         this.status = this.$route.query.status
@@ -196,9 +218,9 @@ export default {
           this.warehouseInfo = res;
           // 根据状态修改仓库开启switch
           if (this.warehouseInfo.status === "OFF") {
-            this.warehouseInfo.status = false
-          } else {
             this.warehouseInfo.status = true
+          } else {
+            this.warehouseInfo.status = false
           }
 
           this.form = this.warehouseInfo;
@@ -207,7 +229,6 @@ export default {
           // }
         })
         .catch((err) => {
-          console.log(err)
           this.$message.error("获取详情失败" + err)
         })
       },
@@ -225,7 +246,6 @@ export default {
             if (this.status === 'create') {
               StorageService.createWarehouse(this.form)
               .then(res => {
-                console.log(res)
                 this.$message.success("创建成功")
                 this.$store.dispatch("tagsView/delView", this.$route);
                 this.$router.go(-1)
@@ -234,15 +254,16 @@ export default {
                 this.$message.error("创建失败" + err)
               })
             } else {
-              // if (this.form.status) {
-              //   this.form.status = "NO"
-              // } else {
-              //   this.form.status = "OFF"
-              // }
-              StorageService.updateCategory(this.form)
+              if (this.form.status) {
+                this.form.status = "NO"
+              } else {
+                this.form.status = "OFF"
+              }
+              StorageService.updateWarehouse(this.form)
               .then(res => {
                 console.log(res)
                 this.$message.success("更新成功")
+
                 this.$store.dispatch("tagsView/delView", this.$route);
                 this.$router.go(-1)
               })
@@ -252,44 +273,12 @@ export default {
             }
           }
         })
-       
-      //  this.$refs.form.validate(valid => {
-      //     if (valid) {
-      //       if (this.level !== 'one' && !this.form.parentId) {
-      //         this.$message.error("请选择一个父级类别")
-      //         return
-      //       }
-      //       if (this.status === 'create') {
-      //         console.log(this.form)
-      //         BasicService.createCategory(this.form)
-      //         .then(res => {
-      //           console.log(res)
-      //           this.$message.success("创建成功")
-      //           this.$router.go(-1)
-      //         })
-      //         .catch(err => {
-      //           this.$message.error("创建失败" + err)
-      //         })
-      //       } else {
-      //         if (this.form.status) {
-      //           this.form.status = "enabled"
-      //         } else {
-      //           this.form.status = "disabled"
-      //         }
-      //         BasicService.updateCategory(this.form)
-      //         .then(res => {
-      //           console.log(res)
-      //           this.$message.success("更新成功")
-      //           this.$router.go(-1)
-      //         })
-      //         .catch(err => {
-      //           this.$message.error("更新失败" + err)
-      //         })
-      //       }
-      //     }
-      //   })
       },
       editCategory() {
+        StorageService.getLogisticsList(this.id)
+        .then(res => {
+          console.log(res)
+        })
         this.status = "edit"
         this.form = Object.assign(this.form, this.categoryInfo)
         console.log(this.form)

@@ -7,9 +7,9 @@
     </span>
 
     <el-form class="edit-form" ref="userForm" :model="user" :rules="rules" label-width="180px" slot="body">
-      <el-form-item label="所属组织" prop="orgId">
-        <org-select :orgValue.sync="user.orgId" :includeLowerOrg="true" v-if="(editOrg && upperOrgId)|| !user.id" :orgRange="orgRange"></org-select>
-        <span v-else>{{user.orgName}}</span>
+      <el-form-item label="所属组织" prop="orgIds">
+        <org-select :orgValue.sync="user.orgIds" :includeLowerOrg="true" v-if="(editOrg && upperOrgId)|| !user.id" :orgRange="orgRange" :multiple="true"></org-select>
+        <span v-else>{{user.orgNames}}</span>
         <el-button size="small" v-if="hasPermission(PermIds.SYS_USER_UPDATE_ORG) && user.id && !editOrg" @click="handleEditOrg">修改</el-button>
       </el-form-item>
       <el-form-item label="状态" v-if="user.id">
@@ -41,7 +41,7 @@
       </el-form-item>
       <el-form-item label="头像" prop="avatar">
         <div v-if="user.avatar" class="uploaded-img-box">
-          <img :src="user.avatar" class="avatar">
+          <img :src="user.avatar" class="avatar" />
           <div>
             <i class="el-icon-delete" @click="deleteUploadedAvatar"></i>
           </div>
@@ -83,6 +83,13 @@ export default {
         callback();
       }
     };
+    var validateOrg = (rule, value, callback) => {
+      if (value === "" || value.length === 0) {
+        callback(new Error("请选择所属组织"));
+      } else {
+        callback();
+      }
+    };
 
     return {
       uploadHeaders: {
@@ -90,7 +97,7 @@ export default {
       },
       user: {
         id: null,
-        orgId: "",
+        orgIds: "",
         username: "",
         password: "",
         confirmPassword: "",
@@ -98,11 +105,12 @@ export default {
         mobile: "",
         email: "",
         workNumber: "",
-        avatar: ""
+        avatar: "",
+        orgNames: ""
       },
       PermIds: PermIds,
       rules: {
-        orgId: [{ required: true, message: "请选择所属组织", trigger: "blur" }],
+        orgIds: [{ required: true, validator: validateOrg, trigger: "blur" }],
         username: [
           { required: true, message: "请输入用户名", trigger: "blur" },
           {
@@ -239,17 +247,17 @@ export default {
       var self = this;
       this.doValidate()
         .then(() => {
-          return UserService.update(self.user);
+          return UserService.update({
+            ...self.user,
+            orgId: ""
+          });
         })
         .then(res => {
           // 修改所属组织
-          if (
-            self.upperOrgId !== self.user.orgId &&
-            self.hasPermission(PermIds.SYS_USER_UPDATE_ORG)
-          ) {
+          if (self.hasPermission(PermIds.SYS_USER_UPDATE_ORG)) {
             const postData = {
               id: self.user.id,
-              orgId: self.user.orgId
+              orgIds: self.user.orgIds
             };
             return UserService.updateOrg(postData);
           }
@@ -387,8 +395,23 @@ export default {
       var self = this;
       UserService.getById(id)
         .then(data => {
-          self.user = data;
+          self.user = {
+            ...data,
+            orgNames: ""
+          };
           self.upperOrgId = data.orgId;
+          return UserService.getUserOrgs(data.username);
+        })
+        .then(res => {
+          var orgIds = [];
+          var orgNames = [];
+          res.forEach(ele => {
+            orgIds.push(ele.id);
+            orgNames.push(ele.name);
+          });
+          self.user.orgIds = orgIds;
+          self.user.orgNames = orgNames.join(",");
+          console.log(self.user.orgNames)
         })
         .catch(err => {
           Utils.showError(err);

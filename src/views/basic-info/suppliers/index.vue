@@ -21,7 +21,7 @@
         <div style="height:20px" />
         <div style="background:#fff">
           <el-row>
-            <router-link :to="{ path: '/basicinfo/suppliers/edit', query:{ status: 'create'} }">
+            <router-link :to="{ path: '/basicinfo/suppliers/add', query:{ status: 'create'} }">
             <!-- <span v-if="child.meta&&child.meta.title" :title="child.meta.title">{{child.meta.title}}</span> -->
             <el-button style="margin:18px 10px" type="primary" size="mini">新建</el-button>
         </router-link>
@@ -149,6 +149,7 @@ export default {
       },
       getSuppliersList: function(reset) {
         // 获取供应商列表
+        window.addEventListener('pageshow', this.onShow)
         const _this = this
         const data = {
           page: this.page,
@@ -200,6 +201,12 @@ export default {
   created() {
     this.getSuppliersList()
   },
+  beforeRouteEnter(to, from, next) {
+      next(vm => {
+        // 通过 `vm` 访问组件实例
+        vm.getSuppliersList();
+      })
+    },
   filters: {
     sourceType(type) {
       switch (type) {

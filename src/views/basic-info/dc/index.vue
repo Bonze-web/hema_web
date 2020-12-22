@@ -29,7 +29,7 @@
         <div style="height:20px" />
         <div style="background:#fff">
           <el-row>
-            <router-link :to="{ path: '/basicinfo/dc/edit', query:{ status: 'create'} }">
+            <router-link :to="{ path: '/basicinfo/dc/add', query:{ status: 'create'} }">
             <!-- <span v-if="child.meta&&child.meta.title" :title="child.meta.title">{{child.meta.title}}</span> -->
             <el-button style="margin:18px 10px" type="primary" size="mini">新建</el-button>
         </router-link>
@@ -130,7 +130,7 @@ export default {
             _this.getDcList()
           })
           .catch((err) => {
-            _this.$message.error("禁用失败" + err)
+            _this.$message.error("禁用失败" + err.message)
             _this.getDcList()
           })
         } else {
@@ -140,7 +140,7 @@ export default {
             _this.getDcList()
           })
           .catch((err) => {
-            _this.$message.error("启用失败" + err)
+            _this.$message.error("启用失败" + err.message)
             _this.getDcList()
           })
         }
@@ -214,6 +214,12 @@ export default {
   created() {
     this.getDcList()
   },
+  beforeRouteEnter(to, from, next) {
+      next(vm => {
+        // 通过 `vm` 访问组件实例
+        vm.getDcList();
+      })
+    },
   filters: {
     dcType(type) {
       switch (type) {

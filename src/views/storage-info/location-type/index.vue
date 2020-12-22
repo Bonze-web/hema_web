@@ -126,7 +126,7 @@ export default {
             this.getDcList()
           })
           .catch((err) => {
-            this.$message.error("禁用失败" + err)
+            this.$message.error("禁用失败" + err.message)
             this.getDcList()
           })
         } else {
@@ -136,7 +136,7 @@ export default {
             this.getDcList()
           })
           .catch((err) => {
-            this.$message.error("启用失败" + err)
+            this.$message.error("启用失败" + err.message)
             this.getDcList()
           })
         }

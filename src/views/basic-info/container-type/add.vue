@@ -9,27 +9,6 @@
                 <!-- <el-button type="primary" v-if="status === 'create'">确认并创建</el-button> -->
             </div>
         </div>
-        <div class="head" v-if="status === 'read'">
-            <div class="head-title">
-                <div style="margin:8px">{{ '[' + containerTypeInfo.code + ']' + containerTypeInfo.name }}</div>
-                <!-- <template>
-                    <el-switch
-                        v-model="containerTypeInfo.status"
-                        @change="statusChange"
-                        active-color="#13ce66"
-                        inactive-color="#eee">
-                    </el-switch>
-                </template> -->
-                <template>
-                  <el-button type="text" @click="statusChange" v-if="containerTypeInfo.status">禁用</el-button>
-                  <el-button type="text" @click="statusChange" v-if="!containerTypeInfo.status">启用</el-button>
-                </template>
-            </div>
-            <div>
-                <el-button @click="back">返回</el-button>
-                <el-button type="primary" @click="editContainerType">编辑</el-button>
-            </div>
-        </div>
         <div style="height:20px" />
         <div class="info-content" v-if="status === 'create' || status === 'edit'">
             <div>
@@ -152,96 +131,6 @@
                                     </el-col>
                                 </el-row>
                             </el-form>
-                        </el-tab-pane>
-                        <!-- <el-tab-pane label="配送中心范围" name="range">配置管理</el-tab-pane>
-                        <el-tab-pane label="操作日志" name="log">角色管理</el-tab-pane> -->
-                    </el-tabs>
-                </template>
-            </div>
-        </div>
-        <div class="info-content" v-if="status === 'read'">
-            <div>
-                <template>
-                    <el-tabs v-model="tabActiveName" @tab-click="tabClick">
-                        <el-tab-pane label="容器类型" name="containerType">
-                            <div class="info-title">基本信息</div>
-                            <el-col :span="6" class="info-box">
-                                <div>代码:</div>
-                                <div>{{ containerTypeInfo.code }}</div>
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>名称:</div>
-                                <div>{{ containerTypeInfo.name }}</div>
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>条码前缀:</div>
-                                <div>{{ containerTypeInfo.barcodeprefix }}</div>
-                            </el-col>
-                            <!-- <el-col :span="6" class="info-box">
-                                <div>货主:</div>
-                                <div></div>
-                            </el-col> -->
-                            <el-col :span="6" class="info-box">
-                                <div>条码类型:</div>
-                                <div>{{ containerTypeInfo.barcodetype | barcodetype }}</div>
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>条码长度:</div>
-                                <div>{{ containerTypeInfo.barcodelength }}</div>
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>回收类型:</div>
-                                <div>{{ containerTypeInfo.recycletype | recycletype}}</div>
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>随车:</div>
-                                <div>{{ containerTypeInfo.shipflage ? "是" : "否" }}</div>
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>附件:</div>
-                                <div>{{ containerTypeInfo.attachment ? "是" : "否" }}</div>
-                            </el-col>
-                            <el-col class="info-box" style="margin-bottom:20px">
-                                <div>备注:</div>
-                                <div>{{ containerTypeInfo.remark ? containerTypeInfo.remark : "&lt;空&gt;" }}</div>
-                            </el-col>
-                            <div class="info-title">规格信息</div>
-                            <el-col :span="6" class="info-box">
-                                <div>内长(cm):</div>
-                                <div>{{ containerTypeInfo.inlength }}</div>
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>外长(cm):</div>
-                                <div>{{ containerTypeInfo.outlength }}</div>
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>内宽(cm):</div>
-                                <div>{{ containerTypeInfo.inwidth }}</div>
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>外宽(cm):</div>
-                                <div>{{ containerTypeInfo.outwidth }}</div>
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>内高(cm):</div>
-                                <div>{{ containerTypeInfo.inheight }}</div>
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>外高(cm):</div>
-                                <div>{{ containerTypeInfo.outheight }}</div>
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>自重(kg):</div>
-                                <div>{{ containerTypeInfo.weight }}</div>
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>承重(kg):</div>
-                                <div>{{ containerTypeInfo.bearingweight }}</div>
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>容积率(%):</div>
-                                <div>{{ containerTypeInfo.plotratio }}</div>
-                            </el-col>
                         </el-tab-pane>
                         <!-- <el-tab-pane label="配送中心范围" name="range">配置管理</el-tab-pane>
                         <el-tab-pane label="操作日志" name="log">角色管理</el-tab-pane> -->
@@ -397,24 +286,7 @@ export default {
         this.status = this.$route.query.status
         if (this.status === 'read') {
           this.id = this.$route.query.id
-          this.getContainerTypeDetail(this.id)
         }
-      },
-      getContainerTypeDetail: function(id) {
-        // 获取容器类型详情
-        BasicService.getContainerTypeDetail(id)
-        .then((res) => {
-          this.containerTypeInfo = res
-          // 根据状态修改
-          if (this.containerTypeInfo.status === "ON") {
-            this.containerTypeInfo.status = true
-          } else {
-            this.containerTypeInfo.status = false
-          }
-        })
-        .catch((err) => {
-          this.$message.error("获取详情失败" + err.message)
-        })
       },
       tabClick: function() {  
       },
@@ -452,11 +324,6 @@ export default {
             console.log(2)
           }
         })
-      },
-      editContainerType() {
-        this.status = "edit"
-        this.form = Object.assign(this.form, this.containerTypeInfo)
-        console.log(this.form)
       }
     },
     created() {

@@ -237,7 +237,7 @@ export default {
             this.getSuppliers(this.id)
           })
           .catch((err) => {
-            this.$message.error("禁用失败" + err)
+            this.$message.error("禁用失败" + err.message)
             this.getSuppliers(this.id)
           })
         } else {
@@ -246,7 +246,7 @@ export default {
             this.getSuppliers(this.id)
           })
           .catch((err) => {
-            this.$message.error("启用失败" + err)
+            this.$message.error("启用失败" + err.message)
             this.getSuppliers(this.id)
           })
         }
@@ -271,7 +271,7 @@ export default {
           }
         })
         .catch((err) => {
-          this.$message.error("获取详情失败" + err)
+          this.$message.error("获取详情失败" + err.message)
         })
       },
       tabClick: function() {  
@@ -288,7 +288,7 @@ export default {
                 this.$router.go(-1)
               })
               .catch(err => {
-                this.$message.error("创建失败" + err)
+                this.$message.error("创建失败" + err.message)
               })
             } else {
               if (this.form.status) {
@@ -303,7 +303,7 @@ export default {
                 this.$router.go(-1)
               })
               .catch(err => {
-                this.$message.error("更新失败" + err)
+                this.$message.error("更新失败" + err.message)
               })
             }
           } else {

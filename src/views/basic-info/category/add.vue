@@ -9,27 +9,6 @@
                 <!-- <el-button type="primary" v-if="status === 'create'">确认并创建</el-button> -->
             </div>
         </div>
-        <div class="head" v-if="status === 'read'">
-            <div class="head-title">
-                <div style="margin:8px">{{ '[' + categoryInfo.code + ']' + categoryInfo.name }}</div>
-                <!-- <template>
-                    <el-switch
-                        v-model="categoryInfo.status"
-                        @change="statusChange"
-                        active-color="#13ce66"
-                        inactive-color="#eee">
-                    </el-switch>
-                </template> -->
-                <template>
-                  <el-button type="text" @click="statusChange" v-if="categoryInfo.status">禁用</el-button>
-                  <el-button type="text" @click="statusChange" v-if="!categoryInfo.status">启用</el-button>
-                </template>
-            </div>
-            <div>
-                <el-button @click="back">返回</el-button>
-                <el-button type="primary" @click="editCategory">编辑</el-button>
-            </div>
-        </div>
         <div style="height:20px" />
         <div class="info-content" v-if="status === 'create' || status === 'edit'">
             <div>
@@ -71,43 +50,6 @@
                                     <textarea v-model="form.remark"></textarea>
                                 </el-form-item>
                             </el-form>
-                        </el-tab-pane>
-                        <!-- <el-tab-pane label="配送中心范围" name="range">配置管理</el-tab-pane>
-                        <el-tab-pane label="操作日志" name="log">角色管理</el-tab-pane> -->
-                    </el-tabs>
-                </template>
-            </div>
-        </div>
-        <div class="info-content" v-if="status === 'read'">
-            <div>
-                <template>
-                    <el-tabs v-model="tabActiveName" @tab-click="tabClick">
-                        <el-tab-pane label="商品类别" name="category">
-                            <div class="info-title">基本信息</div>
-                            <el-col :span="6" class="info-box">
-                                <div>代码:</div>
-                                <div>{{ categoryInfo.code }}</div>
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>名称:</div>
-                                <div>{{ categoryInfo.name }}</div>
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>级别:</div>
-                                <div>{{ categoryInfo.level | categoryLevel }}</div>
-                            </el-col>
-                            <!-- <el-col :span="6" class="info-box">
-                                <div>货主:</div>
-                                <div></div>
-                            </el-col> -->
-                            <el-col :span="6" class="info-box">
-                                <div>上级类别:</div>
-                                <div>{{ categoryInfo.parentName ? categoryInfo.parentName : "&lt;空&gt;" }}</div>
-                            </el-col>
-                            <el-col class="info-box">
-                                <div>备注:</div>
-                                <div>{{ categoryInfo.remark ? categoryInfo.remark : "&lt;空&gt;" }}</div>
-                            </el-col>
                         </el-tab-pane>
                         <!-- <el-tab-pane label="配送中心范围" name="range">配置管理</el-tab-pane>
                         <el-tab-pane label="操作日志" name="log">角色管理</el-tab-pane> -->
@@ -201,27 +143,7 @@ export default {
         this.status = this.$route.query.status
         if (this.status === 'read') {
           this.id = this.$route.query.id
-          this.getCategory(this.id)
         }
-      },
-      getCategory: function(id) {
-        // 获取商品类别详情
-        BasicService.getCategoryDatail(id)
-        .then((res) => {
-          this.categoryInfo = res
-          // 根据状态修改供应商开启switch
-          if (this.categoryInfo.status === "enabled") {
-            this.categoryInfo.status = true
-          } else {
-            this.categoryInfo.status = false
-          }
-          if (res.level !== "one") {
-            this.level = res.level
-          }
-        })
-        .catch((err) => {
-          this.$message.error("获取详情失败" + err.message)
-        })
       },
       tabClick: function() {  
       },
@@ -265,14 +187,6 @@ export default {
             console.log(2)
           }
         })
-      },
-      editCategory() {
-        this.status = "edit"
-        this.form = Object.assign(this.form, this.categoryInfo)
-        console.log(this.form)
-        if (this.level !== "one") {
-          this.getParentCategory()
-        }
       },
       levelChange() {
         this.level = this.form.level

@@ -9,27 +9,6 @@
                 <!-- <el-button type="primary" v-if="status === 'create'">确认并创建</el-button> -->
             </div>
         </div>
-        <div class="head" v-if="status === 'read'">
-            <div class="head-title">
-                <div style="margin:8px">{{ '[' + dcInfo.code + ']' + dcInfo.name }}</div>
-                <!-- <template>
-                    <el-switch
-                        v-model="dcInfo.status"
-                        @change="statusChange"
-                        active-color="#13ce66"
-                        inactive-color="#eee">
-                    </el-switch>
-                </template> -->
-                <template>
-                  <el-button type="text" @click="statusChange" v-if="dcInfo.status">禁用</el-button>
-                  <el-button type="text" @click="statusChange" v-if="!dcInfo.status">启用</el-button>
-                </template>
-            </div>
-            <div>
-                <el-button @click="back">返回</el-button>
-                <el-button type="primary" @click="editDc">编辑</el-button>
-            </div>
-        </div>
         <div style="height:20px" />
         <div class="info-content" v-if="status === 'create' || status === 'edit'">
             <div>
@@ -114,75 +93,6 @@
                                     <textarea v-model="form.remark"></textarea>
                                 </el-form-item>
                             </el-form>
-                        </el-tab-pane>
-                        <!-- <el-tab-pane label="配送中心范围" name="range">配置管理</el-tab-pane>
-                        <el-tab-pane label="操作日志" name="log">角色管理</el-tab-pane> -->
-                    </el-tabs>
-                </template>
-            </div>
-        </div>
-        <div class="info-content" v-if="status === 'read'">
-            <div>
-                <template>
-                    <el-tabs v-model="tabActiveName" @tab-click="tabClick">
-                        <el-tab-pane label="物流中心" name="dc">
-                            <div class="info-title">基本信息</div>
-                            <el-col :span="6" class="info-box">
-                                <div>类型:</div>
-                                <div>{{ dcInfo.type | dcType }}</div>
-                            </el-col>
-                            <el-col :span="6" v-if="dcInfo.type === 'FRONT'" class="info-box">
-                                <div>所属仓库:</div>
-                                <div>{{ dcInfo.dcName }}</div>
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>代码:</div>
-                                <div>{{ dcInfo.code }}</div>
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>名称:</div>
-                                <div>{{ dcInfo.name }}</div>
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>来源代码:</div>
-                                <div>{{ dcInfo.sourceCode }}</div>
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>简称:</div>
-                                <div>{{ dcInfo.shortName }}</div>
-                            </el-col>
-                            <!-- <el-col :span="6" class="info-box">
-                                <div>货主:</div>
-                                <div></div>
-                            </el-col> -->
-                            <el-col :span="6" class="info-box">
-                                <div>联系人:</div>
-                                <div>{{ dcInfo.contactor }}</div>
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>联系方式:</div>
-                                <div>{{ dcInfo.contactPhone }}</div>
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>地址:</div>
-                                <div>{{ dcInfo.address }}</div>
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>经营面积:</div>
-                                <div>{{ dcInfo.operatingArea }}</div>
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>邮编:</div>
-                                <div>{{ dcInfo.zipCode ? dcInfo.zipCode : "&lt;空&gt;" }}</div>
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>主体码:</div>
-                                <div>{{ dcInfo.subjectCode ? dcInfo.subjectCode : "&lt;空&gt;" }}</div>
-                            </el-col>
-                            <el-col class="info-box">
-                                <div>备注:</div>
-                                <div>{{ dcInfo.remark ? dcInfo.remark : "&lt;空&gt;" }}</div>
-                            </el-col>
                         </el-tab-pane>
                         <!-- <el-tab-pane label="配送中心范围" name="range">配置管理</el-tab-pane>
                         <el-tab-pane label="操作日志" name="log">角色管理</el-tab-pane> -->
@@ -298,24 +208,7 @@ export default {
         this.status = this.$route.query.status
         if (this.status === 'read') {
           this.id = this.$route.query.id
-          this.getDc(this.id)
         }
-      },
-      getDc: function(id) {
-        // 获取配送中心详情
-        BasicService.getDcDetail(id)
-        .then((res) => {
-          this.dcInfo = res
-          // 根据状态修改
-          if (this.dcInfo.status === "ON") {
-            this.dcInfo.status = true
-          } else {
-            this.dcInfo.status = false
-          }
-        })
-        .catch((err) => {
-          this.$message.error("获取详情失败" + err.message)
-        })
       },
       getDcCenter: function() {
         // 获取所有中心仓
@@ -368,12 +261,6 @@ export default {
             console.log(2)
           }
         })
-      },
-      editDc() {
-        this.status = "edit"
-        this.form = Object.assign(this.form, this.dcInfo)
-        console.log(this.form)
-        this.getDcCenter()
       }
     },
     created() {

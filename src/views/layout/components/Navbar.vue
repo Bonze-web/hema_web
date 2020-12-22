@@ -5,10 +5,17 @@
         <div class="logo-container" :class="{open: sidebar.opened}">
           <img src="/static/imgs/share_images/36524/hema.png" alt />
         </div>
-        <hamburger class="hamburger-container" :toggleClick="toggleSideBar" :isActive="sidebar.opened">
-        </hamburger>
+        <hamburger class="hamburger-container" :toggleClick="toggleSideBar" :isActive="sidebar.opened"></hamburger>
         <breadcrumb></breadcrumb>
-
+        <el-dropdown class="org-container" trigger="click" @command="handleChangeOrg" v-if="user.orgId !== 0 && user.orgId !== '0'">
+          <span class="el-dropdown-link">
+            切换登录组织
+            <i class="el-icon-arrow-down el-icon--right"></i>
+          </span>
+          <el-dropdown-menu class="user-dropdown" slot="dropdown">
+            <el-dropdown-item :command="item" v-for="item in orgList" :key="item.id" :disabled="item.id === workingOrg.id">{{item.name}}</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
         <el-dropdown class="avatar-container" trigger="click" @command="handleCommand">
           <span class="el-dropdown-link">
             欢迎 {{user? user.realName: ''}}
@@ -20,7 +27,6 @@
             <el-dropdown-item divided command="logout">注销</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-
       </el-menu>
     </div>
     <el-dialog title="密码设置" :visible.sync="dialogVisible" width="400px" center>
@@ -77,7 +83,8 @@ export default {
       passFormRules: {
         oldPassword: [{ validator: validatePass, trigger: "blur" }],
         newPassword: [{ validator: validatePass2, trigger: "blur" }]
-      }
+      },
+      orgList: []
     };
   },
   components: {
@@ -85,7 +92,7 @@ export default {
     Hamburger
   },
   computed: {
-    ...mapGetters(["sidebar", "avatar", "user"])
+    ...mapGetters(["sidebar", "avatar", "user", "workingOrg"])
   },
   methods: {
     /** 修改用户密码 */
@@ -105,7 +112,7 @@ export default {
                 duration: 2000,
                 onClose: function() {
                   self.$store.dispatch("LogOut").then(() => {
-                    sessionStorage.setItem("_isLogOut_", true)
+                    sessionStorage.setItem("_isLogOut_", true);
                     location.reload(); // 为了重新实例化vue-router对象 避免bug
                   });
                 }
@@ -120,29 +127,68 @@ export default {
       });
     },
     toggleSideBar() {
-      eventBus.$emit('toggleSideBar');
+      eventBus.$emit("toggleSideBar");
       this.$store.dispatch("ToggleSideBar");
     },
     logout() {
       this.$store.dispatch("LogOut").then(() => {
-        sessionStorage.setItem("_isLogOut_", true)
+        sessionStorage.setItem("_isLogOut_", true);
         location.reload(); // 为了重新实例化vue-router对象 避免bug
       });
     },
     handleCommand(command) {
       if (command === "index") {
         this.$router.push({
-          path: "/"
+          path: "/dashboard"
         });
       } else if (command === "logout") {
         this.logout();
       } else if (command === "updatePwd") {
         this.dialogVisible = true;
       }
+    },
+
+    getUserOrgs() {
+      UserService.getUserOrgs(this.user.username)
+        .then(res => {
+          this.orgList = res;
+        })
+        .catch(err => {
+          this.$message.error(err.message);
+        });
+    },
+    handleChangeOrg(val) {
+      var reg = new RegExp("report");
+      var redirect = this.$route.query.redirect;
+      const loginForm = {
+        username: this.user.username,
+        workingOrgId: val.id
+      };
+      this.$store
+        .dispatch("ChangeWorkingOrg", loginForm)
+        .then(data => {
+          console.log(redirect);
+          if (redirect) {
+            if (reg.test(redirect)) {
+              this.$router.push({ path: "/dashboard" });
+            } else {
+              this.$router.push({ path: redirect });
+            }
+          } else {
+            this.$router.push({ path: "/dashboard" });
+          }
+          location.reload(); // 为了重新实例化vue-router对象 避免bug
+        })
+        .catch(error => {
+          console.log(error);
+          console.log(this.$store.state.tagsView.visitedViews);
+          this.$message.error(error.message);
+        });
     }
   },
   created() {
     this.logo = require("../../../assets/logo_images/logo.png");
+    this.getUserOrgs();
   },
   watch: {
     dialogVisible: function(val) {
@@ -221,8 +267,25 @@ export default {
         }
       }
     }
+    .org-container {
+      height: 50px;
+      display: inline-block;
+      position: absolute;
+      right: 180px;
+      cursor: pointer;
+    }
+  }
+}
+.change-org-popover {
+  margin-right: 20px !important;
+  .change-org-button-box {
+    display: flex;
+    flex-direction: column;
+    .el-button {
+      width: 30px;
+      text-align: left;
+      margin-left: 0;
+    }
   }
 }
 </style>
-
-

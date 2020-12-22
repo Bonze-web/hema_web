@@ -29,8 +29,8 @@
         <el-form-item label="状态">
           <el-select v-model="form.status" placeholder="请选择状态">
             <el-option label="全部" value=""></el-option>
-            <el-option label="启用" value="enabled"></el-option>
-            <el-option label="禁用" value="disabled"></el-option>
+            <el-option label="启用" value="OFF"></el-option>
+            <el-option label="禁用" value="ON"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item>
@@ -46,7 +46,7 @@
 
     <div style="background: #fff">
       <el-row>
-        <router-link :to="{ path: '/storageinfo/potion/edit', query:{ status: 'create'} }" >
+        <router-link :to="{ path: '/storageinfo/warehouse/add', query:{ status: 'create'} }" >
           <el-button style="margin: 18px 10px" type="primary" size="mini"
             >新建</el-button
           >
@@ -60,13 +60,7 @@
       >
         <el-table-column fixed prop="code" label="代码" style="height: 20px">
           <template slot-scope="scope">
-            <router-link
-              style="color: #409eff"
-              :to="{
-                path: '/storageinfo/potion/edit',
-                query: { status: 'read', id: scope.row.id },
-              }"
-            >
+            <router-link style="color: #409eff" :to="{ path: '/storageinfo/warehouse/edit', query: { status: 'read', id: scope.row.id }, }" >
               <span>{{ scope.row.code }}</span>
             </router-link>
           </template>
@@ -149,42 +143,52 @@ export default {
   computed: {},
   methods: {
     onSubmit: function() {
+      const _this = this;
       this.page = 1;
 
       this.$refs.form.validate((result) => {
         if (result) {
-          this.getCateGoryQuery();
+          _this.warehouseInit();
         }
       });
     },
     statusChange: function(status, id, version) {
-      // 修改供应商状态
-      if (status) {
-        this.suppliersData[id].status = false
-      } else {
-        this.suppliersData[id].status = true
-      }
-      // if (status) {
-      //   BasicService.closeCategory(id, version)
-      //     .then((res) => {
-      //       this.$message.success("禁用成功");
-      //       this.getCateGoryQuery();
-      //     })
-      //     .catch((err) => {
-      //       this.$message.error("禁用失败" + err);
-      //       this.getCateGoryQuery();
-      //     });
-      // } else {
-      //   BasicService.openCategory(id, version)
-      //     .then((res) => {
-      //       this.$message.success("启用成功");
-      //       this.getCateGoryQuery();
-      //     })
-      //     .catch((err) => {
-      //       this.$message.error("启用失败" + err);
-      //       this.getCateGoryQuery();
-      //     });
-      // }
+      // 修改仓库状态
+      const _this = this;
+      this.$confirm('是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        if (status) {
+          // 禁用
+          StorageService.closeWarehouse(id, version)
+          .then((res) => {
+            _this.$message.success("禁止用成功")
+            _this.warehouseInit();
+          })
+          .catch((err) => {
+            _this.$message.error("禁用失败" + err)
+            _this.warehouseInit();
+          })
+        } else {
+          // 启用
+          StorageService.openWarehouse(id, version)
+          .then((res) => {
+            _this.$message.success("启用成功")
+            _this.warehouseInit();
+          })
+          .catch((err) => {
+            _this.$message.error("启用失败" + err)
+            _this.warehouseInit();
+          })
+        }
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消'
+        })        
+      })
     },
     clearInput: function() {
       this.form = {
@@ -199,26 +203,28 @@ export default {
       // 获取供应商列表
       const _this = this;
       const data = {
+        codeEquals: this.form.nameOrCode || null,
         page: this.page,
         pageSize: this.pageSize,
         searchCount: true,
-        codeOrNameLike: this.form.nameOrCode,
+        nameLike: this.form.nameOrCode || null,
         statusEquals: this.form.status || null
       };
+
+      console.log(this.form.status)
 
       StorageService.warehouseInit(data).then((res) => {
         const records = res.records;
         const listData = [];
-
+        console.log(res)
         this.totalCount = res.totalCount;
 
         records.forEach((item, index) => {
-          if (item === 'OFF') {
-            records[index].status = false
+          if (item.status === 'OFF') {
+            item.status = true
           } else {
-            records[index].status = true
+            item.status = false
           }
-
           listData.push(item)
         })
 
@@ -228,12 +234,12 @@ export default {
     },
     handleCurrentChange: function(e) {
       this.page = Number(e);
-      this.getRegistList(true);
+      this.warehouseInit(true);
     },
     handleSizeChange: function(e) {
       this.pageSize = Number(e);
       this.page = 1;
-      this.getRegistList(true);
+      this.warehouseInit(true);
     },
     allSelectionChange(val) {
       console.log(val);
