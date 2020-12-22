@@ -27,7 +27,7 @@
             </div>
             <div>
                 <el-button @click="back">返回</el-button>
-                <el-button type="primary" @click="editSupplier">编辑</el-button>
+                <el-button type="primary" @click="editContainerType">编辑</el-button>
             </div>
         </div>
         <div style="height:20px" />
@@ -41,7 +41,7 @@
                                 <el-row :gutter="20">
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="代码" prop="code">
-                                            <el-input v-model="form.code"></el-input>
+                                            <el-input :disabled="containerTypeInfo.code" v-model="form.code"></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
@@ -51,7 +51,7 @@
                                     </el-col>
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="条码前缀" prop="barcodeprefix">
-                                            <el-input v-model="form.barcodeprefix"></el-input>
+                                            <el-input :disabled="containerTypeInfo.barcodeprefix" v-model="form.barcodeprefix"></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
@@ -163,7 +163,7 @@
             <div>
                 <template>
                     <el-tabs v-model="tabActiveName" @tab-click="tabClick">
-                        <el-tab-pane label="供应商" name="containerType">
+                        <el-tab-pane label="容器类型" name="containerType">
                             <div class="info-title">基本信息</div>
                             <el-col :span="6" class="info-box">
                                 <div>代码:</div>
@@ -174,44 +174,73 @@
                                 <div>{{ containerTypeInfo.name }}</div>
                             </el-col>
                             <el-col :span="6" class="info-box">
-                                <div>简称:</div>
-                                <div>{{ containerTypeInfo.anotherName }}</div>
+                                <div>条码前缀:</div>
+                                <div>{{ containerTypeInfo.barcodeprefix }}</div>
                             </el-col>
                             <!-- <el-col :span="6" class="info-box">
                                 <div>货主:</div>
                                 <div></div>
                             </el-col> -->
                             <el-col :span="6" class="info-box">
-                                <div>联系人:</div>
-                                <div>{{ containerTypeInfo.contactName }}</div>
+                                <div>条码类型:</div>
+                                <div>{{ containerTypeInfo.barcodetype | barcodetype }}</div>
                             </el-col>
                             <el-col :span="6" class="info-box">
-                                <div>联系方式:</div>
-                                <div>{{ containerTypeInfo.mobile }}</div>
+                                <div>条码长度:</div>
+                                <div>{{ containerTypeInfo.barcodelength }}</div>
                             </el-col>
                             <el-col :span="6" class="info-box">
-                                <div>地址:</div>
-                                <div>{{ containerTypeInfo.address }}</div>
+                                <div>回收类型:</div>
+                                <div>{{ containerTypeInfo.recycletype | recycletype}}</div>
                             </el-col>
                             <el-col :span="6" class="info-box">
-                                <div>邮编:</div>
-                                <div>{{ containerTypeInfo.postCode ? containerTypeInfo.postCode : "&lt;空&gt;" }}</div>
+                                <div>随车:</div>
+                                <div>{{ containerTypeInfo.shipflage ? "是" : "否" }}</div>
                             </el-col>
                             <el-col :span="6" class="info-box">
-                                <div>主页:</div>
-                                <div>{{ containerTypeInfo.homePage ? containerTypeInfo.homePage : "&lt;空&gt;" }}</div>
+                                <div>附件:</div>
+                                <div>{{ containerTypeInfo.attachment ? "是" : "否" }}</div>
                             </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>经营者备案:</div>
-                                <div>{{ containerTypeInfo.recordCode ? containerTypeInfo.recordCode : "&lt;空&gt;" }}</div>
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>自定义字段1:</div>
-                                <div>{{ containerTypeInfo.customField ? containerTypeInfo.customField : "&lt;空&gt;" }}</div>
-                            </el-col>
-                            <el-col class="info-box">
+                            <el-col class="info-box" style="margin-bottom:20px">
                                 <div>备注:</div>
                                 <div>{{ containerTypeInfo.remark ? containerTypeInfo.remark : "&lt;空&gt;" }}</div>
+                            </el-col>
+                            <div class="info-title">规格信息</div>
+                            <el-col :span="6" class="info-box">
+                                <div>内长(cm):</div>
+                                <div>{{ containerTypeInfo.inlength }}</div>
+                            </el-col>
+                            <el-col :span="6" class="info-box">
+                                <div>外长(cm):</div>
+                                <div>{{ containerTypeInfo.outlength }}</div>
+                            </el-col>
+                            <el-col :span="6" class="info-box">
+                                <div>内宽(cm):</div>
+                                <div>{{ containerTypeInfo.inwidth }}</div>
+                            </el-col>
+                            <el-col :span="6" class="info-box">
+                                <div>外宽(cm):</div>
+                                <div>{{ containerTypeInfo.outwidth }}</div>
+                            </el-col>
+                            <el-col :span="6" class="info-box">
+                                <div>内高(cm):</div>
+                                <div>{{ containerTypeInfo.inheight }}</div>
+                            </el-col>
+                            <el-col :span="6" class="info-box">
+                                <div>外高(cm):</div>
+                                <div>{{ containerTypeInfo.outheight }}</div>
+                            </el-col>
+                            <el-col :span="6" class="info-box">
+                                <div>自重(kg):</div>
+                                <div>{{ containerTypeInfo.weight }}</div>
+                            </el-col>
+                            <el-col :span="6" class="info-box">
+                                <div>承重(kg):</div>
+                                <div>{{ containerTypeInfo.bearingweight }}</div>
+                            </el-col>
+                            <el-col :span="6" class="info-box">
+                                <div>容积率(%):</div>
+                                <div>{{ containerTypeInfo.plotratio }}</div>
                             </el-col>
                         </el-tab-pane>
                         <!-- <el-tab-pane label="配送中心范围" name="range">配置管理</el-tab-pane>
@@ -253,7 +282,8 @@ export default {
           plotratio: '', // 容积率
           weight: '', // 自重
           remark: '',
-          version: ''
+          version: '',
+          wrhId: '1'
         },
         containerTypeInfo: {}, // 供应商信息
         createRules: {
@@ -331,8 +361,12 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
+          const data = [{
+            id: _this.id,
+            version: _this.containerTypeInfo.version
+          }]
           if (_this.containerTypeInfo.status) {
-          BasicService.closeContainerType(_this.id, _this.containerTypeInfo.version)
+          BasicService.closeContainerType(data)
           .then((res) => {
             _this.$message.success("禁用成功")
             _this.getContainerTypeDetail(_this.id)
@@ -342,7 +376,7 @@ export default {
             _this.getContainerTypeDetail(_this.id)
           })
         } else {
-          BasicService.openContainerType(_this.id, _this.containerTypeInfo.version)
+          BasicService.openContainerType(data)
           .then((res) => {
             _this.$message.success("启用成功")
             _this.getContainerTypeDetail(_this.id)
@@ -429,7 +463,26 @@ export default {
       this.getQueryStatus()
     },
     filters: {
-    
+      recycletype(type) {
+        switch (type) {
+          case "BY_QTY":
+            return "按数量"
+          case "BY_BARCODE":
+            return "按条码"
+          default:
+            return "未知"
+        }
+      },
+      barcodetype(type) {
+        switch (type) {
+          case "ONCE":
+            return "一次性"
+          case "FOREVER":
+            return "永久"
+          default:
+            return "未知"
+        }
+      }
     }
 };
 </script>

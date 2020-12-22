@@ -43,12 +43,12 @@
                     </template>
                 </el-table-column>
                 <el-table-column prop="name" label="名称"></el-table-column>
-                <el-table-column prop="shortName" label="条码前缀"></el-table-column>
-                <el-table-column prop="shortName" label="内长/宽/高(cm)"></el-table-column>
-                <el-table-column prop="shortName" label="外长/宽/高(cm)"></el-table-column>
-                <el-table-column prop="shortName" label="自重"></el-table-column>
-                <el-table-column prop="shortName" label="承重"></el-table-column>
-                <el-table-column prop="shortName" label="容积率"></el-table-column>
+                <el-table-column prop="barcodeprefix" label="条码前缀"></el-table-column>
+                <el-table-column prop="inLWH" label="内长/宽/高(cm)"></el-table-column>
+                <el-table-column prop="outLWH" label="外长/宽/高(cm)"></el-table-column>
+                <el-table-column prop="weight" label="自重"></el-table-column>
+                <el-table-column prop="bearingweight" label="承重"></el-table-column>
+                <el-table-column prop="plotratio" label="容积率"></el-table-column>
                 <el-table-column prop="status" label="状态" >
                   <template slot-scope="scope">
                     {{ scope.row.status | dcStatus }}
@@ -89,8 +89,7 @@ export default {
         totalCount: 0,
         form: {
           nameOrCode: '',
-          status: '',
-          type: ''
+          status: ''
         },
         dcData: [],
         multipleSelection: [] // 选择的列表
@@ -116,24 +115,28 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
+          const data = [{
+            id,
+            version
+          }]
           if (status) {
-          BasicService.closeContainerType(id, version)
+          BasicService.closeContainerType(data)
           .then((res) => {
             _this.$message.success("禁用成功")
             _this.getContainerTypeList()
           })
           .catch((err) => {
-            _this.$message.error("禁用失败" + err)
+            _this.$message.error("禁用失败" + err.message)
             _this.getContainerTypeList()
           })
         } else {
-          BasicService.openContainerType(id, version)
+          BasicService.openContainerType(data)
           .then((res) => {
             _this.$message.success("启用成功")
             _this.getContainerTypeList()
           })
           .catch((err) => {
-            _this.$message.error("启用失败" + err)
+            _this.$message.error("启用失败" + err.message)
             _this.getContainerTypeList()
           })
         }
@@ -147,8 +150,7 @@ export default {
       clearInput: function() {
         this.form = {
           nameOrCode: '',
-          status: '',
-          type: ''
+          status: ''
         }
       },
       getContainerTypeList: function(reset) {
@@ -158,9 +160,8 @@ export default {
           page: this.page,
           pageSize: this.pageSize,
           searchCount: true,
-          nameOrCodeLike: this.form.nameOrCode,
-          statusEquals: this.form.status,
-          typeEquals: this.form.type
+          nameOrCodeEquals: this.form.nameOrCode,
+          statusEquals: this.form.status
         }
         BasicService.getContainerTypeList(data)
         .then((res) => {
@@ -173,9 +174,13 @@ export default {
               id: res.records[item].id,
               code: res.records[item].code,
               name: res.records[item].name,
-              type: res.records[item].type,
+              barcodeprefix: res.records[item].barcodeprefix,
+              inLWH: res.records[item].inlength + '/' + res.records[item].inwidth + '/' + res.records[item].inheight,
+              outLWH: res.records[item].outlength + '/' + res.records[item].outwidth + '/' + res.records[item].outheight,
+              weight: res.records[item].weight,
+              bearingweight: res.records[item].bearingweight,
+              plotratio: res.records[item].plotratio,
               status: res.records[item].status,
-              shortName: res.records[item].shortName,
               version: res.records[item].version
             }
             if (obj.status === "ON") {

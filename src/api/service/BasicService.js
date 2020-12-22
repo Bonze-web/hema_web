@@ -121,19 +121,25 @@ export default {
    * 获取容器类型列表
    */
   getContainerTypeList(data) {
-    return request.get('/wms/containerType/query', {param: data})
+    return request.get('/wms/containerType/query', {params: data})
   },
   /**
    * 启用容器类型
    */
-  openContainerType(id, version) {
-    return request.put('/wms/containerType/batchOn?id=' + id + '&version=' + version)
+  openContainerType(data) {
+    const param = {
+      data
+    }
+    return request.post('/wms/containerType/batchOn', param)
   },
   /**
    * 禁用容器类型
    */
-  closeContainerType(id, version) {
-    return request.put('/wms/containerType/batchOff?id=' + id + '&version=' + version)
+  closeContainerType(data) {
+    const param = {
+      data
+    }
+    return request.post('/wms/containerType/batchOff', param)
   },
   /**
    * 获取容器类型详情
