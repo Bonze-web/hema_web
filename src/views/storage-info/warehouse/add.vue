@@ -36,7 +36,7 @@
             <div>
                 <template>
                     <el-tabs v-model="tabActiveName" @tab-click="tabClick">
-                        <el-tab-pane label="仓库" name="category">
+                        <el-tab-pane label="商品类别" name="category">
                             <div class="info-title">基本信息</div>
                             <el-form :model="form" :rules="createRules" ref="form" label-width="100px" class="demo-ruleForm">
                                 <el-row :gutter="20">
@@ -275,10 +275,6 @@ export default {
         })
       },
       editCategory() {
-        StorageService.getLogisticsList(this.id)
-        .then(res => {
-          console.log(res)
-        })
         this.status = "edit"
         this.form = Object.assign(this.form, this.categoryInfo)
         console.log(this.form)
@@ -289,29 +285,6 @@ export default {
       levelChange() {
         this.level = this.form.level
         console.log(this.form)
-        // if (this.form.level === "one") {
-        //   return
-        // }
-        // this.form.parentId = ""
-        // this.getParentCategory()
-      },
-      getParentCategory() {
-        // const data = {
-        //   page: this.page,
-        //   pageSize: 0,
-        //   lowerLevelEquals: this.form.level
-        // }
-        // BasicService.getCateGoryQuery(data)
-        // .then((res) => {
-        //   this.parentList = res.records
-        //   for (const item in res.records) {
-        //     // 处理供应商数据
-        //     this.parentList[item].name = '[' + this.parentList[item].code + ']' + this.parentList[item].name
-        //   }
-        // })
-        // .catch((err) => {
-        //     this.$message.error("加载父级列表失败，请刷新页面重新尝试" + err)
-        // })
       }
     },
     created() {

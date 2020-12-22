@@ -50,5 +50,12 @@ export default {
             ...postData
         }
         return request.post('/wms/warehouse/update', param)
+    },
+    /**
+     * 查询物流
+     */
+    getLogisticsList(id) {
+        console.log(id)
+        return request.get('/sys/dc/getById?id=' + id)
     }
 }

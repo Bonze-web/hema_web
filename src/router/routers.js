@@ -415,7 +415,7 @@ const StorageInfoPackage = {
         import('@/views/storage-info/warehouse/index'),
       hidden: true,
       meta: {
-        title: '',
+        title: '仓库',
         icon: 'table'
       }
     }, {
@@ -425,7 +425,17 @@ const StorageInfoPackage = {
         import('@/views/storage-info/warehouse/edit'),
       hidden: true,
       meta: {
-        title: '',
+        title: '查看仓库',
+        icon: 'table'
+      }
+    }, {
+      path: "add",
+      name: "Add",
+      component: () =>
+        import('@/views/storage-info/warehouse/add'),
+      hidden: true,
+      meta: {
+        title: '新建仓库',
         icon: 'table'
       }
     }]

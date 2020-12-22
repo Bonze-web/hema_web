@@ -29,8 +29,8 @@
         <el-form-item label="状态">
           <el-select v-model="form.status" placeholder="请选择状态">
             <el-option label="全部" value=""></el-option>
-            <el-option label="启用" value="enabled"></el-option>
-            <el-option label="禁用" value="disabled"></el-option>
+            <el-option label="启用" value="OFF"></el-option>
+            <el-option label="禁用" value="ON"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item>
@@ -46,7 +46,7 @@
 
     <div style="background: #fff">
       <el-row>
-        <router-link :to="{ path: '/storageinfo/warehouse/edit', query:{ status: 'create'} }" >
+        <router-link :to="{ path: '/storageinfo/warehouse/add', query:{ status: 'create'} }" >
           <el-button style="margin: 18px 10px" type="primary" size="mini"
             >新建</el-button
           >
@@ -143,11 +143,12 @@ export default {
   computed: {},
   methods: {
     onSubmit: function() {
+      const _this = this;
       this.page = 1;
 
       this.$refs.form.validate((result) => {
         if (result) {
-          this.getCateGoryQuery();
+          _this.warehouseInit();
         }
       });
     },
@@ -202,12 +203,15 @@ export default {
       // 获取供应商列表
       const _this = this;
       const data = {
+        codeEquals: this.form.nameOrCode || null,
         page: this.page,
         pageSize: this.pageSize,
         searchCount: true,
-        codeOrNameLike: this.form.nameOrCode,
+        nameLike: this.form.nameOrCode || null,
         statusEquals: this.form.status || null
       };
+
+      console.log(this.form.status)
 
       StorageService.warehouseInit(data).then((res) => {
         const records = res.records;
@@ -230,12 +234,12 @@ export default {
     },
     handleCurrentChange: function(e) {
       this.page = Number(e);
-      this.getRegistList(true);
+      this.warehouseInit(true);
     },
     handleSizeChange: function(e) {
       this.pageSize = Number(e);
       this.page = 1;
-      this.getRegistList(true);
+      this.warehouseInit(true);
     },
     allSelectionChange(val) {
       console.log(val);
