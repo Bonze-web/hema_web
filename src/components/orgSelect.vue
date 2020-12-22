@@ -1,5 +1,5 @@
 <template>
-  <el-select :disabled="disable" v-model="value" filterable clearable remote :remote-method="remoteMethod" @focus="handleFocus" :loading="loading" @change="handleChange" @clear="handleClear" :placeholder="placeholder">
+  <el-select :disabled="disable" v-model="value" filterable clearable remote :remote-method="remoteMethod" @focus="handleFocus" :loading="loading" @change="handleChange" @clear="handleClear" :placeholder="placeholder" :multiple="multiple">
     <el-option v-for="item in orgs" :key="item.id" :label="item.name" :value="item.id"></el-option>
     <div class="select-pagination" v-if="orgTypesIn==='STORE'">
       <button type="button" class="btn-prev" :disabled="disabledPrev" @click="handlePrevPage">
@@ -33,7 +33,7 @@ export default {
       nameLike: ''
     };
   },
-  props: ["orgValue", "orgTypesIn", "disabled", "includeLowerOrg", "orgRange"],
+  props: ["orgValue", "orgTypesIn", "disabled", "includeLowerOrg", "orgRange", "multiple"],
   methods: {
     queryOrg(nameLike, orgTypesIn, orgValue) {
       this.nameLike = nameLike
@@ -141,7 +141,7 @@ export default {
       this.queryOrg(query, this.orgTypesIn);
     },
     handleFocus() {
-      if (!this.value) {
+      if (!this.value || this.value.length === 0) {
         this.page = 1;
         this.orgs = [];
         this.disabledPrev = true;

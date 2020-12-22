@@ -3,27 +3,34 @@
   <el-dialog title="编辑用户角色" :visible.sync="dlgRolesVisible">
     角色来源：
     <ul>
-
       <li>
         <span>用户上级组织盒马的角色</span>
-        <div v-if="userRolesSet.length === 0">&lt;空&gt;</div>                
-        <div><span v-for="role in userRolesSet" :key="role.id" style="margin-right: 20px;">{{role.name}}</span></div>
+        <div v-if="userRolesSet.length === 0">&lt;空&gt;</div>
+        <div>
+          <span v-for="role in userRolesSet" :key="role.id" style="margin-right: 20px;">{{role.name}}</span>
+        </div>
       </li>
-      
+
       <li>
         <span>用户所属组织的角色</span>
         <div v-if="orgRoles.length === 0">&lt;空&gt;</div>
-        <el-checkbox-group v-model="userRoles" @change="handleCheckedChange">
-          <el-checkbox v-for="role in orgRoles" :key="role.id" :label="role.id">{{role.name}}</el-checkbox>
-        </el-checkbox-group>
-      </li>      
+        <div v-for="ele in orgRoles" :key="ele.orgId">
+          <span style="margin: 4px 0;display: inline-block;">{{ele.orgName}}</span>
+          <el-checkbox-group v-model="userRoles" @change="handleCheckedChange">
+            <el-checkbox v-for="role in ele.lists" :key="role.id" :label="role.id">{{role.name}}</el-checkbox>
+          </el-checkbox-group>
+        </div>
+      </li>
 
       <li>
         <span>你还可以授予你自己拥有的角色</span>
         <div v-if="curUserRoles.length === 0">&lt;空&gt;</div>
-        <el-checkbox-group v-model="userRoles" @change="handleCheckedChange">
-          <el-checkbox v-for="role in curUserRoles" :key="role.id" :label="role.id">{{role.name}}</el-checkbox>
-        </el-checkbox-group>
+        <div v-for="ele in curUserRoles" :key="ele.orgId">
+          <span style="margin: 4px 0;display: inline-block;">{{ele.orgName}}</span>
+          <el-checkbox-group v-model="userRoles" @change="handleCheckedChange">
+            <el-checkbox v-for="role in ele.lists" :key="role.id" :label="role.id">{{role.name}}</el-checkbox>
+          </el-checkbox-group>
+        </div>
       </li>
 
       <li v-if="hasPermission(PermIds.SYS_ROLE_CREATE)">
@@ -60,25 +67,26 @@ export default {
       user: {}, // 被授权的用户
       checkAll: false,
       isIndeterminate: false,
-      PermIds: PermIds
+      PermIds: PermIds,
+      userOrgs: []
     };
   },
 
   computed: {
     ...mapGetters({ loginUser: "user", hasPermission: "hasPermission" }),
 
-    /** 
+    /**
      * 上级组织角色
      */
     upperOrgRoles: function() {
       if (!this.userRoles) {
-        return []
+        return [];
       } else {
         var roles = this.userRoles.filter(r => {
-          return r.orgId !== this.user.orgId
-        })
-        console.log(roles)
-        return roles
+          return r.orgId !== this.user.orgId;
+        });
+        console.log(roles);
+        return roles;
       }
     }
   },
@@ -114,10 +122,7 @@ export default {
       ) {
         // 如果所属组织发生了变化，则重新加载组织角色列表
         // this.reloadOrgRoles(user.orgId);
-        Promise.all([
-          self.reloadOrgRoles(user.orgId),
-          self.reloadCurUserRoles()
-        ])
+        Promise.all([self.reloadUserOrgs(user.username)])
           .then(() => {
             self.user = user;
             return self.getUserRoles(user.id);
@@ -133,7 +138,29 @@ export default {
     /** 保存用户角色 */
     onOk() {
       var self = this;
-      UserService.updateRoles(this.user.id, this.userRoles)
+      var roles = [];
+      for (let i = 0; i < this.orgRoles.length; i++) {
+        const item = this.orgRoles[i];
+        var roleIds = [];
+        for (let j = 0; j < item.lists.length; j++) {
+          const ele = item.lists[j];
+          for (let k = 0; k < this.userRoles.length; k++) {
+            const it = this.userRoles[k];
+            if (ele.id === it) {
+              roleIds.push(it);
+              break;
+            }
+          }
+        }
+        if (roleIds.length > 0) {
+          roles.push({
+            roleIds: roleIds,
+            workingOrgId: item.orgId
+          });
+        }
+      }
+
+      UserService.updateRoles(this.user.id, roles)
         .then(() => {
           self.dlgRolesVisible = false;
         })
@@ -141,24 +168,96 @@ export default {
           Utils.showError(err);
         });
     },
-
-    /** 重新加载组织的所有角色 */
-    reloadOrgRoles(orgId) {
+    /* 获取用户所有的所属组织 */
+    reloadUserOrgs(username) {
       var self = this;
+      return UserService.getUserOrgs(username)
+        .then(res => {
+          self.userOrgs = res;
+          self.reloadCurUserRoles();
+        })
+        .then(res => {
+          self.reloadOrgRoles();
+        });
+    },
+    /** 重新加载组织的所有角色 */
+    reloadOrgRoles() {
+      var self = this;
+      var orgIdIn = [];
+      if (self.userOrgs.length > 0) {
+        orgIdIn = [];
+        self.userOrgs.forEach(ele => {
+          orgIdIn.push(ele.id);
+        });
+      }
       return RoleService.query(1, 0, {
         searchCount: true,
-        orgIdIn: [orgId]
+        orgIdIn: orgIdIn
       }).then(data => {
-        self.orgRoles = data.records;
+        var orgRoles = [];
+        for (let i = 0; i < data.records.length; i++) {
+          const ele = data.records[i];
+          var isHas = false;
+          var index = 0;
+          for (let j = 0; j < orgRoles.length; j++) {
+            const item = orgRoles[j];
+            if (ele.orgId === item.orgId) {
+              isHas = true;
+              index = j;
+              break;
+            }
+          }
+          if (isHas) {
+            orgRoles[index].lists.push(ele);
+          } else {
+            orgRoles.push({
+              orgId: ele.orgId,
+              orgName: ele.orgName,
+              lists: [ele]
+            });
+          }
+        }
+        self.orgRoles = orgRoles;
       });
     },
 
     /** 重新加载当前登录人拥有的所有角色  */
     reloadCurUserRoles() {
       var self = this;
-      return UserService.getRoles(this.loginUser.id).then(data => {
-        self.curUserRoles = data;
-      });
+      var workingOrgIds = [];
+      if (self.userOrgs.length > 0) {
+        self.userOrgs.forEach(ele => {
+          workingOrgIds.push(ele.id);
+        });
+      }
+      return UserService.getRoles(this.loginUser.id, workingOrgIds).then(
+        data => {
+          var tempCurUserRoles = [];
+          for (let i = 0; i < data.length; i++) {
+            const ele = data[i];
+            var isHas = false;
+            var index = 0;
+            for (let j = 0; j < tempCurUserRoles.length; j++) {
+              const item = tempCurUserRoles[j];
+              if (ele.orgId === item.orgId) {
+                isHas = true;
+                index = j;
+                break;
+              }
+            }
+            if (isHas) {
+              tempCurUserRoles[index].lists.push(ele);
+            } else {
+              tempCurUserRoles.push({
+                orgId: ele.orgId,
+                orgName: ele.orgName,
+                lists: [ele]
+              });
+            }
+          }
+          self.curUserRoles = tempCurUserRoles;
+        }
+      );
     },
 
     /** 取得用户的角色列表 */
@@ -167,8 +266,14 @@ export default {
       this.userRoles = [];
       this.isIndeterminate = false;
       this.checkAll = [];
-      return UserService.getRoles(userId).then(data => {
-        self.userRolesSet = data
+      var workingOrgIds = [];
+      if (self.userOrgs.length > 0) {
+        self.userOrgs.forEach(ele => {
+          workingOrgIds.push(ele.id);
+        });
+      }
+      return UserService.getRoles(userId, workingOrgIds).then(data => {
+        self.userRolesSet = data;
         self.userRoles = data.map(function(item) {
           return item.id;
         });

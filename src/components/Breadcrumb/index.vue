@@ -37,7 +37,6 @@ export default {
         }
       });
       const first = matched[0];
-      console.log(first);
       if (first && first.name !== "dashboard" && first.name !== "Dashboard") {
         matched = [{ path: "/dashboard", meta: { title: "首页" } }].concat(
           matched

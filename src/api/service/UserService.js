@@ -140,10 +140,11 @@ export default {
    * 取得用户的角色列表 
    * @param {*} id 
    */
-  getRoles(id) {
+  getRoles(id, workingOrgIds = null) {
     return request.get('/sys/user/getRoles', {
       params: {
-        id: id
+        id: id,
+        workingOrgIds: workingOrgIds
       }
     });
   },
@@ -151,12 +152,12 @@ export default {
   /**
    * 保存用户角色   
    * @param {*} userId 用户ID
-   * @param {*} roleIds 角色ID
+   * @param {*} roles 角色列表
    */
-  updateRoles(userId, roleIds = []) {
+  updateRoles(userId, roles = []) {
     return request.put('/sys/user/updateRoles', {
       userId: userId,
-      roleIds: roleIds
+      roles: roles
     });
   },
 
@@ -189,5 +190,32 @@ export default {
    */
   importUser() {
     return request.get('/sys/user/import');
+  },
+
+  /**
+   * 修改工作组织
+   * @param userName 
+   * @param workingOrgId 
+   */
+  changeWorkingOrg(userName, workingOrgId) {
+    var params = {
+      userName: userName,
+      workingOrgId: workingOrgId
+    };
+    return request.get('/sys/user/changeWorkingOrg', {
+      params: params
+    });
+  },
+
+  /**
+   * 取得用户的所有可选组织
+   */
+  getUserOrgs(userName) {
+    var params = {
+      userName: userName
+    };
+    return request.get('/sys/user/getUserOrgs', {
+      params: params
+    });
   }
 }
