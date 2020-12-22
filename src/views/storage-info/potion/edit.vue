@@ -186,7 +186,7 @@ export default {
           this.getCategory(this.id)
         }
       },
-      getCategory (id) {
+      getCategory: function(id) {
         console.log(id)
       },
       getDc: function(id) {
@@ -219,10 +219,7 @@ export default {
               return
             }
             if (this.status === 'create') {
-
               console.log(this.form)
-return
-
               BasicService.createCategory(this.form)
               .then(res => {
                 console.log(res)
@@ -262,7 +259,6 @@ return
         }
       },
       levelChange() {
-        return
         this.level = this.form.level
         if (this.form.level === "one") {
           return

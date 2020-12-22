@@ -125,16 +125,16 @@ export default {
       totalCount: 0,
       form: {
         nameOrCode: "",
-        status: "",
+        status: ""
         // parentEquals: "",
       },
       suppliersData: [],
-      multipleSelection: [], // 选择的列表
+      multipleSelection: [] // 选择的列表
     };
   },
   computed: {},
   methods: {
-    onSubmit: function () {
+    onSubmit: function() {
       this.page = 1;
 
       this.$refs.form.validate((result) => {
@@ -144,16 +144,13 @@ export default {
         }
       });
     },
-    statusChange: function (status, id, version) {
+    statusChange: function(status, id, version) {
       // 修改供应商状态
-      if(status) {
+      if (status) {
         this.suppliersData[id].status = false
-      }else{
+      } else {
         this.suppliersData[id].status = true
       }
-
-
-      return  
       if (status) {
         BasicService.closeCategory(id, version)
           .then((res) => {
@@ -176,29 +173,27 @@ export default {
           });
       }
     },
-    clearInput: function () {
+    clearInput: function() {
       this.form = {
         nameOrCode: "",
-        status: "",
+        status: ""
       };
     },
-    getCateGoryQuery: function (reset) {
-
+    getCateGoryQuery: function(reset) {
       this.suppliersData = []
 
       // 获取供应商列表
-      const _this = this;
-      const data = {
-        page: this.page,
-        pageSize: this.pageSize,
-        searchCount: true,
-        codeOrNameLike: this.form.nameOrCode,
-        statusEquals: this.form.status,
-        // parentIdEquals: this.form.parentEquals,
-      };
+      // const _this = this;
+      // const data = {
+      //   page: this.page,
+      //   pageSize: this.pageSize,
+      //   searchCount: true,
+      //   codeOrNameLike: this.form.nameOrCode,
+      //   statusEquals: this.form.status
+      //   // parentIdEquals: this.form.parentEquals,
+      // };
 
-
-      for( let i = 0; i < 10; i++ ) {
+      for (let i = 0; i < 10; i++) {
         const obj = {
             id: i,
             code: i + 'code',
@@ -206,17 +201,15 @@ export default {
             status: i,
             sourceType: i + 'sourceType',
             level: i + 'level',
-            parentName: i + 'parentName',
+            parentName: i + 'parentName'
           };
-          if (obj.status % 2 == 0) {
+          if (obj.status % 2 === 0) {
             obj.status = true;
           } else {
             obj.status = false;
           }
           this.suppliersData.push(obj);
       }
-
-
       // BasicService.getCateGoryQuery(data).then((res) => {
       //   _this.suppliersData = [];
       //   console.log(res);
@@ -241,11 +234,11 @@ export default {
       //   }
       // });
     },
-    handleCurrentChange: function (e) {
+    handleCurrentChange: function(e) {
       this.page = Number(e);
       this.getRegistList(true);
     },
-    handleSizeChange: function (e) {
+    handleSizeChange: function(e) {
       this.pageSize = Number(e);
       this.page = 1;
       this.getRegistList(true);
@@ -253,7 +246,7 @@ export default {
     allSelectionChange(val) {
       console.log(val);
       this.multipleSelection = val;
-    },
+    }
   },
   created() {
     this.getCateGoryQuery();
@@ -292,8 +285,8 @@ export default {
         default:
           return "未知";
       }
-    },
-  },
+    }
+  }
 };
 </script>
 
