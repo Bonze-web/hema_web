@@ -154,6 +154,7 @@ export default {
     },
     methods: {
       back: function() {
+        this.$store.dispatch("tagsView/delView", this.$route);
         this.$router.go(-1)
       },
       statusChange: function() {
@@ -224,6 +225,7 @@ export default {
               .then(res => {
                 console.log(res)
                 this.$message.success("创建成功")
+                this.$store.dispatch("tagsView/delView", this.$route);
                 this.$router.go(-1)
               })
               .catch(err => {
@@ -239,6 +241,7 @@ export default {
               .then(res => {
                 console.log(res)
                 this.$message.success("更新成功")
+                this.$store.dispatch("tagsView/delView", this.$route);
                 this.$router.go(-1)
               })
               .catch(err => {

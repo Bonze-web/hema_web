@@ -38,6 +38,7 @@ export default {
       // this.$router.push({
       //   path: this.backPath
       // })
+      this.$store.dispatch("tagsView/delView", this.$route);
       this.$router.go(-1);
     }
   }

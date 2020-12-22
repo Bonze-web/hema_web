@@ -136,6 +136,7 @@ export default {
   methods: {
     /** 回退 */
     goback() {
+      this.$store.dispatch("tagsView/delView", this.$route);
       this.$router.go(-1);
     },
     /** 处理组织类型选择 */
