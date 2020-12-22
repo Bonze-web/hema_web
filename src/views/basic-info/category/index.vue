@@ -40,7 +40,7 @@
                 </el-table-column> -->
                 <el-table-column prop="code" label="代码">
                     <template slot-scope="scope">
-                        <router-link style="color:#409EFF" :to="{ path: '/basicinfo/category/edit', query:{ status: 'read', id: scope.row.id} }">
+                        <router-link style="color:#409EFF" :to="{ path: '/basicinfo/category/add', query:{ status: 'read', id: scope.row.id} }">
                             <span>{{ scope.row.code }}</span>
                         </router-link>
                     </template>

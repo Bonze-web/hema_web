@@ -21,7 +21,7 @@
         <div style="height:20px" />
         <div style="background:#fff">
           <el-row>
-            <router-link :to="{ path: '/basicinfo/suppliers/edit', query:{ status: 'create'} }">
+            <router-link :to="{ path: '/basicinfo/suppliers/add', query:{ status: 'create'} }">
             <!-- <span v-if="child.meta&&child.meta.title" :title="child.meta.title">{{child.meta.title}}</span> -->
             <el-button style="margin:18px 10px" type="primary" size="mini">新建</el-button>
         </router-link>
