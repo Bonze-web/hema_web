@@ -96,10 +96,7 @@ export default {
       },
       isEdit: false,
       orgType: "",
-      orgTypes: [
-        { id: "1", key: "COMPANY", label: "分公司" },
-        { id: "2", key: "DEPART", label: "部门" }
-      ],
+      orgTypes: [],
       upperOrgId: "", // 上级组织ID
       orgsList: [], // 组织列表
       queryFrom: {
@@ -139,6 +136,7 @@ export default {
   methods: {
     /** 回退 */
     goback() {
+      this.$store.dispatch("tagsView/delView", this.$route);
       this.$router.go(-1);
     },
     /** 处理组织类型选择 */
@@ -301,9 +299,7 @@ export default {
       console.log(this.currentStoreId);
       if (this.currentStoreId === "0") {
         this.orgTypes = [
-          { id: "0", key: "GROUP", label: "总部" },
-          { id: "1", key: "COMPANY", label: "分公司" },
-          { id: "2", key: "DEPART", label: "部门" }
+          { id: "0", key: "GROUP", label: "总部" }
         ];
       }
     }

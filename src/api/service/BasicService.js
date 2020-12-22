@@ -20,7 +20,7 @@ export default {
   //   return request.get('/product/productSupplier/query?page=' + data.page + '&pageSize=' + data.pageSize + '&searchCount=true' + '&codeOrNameEquals=' + (data.codeOrNameEquals ? data.codeOrNameEquals : '') + '&statusEquals=' + (data.status ? data.status : ''))
   // },
   getSuppliersList(data) {
-    return request.get('/product/productSupplier/query', {param: data})
+    return request.get('/product/productSupplier/query', {params: data})
   },
   /**
    * 获取供应商详情
@@ -84,7 +84,7 @@ export default {
   //   return request.get('/product/productCategory/query?page=' + data.page + '&pageSize=' + data.pageSize + '&searchCount=true' + '&codeOrNameLike=' + (data.codeOrNameLike ? data.codeOrNameLike : '') + '&parentIdEquals=' + (data.parentIdEquals ? data.parentIdEquals : '') + '&statusEquals=' + (data.statusEquals ? data.statusEquals : '') + '&levelEquals=' + (data.levelEquals ? data.levelEquals : '') + '&lowerLevelEquals=' + (data.lowerLevelEquals ? data.lowerLevelEquals : ''))
   // },
   getCateGoryQuery(data) {
-    return request.get('/product/productCategory/query', {param: data})
+    return request.get('/product/productCategory/query', {params: data})
   },
   /**
    * 查询类别详情
@@ -113,6 +113,52 @@ export default {
     }
     return request.put('/product/productCategory/update', param)
   },
+  /**
+   * 容器类型接口
+   */
+
+  /**
+   * 获取容器类型列表
+   */
+  getContainerTypeList(data) {
+    return request.get('/wms/containerType/query', {param: data})
+  },
+  /**
+   * 启用容器类型
+   */
+  openContainerType(id, version) {
+    return request.put('/wms/containerType/batchOn?id=' + id + '&version=' + version)
+  },
+  /**
+   * 禁用容器类型
+   */
+  closeContainerType(id, version) {
+    return request.put('/wms/containerType/batchOff?id=' + id + '&version=' + version)
+  },
+  /**
+   * 获取容器类型详情
+   */
+  getContainerTypeDetail(id) {
+    return request.get('/wms/containerType/getDetail?id=' + id)
+  },
+  /**
+   * 新建容器类型
+   */
+  createContainerType(postData) {
+    const param = {
+      ...postData
+    }
+    return request.post('/wms/containerType/create', param)
+  },
+  /**
+   * 更新容器类型
+   */
+  updateContainerType(postData) {
+    const param = {
+      ...postData
+    }
+    return request.post('/wms/containerType/update', param)
+  },
 
   /**
    * 仓库资料接口 
@@ -121,7 +167,7 @@ export default {
    * 获取所有仓库资料
    */
   getWrhQuery(data) {
-    return request.get('/sys/dc/query', {param: data})
+    return request.get('/sys/dc/query', {params: data})
   },
   /**
    * 仓库启用
@@ -149,6 +195,15 @@ export default {
    */
   getDcDetail(id) {
     return request.get('/sys/dc/getById?id=' + id)
+  },
+  /**
+   * 更新配送中心详情
+   */
+  updateDc(postData) {
+    const param = {
+      ...postData
+    }
+    return request.post('/sys/dc/update', param)
   }
 }
 

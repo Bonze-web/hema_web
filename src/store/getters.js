@@ -35,6 +35,8 @@ const getters = {
   /**
    * 静态路由+动态授权路由=用来构造菜单的路由
    */
-  menuRouters: state => state.menu.routers
+  menuRouters: state => state.menu.routers,
+  visitedViews: state => state.tagsView.visitedViews,
+  cachedViews: state => state.tagsView.cachedViews
 }
 export default getters

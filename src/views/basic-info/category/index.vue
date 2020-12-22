@@ -38,7 +38,7 @@
                     type="selection"
                     width="55">
                 </el-table-column> -->
-                <el-table-column fixed prop="code" label="代码" style="height:20px">
+                <el-table-column prop="code" label="代码">
                     <template slot-scope="scope">
                         <router-link style="color:#409EFF" :to="{ path: '/basicinfo/category/edit', query:{ status: 'read', id: scope.row.id} }">
                             <span>{{ scope.row.code }}</span>
@@ -62,9 +62,7 @@
                   </template>
                 </el-table-column>
                 <el-table-column
-                fixed="right"
-                label="操作"
-                width="200">
+                label="操作">
                 <template slot-scope="scope">
                   <el-button :disabled="scope.row.status" size="mini" type="text" @click="statusChange(scope.row.status, scope.row.id, scope.row.version)">启用</el-button>
                   <el-button :disabled="!scope.row.status" size="mini" type="text" @click="statusChange(scope.row.status, scope.row.id, scope.row.version)">禁用</el-button>
@@ -118,8 +116,12 @@ export default {
       },
       statusChange: function(status, id, version) {
         // 修改供应商状态
-        console.log(status)
-        if (status) {
+        this.$confirm('此操作将改变商品类别状态, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          if (status) {
           BasicService.closeCategory(id, version)
           .then((res) => {
             this.$message.success("禁用成功")
@@ -140,6 +142,12 @@ export default {
             this.getCateGoryQuery()
           })
         }
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })         
+        })
       },
       clearInput: function() {
         this.form = {
@@ -185,12 +193,12 @@ export default {
       },
       handleCurrentChange: function(e) {
         this.page = Number(e)
-        this.getRegistList(true)
+        this.getCateGoryQuery()
       },
       handleSizeChange: function(e) {
         this.pageSize = Number(e)
         this.page = 1
-        this.getRegistList(true)
+        this.getCateGoryQuery()
       },
       allSelectionChange(val) {
         console.log(val)

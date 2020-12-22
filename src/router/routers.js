@@ -19,6 +19,14 @@ import PermIds from "@/api/permissionIds";
 
 /** 静态路由 */
 export const constantRouterMap = [{
+    path: '/redirect',
+    component: Layout,
+    hidden: true,
+    children: [{
+      path: '/redirect/:path(.*)',
+      component: () => import('@/views/redirect/index')
+    }]
+  }, {
     path: '/login',
     component: () =>
       import('@/views/login/index'),
@@ -31,10 +39,21 @@ export const constantRouterMap = [{
     hidden: true
   },
   {
-    path: '/dashboard',
-    component: () =>
-      import('@/views/dashboard/index'),
-    hidden: true
+    path: '/',
+    component: Layout,
+    redirect: '/dashboard',
+    name: 'Dashboard',
+    hidden: true,
+    children: [{
+      path: 'dashboard',
+      name: 'dashboard',
+      component: () =>
+        import('@/views/dashboard/index'),
+      meta: {
+        title: '首页',
+        affix: true
+      }
+    }]
   }
 ]
 
@@ -51,144 +70,147 @@ const SystemPackage = {
     icon: 'system'
   },
   children: [{
-      path: 'user',
-      name: 'User',
-      component: AModule,
+    path: 'user',
+    name: 'User',
+    component: AModule,
+    meta: {
+      title: '用户',
+      icon: 'table',
+      permission: PermIds.SYS_USER
+    },
+    children: [{
+      path: '',
+      name: 'UserList',
+      component: () =>
+        import('@/views/sys/user/index'),
+      hidden: true,
       meta: {
         title: '用户',
         icon: 'table',
-        permission: PermIds.SYS_USER
-      },
-      children: [{
-        path: '',
-        name: 'UserList',
-        component: () =>
-          import('@/views/sys/user/index'),
-        hidden: true,
-        meta: {
-          icon: 'table',
-          permission: PermIds.SYS_USER_VIEW
-        }
-      }, {
-        path: 'add',
-        name: 'UserAdd',
-        component: () =>
-          import('@/views/sys/user/userAdd'),
-        hidden: true,
-        meta: {
-          title: '新增用户',
-          icon: 'table',
-          permission: PermIds.SYS_USER_CREATE
-        }
-      }, {
-        path: 'edit',
-        name: 'UserEdit',
-        component: () =>
-          import('@/views/sys/user/userAdd'),
-        hidden: true,
-        meta: {
-          title: '编辑',
-          icon: 'table',
-          permission: PermIds.SYS_USER_UPDATE
-        }
-      }]
+        permission: PermIds.SYS_USER_VIEW
+      }
+    }, {
+      path: 'add',
+      name: 'UserAdd',
+      component: () =>
+        import('@/views/sys/user/userAdd'),
+      hidden: true,
+      meta: {
+        title: '新增用户',
+        icon: 'table',
+        permission: PermIds.SYS_USER_CREATE
+      }
+    }, {
+      path: 'edit',
+      name: 'UserEdit',
+      component: () =>
+        import('@/views/sys/user/userAdd'),
+      hidden: true,
+      meta: {
+        title: '编辑',
+        icon: 'table',
+        permission: PermIds.SYS_USER_UPDATE
+      }
+    }]
+  },
+  {
+    path: 'role',
+    name: 'Role',
+    component: AModule,
+    meta: {
+      title: '角色',
+      icon: 'table',
+      permission: PermIds.SYS_ROLE
     },
-    {
-      path: 'role',
-      name: 'Role',
-      component: AModule,
+    children: [{
+      path: '',
+      name: 'RoleList',
+      hidden: true,
+      component: () =>
+        import('@/views/sys/role/index'),
       meta: {
         title: '角色',
         icon: 'table',
-        permission: PermIds.SYS_ROLE
-      },
-      children: [{
-        path: '',
-        name: 'RoleList',
-        hidden: true,
-        component: () =>
-          import('@/views/sys/role/index'),
-        meta: {
-          icon: 'table',
-          permission: PermIds.SYS_ROLE_VIEW
-        }
-      }, {
-        path: 'add',
-        name: 'RoleAdd',
-        hidden: true,
-        component: () =>
-          import('@/views/sys/role/roleAdd'),
-        meta: {
-          title: '新增角色',
-          icon: 'table',
-          permission: PermIds.SYS_ROLE_CREATE
-        }
-      }, {
-        path: 'authorManage',
-        name: 'AuthorManage',
-        hidden: true,
-        component: () =>
-          import('@/views/sys/role/authorManage'),
-        meta: {
-          title: '权限管理',
-          icon: 'table',
-          permission: PermIds.SYS_ROLE_EDIT_PERMISSION
-        }
-      }]
-    },
-    {
-      path: 'org',
-      name: 'Org',
-      component: AModule,
-      meta: {
-        title: '组织',
-        icon: 'table',
-        permission: PermIds.SYS_ORG
-      },
-      children: [{
-        path: '',
-        name: 'OrgList',
-        hidden: true,
-        component: () =>
-          import('@/views/sys/org/index'),
-        meta: {
-          title: '组织列表',
-          icon: 'table',
-          permission: PermIds.SYS_ORG_VIEW
-        }
-      }, {
-        path: 'add',
-        name: 'OrgAdd',
-        hidden: true,
-        component: () =>
-          import('@/views/sys/org/orgAdd'),
-        meta: {
-          title: '新增组织',
-          icon: 'table',
-          permission: PermIds.SYS_ORG_CREATE
-        }
-      }]
+        permission: PermIds.SYS_ROLE_VIEW
+      }
     }, {
-      path: 'sysConfigure',
-      name: 'SysConfigure',
-      component: AModule,
+      path: 'add',
+      name: 'RoleAdd',
+      hidden: true,
+      component: () =>
+        import('@/views/sys/role/roleAdd'),
       meta: {
-        title: '系统配置',
+        title: '新增角色',
+        icon: 'table',
+        permission: PermIds.SYS_ROLE_CREATE
+      }
+    }, {
+      path: 'authorManage',
+      name: 'AuthorManage',
+      hidden: true,
+      component: () =>
+        import('@/views/sys/role/authorManage'),
+      meta: {
+        title: '权限管理',
+        icon: 'table',
+        permission: PermIds.SYS_ROLE_EDIT_PERMISSION
+      }
+    }]
+  },
+  {
+    path: 'org',
+    name: 'Org',
+    component: AModule,
+    meta: {
+      title: '组织',
+      icon: 'table',
+      permission: PermIds.SYS_ORG
+    },
+    children: [{
+      path: '',
+      name: 'OrgList',
+      hidden: true,
+      component: () =>
+        import('@/views/sys/org/index'),
+      meta: {
+        title: '组织列表',
+        icon: 'table',
+        permission: PermIds.SYS_ORG_VIEW
+      }
+    }, {
+      path: 'add',
+      name: 'OrgAdd',
+      hidden: true,
+      component: () =>
+        import('@/views/sys/org/orgAdd'),
+      meta: {
+        title: '新增组织',
+        icon: 'table',
+        permission: PermIds.SYS_ORG_CREATE
+      }
+    }]
+  }, {
+    path: 'sysConfigure',
+    name: 'SysConfigure',
+    component: AModule,
+    meta: {
+      title: '系统配置',
+      icon: 'table',
+      permission: PermIds.SYS_OPTIONS_VIEW
+    },
+    children: [{
+      path: '',
+      name: 'SysConfigure',
+      component: () =>
+        import('@/views/sys/configure/sysConfigure'),
+      hidden: true,
+      meta: {
+        title: "系统配置",
         icon: 'table',
         permission: PermIds.SYS_OPTIONS_VIEW
-      },
-      children: [{
-        path: '',
-        name: 'SysConfigure',
-        component: () =>
-          import('@/views/sys/configure/sysConfigure'),
-        hidden: true,
-        meta: {
-          icon: 'table',
-          permission: PermIds.SYS_OPTIONS_VIEW
-        }
-      }]
-    }
+      }
+    }]
+  }
   ]
 }
 
@@ -216,56 +238,113 @@ const BasicInfoPackage = {
     },
     children: [{
       path: "",
-      name: "View",
+      name: "SuppliersView",
       component: () =>
         import('@/views/basic-info/suppliers/index'),
-        hidden: true,
+      hidden: true,
       meta: {
-        title: '',
+        title: '供应商列表',
         icon: 'table'
       }
     }, {
       path: "edit",
-      name: "Edit",
+      name: "SuppliersEdit",
       component: () =>
         import('@/views/basic-info/suppliers/edit'),
-        hidden: true,
+      hidden: true,
       meta: {
-        title: '供应商',
+        title: '修改供应商',
         icon: 'table'
       }
-    }] 
+    }]
   }, {
     path: "category",
     name: "Category",
     component: AModule,
     meta: {
-      title: '商品类别',
+      title: '商品类别列表',
+      icon: 'table'
+    },
+    children: [{
+      path: "",
+      name: "CategoryView",
+      component: () =>
+        import('@/views/basic-info/category/index'),
+      hidden: true,
+      meta: {
+        title: '商品类别',
+        icon: 'table'
+      }
+    }, {
+      path: "edit",
+      name: "CategoryEdit",
+      component: () =>
+        import('@/views/basic-info/category/edit'),
+      hidden: true,
+      meta: {
+        title: '修改商品类别',
+        icon: 'table'
+      }
+    }]
+  }, {
+    path: "containertype",
+    name: "ContainerType",
+    component: AModule,
+    meta: {
+      title: '容器类型列表',
+      icon: 'table'
+    },
+    children: [{
+      path: "",
+      name: "ContainerTypeIndex",
+      component: () =>
+        import('@/views/basic-info/container-type/index'),
+      hidden: true,
+      meta: {
+        title: '容器类型',
+        icon: 'table'
+      }
+    }, {
+      path: "edit",
+      name: "ContainerTypeEdit",
+      component: () =>
+        import('@/views/basic-info/container-type/edit'),
+      hidden: true,
+      meta: {
+        title: '修改容器类型',
+        icon: 'table'
+      }
+    }]
+  }, {
+    path: "dc",
+    name: "Dc",
+    component: AModule,
+    meta: {
+      title: '物流中心',
       icon: 'table'
     },
     children: [{
       path: "",
       name: "View",
       component: () =>
-        import('@/views/basic-info/category/index'),
-        hidden: true,
+        import('@/views/basic-info/dc/index'),
+      hidden: true,
       meta: {
-        title: '',
+        title: '配送中心',
         icon: 'table'
       }
     }, {
       path: "edit",
-      name: "edit",
+      name: "Edit",
       component: () =>
-        import('@/views/basic-info/category/edit'),
-        hidden: true,
+        import('@/views/basic-info/dc/edit'),
+      hidden: true,
       meta: {
         title: '',
         icon: 'table'
       }
     }]
-  }
-]     
+  }]
 }
 
 /**
@@ -281,21 +360,20 @@ const StorageInfoPackage = {
     icon: 'storage-info',
     permission: PermIds.REPORT_DYNAMIC
   },
-  children: [
-    {
-    path: "dc",
-    name: "Dc",
+  children: [{
+    path: "potion",
+    name: "Potion",
     component: AModule,
     meta: {
-      title: '配送中心',
+      title: '仓库',
       icon: 'table'
     },
     children: [{
       path: "",
       name: "View",
       component: () =>
-        import('@/views/storage-info/dc/index'),
-        hidden: true,
+        import('@/views/storage-info/potion/index'),
+      hidden: true,
       meta: {
         title: '',
         icon: 'table'
@@ -304,8 +382,8 @@ const StorageInfoPackage = {
       path: "edit",
       name: "Edit",
       component: () =>
-        import('@/views/storage-info/dc/edit'),
-        hidden: true,
+        import('@/views/storage-info/potion/edit'),
+      hidden: true,
       meta: {
         title: '',
         icon: 'table'
