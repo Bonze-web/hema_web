@@ -35,7 +35,7 @@
                     type="selection"
                     width="55">
                 </el-table-column> -->
-                <el-table-column fixed prop="code" label="代码">
+                <el-table-column prop="code" label="代码">
                     <template slot-scope="scope">
                         <router-link style="color:#409EFF" :to="{ path: '/storageinfo/wharf/edit', query:{ status: 'read', id: scope.row.id} }">
                             <span>{{ scope.row.code }}</span>
@@ -45,7 +45,7 @@
                 <el-table-column prop="name" label="名称"></el-table-column>
                 <el-table-column prop="dockerusage" label="用途">
                     <template slot-scope="scope">
-                        {{ scope.row.dockerusage }}
+                        {{ scope.row.dockerusage | purposeChange}}
                     </template>
                 </el-table-column>
                 <el-table-column prop="status" label="状态" >
@@ -54,24 +54,21 @@
                   </template>
                 </el-table-column>
                 <el-table-column
-                fixed="right"
-                label="操作"
-                width="200">
+                label="操作">
                   <template slot-scope="scope">
                     <el-button :disabled="scope.row.status" size="mini" type="text" @click="statusChange(scope.row.status, scope.row.id, scope.row.version)">启用</el-button>
+                    <!-- <el-button :disabled="scope.row.status" size="mini" type="text" @click="statusChange(scope)">启用</el-button> -->
                     <el-button :disabled="!scope.row.status" size="mini" type="text" @click="statusChange(scope.row.status, scope.row.id, scope.row.version)">禁用</el-button>
                   </template>
                 </el-table-column>
-                <el-table-column
-                fixed="right"
-                label="编辑"
-                width="200">
+                <!-- <el-table-column
+                label="编辑">
                   <template slot-scope="scope">
                       <router-link :to="{ path: '/storageinfo/wharf/edit', query:{ status: 'edit', id: scope.row.id} }">
                             <el-button size="mini" type="text">编辑</el-button>
                       </router-link>
                   </template>
-                </el-table-column>
+                </el-table-column> -->
             </el-table>
             <!-- 下面这个是翻页 -->
             <el-pagination
@@ -90,7 +87,7 @@
 
 <script>
 // 引入公共模块
-import SortdivisionService from "@/api/service/SortdivisionService";
+import WharfService from "@/api/service/WharfService";
 // import { mapGetters } from "vuex";
 
 export default {
@@ -121,29 +118,42 @@ export default {
         })
       },
       statusChange: function(status, id, version) {
-        // 启用的状态
-        console.log(status);
-        if (status) {
-          SortdivisionService.closeSuppliers(id, version)
+         console.log(status, id, version);
+        // 修改供应商状态
+        this.$confirm('此操作将改变供应商状态, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          if (status) {
+          WharfService.closeSuppliers(id, version, status)
           .then((res) => {
+            console.log(res);
             this.$message.success("禁用成功")
+            // 自己修改数据
             this.getSuppliersList()
           })
           .catch((err) => {
-            this.$message.error("禁用失败" + err)
+            this.$message.error("禁用失败" + err.message)
             this.getSuppliersList()
           })
         } else {
-          SortdivisionService.openSuppliers(id, version)
+          WharfService.openSuppliers(id, version)
           .then((res) => {
             this.$message.success("启用成功")
             this.getSuppliersList()
           })
           .catch((err) => {
-            this.$message.error("启用失败" + err)
+            this.$message.error("启用失败" + err.message)
             this.getSuppliersList()
           })
         }
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消'
+          })        
+        })
       },
       clearInput: function() {
         this.form = {
@@ -165,13 +175,24 @@ export default {
           status: this.form.status
         }
         // 获取数据,然后将自己组件中的数据发送到后台
-        SortdivisionService.getSuppliersList(data)
-
+        WharfService.getSuppliersList(data)
         .then((res) => {
+          console.log(res);
+          if (!res) return false;
           // 初始化自己定义的数据
           _this.suppliersData = [];
           // 将总数,赋值给自己定义的变量
-          this.totalCount = res.totalCount;
+          // res = {
+          //   records: [{
+          //       totalCount: 10,
+          //       id: "1341338404906762241",
+          //       code: '0001',
+          //       name: 'yang',
+          //       version: 9999999999999,
+          //       dockerusage: ['发货']
+          //     }]
+          // }
+          _this.totalCount = res.totalCount;
           for (const item in res.records) {
             // 数组循环后,将过去到的值,全部放在suppliersData这个数组中,我要模拟数据也要使用这个数组
             const obj = {
@@ -180,10 +201,11 @@ export default {
               // 代码
               code: res.records[item].code,
               name: res.records[item].name,
+              version: res.records[item].version,
               // 用途
-              dockerusage: res.records[item].dockerusage
+              dockerusage: res.records[item].dockerusage,
               // anotherName: res.records[item].anotherName,
-              // status: res.records[item].status,
+              status: res.records[item].status
               // address: res.records[item].address,
               // sourceType: res.records[item].sourceType,
               // version: res.records[item].version
@@ -194,7 +216,7 @@ export default {
               obj.status = false
             }
             // 获取数据后,存到自己的数组里面
-            _this.suppliersData.push(obj)
+            _this.suppliersData.push(obj);
           }
         })
       },
@@ -232,6 +254,14 @@ export default {
         default:
           return '未知';
       }
+    },
+    purposeChange(val) {
+      if (!val) return false;
+    let str = '';
+    for (let i = 0; i < val.length; i++) {
+      str += val[i];
+    }
+      return str;
     }
   }
 };
