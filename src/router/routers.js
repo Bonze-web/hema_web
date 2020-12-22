@@ -70,147 +70,146 @@ const SystemPackage = {
     icon: 'system'
   },
   children: [{
-      path: 'user',
-      name: 'User',
-      component: AModule,
-      meta: {
-        title: '用户',
-        icon: 'table',
-        permission: PermIds.SYS_USER
-      },
-      children: [{
-        path: '',
-        name: 'UserList',
-        component: () =>
-          import('@/views/sys/user/index'),
-        hidden: true,
-        meta: {
-          title: '用户',
-          icon: 'table',
-          permission: PermIds.SYS_USER_VIEW
-        }
-      }, {
-        path: 'add',
-        name: 'UserAdd',
-        component: () =>
-          import('@/views/sys/user/userAdd'),
-        hidden: true,
-        meta: {
-          title: '新增用户',
-          icon: 'table',
-          permission: PermIds.SYS_USER_CREATE
-        }
-      }, {
-        path: 'edit',
-        name: 'UserEdit',
-        component: () =>
-          import('@/views/sys/user/userAdd'),
-        hidden: true,
-        meta: {
-          title: '编辑',
-          icon: 'table',
-          permission: PermIds.SYS_USER_UPDATE
-        }
-      }]
+    path: 'user',
+    name: 'User',
+    component: AModule,
+    meta: {
+      title: '用户',
+      icon: 'table',
+      permission: PermIds.SYS_USER
     },
-    {
-      path: 'role',
-      name: 'Role',
-      component: AModule,
+    children: [{
+      path: '',
+      name: 'UserList',
+      component: () =>
+        import('@/views/sys/user/index'),
+      hidden: true,
+      meta: {
+        icon: 'table',
+        permission: PermIds.SYS_USER_VIEW
+      }
+    }, {
+      path: 'add',
+      name: 'UserAdd',
+      component: () =>
+        import('@/views/sys/user/userAdd'),
+      hidden: true,
+      meta: {
+        title: '新增用户',
+        icon: 'table',
+        permission: PermIds.SYS_USER_CREATE
+      }
+    }, {
+      path: 'edit',
+      name: 'UserEdit',
+      component: () =>
+        import('@/views/sys/user/userAdd'),
+      hidden: true,
+      meta: {
+        title: '编辑',
+        icon: 'table',
+        permission: PermIds.SYS_USER_UPDATE
+      }
+    }]
+  },
+  {
+    path: 'role',
+    name: 'Role',
+    component: AModule,
+    meta: {
+      title: '角色',
+      icon: 'table',
+      permission: PermIds.SYS_ROLE
+    },
+    children: [{
+      path: '',
+      name: 'RoleList',
+      hidden: true,
+      component: () =>
+        import('@/views/sys/role/index'),
       meta: {
         title: '角色',
         icon: 'table',
-        permission: PermIds.SYS_ROLE
-      },
-      children: [{
-        path: '',
-        name: 'RoleList',
-        hidden: true,
-        component: () =>
-          import('@/views/sys/role/index'),
-        meta: {
-          title: '角色',
-          icon: 'table',
-          permission: PermIds.SYS_ROLE_VIEW
-        }
-      }, {
-        path: 'add',
-        name: 'RoleAdd',
-        hidden: true,
-        component: () =>
-          import('@/views/sys/role/roleAdd'),
-        meta: {
-          title: '新增角色',
-          icon: 'table',
-          permission: PermIds.SYS_ROLE_CREATE
-        }
-      }, {
-        path: 'authorManage',
-        name: 'AuthorManage',
-        hidden: true,
-        component: () =>
-          import('@/views/sys/role/authorManage'),
-        meta: {
-          title: '权限管理',
-          icon: 'table',
-          permission: PermIds.SYS_ROLE_EDIT_PERMISSION
-        }
-      }]
-    },
-    {
-      path: 'org',
-      name: 'Org',
-      component: AModule,
-      meta: {
-        title: '组织',
-        icon: 'table',
-        permission: PermIds.SYS_ORG
-      },
-      children: [{
-        path: '',
-        name: 'OrgList',
-        hidden: true,
-        component: () =>
-          import('@/views/sys/org/index'),
-        meta: {
-          title: '组织列表',
-          icon: 'table',
-          permission: PermIds.SYS_ORG_VIEW
-        }
-      }, {
-        path: 'add',
-        name: 'OrgAdd',
-        hidden: true,
-        component: () =>
-          import('@/views/sys/org/orgAdd'),
-        meta: {
-          title: '新增组织',
-          icon: 'table',
-          permission: PermIds.SYS_ORG_CREATE
-        }
-      }]
+        permission: PermIds.SYS_ROLE_VIEW
+      }
     }, {
-      path: 'sysConfigure',
-      name: 'SysConfigure',
-      component: AModule,
+      path: 'add',
+      name: 'RoleAdd',
+      hidden: true,
+      component: () =>
+        import('@/views/sys/role/roleAdd'),
       meta: {
-        title: '系统配置',
+        title: '新增角色',
+        icon: 'table',
+        permission: PermIds.SYS_ROLE_CREATE
+      }
+    }, {
+      path: 'authorManage',
+      name: 'AuthorManage',
+      hidden: true,
+      component: () =>
+        import('@/views/sys/role/authorManage'),
+      meta: {
+        title: '权限管理',
+        icon: 'table',
+        permission: PermIds.SYS_ROLE_EDIT_PERMISSION
+      }
+    }]
+  },
+  {
+    path: 'org',
+    name: 'Org',
+    component: AModule,
+    meta: {
+      title: '组织',
+      icon: 'table',
+      permission: PermIds.SYS_ORG
+    },
+    children: [{
+      path: '',
+      name: 'OrgList',
+      hidden: true,
+      component: () =>
+        import('@/views/sys/org/index'),
+      meta: {
+        title: '组织列表',
+        icon: 'table',
+        permission: PermIds.SYS_ORG_VIEW
+      }
+    }, {
+      path: 'add',
+      name: 'OrgAdd',
+      hidden: true,
+      component: () =>
+        import('@/views/sys/org/orgAdd'),
+      meta: {
+        title: '新增组织',
+        icon: 'table',
+        permission: PermIds.SYS_ORG_CREATE
+      }
+    }]
+  }, {
+    path: 'sysConfigure',
+    name: 'SysConfigure',
+    component: AModule,
+    meta: {
+      title: '系统配置',
+      icon: 'table',
+      permission: PermIds.SYS_OPTIONS_VIEW
+    },
+    children: [{
+      path: '',
+      name: 'SysConfigure',
+      component: () =>
+        import('@/views/sys/configure/sysConfigure'),
+      hidden: true,
+      meta: {
+        title: "系统配置",
         icon: 'table',
         permission: PermIds.SYS_OPTIONS_VIEW
-      },
-      children: [{
-        path: '',
-        name: 'SysConfigure',
-        component: () =>
-          import('@/views/sys/configure/sysConfigure'),
-        hidden: true,
-        meta: {
-          title: '系统配置',
-          icon: 'table',
-          permission: PermIds.SYS_OPTIONS_VIEW
-        }
-      }]
-    }
+      }
+    }]
+  }
   ]
 }
 
@@ -307,7 +306,7 @@ const StorageInfoPackage = {
     name: "Dc",
     component: AModule,
     meta: {
-      title: '配送中心',
+      title: '物流中心',
       icon: 'table'
     },
     children: [{
@@ -325,6 +324,36 @@ const StorageInfoPackage = {
       name: "Edit",
       component: () =>
         import('@/views/storage-info/dc/edit'),
+      hidden: true,
+      meta: {
+        title: '',
+        icon: 'table'
+      }
+    }]
+  },
+  {
+    path: "potion",
+    name: "Potion",
+    component: AModule,
+    meta: {
+      title: '仓库',
+      icon: 'table'
+    },
+    children: [{
+      path: "",
+      name: "View",
+      component: () =>
+        import('@/views/storage-info/potion/index'),
+      hidden: true,
+      meta: {
+        title: '',
+        icon: 'table'
+      }
+    }, {
+      path: "edit",
+      name: "Edit",
+      component: () =>
+        import('@/views/storage-info/potion/edit'),
       hidden: true,
       meta: {
         title: '',

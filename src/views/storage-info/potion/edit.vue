@@ -11,18 +11,14 @@
         </div>
         <div class="head" v-if="status === 'read'">
             <div class="head-title">
-                <div style="margin:8px">{{ '[' + categoryInfo.code + ']' + categoryInfo.name }}</div>
-                <!-- <template>
+                <div style="margin-right:8px">{{ '[' + categoryInfo.code + ']' + categoryInfo.name }}</div>
+                <template>
                     <el-switch
                         v-model="categoryInfo.status"
                         @change="statusChange"
                         active-color="#13ce66"
                         inactive-color="#eee">
                     </el-switch>
-                </template> -->
-                <template>
-                  <el-button type="text" @click="statusChange" v-if="categoryInfo.status">禁用</el-button>
-                  <el-button type="text" @click="statusChange" v-if="!categoryInfo.status">启用</el-button>
                 </template>
             </div>
             <div>
@@ -50,12 +46,12 @@
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
-                                        <el-form-item label="级别" prop="level">
-                                            <el-select v-model="form.level" placeholder="请选择级别" @change="levelChange">
-                                                <el-option label="一级" value="one"></el-option>
-                                                <el-option label="二级" value="two"></el-option>
-                                                <el-option label="三级" value="three"></el-option>
-                                                <el-option label="四级" value="four "></el-option>
+                                        <el-form-item label="配送中心" prop="level">
+                                            <el-select v-model="form.level" placeholder="情选择配送中心" @change="levelChange">
+                                                <el-option label="配送中心一级" value="one"></el-option>
+                                                <el-option label="配送中心二级" value="two"></el-option>
+                                                <el-option label="配送中心三级" value="three"></el-option>
+                                                <el-option label="配送中心四级" value="four "></el-option>
                                             </el-select>
                                         </el-form-item>
                                     </el-col>
@@ -162,48 +158,38 @@ export default {
       },
       statusChange: function() {
         // 修改供应商状态
-        const _this = this
-        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          if (_this.categoryInfo.status) {
-          BasicService.closeCategory(_this.categoryInfo.id, _this.categoryInfo.version)
+        console.log(this.categoryInfo.status)
+        if (!this.categoryInfo.status) {
+          BasicService.closeSuppliers(this.id)
           .then((res) => {
-            _this.$message.success("禁用成功")
-            _this.getCategory(_this.id)
+            this.getCategory(this.id)
           })
           .catch((err) => {
-            _this.$message.error("禁用失败" + err)
-            _this.getCategory(_this.id)
+            this.$message.error("禁用失败" + err)
           })
         } else {
-          BasicService.openCategory(_this.categoryInfo.id, _this.categoryInfo.version)
+          BasicService.openSuppliers(this.id)
           .then((res) => {
-            _this.$message.success("启用成功")
-            _this.getCategory(_this.id)
+            this.getCategory(this.id)
           })
           .catch((err) => {
-            _this.$message.error("启用失败" + err)
-            _this.getCategory(_this.id)
+            this.$message.error("启用失败" + err)
           })
         }
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          })        
-        })
       },
       getQueryStatus: function() {
         this.status = this.$route.query.status
+
         if (this.status === 'read') {
-          this.id = this.$route.query.id
+          this.id = this.$route.query.id;
+
           this.getCategory(this.id)
         }
       },
       getCategory: function(id) {
+        console.log(id)
+      },
+      getDc: function(id) {
         // 获取商品类别详情
         BasicService.getCategoryDatail(id)
         .then((res) => {
@@ -233,6 +219,7 @@ export default {
               return
             }
             if (this.status === 'create') {
+              console.log(this.form)
               BasicService.createCategory(this.form)
               .then(res => {
                 console.log(res)
