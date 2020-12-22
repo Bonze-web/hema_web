@@ -60,13 +60,7 @@
       >
         <el-table-column fixed prop="code" label="代码" style="height: 20px">
           <template slot-scope="scope">
-            <router-link
-              style="color: #409eff"
-              :to="{
-                path: '/storageinfo/potion/edit',
-                query: { status: 'read', id: scope.row.id },
-              }"
-            >
+            <router-link style="color: #409eff" :to="{ path: '/storageinfo/potion/edit', query: { status: 'read', id: scope.row.id }, }" >
               <span>{{ scope.row.code }}</span>
             </router-link>
           </template>
@@ -158,33 +152,42 @@ export default {
       });
     },
     statusChange: function(status, id, version) {
-      // 修改供应商状态
-      if (status) {
-        this.suppliersData[id].status = false
-      } else {
-        this.suppliersData[id].status = true
-      }
-      // if (status) {
-      //   BasicService.closeCategory(id, version)
-      //     .then((res) => {
-      //       this.$message.success("禁用成功");
-      //       this.getCateGoryQuery();
-      //     })
-      //     .catch((err) => {
-      //       this.$message.error("禁用失败" + err);
-      //       this.getCateGoryQuery();
-      //     });
-      // } else {
-      //   BasicService.openCategory(id, version)
-      //     .then((res) => {
-      //       this.$message.success("启用成功");
-      //       this.getCateGoryQuery();
-      //     })
-      //     .catch((err) => {
-      //       this.$message.error("启用失败" + err);
-      //       this.getCateGoryQuery();
-      //     });
-      // }
+      // 修改仓库状态
+      const _this = this;
+      this.$confirm('是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        if (status) {
+          // 禁用
+          StorageService.closeWarehouse(id, version)
+          .then((res) => {
+            _this.$message.success("禁止用成功")
+            _this.warehouseInit();
+          })
+          .catch((err) => {
+            _this.$message.error("禁用失败" + err)
+            _this.warehouseInit();
+          })
+        } else {
+          // 启用
+          StorageService.openWarehouse(id, version)
+          .then((res) => {
+            _this.$message.success("启用成功")
+            _this.warehouseInit();
+          })
+          .catch((err) => {
+            _this.$message.error("启用失败" + err)
+            _this.warehouseInit();
+          })
+        }
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消'
+        })        
+      })
     },
     clearInput: function() {
       this.form = {
@@ -209,16 +212,15 @@ export default {
       StorageService.warehouseInit(data).then((res) => {
         const records = res.records;
         const listData = [];
-
+        console.log(res)
         this.totalCount = res.totalCount;
 
         records.forEach((item, index) => {
-          if (item === 'OFF') {
-            records[index].status = false
+          if (item.status === 'OFF') {
+            item.status = true
           } else {
-            records[index].status = true
+            item.status = false
           }
-
           listData.push(item)
         })
 

@@ -39,10 +39,16 @@ export default {
      * 启用仓位状态
      */
     openWarehouse(id, version) {
+        console.log(id, version)
         return request.put('/wms/warehouse/open?id=' + id + '&version=' + version)
     },
      /**
      * 更新仓位
      */
-    updateWarehouse() {}
+    updateWarehouse(postData) {
+        const param = {
+            ...postData
+        }
+        return request.post('/wms/warehouse/update', param)
+    }
 }
