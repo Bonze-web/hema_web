@@ -27,7 +27,7 @@
     </div>
 
     <div slot="body">
-      <el-row>
+      <el-row v-if="currentStoreId=== '0'">
         <router-link to="/sys/org/add" v-if="hasPermission(PermIds.SYS_ORG_CREATE)">
           <el-button type="primary" icon="el-icon-plus">新增</el-button>
         </router-link>
@@ -75,10 +75,7 @@ import { mapGetters } from "vuex";
 
 const ORG_TYPE_NAMES = {
   GROUP: "总公司",
-  COMPANY: "分公司",
-  STORE: "门店",
-  DEPART: "部门",
-  VENDOR: "供应商"
+  COMPANY: "分公司"
 };
 
 export default {
@@ -92,7 +89,7 @@ export default {
   data() {
     return {
       listLoading: false,
-
+      currentStoreId: "0",
       qryForm: {
         nameLike: "",
         orgTypesIn: [],
@@ -242,6 +239,9 @@ export default {
 
   created() {
     this.reload();
+    if (this.workingOrg) {
+      this.currentStoreId = this.workingOrg.id
+    }
   }
 };
 </script>

@@ -11,14 +11,18 @@
         </div>
         <div class="head" v-if="status === 'read'">
             <div class="head-title">
-                <div style="margin-right:8px">{{ '[' + categoryInfo.code + ']' + categoryInfo.name }}</div>
-                <template>
+                <div style="margin:8px">{{ '[' + categoryInfo.code + ']' + categoryInfo.name }}</div>
+                <!-- <template>
                     <el-switch
                         v-model="categoryInfo.status"
                         @change="statusChange"
                         active-color="#13ce66"
                         inactive-color="#eee">
                     </el-switch>
+                </template> -->
+                <template>
+                  <el-button type="text" @click="statusChange" v-if="categoryInfo.status">禁用</el-button>
+                  <el-button type="text" @click="statusChange" v-if="!categoryInfo.status">启用</el-button>
                 </template>
             </div>
             <div>
@@ -154,28 +158,44 @@ export default {
     },
     methods: {
       back: function() {
+        this.$store.dispatch("tagsView/delView", this.$route);
         this.$router.go(-1)
       },
       statusChange: function() {
         // 修改供应商状态
-        console.log(this.categoryInfo.status)
-        if (!this.categoryInfo.status) {
-          BasicService.closeSuppliers(this.id)
+        const _this = this
+        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          if (_this.categoryInfo.status) {
+          BasicService.closeCategory(_this.categoryInfo.id, _this.categoryInfo.version)
           .then((res) => {
-            this.getCategory(this.id)
+            _this.$message.success("禁用成功")
+            _this.getCategory(_this.id)
           })
           .catch((err) => {
-            this.$message.error("禁用失败" + err)
+            _this.$message.error("禁用失败" + err)
+            _this.getCategory(_this.id)
           })
         } else {
-          BasicService.openSuppliers(this.id)
+          BasicService.openCategory(_this.categoryInfo.id, _this.categoryInfo.version)
           .then((res) => {
-            this.getCategory(this.id)
+            _this.$message.success("启用成功")
+            _this.getCategory(_this.id)
           })
           .catch((err) => {
-            this.$message.error("启用失败" + err)
+            _this.$message.error("启用失败" + err)
+            _this.getCategory(_this.id)
           })
         }
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })        
+        })
       },
       getQueryStatus: function() {
         this.status = this.$route.query.status
@@ -184,7 +204,7 @@ export default {
           this.getCategory(this.id)
         }
       },
-      getDc: function(id) {
+      getCategory: function(id) {
         // 获取商品类别详情
         BasicService.getCategoryDatail(id)
         .then((res) => {
@@ -218,6 +238,7 @@ export default {
               .then(res => {
                 console.log(res)
                 this.$message.success("创建成功")
+                this.$store.dispatch("tagsView/delView", this.$route);
                 this.$router.go(-1)
               })
               .catch(err => {
@@ -233,6 +254,7 @@ export default {
               .then(res => {
                 console.log(res)
                 this.$message.success("更新成功")
+                this.$store.dispatch("tagsView/delView", this.$route);
                 this.$router.go(-1)
               })
               .catch(err => {

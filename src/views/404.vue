@@ -34,7 +34,7 @@ export default {
   methods: {
     returnHome() {
       this.$router.push({
-        path: "/dashboard/index"
+        path: "/"
       });
     }
   },

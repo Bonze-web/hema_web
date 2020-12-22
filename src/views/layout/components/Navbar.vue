@@ -132,7 +132,7 @@ export default {
     handleCommand(command) {
       if (command === "index") {
         this.$router.push({
-          path: "/dashboard/index"
+          path: "/"
         });
       } else if (command === "logout") {
         this.logout();

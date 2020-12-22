@@ -11,14 +11,18 @@
         </div>
         <div class="head" v-if="status === 'read'">
             <div class="head-title">
-                <div style="margin-right:8px">{{ '[' + suppliersInfo.code + ']' + suppliersInfo.name }}</div>
-                <template>
+                <div style="margin:8px">{{ '[' + suppliersInfo.code + ']' + suppliersInfo.name }}</div>
+                <!-- <template>
                     <el-switch
                         v-model="suppliersInfo.status"
                         @change="statusChange"
                         active-color="#13ce66"
                         inactive-color="#eee">
                     </el-switch>
+                </template> -->
+                <template>
+                  <el-button type="text" @click="statusChange" v-if="suppliersInfo.status">禁用</el-button>
+                  <el-button type="text" @click="statusChange" v-if="!suppliersInfo.status">启用</el-button>
                 </template>
             </div>
             <div>
@@ -200,7 +204,8 @@ export default {
             { required: true, message: '请输入供应商名称', trigger: 'blur' }
           ],
           mobile: [
-            { required: true, message: '请输入联系方式', trigger: 'blur' }
+            { required: true, message: '请输入联系方式', trigger: 'blur' },
+            { required: true, pattern: /^[1-9]\d{10}$/, message: '请输入正确的手机号格式', trigger: 'blur' }
           ],
           contactName: [
             { required: true, message: '请输入联系人名称', trigger: 'blur' }
@@ -215,30 +220,44 @@ export default {
     },
     methods: {
       back: function() {
+        this.$store.dispatch("tagsView/delView", this.$route);
         this.$router.go(-1)
       },
       statusChange: function() {
         // 修改供应商状态
-        console.log(this.suppliersInfo.status)
-        if (!this.suppliersInfo.status) {
-          BasicService.closeSuppliers(this.id)
+        const _this = this
+        this.$confirm(' , 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          if (_this.suppliersInfo.status) {
+          BasicService.closeSuppliers(_this.id, _this.suppliersInfo.version)
           .then((res) => {
-            this.getSuppliers(this.id)
+            _this.$message.success("禁用成功")
+            _this.getSuppliers(_this.id)
           })
           .catch((err) => {
-            this.$message.error("禁用失败" + err)
-            this.getSuppliers(this.id)
+            _this.$message.error("禁用失败" + err.message)
+            _this.getSuppliers(_this.id)
           })
         } else {
-          BasicService.openSuppliers(this.id)
+          BasicService.openSuppliers(_this.id, _this.suppliersInfo.version)
           .then((res) => {
-            this.getSuppliers(this.id)
+            _this.$message.success("启用成功")
+            _this.getSuppliers(_this.id)
           })
           .catch((err) => {
-            this.$message.error("启用失败" + err)
-            this.getSuppliers(this.id)
+            _this.$message.error("启用失败" + err.message)
+            _this.getSuppliers(_this.id)
           })
         }
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消'
+          })          
+        })
       },
       getQueryStatus: function() {
         this.status = this.$route.query.status
@@ -274,6 +293,7 @@ export default {
               .then(res => {
                 console.log(res)
                 this.$message.success("创建成功")
+                this.$store.dispatch("tagsView/delView", this.$route);
                 this.$router.go(-1)
               })
               .catch(err => {
@@ -289,6 +309,7 @@ export default {
               .then(res => {
                 console.log(res)
                 this.$message.success("更新成功")
+                this.$store.dispatch("tagsView/delView", this.$route);
                 this.$router.go(-1)
               })
               .catch(err => {

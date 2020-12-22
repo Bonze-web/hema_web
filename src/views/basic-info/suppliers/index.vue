@@ -9,7 +9,7 @@
                     <el-select v-model="form.status" placeholder="请选择状态">
                     <el-option label="全部" value=""></el-option>
                     <el-option label="启用" value="OPEN"></el-option>
-                    <el-option label="停用" value="COLOSED"></el-option>
+                    <el-option label="禁用" value="COLOSED"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item>
@@ -110,15 +110,19 @@ export default {
       },
       statusChange: function(status, id, version) {
         // 修改供应商状态
-        console.log(status)
-        if (status) {
+        this.$confirm('此操作将改变供应商状态, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          if (status) {
           BasicService.closeSuppliers(id, version)
           .then((res) => {
             this.$message.success("禁用成功")
             this.getSuppliersList()
           })
           .catch((err) => {
-            this.$message.error("禁用失败" + err)
+            this.$message.error("禁用失败" + err.message)
             this.getSuppliersList()
           })
         } else {
@@ -128,10 +132,16 @@ export default {
             this.getSuppliersList()
           })
           .catch((err) => {
-            this.$message.error("启用失败" + err)
+            this.$message.error("启用失败" + err.message)
             this.getSuppliersList()
           })
         }
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消'
+          })        
+        })
       },
       clearInput: function() {
         this.form = {
@@ -177,12 +187,12 @@ export default {
       },
       handleCurrentChange: function(e) {
         this.page = Number(e)
-        this.getRegistList(true)
+        this.getSuppliersList(true)
       },
       handleSizeChange: function(e) {
         this.pageSize = Number(e)
         this.page = 1
-        this.getRegistList(true)
+        this.getSuppliersList(true)
       },
       allSelectionChange(val) {
         console.log(val)

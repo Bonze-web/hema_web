@@ -26,7 +26,7 @@
           <el-row>
             <router-link :to="{ path: '/basicinfo/category/edit', query:{ status: 'create'} }">
                 <!-- <span v-if="child.meta&&child.meta.title" :title="child.meta.title">{{child.meta.title}}</span> -->
-                <el-button style="margin:18px 10px" type="primary" size="mini">新建类别</el-button>
+                <el-button style="margin:18px 10px" type="primary" size="mini">新建</el-button>
             </router-link>
           </el-row>
             <el-table
@@ -118,8 +118,12 @@ export default {
       },
       statusChange: function(status, id, version) {
         // 修改供应商状态
-        console.log(status)
-        if (status) {
+        this.$confirm('此操作将改变商品类别状态, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          if (status) {
           BasicService.closeCategory(id, version)
           .then((res) => {
             this.$message.success("禁用成功")
@@ -140,6 +144,12 @@ export default {
             this.getCateGoryQuery()
           })
         }
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })         
+        })
       },
       clearInput: function() {
         this.form = {
@@ -185,12 +195,12 @@ export default {
       },
       handleCurrentChange: function(e) {
         this.page = Number(e)
-        this.getRegistList(true)
+        this.getCateGoryQuery()
       },
       handleSizeChange: function(e) {
         this.pageSize = Number(e)
         this.page = 1
-        this.getRegistList(true)
+        this.getCateGoryQuery()
       },
       allSelectionChange(val) {
         console.log(val)
