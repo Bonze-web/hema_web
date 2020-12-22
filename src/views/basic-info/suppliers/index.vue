@@ -187,12 +187,12 @@ export default {
       },
       handleCurrentChange: function(e) {
         this.page = Number(e)
-        this.getRegistList(true)
+        this.getSuppliersList(true)
       },
       handleSizeChange: function(e) {
         this.pageSize = Number(e)
         this.page = 1
-        this.getRegistList(true)
+        this.getSuppliersList(true)
       },
       allSelectionChange(val) {
         console.log(val)

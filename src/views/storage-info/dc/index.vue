@@ -201,12 +201,12 @@ export default {
       },
       handleCurrentChange: function(e) {
         this.page = Number(e)
-        this.getRegistList(true)
+        this.getDcList(true)
       },
       handleSizeChange: function(e) {
         this.pageSize = Number(e)
         this.page = 1
-        this.getRegistList(true)
+        this.getDcList(true)
       },
       allSelectionChange(val) {
         console.log(val)

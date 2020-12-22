@@ -195,12 +195,12 @@ export default {
       },
       handleCurrentChange: function(e) {
         this.page = Number(e)
-        this.getRegistList(true)
+        this.getCateGoryQuery()
       },
       handleSizeChange: function(e) {
         this.pageSize = Number(e)
         this.page = 1
-        this.getRegistList(true)
+        this.getCateGoryQuery()
       },
       allSelectionChange(val) {
         console.log(val)
