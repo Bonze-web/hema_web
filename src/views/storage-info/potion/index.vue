@@ -52,8 +52,9 @@
           >
         </router-link>
       </el-row>
+
       <el-table
-        :data="suppliersData"
+        :data="listData"
         style="width: 100%; text-align: center"
         :row-style="{ height: '16px', padding: '-4px' }"
       >
@@ -71,16 +72,19 @@
           </template>
         </el-table-column>
         <el-table-column prop="name" label="名称"></el-table-column>
-        <el-table-column prop="anotherName" label="上级类别">
+        <!-- <el-table-column prop="anotherName" label="上级类别">
           <template slot-scope="scope">
             {{ scope.row.parentName ? scope.row.parentName : "&lt;空&gt;" }}
           </template>
-        </el-table-column>
-        <el-table-column prop="level" label="级别">
+        </el-table-column> -->
+        
+        <el-table-column prop="level" label="配送中心">
           <template slot-scope="scope">
-            {{ scope.row.level | categoryLevel }}
+            {{ scope.row.dcId }}
+            <!-- {{ scope.row.dcId | categoryLevel }} -->
           </template>
         </el-table-column>
+
         <el-table-column prop="anotherName" label="状态">
           <template slot-scope="scope">
             {{ scope.row.status | categoryStatus }}
@@ -109,12 +113,23 @@
           </template>
         </el-table-column>
       </el-table>
+
+      <el-pagination
+          style="float:right"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="1"
+          :page-sizes="[10, 20, 30, 50]"
+          :page-size="pageSize"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="totalCount">
+      </el-pagination>
     </div>
   </div>
 </template>
 
 <script>
-import BasicService from "@/api/service/BasicService";
+import StorageService from "@/api/service/StorageService";
 
 export default {
   data() {
@@ -126,9 +141,8 @@ export default {
       form: {
         nameOrCode: "",
         status: ""
-        // parentEquals: "",
       },
-      suppliersData: [],
+      listData: [], // 列表数据
       multipleSelection: [] // 选择的列表
     };
   },
@@ -138,7 +152,6 @@ export default {
       this.page = 1;
 
       this.$refs.form.validate((result) => {
-        console.log(result)
         if (result) {
           this.getCateGoryQuery();
         }
@@ -151,27 +164,27 @@ export default {
       } else {
         this.suppliersData[id].status = true
       }
-      if (status) {
-        BasicService.closeCategory(id, version)
-          .then((res) => {
-            this.$message.success("禁用成功");
-            this.getCateGoryQuery();
-          })
-          .catch((err) => {
-            this.$message.error("禁用失败" + err);
-            this.getCateGoryQuery();
-          });
-      } else {
-        BasicService.openCategory(id, version)
-          .then((res) => {
-            this.$message.success("启用成功");
-            this.getCateGoryQuery();
-          })
-          .catch((err) => {
-            this.$message.error("启用失败" + err);
-            this.getCateGoryQuery();
-          });
-      }
+      // if (status) {
+      //   BasicService.closeCategory(id, version)
+      //     .then((res) => {
+      //       this.$message.success("禁用成功");
+      //       this.getCateGoryQuery();
+      //     })
+      //     .catch((err) => {
+      //       this.$message.error("禁用失败" + err);
+      //       this.getCateGoryQuery();
+      //     });
+      // } else {
+      //   BasicService.openCategory(id, version)
+      //     .then((res) => {
+      //       this.$message.success("启用成功");
+      //       this.getCateGoryQuery();
+      //     })
+      //     .catch((err) => {
+      //       this.$message.error("启用失败" + err);
+      //       this.getCateGoryQuery();
+      //     });
+      // }
     },
     clearInput: function() {
       this.form = {
@@ -179,60 +192,39 @@ export default {
         status: ""
       };
     },
-    getCateGoryQuery: function(reset) {
+    warehouseInit: function(reset) {
+      // 获取仓库列表
       this.suppliersData = []
 
       // 获取供应商列表
-      // const _this = this;
-      // const data = {
-      //   page: this.page,
-      //   pageSize: this.pageSize,
-      //   searchCount: true,
-      //   codeOrNameLike: this.form.nameOrCode,
-      //   statusEquals: this.form.status
-      //   // parentIdEquals: this.form.parentEquals,
-      // };
+      const _this = this;
+      const data = {
+        page: this.page,
+        pageSize: this.pageSize,
+        searchCount: true,
+        codeOrNameLike: this.form.nameOrCode,
+        statusEquals: this.form.status || null
+      };
 
-      for (let i = 0; i < 10; i++) {
-        const obj = {
-            id: i,
-            code: i + 'code',
-            name: i + 'name',
-            status: i,
-            sourceType: i + 'sourceType',
-            level: i + 'level',
-            parentName: i + 'parentName'
-          };
-          if (obj.status % 2 === 0) {
-            obj.status = true;
+      StorageService.warehouseInit(data).then((res) => {
+        const records = res.records;
+        const listData = [];
+
+        this.totalCount = res.totalCount;
+
+        records.forEach((item, index) => {
+          if (item === 'OFF') {
+            records[index].status = false
           } else {
-            obj.status = false;
+            records[index].status = true
           }
-          this.suppliersData.push(obj);
-      }
-      // BasicService.getCateGoryQuery(data).then((res) => {
-      //   _this.suppliersData = [];
-      //   console.log(res);
-      //   this.totalCount = res.totalCount;
-      //   for (const item in res.records) {
-      //     // 处理商品类别数据
-      //     const obj = {
-      //       id: res.records[item].id,
-      //       code: res.records[item].code,
-      //       name: res.records[item].name,
-      //       status: res.records[item].status,
-      //       sourceType: res.records[item].sourceType,
-      //       level: res.records[item].level,
-      //       parentName: res.records[item].parentName,
-      //     };
-      //     if (obj.status === "enabled") {
-      //       obj.status = true;
-      //     } else {
-      //       obj.status = false;
-      //     }
-      //     _this.suppliersData.push(obj);
-      //   }
-      // });
+
+          listData.push(item)
+        })
+
+        _this.listData = listData;
+        console.log(_this.listData)
+      });
     },
     handleCurrentChange: function(e) {
       this.page = Number(e);
@@ -249,19 +241,9 @@ export default {
     }
   },
   created() {
-    this.getCateGoryQuery();
+    this.warehouseInit();
   },
   filters: {
-    sourceType(type) {
-      switch (type) {
-        case "HAND":
-          return "手动创建";
-        case "IMPORT":
-          return "文件导入";
-        default:
-          return "未知";
-      }
-    },
     categoryLevel(level) {
       switch (level) {
         case "one":
@@ -279,9 +261,9 @@ export default {
     categoryStatus(status) {
       switch (status) {
         case true:
-          return "启用";
-        case false:
           return "禁用";
+        case false:
+          return "启用";
         default:
           return "未知";
       }

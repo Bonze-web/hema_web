@@ -339,7 +339,41 @@ const StorageInfoPackage = {
         icon: 'table'
       }
     }]
-  }]
+  },
+  {
+    path: "locationtype",
+    name: "LocationType",
+    component: AModule,
+    meta: {
+      title: '货位类型',
+      icon: 'table'
+    },
+    children: [
+      {
+        path: "",
+        name: "View",
+        component: () =>
+          import('@/views/storage-info/location-type/index'),
+        hidden: true,
+        meta: {
+          title: '',
+          icon: 'table'
+        }
+      },
+      {
+        path: "edit",
+        name: "Edit",
+        component: () =>
+          import('@/views/storage-info/location-type/edit'),
+        hidden: true,
+        meta: {
+          title: '',
+          icon: 'table'
+        }
+      }
+    ]
+  }
+  ]
 }
 
 /**
