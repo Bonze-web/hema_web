@@ -85,6 +85,7 @@ const SystemPackage = {
         import('@/views/sys/user/index'),
       hidden: true,
       meta: {
+        title: '用户',
         icon: 'table',
         permission: PermIds.SYS_USER_VIEW
       }

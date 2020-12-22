@@ -34,7 +34,7 @@
                     type="selection"
                     width="55">
                 </el-table-column> -->
-                <el-table-column fixed prop="code" label="代码">
+                <el-table-column prop="code" label="代码">
                     <template slot-scope="scope">
                         <router-link style="color:#409EFF" :to="{ path: '/basicinfo/suppliers/edit', query:{ status: 'read', id: scope.row.id} }">
                             <span>{{ scope.row.code }}</span>
@@ -55,9 +55,7 @@
                   </template>
                 </el-table-column>
                 <el-table-column
-                fixed="right"
-                label="操作"
-                width="200">
+                label="操作">
                 <template slot-scope="scope">
                   <el-button :disabled="scope.row.status" size="mini" type="text" @click="statusChange(scope.row.status, scope.row.id, scope.row.version)">启用</el-button>
                   <el-button :disabled="!scope.row.status" size="mini" type="text" @click="statusChange(scope.row.status, scope.row.id, scope.row.version)">禁用</el-button>
