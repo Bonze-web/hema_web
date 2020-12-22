@@ -46,7 +46,7 @@
 
     <div style="background: #fff">
       <el-row>
-        <router-link :to="{ path: '/storageinfo/potion/edit', query:{ status: 'create'} }" >
+        <router-link :to="{ path: '/storageinfo/warehouse/edit', query:{ status: 'create'} }" >
           <el-button style="margin: 18px 10px" type="primary" size="mini"
             >新建</el-button
           >
@@ -60,7 +60,7 @@
       >
         <el-table-column fixed prop="code" label="代码" style="height: 20px">
           <template slot-scope="scope">
-            <router-link style="color: #409eff" :to="{ path: '/storageinfo/potion/edit', query: { status: 'read', id: scope.row.id }, }" >
+            <router-link style="color: #409eff" :to="{ path: '/storageinfo/warehouse/edit', query: { status: 'read', id: scope.row.id }, }" >
               <span>{{ scope.row.code }}</span>
             </router-link>
           </template>

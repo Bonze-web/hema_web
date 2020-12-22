@@ -401,8 +401,8 @@ const StorageInfoPackage = {
     permission: PermIds.REPORT_DYNAMIC
   },
   children: [{
-    path: "potion",
-    name: "Potion",
+    path: "warehouse",
+    name: "Warehouse",
     component: AModule,
     meta: {
       title: '仓库',
@@ -412,7 +412,7 @@ const StorageInfoPackage = {
       path: "",
       name: "View",
       component: () =>
-        import('@/views/storage-info/potion/index'),
+        import('@/views/storage-info/warehouse/index'),
       hidden: true,
       meta: {
         title: '',
@@ -422,7 +422,7 @@ const StorageInfoPackage = {
       path: "edit",
       name: "Edit",
       component: () =>
-        import('@/views/storage-info/potion/edit'),
+        import('@/views/storage-info/warehouse/edit'),
       hidden: true,
       meta: {
         title: '',

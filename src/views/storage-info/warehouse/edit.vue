@@ -214,7 +214,6 @@ export default {
           console.log(res)
           this.warehouseInfo = res;
           // 根据状态修改仓库开启switch
-          console.log(this.warehouseInfo.status)
           if (this.warehouseInfo.status === "OFF") {
             this.warehouseInfo.status = true
           } else {
@@ -227,7 +226,6 @@ export default {
           // }
         })
         .catch((err) => {
-          console.log(err)
           this.$message.error("获取详情失败" + err)
         })
       },
@@ -258,7 +256,6 @@ export default {
               } else {
                 this.form.status = "OFF"
               }
-              console.log(this.form)
               StorageService.updateWarehouse(this.form)
               .then(res => {
                 console.log(res)
