@@ -35,7 +35,8 @@ export default {
     const param = {
       ...postData
     }
-    return request.post('/wms/dock/create', param)
+    // return request.post('/wms/dock/create', param)
+    return request.post('/wms/warehouse/create', param)
   },
   /**
    * 启用状态
@@ -59,7 +60,8 @@ export default {
     const param = {
         ...postData
     }
-    return request.post('/wms/dock/update', param)
+    // return request.post('/wms/dock/update', param)
+    return request.post('/wms/warehouse/update', param)
   }
 }
 

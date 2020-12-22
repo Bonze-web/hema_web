@@ -11,15 +11,7 @@
         </div>
         <div class="head" v-if="status === 'read'">
             <div class="head-title">
-                <div style="margin-right:8px">{{ '[' + suppliersInfo.code + ']' + suppliersInfo.name }}</div>
-                <!-- <template>
-                    <el-switch
-                        v-model="suppliersInfo.status"
-                        @change="statusChange"
-                        active-color="#13ce66"
-                        inactive-color="#eee">
-                    </el-switch>
-                </template> -->
+                <div style="margin:8px">{{ '[' + suppliersInfo.code + ']' + suppliersInfo.name }}</div>
                 <template>
                   <el-button type="text" @click="statusChange" v-if="suppliersInfo.status">禁用</el-button>
                   <el-button type="text" @click="statusChange" v-if="!suppliersInfo.status">启用</el-button>
@@ -41,12 +33,12 @@
                                 <el-row :gutter="20">
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="代码" prop="code">
-                                            <el-input v-model="form.code"></el-input>
+                                            <el-input v-model="form.code" maxlength="16"></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="名称" prop="name">
-                                            <el-input v-model="form.name"></el-input>
+                                            <el-input v-model="form.name" maxlength="40"></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
@@ -60,7 +52,7 @@
                                     </el-col>
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="配送中心" prop="dcId">
-                                            <el-select v-model="form.dcId" placeholder="情选择配送中心" @change="levelChange">
+                                            <el-select v-model="form.dcId" placeholder="请择配送中心" @change="levelChange">
                                                 <el-option label="配送中心1" value="0001"></el-option>
                                                 <el-option label="配送中心2" value="0002"></el-option>
                                                 <el-option label="配送中心3" value="0003"></el-option>
@@ -70,7 +62,7 @@
                                     </el-col>
                                 </el-row>
                                 <el-form-item label="备注">
-                                    <textarea v-model="form.remark"></textarea>
+                                    <textarea v-model="form.remark" maxlength="200"></textarea>
                                 </el-form-item>
                             </el-form>
                         </el-tab-pane>
@@ -136,6 +128,9 @@ export default {
           ],
           name: [
             { required: true, message: '请输入码头名称', trigger: 'blur' }
+          ],
+          dockerusage: [
+            { required: true, message: '请填写用途', trigger: 'blur' }
           ]
         }
       }
@@ -211,6 +206,10 @@ export default {
         // 创建新的码头的按钮
         this.$refs.form.validate(valid => {
           if (valid) {
+              if (!this.form.dcId) {
+              this.$message.error("请选择一个配送中心")
+              return
+            }
             if (this.status === 'create') {
               // 创建新的码头的按钮
               console.log(this.form);

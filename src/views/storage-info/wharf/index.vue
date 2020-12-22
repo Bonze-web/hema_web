@@ -117,44 +117,82 @@ export default {
           }
         })
       },
+      // statusChange: function(status, id, version) {
+      //    console.log(status, id, version);
+      //   // 修改供应商状态
+      //   this.$confirm('此操作将改变供应商状态, 是否继续?', '提示', {
+      //     confirmButtonText: '确定',
+      //     cancelButtonText: '取消',
+      //     type: 'warning'
+      //   }).then(() => {
+      //     if (status) {
+      //     WharfService.closeSuppliers(id, version, status)
+      //     .then((res) => {
+      //       console.log(res);
+      //       this.$message.success("禁用成功")
+      //       // 自己修改数据
+      //       this.getSuppliersList()
+      //     })
+      //     .catch((err) => {
+      //       this.$message.error("禁用失败" + err.message)
+      //       this.getSuppliersList()
+      //     })
+      //   } else {
+      //     WharfService.openSuppliers(id, version)
+      //     .then((res) => {
+      //       this.$message.success("启用成功")
+      //       this.getSuppliersList()
+      //     })
+      //     .catch((err) => {
+      //       this.$message.error("启用失败" + err.message)
+      //       this.getSuppliersList()
+      //     })
+      //   }
+      //   }).catch(() => {
+      //     this.$message({
+      //       type: 'info',
+      //       message: '已取消'
+      //     })        
+      //   })
+      // },
       statusChange: function(status, id, version) {
-         console.log(status, id, version);
-        // 修改供应商状态
-        this.$confirm('此操作将改变供应商状态, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          if (status) {
-          WharfService.closeSuppliers(id, version, status)
+      // 修改仓库状态
+      const _this = this;
+      this.$confirm('是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        if (status) {
+          // 禁用
+          WharfService.closeSuppliers(id, version)
           .then((res) => {
-            console.log(res);
-            this.$message.success("禁用成功")
-            // 自己修改数据
-            this.getSuppliersList()
+            _this.$message.success("禁止用成功")
+            _this.getSuppliersList();
           })
           .catch((err) => {
-            this.$message.error("禁用失败" + err.message)
-            this.getSuppliersList()
+            _this.$message.error("禁用失败" + err)
+            _this.getSuppliersList();
           })
         } else {
+          // 启用
           WharfService.openSuppliers(id, version)
           .then((res) => {
-            this.$message.success("启用成功")
-            this.getSuppliersList()
+            _this.$message.success("启用成功")
+            _this.getSuppliersList();
           })
           .catch((err) => {
-            this.$message.error("启用失败" + err.message)
-            this.getSuppliersList()
+            _this.$message.error("启用失败" + err)
+            _this.getSuppliersList();
           })
         }
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消'
-          })        
-        })
-      },
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消'
+        })        
+      })
+    },
       clearInput: function() {
         this.form = {
           nameOrCode: '',
@@ -210,7 +248,7 @@ export default {
               // sourceType: res.records[item].sourceType,
               // version: res.records[item].version
             }
-            if (obj.status === "OPEN") {
+            if (obj.status === "OFF") {
               obj.status = true
             } else {
               obj.status = false
