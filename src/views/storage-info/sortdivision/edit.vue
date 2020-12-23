@@ -1,8 +1,8 @@
 <template>
     <div>
         <div class="head" v-if="status === 'create' || status === 'edit'">
-            <div style="margin-top:8px" v-if="status === 'create'">新建</div>
-            <div style="margin-top:8px" v-else>编辑码头</div>
+            <div style="margin-top:8px" v-if="status === 'create'">新建拣货分区</div>
+            <div style="margin-top:8px" v-else>编辑拣货分区</div>
             <div>
                 <el-button @click="back">取消</el-button>
                 <el-button type="primary" @click="createSuppliers">确认</el-button>
@@ -11,14 +11,10 @@
         </div>
         <div class="head" v-if="status === 'read'">
             <div class="head-title">
-                <div style="margin-right:8px">{{ '[' + suppliersInfo.code + ']' + suppliersInfo.name }}</div>
+                <div style="margin:8px">{{ '[' + suppliersInfo.code + ']' + suppliersInfo.name }}</div>
                 <template>
-                    <el-switch
-                        v-model="suppliersInfo.status"
-                        @change="statusChange"
-                        active-color="#13ce66"
-                        inactive-color="#eee">
-                    </el-switch>
+                  <el-button type="text" @click="statusChange" v-if="suppliersInfo.status">禁用</el-button>
+                  <el-button type="text" @click="statusChange" v-if="!suppliersInfo.status">启用</el-button>
                 </template>
             </div>
             <div>
@@ -37,12 +33,12 @@
                                 <el-row :gutter="20">
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="代码" prop="code">
-                                            <el-input v-model="form.code"></el-input>
+                                            <el-input v-model="form.code" maxlength="16"></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="名称" prop="name">
-                                            <el-input v-model="form.name"></el-input>
+                                            <el-input v-model="form.name" maxlength="40"></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
@@ -54,9 +50,19 @@
                                           </el-select>
                                         </el-form-item>
                                     </el-col>
+                                    <el-col :span="6" class="info-box">
+                                        <el-form-item label="配送中心" prop="dcId">
+                                            <el-select v-model="form.dcId" placeholder="请择配送中心" @change="levelChange">
+                                                <el-option label="配送中心1" value="0001"></el-option>
+                                                <el-option label="配送中心2" value="0002"></el-option>
+                                                <el-option label="配送中心3" value="0003"></el-option>
+                                                <el-option label="配送中心4" value="0004 "></el-option>
+                                            </el-select>
+                                        </el-form-item>
+                                    </el-col>
                                 </el-row>
                                 <el-form-item label="备注">
-                                    <textarea v-model="form.remark"></textarea>
+                                    <textarea v-model="form.remark" maxlength="200"></textarea>
                                 </el-form-item>
                             </el-form>
                         </el-tab-pane>
@@ -106,14 +112,14 @@ export default {
         status: '', // 页面状态
         id: '', 
         tabActiveName: 'suppliers', // tab栏名称
+        dcId: '',
         form: {
-          id: '',
+          dcId: '',
           code: '',
           name: '',
           remark: '',
-          version: '',
           // 用途
-          dockerusage: ''    
+          dockerusage: ''
         },
         suppliersInfo: {}, 
         createRules: {
@@ -122,6 +128,9 @@ export default {
           ],
           name: [
             { required: true, message: '请输入码头名称', trigger: 'blur' }
+          ],
+          dockerusage: [
+            { required: true, message: '请填写用途', trigger: 'blur' }
           ]
         }
       }
@@ -130,12 +139,15 @@ export default {
 
     },
     methods: {
+      levelChange() {
+        this.dc_id = this.form.dcId
+        console.log(this.form)
+      },
       back: function() {
         this.$router.go(-1)
       },
       statusChange: function() {
         // 这个地方是已经点击了之后传过来的值,本来是打开的,点击之后已经成了false传递到这里,所以应该执行关闭键
-        console.log(this.suppliersInfo.status)
         // 当状态为关闭的时候,点击的时候应该是让它打开
         if (!this.suppliersInfo.status) {
           // 修改状态,将id传过去就可以
@@ -162,18 +174,20 @@ export default {
       // 这个地方用来获取到之前那个页面传递过来的数据,也就是id和状态
       getQueryStatus: function() {
         this.status = this.$route.query.status
-         console.log(this.status);
+         console.log(this.id);
         if (this.status === 'read') {
           // 如果是编辑的话,还要将id传递过来
-          this.id = this.$route.query.id
+          this.id = this.$route.query.id;
+          console.log(this.id);
           this.getSuppliers(this.id)
         }
       },
-      // 下面这个也是修改禁用于开启的接口调用
+      // 渲染,下面这个也是修改禁用于开启的接口调用
       getSuppliers: function(id) {
         // 如果是只读的模式,就要调取后台的数据,将数据渲染到页面上
         WharfService.getSuppliersDetail(id)
         .then((res) => {
+          console.log(res);
           this.suppliersInfo = res
           // 根据状态修改供应商开启switch
           // 首先是根据数据去修改名字后面的两个按钮
@@ -192,8 +206,13 @@ export default {
         // 创建新的码头的按钮
         this.$refs.form.validate(valid => {
           if (valid) {
+              if (!this.form.dcId) {
+              this.$message.error("请选择一个配送中心")
+              return
+            }
             if (this.status === 'create') {
               // 创建新的码头的按钮
+              console.log(this.form);
               WharfService.createSuppliers(this.form)
               .then(res => {
                 this.$message.success("创建成功")

@@ -157,7 +157,7 @@
                                 <div>{{ suppliersInfo.customField ? suppliersInfo.customField : "&lt;空&gt;" }}</div>
                             </el-col>
                             <el-col class="info-box">
-                                <div>备注:</div>
+                                <div style="width:32px">备注:</div>
                                 <div>{{ suppliersInfo.remark ? suppliersInfo.remark : "&lt;空&gt;" }}</div>
                             </el-col>
                         </el-tab-pane>

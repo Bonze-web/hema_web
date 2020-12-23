@@ -278,7 +278,7 @@ export default {
           case 'CENTER':
             return "中心仓"
           case 'FRONT':
-            return "前置仓"
+            return "网格仓"
           default:
             return "未知"
         }

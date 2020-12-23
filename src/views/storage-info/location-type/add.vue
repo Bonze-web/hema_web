@@ -1,289 +1,239 @@
 <template>
-  <div class="table-index">
-    <div class="select-head">
-      <el-form
-        ref="form"
-        style="display: flex"
-        :model="form"
-        label-width="80px"
-        label-position="right"
-      >
-        <el-form-item label="仓库">
-          <el-input
-            type="text"
-            placeholder="请输入仓库编号/名称"
-            v-model="form.nameOrCode"
-            class="input-width"
-          ></el-input>
-        </el-form-item>
+    <div>
+        <div class="head">
+            <div class="head-title">
+                <div style="margin:8px">新建货位类型</div>
+            </div>
+            <div>
+                <el-button @click="back">取消</el-button>
+                <el-button type="primary" @click="confirm">确认</el-button>
+            </div>
+        </div>
+        <div style="height:20px" />
 
-        <!-- <el-form-item label="上级类别">
-          <el-input
-            type="text"
-            placeholder="请输入上级仓库编号/名称"
-            v-model="form.parentEquals"
-            class="input-width"
-          ></el-input>
-        </el-form-item> -->
+        <div class="info-content">
+            <div>
+                <template>
+                    <el-tabs v-model="tabActiveName">
+                        <el-tab-pane label="货位类型" name="category">
+                          <div class="info-title">基本信息</div>
+                            <el-form :model="form" :rules="createRules" ref="form" label-width="100px" class="demo-ruleForm">
+                                <el-row :gutter="20">
+                                    <el-col :span="6" class="info-box">
+                                        <el-form-item label="代码" prop="code">
+                                            <el-input v-model="form.code"></el-input>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="6" class="info-box">
+                                        <el-form-item label="名称" prop="name">
+                                            <el-input v-model="form.name"></el-input>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="6" class="info-box">
+                                      <el-form-item label="存储盘数" prop="storageNumber">
+                                          <el-input v-model="form.storageNumber"></el-input>
+                                      </el-form-item>
+                                    </el-col>
+                                </el-row>
+                                <el-form-item label="备注" prop="remark">
+                                    <textarea v-model="form.remark"></textarea>
+                                </el-form-item>
 
-        <el-form-item label="状态">
-          <el-select v-model="form.status" placeholder="请选择状态">
-            <el-option label="全部" value=""></el-option>
-            <el-option label="启用" value="OFF"></el-option>
-            <el-option label="禁用" value="ON"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" size="mini" @click="onSubmit"
-            >立即搜索</el-button
-          >
-          <el-button size="mini" @click="clearInput">重置</el-button>
-        </el-form-item>
-      </el-form>
+                             <div class="info-title">规格信息</div>
+
+                                <el-row :gutter="20">
+                                    <el-col :span="6" class="info-box">
+                                        <el-form-item label="长度(cm)" prop="length">
+                                            <el-input v-model="form.length"></el-input>
+                                        </el-form-item>
+                                    </el-col>
+
+                                    <el-col :span="6" class="info-box">
+                                        <el-form-item label="宽度(cm)" prop="widht">
+                                            <el-input v-model="form.widht"></el-input>
+                                        </el-form-item>
+                                    </el-col>
+
+                                    <el-col :span="6" class="info-box">
+                                      <el-form-item label="高度(cm)" prop="height">
+                                          <el-input v-model="form.height"></el-input>
+                                      </el-form-item>
+                                    </el-col>
+
+                                    <el-col :span="6" class="info-box">
+                                      <el-form-item label="承重(kg)" prop="weight">
+                                          <el-input v-model="form.weight"></el-input>
+                                      </el-form-item>
+                                    </el-col>
+
+                                    <el-col :span="6" class="info-box">
+                                      <el-form-item label="容积率(%)" prop="plotRatio">
+                                          <el-input v-model="form.plotRatio"></el-input>
+                                      </el-form-item>
+                                    </el-col>
+                                </el-row>
+                            </el-form>
+                        </el-tab-pane>
+                    </el-tabs>
+                </template>
+            </div>
+        </div>
     </div>
-    
-    <div style="height: 20px" />
-
-    <div style="background: #fff">
-      <el-row>
-        <router-link :to="{ path: '/storageinfo/warehouse/add', query:{ status: 'create'} }" >
-          <el-button style="margin: 18px 10px" type="primary" size="mini"
-            >新建</el-button
-          >
-        </router-link>
-      </el-row>
-
-      <el-table
-        :data="listData"
-        style="width: 100%; text-align: center"
-        :row-style="{ height: '16px', padding: '-4px' }"
-      >
-        <el-table-column fixed prop="code" label="代码" style="height: 20px">
-          <template slot-scope="scope">
-            <router-link style="color: #409eff" :to="{ path: '/storageinfo/warehouse/edit', query: { status: 'read', id: scope.row.id }, }" >
-              <span>{{ scope.row.code }}</span>
-            </router-link>
-          </template>
-        </el-table-column>
-        <el-table-column prop="name" label="名称"></el-table-column>
-        <!-- <el-table-column prop="anotherName" label="上级类别">
-          <template slot-scope="scope">
-            {{ scope.row.parentName ? scope.row.parentName : "&lt;空&gt;" }}
-          </template>
-        </el-table-column> -->
-        
-        <el-table-column prop="level" label="配送中心">
-          <template slot-scope="scope">
-            {{ scope.row.dcId }}
-            <!-- {{ scope.row.dcId | categoryLevel }} -->
-          </template>
-        </el-table-column>
-
-        <el-table-column prop="anotherName" label="状态">
-          <template slot-scope="scope">
-            {{ scope.row.status | categoryStatus }}
-          </template>
-        </el-table-column>
-        <el-table-column fixed="right" label="操作" width="200">
-          <template slot-scope="scope">
-            <el-button
-              :disabled="scope.row.status"
-              size="mini"
-              type="text"
-              @click="
-                statusChange(scope.row.status, scope.row.id, scope.row.version)
-              "
-              >启用</el-button
-            >
-            <el-button
-              :disabled="!scope.row.status"
-              size="mini"
-              type="text"
-              @click="
-                statusChange(scope.row.status, scope.row.id, scope.row.version)
-              "
-              >禁用</el-button
-            >
-          </template>
-        </el-table-column>
-      </el-table>
-
-      <el-pagination
-          style="float:right"
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="1"
-          :page-sizes="[10, 20, 30, 50]"
-          :page-size="pageSize"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="totalCount">
-      </el-pagination>
-    </div>
-  </div>
 </template>
 
 <script>
+// import { mapGetters } from "vuex";
 import StorageService from "@/api/service/StorageService";
 
 export default {
   data() {
-    return {
-      suppliersId: "",
-      page: 1,
-      pageSize: 10,
-      totalCount: 0,
-      form: {
-        nameOrCode: "",
-        status: ""
+      return {
+        tabActiveName: 'category',
+        form: {
+          code: '',
+          name: '',
+          storageNumber: '',
+          remark: '',
+          length: '',
+          widht: '',
+          height: '',
+          weight: '',
+          plotRatio: ''
+        },
+        createRules: {
+          code: [
+            { required: true, message: '请输入类别代码', trigger: 'blur' }
+          ],
+          name: [
+            { required: true, message: '请输入类别名称', trigger: 'blur' }
+          ],
+          storageNumber: [
+            { required: true, message: '请选输入存储容器数量', trigger: 'blur' }
+          ],
+          remark: [
+            { required: true, message: '请输入备注', trigger: 'blur' }
+          ],
+          length: [
+            { required: true, message: '请输入长度', trigger: 'blur' }
+          ],
+          widht: [
+            { required: true, message: '请输入宽度', trigger: 'blur' }
+          ],
+          height: [
+            { required: true, message: '请输入高度', trigger: 'blur' }
+          ],
+          weight: [
+            { required: true, message: '请输入承重', trigger: 'blur' }
+          ],
+          plotRatio: [
+            { required: true, message: '请输入容积率', trigger: 'blur' }
+          ]
+        }
+      }
+    },
+    computed: {
+    },
+    methods: {
+      back: function() {
+        this.$store.dispatch("tagsView/delView", this.$route);
+        this.$router.go(-1)
       },
-      listData: [], // 列表数据
-      multipleSelection: [] // 选择的列表
-    };
-  },
-  computed: {},
-  methods: {
-    onSubmit: function() {
-      const _this = this;
-      this.page = 1;
+      createCategory: function() {
+        // 创建新的仓位
+        this.$refs.form.validate(valid => {
+          if (valid) {
+            if (!this.form.dcId) {
+              this.$message.error("请选择一个配送中心")
+              return
+            }
 
-      this.$refs.form.validate((result) => {
-        if (result) {
-          _this.warehouseInit();
-        }
-      });
-    },
-    statusChange: function(status, id, version) {
-      // 修改仓库状态
-      const _this = this;
-      this.$confirm('是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        if (status) {
-          // 禁用
-          StorageService.closeWarehouse(id, version)
-          .then((res) => {
-            _this.$message.success("禁止用成功")
-            _this.warehouseInit();
-          })
-          .catch((err) => {
-            _this.$message.error("禁用失败" + err)
-            _this.warehouseInit();
-          })
-        } else {
-          // 启用
-          StorageService.openWarehouse(id, version)
-          .then((res) => {
-            _this.$message.success("启用成功")
-            _this.warehouseInit();
-          })
-          .catch((err) => {
-            _this.$message.error("启用失败" + err)
-            _this.warehouseInit();
-          })
-        }
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消'
-        })        
-      })
-    },
-    clearInput: function() {
-      this.form = {
-        nameOrCode: "",
-        status: ""
-      };
-    },
-    warehouseInit: function(reset) {
-      // 获取仓库列表
-      this.suppliersData = []
+            if (this.status === 'create') {
+              StorageService.createWarehouse(this.form)
+              .then(res => {
+                this.$message.success("创建成功")
+                this.$store.dispatch("tagsView/delView", this.$route);
+                this.$router.go(-1)
+              })
+              .catch(err => {
+                this.$message.error("创建失败" + err)
+              })
+            } else {
+              if (this.form.status) {
+                this.form.status = "NO"
+              } else {
+                this.form.status = "OFF"
+              }
+              StorageService.updateWarehouse(this.form)
+              .then(res => {
+                console.log(res)
+                this.$message.success("更新成功")
 
-      // 获取供应商列表
-      const _this = this;
-      const data = {
-        codeEquals: this.form.nameOrCode || null,
-        page: this.page,
-        pageSize: this.pageSize,
-        searchCount: true,
-        nameLike: this.form.nameOrCode || null,
-        statusEquals: this.form.status || null
-      };
-
-      console.log(this.form.status)
-
-      StorageService.warehouseInit(data).then((res) => {
-        const records = res.records;
-        const listData = [];
-        console.log(res)
-        this.totalCount = res.totalCount;
-
-        records.forEach((item, index) => {
-          if (item.status === 'OFF') {
-            item.status = true
-          } else {
-            item.status = false
+                this.$store.dispatch("tagsView/delView", this.$route);
+                this.$router.go(-1)
+              })
+              .catch(err => {
+                this.$message.error("更新失败" + err)
+              })
+            }
           }
-          listData.push(item)
         })
+      },
+      confirm() {
+        // 确认
+        this.status = "edit"
+        this.form = Object.assign(this.form, this.categoryInfo)
 
-        _this.listData = listData;
-        console.log(_this.listData)
-      });
-    },
-    handleCurrentChange: function(e) {
-      this.page = Number(e);
-      this.warehouseInit(true);
-    },
-    handleSizeChange: function(e) {
-      this.pageSize = Number(e);
-      this.page = 1;
-      this.warehouseInit(true);
-    },
-    allSelectionChange(val) {
-      console.log(val);
-      this.multipleSelection = val;
-    }
-  },
-  created() {
-    this.warehouseInit();
-  },
-  filters: {
-    categoryLevel(level) {
-      switch (level) {
-        case "one":
-          return "一级";
-        case "two":
-          return "二级";
-        case "three":
-          return "三级";
-        case "four":
-          return "四级";
-        default:
-          return "未知";
+        if (this.level !== "one") {
+          this.getParentCategory()
+        }
       }
     },
-    categoryStatus(status) {
-      switch (status) {
-        case true:
-          return "禁用";
-        case false:
-          return "启用";
-        default:
-          return "未知";
+    created() {},
+    filters: {
+      categoryLevel(level) {
+        switch (level) {
+          case "one":
+            return "一级"
+          case "two":
+            return "二级"
+          case "three":
+            return "三级"
+          case "four":
+            return "四级"
+          default:
+            return '未知';
+        }
       }
     }
-  }
 };
 </script>
 
 <style lang="scss" scoped>
 @import "src/styles/mixin.scss";
-</style>
-<style lang="scss">
-.table-index {
-  @import "src/styles/mixin.scss";
-  @include elTable;
+.head{
+    background: #fff;
+    padding: 15px 12px;
+    border-radius: 12px;
+    border: 1px #eee solid;
+    display: flex;
+    justify-content: space-between;
+}
+.head-title{
+    display: flex;
+    justify-content: left;
+}
+.info-content{
+    background: #fff;
+    border-radius: 12px;
+    padding: 15px 12px;
+}
+.info-box{
+    margin: 4px 0;
+    font-size: 12px;
+    display: flex;
+    justify-content: left;
+}
+.info-title{
+    margin: 12px 0;
 }
 </style>

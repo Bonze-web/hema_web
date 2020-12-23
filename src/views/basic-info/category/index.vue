@@ -170,7 +170,7 @@ export default {
         .then((res) => {
           _this.suppliersData = []
           console.log(res)
-          this.totalCount = res.totalCount
+          _this.totalCount = res.totalCount
           for (const item in res.records) {
             // 处理商品类别数据
             const obj = {
