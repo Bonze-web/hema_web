@@ -56,5 +56,30 @@ export default {
      */
     getDcQuery() {
         return request.get('/sys/dc/query?page=1&pageSize=0')
+    },
+    /**
+     * 
+     * 
+     * 
+     * 
+     * 
+     *  货位类型接口
+     * 
+     * 
+     * 
+     * 
+     * 
+     */
+    getWmsBintypeQuery(opt) {
+        const { page, pageSize } = opt
+        console.log({ page, pageSize })
+        return request.get(`/wms/wmsBintype/query?page=${page}&pageSize=${pageSize}`)
+    },
+    /**
+     * 新建货位类型
+     */
+    openWmsBintype(opt) {
+        console.log(opt)
+        return request.post('/wms/wmsBintype/create', opt)
     }
 }

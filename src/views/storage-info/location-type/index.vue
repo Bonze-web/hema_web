@@ -90,7 +90,7 @@ export default {
 
       this.$refs.form.validate((result) => {
         if (result) {
-          _this.warehouseInit();
+          _this.getWmsBintypeQuery();
         }
       });
     },
@@ -116,37 +116,37 @@ export default {
         name: ""
       };
     },
-    warehouseInit: function(reset) {
+    getWmsBintypeQuery: function(reset) {
       // 获取仓库列表
       this.suppliersData = []
 
       // 获取供应商列表
       const _this = this;
       const data = {
-        codeEquals: this.form.nameOrCode || null,
+        // codeEquals: this.form.nameOrCode || null,
         page: this.page,
         pageSize: this.pageSize,
-        searchCount: true,
-        nameLike: this.form.nameOrCode || null,
-        statusEquals: this.form.status || null
+        searchCount: true
+        // nameLike: this.form.nameOrCode || null,
+        // statusEquals: this.form.status || null
       };
 
       console.log(this.form.status)
 
-      StorageService.warehouseInit(data).then((res) => {
-        const records = res.records;
+      StorageService.getWmsBintypeQuery(data).then((res) => {
+        // const records = res.records;
         const listData = [];
         console.log(res)
-        this.totalCount = res.totalCount;
+        // this.totalCount = res.totalCount;
 
-        records.forEach((item, index) => {
-          if (item.status === 'OFF') {
-            item.status = true
-          } else {
-            item.status = false
-          }
-          listData.push(item)
-        })
+        // records.forEach((item, index) => {
+        //   if (item.status === 'OFF') {
+        //     item.status = true
+        //   } else {
+        //     item.status = false
+        //   }
+        //   listData.push(item)
+        // })
 
         _this.listData = listData;
       }).catch(err => {
@@ -155,16 +155,16 @@ export default {
     },
     handleCurrentChange: function(e) {
       this.page = Number(e);
-      this.warehouseInit(true);
+      this.getWmsBintypeQuery(true);
     },
     handleSizeChange: function(e) {
       this.pageSize = Number(e);
       this.page = 1;
-      this.warehouseInit(true);
+      this.getWmsBintypeQuery(true);
     }
   },
   created() {
-    this.warehouseInit();
+    this.getWmsBintypeQuery();
   },
   filters: {}
 };
