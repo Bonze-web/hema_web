@@ -1,8 +1,8 @@
 <template>
     <div>
         <div class="head" v-if="status === 'create' || status === 'edit'">
-            <div style="margin-top:8px" v-if="status === 'create'">新建</div>
-            <div style="margin-top:8px" v-else>编辑码头</div>
+            <div style="margin-top:8px" v-if="status === 'create'">新建拣货分区</div>
+            <div style="margin-top:8px" v-else>编辑</div>
             <div>
                 <el-button @click="back">取消</el-button>
                 <el-button type="primary" @click="createSuppliers">确认</el-button>
@@ -29,7 +29,7 @@
                     <el-tabs v-model="tabActiveName">
                         <el-tab-pane label="码头" name="suppliers">
                             <div class="info-title">基本信息</div>
-                            <el-form :model="form" :rules="createRules" ref="form" label-width="100px" class="demo-ruleForm">
+                             <el-form :model="form" :rules="createRules" ref="form" label-width="100px" class="demo-ruleForm">
                                 <el-row :gutter="20">
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="代码" prop="code">
@@ -42,29 +42,49 @@
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
-                                        <el-form-item label="用途" prop="dockerusage">
-                                          <el-select v-model="form.dockerusage" multiple placeholder="请选择用途">
-                                            <el-option label="收货" value="RECEIVE"></el-option>
-                                            <el-option label="出货" value="OUT"></el-option>
-                                            <el-option label="退货" value="RETURN"></el-option>
-                                          </el-select>
+                                        <el-form-item label="货位范围" prop="binScope">
+                                            <el-input v-model="form.binScope" maxlength="40"></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="配送中心" prop="dcId">
                                             <el-select v-model="form.dcId" placeholder="请择配送中心" @change="levelChange">
-                                                <el-option label="配送中心1" value="0001"></el-option>
-                                                <el-option label="配送中心2" value="0002"></el-option>
-                                                <el-option label="配送中心3" value="0003"></el-option>
-                                                <el-option label="配送中心4" value="0004 "></el-option>
+                                                <el-option v-for="(ele,idx) in materials" :key="idx" :label="ele.name" :value="ele.id"></el-option>
                                             </el-select>
                                         </el-form-item>
                                     </el-col>
                                 </el-row>
                                 <el-form-item label="备注">
-                                    <textarea v-model="form.remark" maxlength="200"></textarea>
+                                    <textarea v-model="form.remark" maxlength="200" @change="levelChange"></textarea>
                                 </el-form-item>
                             </el-form>
+                            <!-- <el-form :model="form" :rules="createRules" ref="form" label-width="100px" class="demo-ruleForm">
+                                <el-row :gutter="20">
+                                    <el-col :span="6" class="info-box">
+                                        <el-form-item label="代码" prop="code">
+                                            <el-input v-model="form.code" maxlength="16"></el-input>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="6" class="info-box">
+                                        <el-form-item label="名称" prop="name">
+                                            <el-input v-model="form.name" maxlength="40"></el-input>
+                                        </el-form-item>
+                                    </el-col>
+                                   <el-col :span="6" class="info-box">
+                                        <el-form-item label="货位范围" prop="binScope">
+                                            <el-input v-model="form.binScope" maxlength="40"></el-input>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-form-item label="配送中心" prop="dcId">
+                                            <el-select v-model="form.dcId" placeholder="请择配送中心" >
+                                                <el-option v-for="(ele,idx) in materials" :key="idx" :label="ele.name" :value="ele.id"></el-option>
+                                            </el-select>
+                                      </el-form-item>
+                                </el-row>
+                                <el-form-item label="备注">
+                                    <textarea v-model="form.remark" maxlength="200" @change="levelChange"></textarea>
+                                </el-form-item>
+                            </el-form> -->
                         </el-tab-pane>
                         <!-- <el-tab-pane label="配送中心范围" name="range">配置管理</el-tab-pane>
                         <el-tab-pane label="操作日志" name="log">角色管理</el-tab-pane> -->
@@ -87,8 +107,12 @@
                                 <div>{{ suppliersInfo.name }}</div>
                             </el-col>
                             <el-col :span="6" class="info-box">
-                                <div>用途:</div>
-                                <div>{{ suppliersInfo.dockerusage }}</div>
+                                <div>货位范围:</div>
+                                <div>{{ suppliersInfo.binScope }}</div>
+                            </el-col>
+                            <el-col :span="6" class="info-box">
+                                <div>配送中心:</div>
+                                <div>{{ suppliersInfo.dcId }}</div>
                             </el-col>
                             <el-col class="info-box">
                                 <div>备注:</div>
@@ -104,7 +128,7 @@
 
 <script>
 // import { mapGetters } from "vuex";
-import WharfService from "@/api/service/WharfService";
+import SortdivisionService from "@/api/service/SortdivisionService";
 
 export default {
   data() {
@@ -113,13 +137,13 @@ export default {
         id: '', 
         tabActiveName: 'suppliers', // tab栏名称
         dcId: '',
+        materials: [],
         form: {
           dcId: '',
           code: '',
           name: '',
           remark: '',
-          // 用途
-          dockerusage: ''
+          binScope: ''
         },
         suppliersInfo: {}, 
         createRules: {
@@ -129,8 +153,11 @@ export default {
           name: [
             { required: true, message: '请输入码头名称', trigger: 'blur' }
           ],
-          dockerusage: [
-            { required: true, message: '请填写用途', trigger: 'blur' }
+          binScope: [
+            { required: true, message: '请填写货位范围', trigger: 'blur' }
+          ],
+          dcId: [
+            { required: true, message: '请填写配送中心', trigger: 'blur' }
           ]
         }
       }
@@ -151,7 +178,7 @@ export default {
         // 当状态为关闭的时候,点击的时候应该是让它打开
         if (!this.suppliersInfo.status) {
           // 修改状态,将id传过去就可以
-          WharfService.closeSuppliers(this.id)      
+          SortdivisionService.closeSuppliers(this.id)      
           .then((res) => {
             this.getSuppliers(this.id)    
           })
@@ -160,7 +187,7 @@ export default {
             this.getSuppliers(this.id)
           })
         } else {
-           WharfService.openSuppliers(this.id)
+           SortdivisionService.openSuppliers(this.id)
             .then((res) => {
               this.getSuppliers(this.id)
             })
@@ -185,7 +212,7 @@ export default {
       // 渲染,下面这个也是修改禁用于开启的接口调用
       getSuppliers: function(id) {
         // 如果是只读的模式,就要调取后台的数据,将数据渲染到页面上
-        WharfService.getSuppliersDetail(id)
+        SortdivisionService.getSuppliersDetail(id)
         .then((res) => {
           console.log(res);
           this.suppliersInfo = res
@@ -206,14 +233,16 @@ export default {
         // 创建新的码头的按钮
         this.$refs.form.validate(valid => {
           if (valid) {
-              if (!this.form.dcId) {
-              this.$message.error("请选择一个配送中心")
-              return
-            }
             if (this.status === 'create') {
               // 创建新的码头的按钮
-              console.log(this.form);
-              WharfService.createSuppliers(this.form)
+              const reg = /^([1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[,]+[1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[-]+[1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[(]+[1-9]+\/[1-9]+[)]+)$/;
+              console.log();
+              if (!reg.test(this.form.binScope)) {
+                this.$message.error("满足格式10、10(1/2)、10-20，多个以逗号隔开");
+                return false;
+              }
+               
+              SortdivisionService.createSuppliers(this.form)
               .then(res => {
                 this.$message.success("创建成功")
                 this.$router.go(-1)
@@ -229,7 +258,7 @@ export default {
               } else {
                 this.form.status = "CLOSED"
               }
-              WharfService.updateSupplier(this.form)
+              SortdivisionService.updateSupplier(this.form)
               .then(res => {
                 console.log(res)
                 this.$message.success("更新成功")
@@ -255,7 +284,16 @@ export default {
       }
     },
     created() {
-      this.getQueryStatus()
+      this.getQueryStatus();
+      const _this = this;
+      SortdivisionService.getdcdata().then(function(res) {
+        res.records.forEach(function(ele, idx) {
+           _this.materials.push({
+              name: ele.name,
+              id: ele.id
+           })
+        })
+      })
     },
     filters: {
     

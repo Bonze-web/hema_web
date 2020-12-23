@@ -124,6 +124,7 @@ export default {
           remark: '',
           // 用途
           usages: []
+          // status: ""
         },
         suppliersInfo: {}, 
         createRules: {

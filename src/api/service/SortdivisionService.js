@@ -45,6 +45,16 @@ export default {
    */
   closeSuppliers(id, version) {
     return request.put('/wms/dock/updateStatus?id=' + id + '&version=' + version);
+  },
+   /**
+   * 去调取物流中心的接口,让用户来选物流中心
+   */
+  getdcdata() {
+    var postData = {
+      page: 0,
+      pageSize: 0
+    }
+    return request.get('/sys/dc/query', postData);
   }
 }
 
