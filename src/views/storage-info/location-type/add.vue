@@ -110,7 +110,7 @@ export default {
             { required: true, max: 40, message: '最多输入40位', trigger: 'change' }
           ],
           storageNumber: [
-            { required: true, message: '请选输入存储盘数量', trigger: 'blur' }
+            { required: true, message: '请选输入存储盘数量', trigger: 'blur' },
             { pattern: /^[0-9]{9}$/, message: '请输入1-999999999之间的数字', trigger: 'change' }
           ],
           remark: [
