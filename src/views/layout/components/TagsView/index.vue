@@ -261,15 +261,18 @@ export default {
 <style lang="scss" scoped>
 .tags-view-container {
   min-height: 40px;
-  width: calc(100% + 100px);
+  width: calc(100% - 180px);
   margin-left: -50px;
   padding: 4px 0 0 0;
   background: #fff;
   // border-bottom: 1px solid #d8dce5;
   border-radius: 2px;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 0 3px 0 rgba(0, 0, 0, 0.04);
-  position: relative;
+  position: fixed;
   margin-bottom: 10px;
+  top: 50px;
+  right: 0;
+  z-index: 99;
   .tags-view-wrapper {
     .tags-view-item {
       display: inline-flex;
