@@ -160,7 +160,6 @@ export default {
       });
     },
     closeSelectedTag(view) {
-      console.log(view, this.routes, this.route);
       this.$store
         .dispatch("tagsView/delView", view)
         .then(({ visitedViews }) => {
@@ -252,16 +251,19 @@ export default {
         this.$refs.scrollPane.setScrollData(0);
       }
     }
+  },
+  beforeDestory() {
+    Bus.$off("removeCache");
   }
 };
 </script>
 
 <style lang="scss" scoped>
 .tags-view-container {
-  min-height: 26px;
+  min-height: 40px;
   width: calc(100% + 100px);
   margin-left: -50px;
-  padding: 4px 0;
+  padding: 4px 0 0 0;
   background: #fff;
   // border-bottom: 1px solid #d8dce5;
   border-radius: 2px;
@@ -273,23 +275,25 @@ export default {
       display: inline-flex;
       position: relative;
       cursor: pointer;
-      height: 32px;
-      line-height: 32px;
+      height: 40px;
+      line-height: 40px;
       padding: 10px 0;
-      border: 1px solid #d8dce5;
       color: #495060;
       background: #fff;
       padding: 0 8px;
       width: 140px;
-      font-size: 12px;
-      // margin-left: 5px;
-      // margin-top: 4px;
+      font-size: 14px;
+      border-bottom-color: #fff;
+      border-radius: 6px 6px 0 0;
       justify-content: space-between;
       align-items: center;
+      justify-content: center;
       border-left: 0;
+      transition: color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1),
+        padding 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+      position: relative;
       &:first-of-type {
         margin-left: 15px;
-        border-left: 1px solid #d8dce5;
       }
       &:last-of-type {
         margin-right: 15px;
@@ -357,26 +361,34 @@ export default {
 .tags-view-wrapper {
   .tags-view-item {
     .el-icon-close {
-      width: 16px;
-      height: 16px;
+      width: 0;
+      height: 18px;
       vertical-align: 2px;
       border-radius: 50%;
       text-align: center;
       transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
       transform-origin: 100% 50%;
       display: inline-block;
+      margin-left: 5px;
+      overflow: hidden;
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      margin-top: -8px;
       &:before {
         transform: scale(0.9);
         vertical-align: -3px;
-        display: none;
+        display: inline-block;
+      }
+      &:hover {
+        background-color: #b4bccc;
+        color: #fff;
       }
     }
     &.active,
     &:hover {
       .el-icon-close {
-        &:before {
-          display: inline-block;
-        }
+        width: 18px;
       }
     }
   }

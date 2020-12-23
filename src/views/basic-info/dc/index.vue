@@ -17,7 +17,7 @@
                     <el-select v-model="form.type" placeholder="请选择类型">
                     <el-option label="全部" value=""></el-option>
                     <el-option label="中心仓" value="CENTER"></el-option>
-                    <el-option label="前置仓" value="FRONT"></el-option>
+                    <el-option label="网格仓" value="FRONT"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item>
@@ -226,7 +226,7 @@ export default {
         case "CENTER":
           return "中心仓"
         case "FRONT":
-          return "前置仓"
+          return "网格仓"
         default:
           return '未知';
       }

@@ -105,7 +105,7 @@
                                 <div>{{ categoryInfo.parentName ? categoryInfo.parentName : "&lt;空&gt;" }}</div>
                             </el-col>
                             <el-col class="info-box">
-                                <div>备注:</div>
+                                <div style="width:32px">备注:</div>
                                 <div>{{ categoryInfo.remark ? categoryInfo.remark : "&lt;空&gt;" }}</div>
                             </el-col>
                         </el-tab-pane>

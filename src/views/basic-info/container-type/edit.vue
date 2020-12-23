@@ -202,7 +202,7 @@
                                 <div>{{ containerTypeInfo.attachment ? "是" : "否" }}</div>
                             </el-col>
                             <el-col class="info-box" style="margin-bottom:20px">
-                                <div>备注:</div>
+                                <div style="width:32px">备注:</div>
                                 <div>{{ containerTypeInfo.remark ? containerTypeInfo.remark : "&lt;空&gt;" }}</div>
                             </el-col>
                             <div class="info-title">规格信息</div>

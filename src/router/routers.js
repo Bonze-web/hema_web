@@ -400,7 +400,8 @@ const StorageInfoPackage = {
     icon: 'storage-info',
     permission: PermIds.REPORT_DYNAMIC
   },
-  children: [{
+  children: [
+  {
     path: "warehouse",
     name: "Warehouse",
     component: AModule,
@@ -408,7 +409,8 @@ const StorageInfoPackage = {
       title: '仓库',
       icon: 'table'
     },
-    children: [{
+    children: [
+      {
       path: "",
       name: "View",
       component: () =>
@@ -441,6 +443,57 @@ const StorageInfoPackage = {
     }] 
   },
   {
+    path: "locationtype",
+    name: "locationType",
+    component: AModule,
+    meta: {
+      title: '货位类型',
+      icon: 'table'
+    },
+    children: [
+      {
+      path: "",
+      name: "View",
+      component: () =>
+        import('@/views/storage-info/location-type/index'),
+      hidden: true,
+      meta: {
+        title: '货位类型',
+        icon: 'table'
+      }
+    }, {
+      path: "edit",
+      name: "Edit",
+      component: () =>
+        import('@/views/storage-info/location-type/edit'),
+      hidden: true,
+      meta: {
+        title: '查看货位',
+        icon: 'table'
+      }
+    }, {
+      path: "add",
+      name: "Add",
+      component: () =>
+        import('@/views/storage-info/location-type/add'),
+      hidden: true,
+      meta: {
+        title: '新建货位',
+        icon: 'table'
+      }
+    }, {
+      path: "add",
+      name: "Add",
+      component: () =>
+        import('@/views/storage-info/wharf/add'),
+      hidden: true,
+      meta: {
+        title: '新建码头',
+        icon: 'table'
+      }
+    }] 
+  },
+  {
     path: "wharf",
     name: "Wharf",
     component: AModule,
@@ -464,35 +517,16 @@ const StorageInfoPackage = {
       component: () =>
         import('@/views/storage-info/wharf/edit'),
         hidden: true,
-      meta: {
-        title: '编辑',
-        icon: 'table'
-      }
-    }, {
-      path: "add",
-      name: "Add",
-      component: () =>
-        import('@/views/storage-info/wharf/add'),
-      hidden: true,
-      meta: {
-        title: '新建码头',
-        icon: 'table'
-      }
-    }] 
-  },
-  {
-    path: "sortdivision",
-    name: "Sortdivision",
-    component: AModule,
-    meta: {
-      title: '拣货分区设置',
-      icon: 'table'
-    },
-    children: [{
-      path: "",
-      name: "SortdivisionView",
-      component: () =>
-        import('@/views/storage-info/sortdivision/index'),
+        meta: {
+          title: '货位详情',
+          icon: 'table'
+        }
+      },
+      {
+        path: "add",
+        name: "Add",
+        component: () =>
+          import('@/views/storage-info/location-type/add'),
         hidden: true,
       meta: {
         title: '拣货分区设置展示',
