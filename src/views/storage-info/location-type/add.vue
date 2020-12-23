@@ -102,31 +102,40 @@ export default {
         },
         createRules: {
           code: [
-            { required: true, message: '请输入类别代码', trigger: 'blur' }
+            { required: true, message: '请输入类别代码', trigger: 'blur' },
+            { required: true, max: 16, message: '最多输入16位', trigger: 'change' }
           ],
           name: [
-            { required: true, message: '请输入类别名称', trigger: 'blur' }
+            { required: true, message: '请输入类别名称', trigger: 'blur' },
+            { required: true, max: 40, message: '最多输入40位', trigger: 'change' }
           ],
           storageNumber: [
-            { required: true, message: '请选输入存储容器数量', trigger: 'blur' }
+            { required: true, message: '请选输入存储盘数量', trigger: 'blur' }
+            { pattern: /^[0-9]{9}$/, message: '请输入1-999999999之间的数字', trigger: 'change' }
           ],
           remark: [
-            { required: true, message: '请输入备注', trigger: 'blur' }
+            { required: true, message: '请输入备注', trigger: 'blur' },
+            { required: true, max: 200, message: '最多输入200位', trigger: 'change' }
           ],
           length: [
-            { required: true, message: '请输入长度', trigger: 'blur' }
+            { required: true, message: '请输入长度', trigger: 'blur' },
+            { pattern: /^\d{1,6}(\.\d+)?$/, message: '请输入1-99999之间的数字', trigger: 'change' }
           ],
           widht: [
-            { required: true, message: '请输入宽度', trigger: 'blur' }
+            { required: true, message: '请输入宽度', trigger: 'blur' },
+            { pattern: /^\d{1,6}(\.\d+)?$/, message: '请输入1-99999之间的数字', trigger: 'change' }
           ],
           height: [
-            { required: true, message: '请输入高度', trigger: 'blur' }
+            { required: true, message: '请输入高度', trigger: 'blur' },
+            { pattern: /^\d{1,6}(\.\d+)?$/, message: '请输入1-99999之间的数字', trigger: 'change' }
           ],
           weight: [
-            { required: true, message: '请输入承重', trigger: 'blur' }
+            { required: true, message: '请输入承重', trigger: 'blur' },
+            { pattern: /^\d{1,6}(\.\d+)?$/, message: '请输入1-99999之间的数字', trigger: 'change' }
           ],
           plotRatio: [
-            { required: true, message: '请输入容积率', trigger: 'blur' }
+            { required: true, message: '请输入容积率', trigger: 'blur' },
+            { pattern: /^[0-9]{2}$/, message: '请输入1-9999之间的数字', trigger: 'change' }
           ]
         }
       }
@@ -138,54 +147,20 @@ export default {
         this.$store.dispatch("tagsView/delView", this.$route);
         this.$router.go(-1)
       },
-      createCategory: function() {
-        // 创建新的仓位
-        this.$refs.form.validate(valid => {
-          if (valid) {
-            if (!this.form.dcId) {
-              this.$message.error("请选择一个配送中心")
-              return
-            }
-
-            if (this.status === 'create') {
-              StorageService.createWarehouse(this.form)
-              .then(res => {
-                this.$message.success("创建成功")
-                this.$store.dispatch("tagsView/delView", this.$route);
-                this.$router.go(-1)
-              })
-              .catch(err => {
-                this.$message.error("创建失败" + err)
-              })
-            } else {
-              if (this.form.status) {
-                this.form.status = "NO"
-              } else {
-                this.form.status = "OFF"
-              }
-              StorageService.updateWarehouse(this.form)
-              .then(res => {
-                console.log(res)
-                this.$message.success("更新成功")
-
-                this.$store.dispatch("tagsView/delView", this.$route);
-                this.$router.go(-1)
-              })
-              .catch(err => {
-                this.$message.error("更新失败" + err)
-              })
-            }
-          }
-        })
-      },
       confirm() {
         // 确认
-        this.status = "edit"
-        this.form = Object.assign(this.form, this.categoryInfo)
-
-        if (this.level !== "one") {
-          this.getParentCategory()
-        }
+       // 创建新的仓位
+        this.$refs.form.validate(valid => {
+          if (valid) {
+            StorageService.openWmsBintype(this.form)
+            .then(res => {
+              console.log(res)
+            })
+            .catch(err => {
+              this.$message.error("创建失败" + err)
+            })
+          }
+        })
       }
     },
     created() {},
