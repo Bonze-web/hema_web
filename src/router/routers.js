@@ -475,7 +475,7 @@ const StorageInfoPackage = {
         path: "add",
         name: "Add",
         component: () =>
-          import('@/views/storage-info/location-type/edit'),
+          import('@/views/storage-info/location-type/add'),
         hidden: true,
         meta: {
           title: '新建货位',
