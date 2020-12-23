@@ -464,7 +464,6 @@ const StorageInfoPackage = {
       component: () =>
         import('@/views/storage-info/wharf/edit'),
         hidden: true,
-<<<<<<< HEAD
         meta: {
           title: '货位详情',
           icon: 'table'
@@ -475,27 +474,6 @@ const StorageInfoPackage = {
         name: "Add",
         component: () =>
           import('@/views/storage-info/location-type/add'),
-=======
-      meta: {
-        title: '编辑',
-        icon: 'table'
-      }
-    }] 
-  },
-  {
-    path: "sortdivision",
-    name: "Sortdivision",
-    component: AModule,
-    meta: {
-      title: '拣货分区设置',
-      icon: 'table'
-    },
-    children: [{
-      path: "",
-      name: "SortdivisionView",
-      component: () =>
-        import('@/views/storage-info/sortdivision/index'),
->>>>>>> eb499eb674c1822df32e1eb56cd1d58500cf94a8
         hidden: true,
       meta: {
         title: '拣货分区设置展示',
