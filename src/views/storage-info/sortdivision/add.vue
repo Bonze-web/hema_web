@@ -41,7 +41,25 @@
                                             <el-input v-model="form.name" maxlength="40"></el-input>
                                         </el-form-item>
                                     </el-col>
-
+                                    <el-col :span="6" class="info-box">
+                                        <el-form-item label="用途" prop="dockerusage">
+                                          <el-select v-model="form.dockerusage" multiple placeholder="请选择用途">
+                                            <el-option label="收货" value="RECEIVE"></el-option>
+                                            <el-option label="出货" value="OUT"></el-option>
+                                            <el-option label="退货" value="RETURN"></el-option>
+                                          </el-select>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="6" class="info-box">
+                                        <el-form-item label="配送中心" prop="dcId">
+                                            <el-select v-model="form.dcId" placeholder="请择配送中心" @change="levelChange">
+                                                <el-option label="配送中心1" value="0001"></el-option>
+                                                <el-option label="配送中心2" value="0002"></el-option>
+                                                <el-option label="配送中心3" value="0003"></el-option>
+                                                <el-option label="配送中心4" value="0004 "></el-option>
+                                            </el-select>
+                                        </el-form-item>
+                                    </el-col>
                                 </el-row>
                                 <el-form-item label="备注">
                                     <textarea v-model="form.remark" maxlength="200"></textarea>

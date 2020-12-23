@@ -468,6 +468,16 @@ const StorageInfoPackage = {
         title: '编辑',
         icon: 'table'
       }
+    }, {
+      path: "add",
+      name: "Add",
+      component: () =>
+        import('@/views/storage-info/wharf/add'),
+      hidden: true,
+      meta: {
+        title: '新建码头',
+        icon: 'table'
+      }
     }] 
   },
   {
@@ -496,6 +506,16 @@ const StorageInfoPackage = {
         hidden: true,
       meta: {
         title: '编辑',
+        icon: 'table'
+      }
+    }, {
+      path: "add",
+      name: "Add",
+      component: () =>
+        import('@/views/storage-info/sortdivision/add'),
+      hidden: true,
+      meta: {
+        title: '新建码头',
         icon: 'table'
       }
     }] 

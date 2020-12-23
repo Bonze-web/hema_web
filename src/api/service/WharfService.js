@@ -11,7 +11,6 @@ export default {
   // 一开始我就要请求的接口
   // 分页的接口请求
   getSuppliersList(postData) {
-    console.log(postData);
     const param = {
       ...postData
     }
