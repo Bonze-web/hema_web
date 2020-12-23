@@ -212,7 +212,7 @@ export default {
         this.$refs.form.validate(valid => {
           if (valid) {
             if (!this.form.dcId) {
-              this.$message.error("请选择一个配送中心")
+              this.$message.error("请选择一个物流中心")
               return
             }
 

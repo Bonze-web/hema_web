@@ -98,7 +98,7 @@
             <div>
                 <template>
                     <el-tabs v-model="tabActiveName">
-                        <el-tab-pane label="商品类别" name="category">
+                        <el-tab-pane label="货位类型" name="category">
                             <div class="info-title">基本信息</div>
                             <el-col :span="6" class="info-box">
                                 <div>代码:</div>
@@ -139,6 +139,8 @@
                                 <div>{{ wmsBintypeInfo.plotRatio }}</div>
                             </el-col>
                         </el-tab-pane>
+
+                        <!-- <el-tab-pane label="消息中心">消息中心</el-tab-pane> -->
                     </el-tabs>
                 </template>
             </div>
@@ -154,6 +156,7 @@ export default {
   data() {
       return {
         tabActiveName: 'category', // tab栏名称
+        active: 'ccc',
         status: '', // 页面状态
         id: '', // 货位类别ID
         form: {

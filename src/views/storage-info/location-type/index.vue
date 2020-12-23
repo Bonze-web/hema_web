@@ -21,7 +21,7 @@
     
     <div style="height: 20px" />
 
-    <div style="background: #fff">
+    <div style="background: #fff;">
       <el-row>
         <router-link :to="{ path: '/storageinfo/locationtype/add' }" >
           <el-button style="margin: 18px 10px" type="primary" size="mini" >新建</el-button>

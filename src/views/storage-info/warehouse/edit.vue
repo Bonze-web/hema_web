@@ -52,7 +52,7 @@
                                     </el-col>
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="物流中心" prop="dcId">
-                                            <el-select v-model="form.dcId" placeholder="请选择配送中心" @change="levelChange">
+                                            <el-select v-model="form.dcId" placeholder="请选择物流中心" @change="levelChange">
                                                 <el-option v-for="(item, index) in records" :key="index" :label="item.name" :value="item.id"></el-option>
                                             </el-select>
                                         </el-form-item>
