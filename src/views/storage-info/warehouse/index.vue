@@ -9,12 +9,11 @@
         label-position="right"
       >
         <el-form-item label="仓库">
-          <el-input
-            type="text"
-            placeholder="请输入仓库编号/名称"
-            v-model="form.nameOrCode"
-            class="input-width"
-          ></el-input>
+          <el-input type="text" placeholder="请输入仓库编号" v-model="form.codeEquals" class="input-width" ></el-input>
+        </el-form-item>
+
+        <el-form-item label="名称">
+          <el-input type="text" placeholder="请输入名称" v-model="form.nameLike" class="input-width" ></el-input>
         </el-form-item>
 
         <!-- <el-form-item label="上级类别">
@@ -72,7 +71,7 @@
           </template>
         </el-table-column> -->
         
-        <el-table-column prop="level" label="配送中心">
+        <el-table-column prop="level" label="物流中心">
           <template slot-scope="scope">
             {{ scope.row.dcId }}
             <!-- {{ scope.row.dcId | categoryLevel }} -->
@@ -133,7 +132,8 @@ export default {
       pageSize: 10,
       totalCount: 0,
       form: {
-        nameOrCode: "",
+        codeEquals: "",
+        nameLike: "",
         status: ""
       },
       listData: [], // 列表数据
@@ -192,7 +192,8 @@ export default {
     },
     clearInput: function() {
       this.form = {
-        nameOrCode: "",
+        codeEquals: "",
+        nameLike: "",
         status: ""
       };
     },
@@ -203,15 +204,15 @@ export default {
       // 获取供应商列表
       const _this = this;
       const data = {
-        codeEquals: this.form.nameOrCode || null,
+        codeEquals: this.form.codeEquals || null,
         page: this.page,
         pageSize: this.pageSize,
         searchCount: true,
-        nameLike: this.form.nameOrCode || null,
+        nameLike: this.form.nameLike || null,
         statusEquals: this.form.status || null
       };
 
-      console.log(this.form.status)
+      console.log(this.form)
 
       StorageService.warehouseInit(data).then((res) => {
         const records = res.records;
@@ -230,6 +231,8 @@ export default {
 
         _this.listData = listData;
         console.log(_this.listData)
+      }).catch(err => {
+        this.$message.error("数据请求失败" + err.message)
       });
     },
     handleCurrentChange: function(e) {
@@ -267,9 +270,9 @@ export default {
     categoryStatus(status) {
       switch (status) {
         case true:
-          return "禁用";
-        case false:
           return "启用";
+        case false:
+          return "禁用";
         default:
           return "未知";
       }

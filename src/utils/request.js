@@ -56,6 +56,8 @@ request.interceptors.request.use(config => {
       // config.url = "/" + tenant + request.defaults.baseURL
       config.headers['tenant'] = tenant;
     }
+  } else {
+    config.headers['tenant'] = "hema";
   }
   if (!isHideLoading()) {
     loading = Loading.service();

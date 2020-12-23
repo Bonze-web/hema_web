@@ -6,20 +6,12 @@
             <div>
                 <el-button @click="back">取消</el-button>
                 <el-button type="primary" @click="createCategory">确认</el-button>
-                <!-- <el-button type="primary" v-if="status === 'create'">确认并创建</el-button> -->
             </div>
         </div>
+
         <div class="head" v-if="status === 'read'">
             <div class="head-title">
                 <div style="margin:8px">{{ '[' + warehouseInfo.code + ']' + warehouseInfo.name }}</div>
-                <!-- <template>
-                    <el-switch
-                        v-model="warehouseInfo.status"
-                        @change="statusChange"
-                        active-color="#13ce66"
-                        inactive-color="#eee">
-                    </el-switch>
-                </template> -->
                 <template>
                   <el-button type="text" @click="statusChange" v-if="warehouseInfo.status">禁用</el-button>
                   <el-button type="text" @click="statusChange" v-if="!warehouseInfo.status">启用</el-button>
@@ -32,12 +24,13 @@
         </div>
         <div style="height:20px" />
 
+        <!-- 编辑 -->
         <div class="info-content" v-if="status === 'create' || status === 'edit'">
             <div>
                 <template>
-                    <el-tabs v-model="tabActiveName" @tab-click="tabClick">
-                        <el-tab-pane label="仓库" name="category">
-                            <div class="info-title">基本信息</div>
+                    <el-tabs v-model="tabActiveName">
+                        <el-tab-pane label="货位类型" name="category">
+                          <div class="info-title">基本信息</div>
                             <el-form :model="form" :rules="createRules" ref="form" label-width="100px" class="demo-ruleForm">
                                 <el-row :gutter="20">
                                     <el-col :span="6" class="info-box">
@@ -51,38 +44,57 @@
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
-                                      <el-form-item label="配送中心" prop="dcId">
-                                          <el-input v-model="form.dcId"></el-input>
+                                      <el-form-item label="存储盘数" prop="storageNumber">
+                                          <el-input v-model="form.storageNumber"></el-input>
                                       </el-form-item>
-                                        <!-- <el-form-item label="配送中心" prop="dcId">
-                                            <el-select v-model="form.dcId" placeholder="情选择配送中心" @change="levelChange">
-                                                <el-option label="配送中心1" value="0001"></el-option>
-                                                <el-option label="配送中心2" value="0002"></el-option>
-                                                <el-option label="配送中心3" value="0003"></el-option>
-                                                <el-option label="配送中心4" value="0004 "></el-option>
-                                            </el-select>
-                                        </el-form-item> -->
                                     </el-col>
-                                    <!-- <el-col :span="6" class="info-box" v-if="level !== 'one'">
-                                        <el-form-item label="上级类别">
-                                            <el-select v-model="form.parentId">
-                                                <el-option v-for="item in parentList" :key="item.value" :label="item.name" :value="item.id"></el-option>
-                                            </el-select>
-                                        </el-form-item>
-                                    </el-col> -->
                                 </el-row>
-                                <el-form-item label="备注">
+                                <el-form-item label="备注" prop="remark">
                                     <textarea v-model="form.remark"></textarea>
                                 </el-form-item>
+
+                             <div class="info-title">规格信息</div>
+
+                                <el-row :gutter="20">
+                                    <el-col :span="6" class="info-box">
+                                        <el-form-item label="长度(cm)" prop="length">
+                                            <el-input v-model="form.length"></el-input>
+                                        </el-form-item>
+                                    </el-col>
+
+                                    <el-col :span="6" class="info-box">
+                                        <el-form-item label="宽度(cm)" prop="widht">
+                                            <el-input v-model="form.widht"></el-input>
+                                        </el-form-item>
+                                    </el-col>
+
+                                    <el-col :span="6" class="info-box">
+                                      <el-form-item label="高度(cm)" prop="height">
+                                          <el-input v-model="form.height"></el-input>
+                                      </el-form-item>
+                                    </el-col>
+
+                                    <el-col :span="6" class="info-box">
+                                      <el-form-item label="承重(kg)" prop="weight">
+                                          <el-input v-model="form.weight"></el-input>
+                                      </el-form-item>
+                                    </el-col>
+
+                                    <el-col :span="6" class="info-box">
+                                      <el-form-item label="容积率(%)" prop="plotRatio">
+                                          <el-input v-model="form.plotRatio"></el-input>
+                                      </el-form-item>
+                                    </el-col>
+                                </el-row>
                             </el-form>
                         </el-tab-pane>
-                        <!-- <el-tab-pane label="配送中心范围" name="range">配置管理</el-tab-pane>
-                        <el-tab-pane label="操作日志" name="log">角色管理</el-tab-pane> -->
                     </el-tabs>
                 </template>
             </div>
         </div>
 
+
+        <!-- 展示 -->
         <div class="info-content" v-if="status === 'read'">
             <div>
                 <template>
@@ -98,24 +110,36 @@
                                 <div>{{ warehouseInfo.name }}</div>
                             </el-col>
                             <el-col :span="6" class="info-box">
-                                <div>配送中心:</div>
+                                <div>存储盘数:</div>
                                 <div>{{ warehouseInfo.dcId }}</div>
                             </el-col>
-                            <!-- <el-col :span="6" class="info-box">
-                                <div>货主:</div>
-                                <div></div>
-                            </el-col> -->
-                            <!-- <el-col :span="6" class="info-box">
-                                <div>上级类别:</div>
-                                <div>{{ warehouseInfo.parentName ? warehouseInfo.parentName : "&lt;空&gt;" }}</div>
-                            </el-col> -->
                             <el-col class="info-box">
                                 <div>备注:</div>
                                 <div>{{ warehouseInfo.remark ? warehouseInfo.remark : "&lt;空&gt;" }}</div>
                             </el-col>
+                            </br>
+                            <div class="info-title" style="padding-top:22px">规格信息</div>
+                            <el-col :span="6" class="info-box">
+                                <div>长度(cm):</div>
+                                <div>{{ warehouseInfo.code }}</div>
+                            </el-col>
+                            <el-col :span="6" class="info-box">
+                                <div>宽度(cm):</div>
+                                <div>{{ warehouseInfo.code }}</div>
+                            </el-col>
+                            <el-col :span="6" class="info-box">
+                                <div>高度(cm):</div>
+                                <div>{{ warehouseInfo.code }}</div>
+                            </el-col>
+                            <el-col :span="6" class="info-box">
+                                <div>承重(kg):</div>
+                                <div>{{ warehouseInfo.code }}</div>
+                            </el-col>
+                            <el-col :span="6" class="info-box">
+                                <div>容积率(%):</div>
+                                <div>{{ warehouseInfo.code }}</div>
+                            </el-col>
                         </el-tab-pane>
-                        <!-- <el-tab-pane label="配送中心范围" name="range">配置管理</el-tab-pane>
-                        <el-tab-pane label="操作日志" name="log">角色管理</el-tab-pane> -->
                     </el-tabs>
                 </template>
             </div>
