@@ -232,7 +232,7 @@ export default {
         _this.listData = listData;
         console.log(_this.listData)
       }).catch(err => {
-        this.$message.error("数据请求失败" + err)
+        this.$message.error("数据请求失败" + err.message)
       });
     },
     handleCurrentChange: function(e) {
@@ -270,9 +270,9 @@ export default {
     categoryStatus(status) {
       switch (status) {
         case true:
-          return "禁用";
-        case false:
           return "启用";
+        case false:
+          return "禁用";
         default:
           return "未知";
       }

@@ -271,6 +271,11 @@ export default {
         this.status = "edit"
         this.form = Object.assign(this.form, this.categoryInfo)
         console.log(this.form)
+
+        StorageService.getDcQuery()
+        .then(res => {
+          console.log(res)
+        })
         if (this.level !== "one") {
           this.getParentCategory()
         }

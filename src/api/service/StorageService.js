@@ -50,5 +50,11 @@ export default {
             ...postData
         }
         return request.post('/wms/warehouse/update', param)
+    },
+    /**
+     * 获取物流中心
+     */
+    getDcQuery() {
+        return request.get('/sys/dc/query?page=1&pageSize=20')
     }
 }
