@@ -76,7 +76,9 @@ export default {
     },
     /** 取消 */
     handleCancel() {
-      this.$router.push({ path: "/sys/role" });
+      // this.$router.push({ path: "/sys/role" });
+      this.$store.dispatch("tagsView/delView", this.$route);
+      this.$router.go(-1);
     },
 
     /** 保存 */
@@ -94,9 +96,11 @@ export default {
               .then(res => {
                 console.log(res);
                 this.message("success", "创建角色成功");                
-                this.$router.push({
-                  name: "RoleList"
-                });
+                // this.$router.push({
+                //   name: "RoleList"
+                // });
+                this.$store.dispatch("tagsView/delView", this.$route);
+                this.$router.go(-1);
               })
               .catch(err => {
                 console.log(err);                
@@ -112,9 +116,11 @@ export default {
               .then(res => {
                 console.log(res);                
                 this.message("success", "修改角色成功");
-                this.$router.push({
-                  name: "RoleList"
-                });
+                // this.$router.push({
+                //   name: "RoleList"
+                // });
+                this.$store.dispatch("tagsView/delView", this.$route);
+                this.$router.go(-1);
               })
               .catch(err => {
                 console.log(err);                

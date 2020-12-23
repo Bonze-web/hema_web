@@ -189,7 +189,9 @@ export default {
 
     /** 回退 */
     goback() {
-      this.$router.push({ name: "UserList" });
+      // this.$router.push({ name: "UserList" });
+      this.$store.dispatch("tagsView/delView", this.$route);
+      this.$router.go(-1);
     },
 
     handleAvatarSuccess(res, file) {

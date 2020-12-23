@@ -142,7 +142,9 @@ export default {
     },
     /** 取消 */
     handleCancel() {
-      this.$router.push({ path: "/sys/wxaAcount" });
+      // this.$router.push({ path: "/sys/wxaAcount" });
+      this.$store.dispatch("tagsView/delView", this.$route);
+      this.$router.go(-1);
     },
 
     /** 保存 */
