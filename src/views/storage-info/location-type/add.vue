@@ -182,7 +182,7 @@ export default {
         // 确认
         this.status = "edit"
         this.form = Object.assign(this.form, this.categoryInfo)
-        console.log(this.form)
+
         if (this.level !== "one") {
           this.getParentCategory()
         }

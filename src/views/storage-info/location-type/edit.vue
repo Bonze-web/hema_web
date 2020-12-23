@@ -274,7 +274,6 @@ export default {
           }
         })
       },
-<<<<<<< HEAD
       editCategory() {
         this.status = "edit"
         this.form = Object.assign(this.form, this.categoryInfo)
@@ -285,12 +284,6 @@ export default {
       },
       levelChange() {
         this.level = this.form.level
-=======
-      editSupplier() {
-        this.status = "edit";
-        console.log(this.form);
-        this.form = Object.assign(this.form, this.suppliersInfo)
->>>>>>> eb499eb674c1822df32e1eb56cd1d58500cf94a8
         console.log(this.form)
         // if (this.form.level === "one") {
         //   return
