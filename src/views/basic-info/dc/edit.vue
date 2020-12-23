@@ -145,11 +145,11 @@
                             </el-col>
                             <el-col :span="6" class="info-box">
                                 <div>来源代码:</div>
-                                <div>{{ dcInfo.sourceCode }}</div>
+                                <div>{{ dcInfo.sourceCode ? dcInfo.sourceCode : "&lt;空&gt;" }}</div>
                             </el-col>
                             <el-col :span="6" class="info-box">
                                 <div>简称:</div>
-                                <div>{{ dcInfo.shortName }}</div>
+                                <div>{{ dcInfo.shortName ? dcInfo.shortName : "&lt;空&gt;" }}</div>
                             </el-col>
                             <!-- <el-col :span="6" class="info-box">
                                 <div>货主:</div>
@@ -169,7 +169,7 @@
                             </el-col>
                             <el-col :span="6" class="info-box">
                                 <div>经营面积:</div>
-                                <div>{{ dcInfo.operatingArea }}</div>
+                                <div>{{ dcInfo.operatingArea ? dcInfo.operatingArea : "&lt;空&gt;" }}</div>
                             </el-col>
                             <el-col :span="6" class="info-box">
                                 <div>邮编:</div>
@@ -180,7 +180,7 @@
                                 <div>{{ dcInfo.subjectCode ? dcInfo.subjectCode : "&lt;空&gt;" }}</div>
                             </el-col>
                             <el-col class="info-box">
-                                <div>备注:</div>
+                                <div style="width:32px">备注:</div>
                                 <div>{{ dcInfo.remark ? dcInfo.remark : "&lt;空&gt;" }}</div>
                             </el-col>
                         </el-tab-pane>
@@ -391,7 +391,7 @@ export default {
           case 'CENTER':
             return "中心仓"
           case 'FRONT':
-            return "前置仓"
+            return "网格仓"
           default:
             return "未知"
         }
