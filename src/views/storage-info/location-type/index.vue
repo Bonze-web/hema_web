@@ -137,6 +137,8 @@ export default {
 
       StorageService.getWmsBintypeQuery(data).then((res) => {
         const records = res.records;
+
+        this.totalCount = res.totalCount;
         // const listData = [];
 
         // records.forEach((item, index) => {
