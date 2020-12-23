@@ -442,6 +442,7 @@ export default {
               .then(res => {
                 console.log(res)
                 this.$message.success("更新成功")
+                this.$store.dispatch("tagsView/delView", this.$route);
                 this.$router.go(-1)
               })
               .catch(err => {
@@ -462,12 +463,12 @@ export default {
     created() {
       this.getQueryStatus()
     },
-    beforeRouteEnter(to, from, next) {
-      next(vm => {
-        // 通过 `vm` 访问组件实例
-        vm.getQueryStatus();
-      })
-    },
+    // beforeRouteEnter(to, from, next) {
+    //   next(vm => {
+    //     // 通过 `vm` 访问组件实例
+    //     vm.getQueryStatus();
+    //   })
+    // },
     filters: {
       recycletype(type) {
         switch (type) {

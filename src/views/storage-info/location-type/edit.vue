@@ -6,20 +6,11 @@
             <div>
                 <el-button @click="back">取消</el-button>
                 <el-button type="primary" @click="createCategory">确认</el-button>
-                <!-- <el-button type="primary" v-if="status === 'create'">确认并创建</el-button> -->
             </div>
         </div>
         <div class="head" v-if="status === 'read'">
             <div class="head-title">
                 <div style="margin:8px">{{ '[' + warehouseInfo.code + ']' + warehouseInfo.name }}</div>
-                <!-- <template>
-                    <el-switch
-                        v-model="warehouseInfo.status"
-                        @change="statusChange"
-                        active-color="#13ce66"
-                        inactive-color="#eee">
-                    </el-switch>
-                </template> -->
                 <template>
                   <el-button type="text" @click="statusChange" v-if="warehouseInfo.status">禁用</el-button>
                   <el-button type="text" @click="statusChange" v-if="!warehouseInfo.status">启用</el-button>
@@ -54,30 +45,13 @@
                                       <el-form-item label="配送中心" prop="dcId">
                                           <el-input v-model="form.dcId"></el-input>
                                       </el-form-item>
-                                        <!-- <el-form-item label="配送中心" prop="dcId">
-                                            <el-select v-model="form.dcId" placeholder="情选择配送中心" @change="levelChange">
-                                                <el-option label="配送中心1" value="0001"></el-option>
-                                                <el-option label="配送中心2" value="0002"></el-option>
-                                                <el-option label="配送中心3" value="0003"></el-option>
-                                                <el-option label="配送中心4" value="0004 "></el-option>
-                                            </el-select>
-                                        </el-form-item> -->
                                     </el-col>
-                                    <!-- <el-col :span="6" class="info-box" v-if="level !== 'one'">
-                                        <el-form-item label="上级类别">
-                                            <el-select v-model="form.parentId">
-                                                <el-option v-for="item in parentList" :key="item.value" :label="item.name" :value="item.id"></el-option>
-                                            </el-select>
-                                        </el-form-item>
-                                    </el-col> -->
                                 </el-row>
                                 <el-form-item label="备注">
                                     <textarea v-model="form.remark"></textarea>
                                 </el-form-item>
                             </el-form>
                         </el-tab-pane>
-                        <!-- <el-tab-pane label="配送中心范围" name="range">配置管理</el-tab-pane>
-                        <el-tab-pane label="操作日志" name="log">角色管理</el-tab-pane> -->
                     </el-tabs>
                 </template>
             </div>
@@ -101,21 +75,11 @@
                                 <div>配送中心:</div>
                                 <div>{{ warehouseInfo.dcId }}</div>
                             </el-col>
-                            <!-- <el-col :span="6" class="info-box">
-                                <div>货主:</div>
-                                <div></div>
-                            </el-col> -->
-                            <!-- <el-col :span="6" class="info-box">
-                                <div>上级类别:</div>
-                                <div>{{ warehouseInfo.parentName ? warehouseInfo.parentName : "&lt;空&gt;" }}</div>
-                            </el-col> -->
                             <el-col class="info-box">
                                 <div>备注:</div>
                                 <div>{{ warehouseInfo.remark ? warehouseInfo.remark : "&lt;空&gt;" }}</div>
                             </el-col>
                         </el-tab-pane>
-                        <!-- <el-tab-pane label="配送中心范围" name="range">配置管理</el-tab-pane>
-                        <el-tab-pane label="操作日志" name="log">角色管理</el-tab-pane> -->
                     </el-tabs>
                 </template>
             </div>
