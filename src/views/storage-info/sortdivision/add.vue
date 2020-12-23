@@ -126,22 +126,27 @@
         <div class="pop-up-pag">
            <!-- 左边的按钮 -->
             <div class="right-popstorge">
-              <el-input
+              <div class="count-tatle">
+                {{'1'}}/{{'625'}}项
+              </div>
+              <div class="center-pag">
+                 <el-input
                   placeholder="请输入内容"
                   v-model="popstorge.searchOne">
                   <i slot="prefix" class="el-input__icon el-icon-search"></i>
-              </el-input>
-              <div>
-                  <el-checkbox v-model="popstorge.checkedOne">备选项</el-checkbox>
-                  存储分区
+                </el-input>
+                <div>
+                    <el-checkbox v-model="popstorge.checkedOne">存储分区</el-checkbox>
+                </div>
+                <ul class="list-pop-ui">
+                  <li>
+                    <el-checkbox v-model="popstorge.checkedOne"></el-checkbox>
+                    <div class="content-checked-one">
+                        狗蛋
+                    </div>
+                  </li>
+                </ul>
               </div>
-              <ul>
-                <li>
-                  <div>
-                      
-                  </div>
-                </li>
-              </ul>
                <!-- 下面这个是翻页 -->
               <el-pagination
                   style="float:right"
@@ -155,14 +160,16 @@
             </div>
             <!-- 右边的按钮 -->
             <div class="left-popstorge">
+              <div class="count-tatle">
+                {{'1'}}/{{'625'}}项
+              </div>
                <el-input
                   placeholder="请输入内容"
                   v-model="popstorge.searchTwo">
                   <i slot="prefix" class="el-input__icon el-icon-search"></i>
               </el-input>
               <div>
-                 <el-checkbox v-model="popstorge.checkedTwo">备选项</el-checkbox>
-                  存储分区
+                 <el-checkbox v-model="popstorge.checkedTwo">存储分区</el-checkbox>
               </div>
               <ul>
                 <li>
@@ -393,6 +400,24 @@ export default {
   justify-content: space-between;
   .right-popstorge,
   .left-popstorge {
+    .count-tatle{
+      padding: 10px;
+      font-size: 12px;
+    }
+    .center-pag {
+      padding: 0 10px;
+    }
+    .list-pop-ui {
+      margin: 0;
+      li {
+        display: flex;
+        align-items: center;
+        padding: 20px;
+        .content-checked-one {
+          font-size: 12px;
+        }
+      }
+    }
     border: #E4E7ED solid 1px;
     width: 350px;
     height: 600px;

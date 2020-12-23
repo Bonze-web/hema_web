@@ -12,10 +12,10 @@
         <div class="head" v-if="status === 'read'">
             <div class="head-title">
                 <div style="margin:8px">{{ '[' + suppliersInfo.code + ']' + suppliersInfo.name }}</div>
-                <template>
+                <!-- <template>
                   <el-button type="text" @click="statusChange" v-if="suppliersInfo.status">禁用</el-button>
                   <el-button type="text" @click="statusChange" v-if="!suppliersInfo.status">启用</el-button>
-                </template>
+                </template> -->
             </div>
             <div>
                 <el-button @click="back">返回</el-button>
@@ -33,7 +33,7 @@
                                 <el-row :gutter="20">
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="代码" prop="code">
-                                            <el-input v-model="form.code" maxlength="16"></el-input>
+                                            <el-input disabled="disabled" v-model="form.code" maxlength="16"></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
@@ -70,7 +70,7 @@
                             </el-col>
                             <el-col :span="6" class="info-box">
                                 <div>用途:</div>
-                                <div>{{ suppliersInfo.dockerusage }}</div>
+                                <div>{{ suppliersInfo.usages }}</div>
                             </el-col>
                             <el-col class="info-box">
                                 <div>备注:</div>
@@ -94,14 +94,14 @@ export default {
         status: '', // 页面状态
         id: '', 
         tabActiveName: 'suppliers', // tab栏名称
-        dcId: '',
+        // dcId: '',
         form: {
-          dcId: '',
+          // dcId: '',
           code: '',
           name: '',
           remark: '',
           // 用途
-          dockerusage: ''
+          usages: ''
         },
         suppliersInfo: {}, 
         createRules: {
@@ -111,8 +111,8 @@ export default {
           name: [
             { required: true, message: '请输入码头名称', trigger: 'blur' }
           ],
-          dockerusage: [
-            { required: true, message: '货位范围', trigger: 'blur' }
+          usages: [
+            { required: true, message: '请选择用途', trigger: 'blur' }
           ]
         }
       }
@@ -122,7 +122,7 @@ export default {
     },
     methods: {
       levelChange() {
-        this.dc_id = this.form.dcId
+        // this.dc_id = this.form.dcId
         console.log(this.form)
       },
       back: function() {
@@ -173,11 +173,11 @@ export default {
           this.suppliersInfo = res
           // 根据状态修改供应商开启switch
           // 首先是根据数据去修改名字后面的两个按钮
-          if (this.suppliersInfo.status === "OPEN") {
-            this.suppliersInfo.status = true
-          } else {
-            this.suppliersInfo.status = false
-          }
+          // if (this.suppliersInfo.status === "OPEN") {
+          //   this.suppliersInfo.status = true
+          // } else {
+          //   this.suppliersInfo.status = false
+          // }
         })
         .catch((err) => {
           this.$message.error("获取详情失败" + err)
@@ -188,10 +188,6 @@ export default {
         // 创建新的码头的按钮
         this.$refs.form.validate(valid => {
           if (valid) {
-              if (!this.form.dcId) {
-              this.$message.error("请选择一个配送中心")
-              return
-            }
             if (this.status === 'create') {
               // 创建新的码头的按钮
               console.log(this.form);
@@ -206,11 +202,12 @@ export default {
             } else {
               console.log(this.form, this.form.status);
               // 因为提交的时候,需要传递状态值,所以先转换一下,这里是编辑
-              if (this.form.status) {
-                this.form.status = "OPEN"
-              } else {
-                this.form.status = "CLOSED"
-              }
+              // if (this.form.status) {
+              //   this.form.status = "OPEN"
+              // } else {
+              //   this.form.status = "CLOSED"
+              // }
+              this.form.id = this.id;
               WharfService.updateSupplier(this.form)
               .then(res => {
                 console.log(res)
@@ -232,6 +229,7 @@ export default {
         // 这个form肯定就是编辑页面的数据,suppliersInfo是前一个页面传递过来的数据
         // 传递的是form是用户填写的数据
         console.log(this.status);
+        this.form.id = this.id;
         this.form = Object.assign(this.form, this.suppliersInfo)
         console.log(this.form, this.suppliersInfo)
       }
