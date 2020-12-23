@@ -438,34 +438,33 @@ const StorageInfoPackage = {
         title: '新建仓库',
         icon: 'table'
       }
-    }]
+    }] 
   },
   {
-    path: "locationtype",
-    name: "LocationType",
+    path: "wharf",
+    name: "Wharf",
     component: AModule,
     meta: {
-      title: '货位类型',
+      title: '码头',
       icon: 'table'
     },
-    children: [
-      {
-        path: "",
-        name: "View",
-        component: () =>
-          import('@/views/storage-info/location-type/index'),
+    children: [{
+      path: "",
+      name: "WharfView",
+      component: () =>
+        import('@/views/storage-info/wharf/index'),
         hidden: true,
-        meta: {
-          title: '货位类型',
-          icon: 'table'
-        }
-      },
-      {
-        path: "edit",
-        name: "Edit",
-        component: () =>
-          import('@/views/storage-info/location-type/edit'),
+      meta: {
+        title: '码头展示',
+        icon: 'table'
+      }
+    }, {
+      path: "edit",
+      name: "WharfEdit",
+      component: () =>
+        import('@/views/storage-info/wharf/edit'),
         hidden: true,
+<<<<<<< HEAD
         meta: {
           title: '货位详情',
           icon: 'table'
@@ -476,15 +475,45 @@ const StorageInfoPackage = {
         name: "Add",
         component: () =>
           import('@/views/storage-info/location-type/add'),
-        hidden: true,
-        meta: {
-          title: '新建货位',
-          icon: 'table'
-        }
+=======
+      meta: {
+        title: '编辑',
+        icon: 'table'
       }
-    ]
+    }] 
+  },
+  {
+    path: "sortdivision",
+    name: "Sortdivision",
+    component: AModule,
+    meta: {
+      title: '拣货分区设置',
+      icon: 'table'
+    },
+    children: [{
+      path: "",
+      name: "SortdivisionView",
+      component: () =>
+        import('@/views/storage-info/sortdivision/index'),
+>>>>>>> eb499eb674c1822df32e1eb56cd1d58500cf94a8
+        hidden: true,
+      meta: {
+        title: '拣货分区设置展示',
+        icon: 'table'
+      }
+    }, {
+      path: "edit",
+      name: "SortdivisionEdit",
+      component: () =>
+        import('@/views/storage-info/sortdivision/edit'),
+        hidden: true,
+      meta: {
+        title: '编辑',
+        icon: 'table'
+      }
+    }] 
   }
-  ]
+]
 }
 
 /**
