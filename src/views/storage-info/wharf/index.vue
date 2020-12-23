@@ -10,7 +10,7 @@
                     <el-select v-model="form.status" placeholder="请选择状态">
                     <el-option label="全部" value=""></el-option>
                     <el-option label="启用" value="OPEN"></el-option>
-                    <el-option label="停用" value="COLOSED"></el-option>
+                    <el-option label="禁用" value="COLOSED"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item>
@@ -50,7 +50,7 @@
                 </el-table-column>
                 <el-table-column prop="status" label="状态" >
                   <template slot-scope="scope">
-                    {{ scope.row.status | sourceType }}
+                    {{ scope.row.status | suppliersStatus }}
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -290,7 +290,7 @@ export default {
         case false:
           return "禁用"
         default:
-          return '未知';
+          return '全部';
       }
     },
     purposeChange(val) {

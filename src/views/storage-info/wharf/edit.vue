@@ -112,7 +112,7 @@ export default {
             { required: true, message: '请输入码头名称', trigger: 'blur' }
           ],
           dockerusage: [
-            { required: true, message: '请填写用途', trigger: 'blur' }
+            { required: true, message: '货位范围', trigger: 'blur' }
           ]
         }
       }
