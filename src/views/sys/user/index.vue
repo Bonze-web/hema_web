@@ -384,6 +384,8 @@ export default {
         if (tenant) {
           this.uploadHeaders["tenant"] = tenant;
         }
+      } else {
+        this.uploadHeaders["tenant"] = "hema";
       }
     },
 

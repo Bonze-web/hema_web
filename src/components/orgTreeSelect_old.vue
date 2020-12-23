@@ -405,6 +405,8 @@ export default {
         if (tenant) {
           this.uploadHeaders["tenant"] = tenant;
         }
+      } else {
+        this.uploadHeaders["tenant"] = "hema";
       }
     },
     /* 导入会员模板前的校验，文件大小不能大于1M */
