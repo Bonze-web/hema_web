@@ -51,25 +51,18 @@
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
-                                      <el-form-item label="配送中心" prop="dcId">
+                                      <!-- <el-form-item label="配送中心" prop="dcId">
                                           <el-input v-model="form.dcId"></el-input>
-                                      </el-form-item>
-                                        <!-- <el-form-item label="配送中心" prop="dcId">
+                                      </el-form-item> -->
+                                        <el-form-item label="配送中心" prop="dcId">
                                             <el-select v-model="form.dcId" placeholder="情选择配送中心" @change="levelChange">
                                                 <el-option label="配送中心1" value="0001"></el-option>
                                                 <el-option label="配送中心2" value="0002"></el-option>
                                                 <el-option label="配送中心3" value="0003"></el-option>
                                                 <el-option label="配送中心4" value="0004 "></el-option>
                                             </el-select>
-                                        </el-form-item> -->
-                                    </el-col>
-                                    <!-- <el-col :span="6" class="info-box" v-if="level !== 'one'">
-                                        <el-form-item label="上级类别">
-                                            <el-select v-model="form.parentId">
-                                                <el-option v-for="item in parentList" :key="item.value" :label="item.name" :value="item.id"></el-option>
-                                            </el-select>
                                         </el-form-item>
-                                    </el-col> -->
+                                    </el-col>
                                 </el-row>
                                 <el-form-item label="备注">
                                     <textarea v-model="form.remark"></textarea>
@@ -278,6 +271,11 @@ export default {
         this.status = "edit"
         this.form = Object.assign(this.form, this.categoryInfo)
         console.log(this.form)
+
+        StorageService.getDcQuery()
+        .then(res => {
+          console.log(res)
+        })
         if (this.level !== "one") {
           this.getParentCategory()
         }

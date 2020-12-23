@@ -149,7 +149,8 @@ export default {
         })
 
         _this.listData = listData;
-        console.log(_this.listData)
+      }).catch(err => {
+        this.$message.error("数据请求失败" + err)
       });
     },
     handleCurrentChange: function(e) {

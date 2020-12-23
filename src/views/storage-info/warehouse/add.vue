@@ -51,17 +51,17 @@
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
-                                      <el-form-item label="配送中心" prop="dcId">
+                                      <!-- <el-form-item label="配送中心" prop="dcId">
                                           <el-input v-model="form.dcId"></el-input>
-                                      </el-form-item>
-                                        <!-- <el-form-item label="配送中心" prop="dcId">
+                                      </el-form-item> -->
+                                        <el-form-item label="配送中心" prop="dcId">
                                             <el-select v-model="form.dcId" placeholder="情选择配送中心" @change="levelChange">
                                                 <el-option label="配送中心1" value="0001"></el-option>
                                                 <el-option label="配送中心2" value="0002"></el-option>
                                                 <el-option label="配送中心3" value="0003"></el-option>
                                                 <el-option label="配送中心4" value="0004 "></el-option>
                                             </el-select>
-                                        </el-form-item> -->
+                                        </el-form-item>
                                     </el-col>
                                     <!-- <el-col :span="6" class="info-box" v-if="level !== 'one'">
                                         <el-form-item label="上级类别">
@@ -97,10 +97,11 @@
                                 <div>名称:</div>
                                 <div>{{ warehouseInfo.name }}</div>
                             </el-col>
-                            <el-col :span="6" class="info-box">
+                            <!-- <el-col :span="6" class="info-box">
                                 <div>配送中心:</div>
                                 <div>{{ warehouseInfo.dcId }}</div>
-                            </el-col>
+                            </el-col> -->
+
                             <!-- <el-col :span="6" class="info-box">
                                 <div>货主:</div>
                                 <div></div>
@@ -109,6 +110,7 @@
                                 <div>上级类别:</div>
                                 <div>{{ warehouseInfo.parentName ? warehouseInfo.parentName : "&lt;空&gt;" }}</div>
                             </el-col> -->
+
                             <el-col class="info-box">
                                 <div>备注:</div>
                                 <div>{{ warehouseInfo.remark ? warehouseInfo.remark : "&lt;空&gt;" }}</div>
