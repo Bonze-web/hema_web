@@ -125,7 +125,7 @@ export default {
   },
   computed: {
     actionUrl() {
-      return process.env.BASE_API + "/sys/dfs/upload";
+      return process.env.BASE_API + "/dfs/upload";
     },
     ...mapGetters(["hasPermission", "workingOrg"])
   },

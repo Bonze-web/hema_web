@@ -232,7 +232,7 @@ export default {
         this.createForm.teamProductName = val.productName;
       }
     },
-/* 处理请求数据 */
+    /* 处理请求数据 */
     handlePostData() {
       var tempData = {
         condition: {},
@@ -521,10 +521,22 @@ export default {
       if (options.query.categoryId) {
         this.productMenuId.push(options.query.categoryId);
       }
+    },
+    // 获取SAAS租户信息
+    getSaasTenant() {
+      if (process.env.PRJ === "SAAS") {
+        var tenant = localStorage.getItem("_tenant_");
+        if (tenant) {
+          this.uploadHeaders["tenant"] = tenant;
+        }
+      } else {
+        this.uploadHeaders["tenant"] = "hema";
+      }
     }
   },
   created() {
     this.prj = process.env.PRJ;
+    this.getSaasTenant()
   },
   mounted() {
     this.pageStatus = this.$route.query.pageStatus;

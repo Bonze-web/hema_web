@@ -175,7 +175,7 @@ export default {
     },
 
     fileUploadUrl: function() {
-      return process.env.BASE_API + "/sys/dfs/upload";
+      return process.env.BASE_API + "/dfs/upload";
     },
 
     ...mapGetters({ hasPermission: "hasPermission", curUser: "user" })
@@ -426,6 +426,8 @@ export default {
         if (tenant) {
           this.uploadHeaders["tenant"] = tenant;
         }
+      } else {
+        this.uploadHeaders["tenant"] = "hema";
       }
     },
 
