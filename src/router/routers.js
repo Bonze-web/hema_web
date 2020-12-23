@@ -574,6 +574,47 @@ const StorageInfoPackage = {
           icon: 'table'
         }
       }] 
+  },
+  {
+    path: "storpartition",
+    name: "Storpartition",
+    component: AModule,
+    meta: {
+      title: '存储分区',
+      icon: 'table'
+    },
+    children: [{
+      path: "",
+      name: "StorpartitionView",
+      component: () =>
+        import('@/views/storage-info/storpartition/index'),
+        hidden: true,
+      meta: {
+        title: '存储分区展示',
+        icon: 'table'
+      }
+    }, {
+      path: "edit",
+      name: "StorpartitionEdit",
+      component: () =>
+        import('@/views/storage-info/storpartition/edit'),
+        hidden: true,
+        meta: {
+          title: '存储分区编辑',
+          icon: 'table'
+        }
+      },
+      {
+        path: "add",
+        name: "StorpartitionAdd",
+        component: () =>
+          import('@/views/storage-info/storpartition/add'),
+        hidden: true,
+        meta: {
+          title: '新建存储分区',
+          icon: 'table'
+        }
+      }] 
   }
 ]
 }
