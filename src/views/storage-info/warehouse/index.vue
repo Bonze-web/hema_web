@@ -71,7 +71,7 @@
           </template>
         </el-table-column> -->
         
-        <el-table-column prop="level" label="配送中心">
+        <el-table-column prop="level" label="物流中心">
           <template slot-scope="scope">
             {{ scope.row.dcId }}
             <!-- {{ scope.row.dcId | categoryLevel }} -->

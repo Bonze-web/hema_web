@@ -51,15 +51,9 @@
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
-                                      <!-- <el-form-item label="配送中心" prop="dcId">
-                                          <el-input v-model="form.dcId"></el-input>
-                                      </el-form-item> -->
                                         <el-form-item label="配送中心" prop="dcId">
-                                            <el-select v-model="form.dcId" placeholder="情选择配送中心" @change="levelChange">
-                                                <el-option label="配送中心1" value="0001"></el-option>
-                                                <el-option label="配送中心2" value="0002"></el-option>
-                                                <el-option label="配送中心3" value="0003"></el-option>
-                                                <el-option label="配送中心4" value="0004 "></el-option>
+                                            <el-select v-model="form.dcId" placeholder="请选择配送中心" @change="levelChange">
+                                                <el-option v-for="(item, index) in records" :key="index" :label="item.name" :value="item.id"></el-option>
                                             </el-select>
                                         </el-form-item>
                                     </el-col>
@@ -69,8 +63,6 @@
                                 </el-form-item>
                             </el-form>
                         </el-tab-pane>
-                        <!-- <el-tab-pane label="配送中心范围" name="range">配置管理</el-tab-pane>
-                        <el-tab-pane label="操作日志" name="log">角色管理</el-tab-pane> -->
                     </el-tabs>
                 </template>
             </div>
@@ -147,7 +139,8 @@ export default {
           level: [
             { required: true, message: '请选择类别级别', trigger: 'blur' }
           ]
-        }
+        },
+        records: []
       }
     },
     computed: {
@@ -272,13 +265,9 @@ export default {
         this.form = Object.assign(this.form, this.categoryInfo)
         console.log(this.form)
 
-        StorageService.getDcQuery()
-        .then(res => {
-          console.log(res)
-        })
-        if (this.level !== "one") {
-          this.getParentCategory()
-        }
+        // if (this.level !== "one") {
+        //   this.getParentCategory()
+        // }
       },
       levelChange() {
         this.level = this.form.level
@@ -288,28 +277,36 @@ export default {
         // }
         // this.form.parentId = ""
         // this.getParentCategory()
-      },
-      getParentCategory() {
-        // const data = {
-        //   page: this.page,
-        //   pageSize: 0,
-        //   lowerLevelEquals: this.form.level
-        // }
-        // BasicService.getCateGoryQuery(data)
-        // .then((res) => {
-        //   this.parentList = res.records
-        //   for (const item in res.records) {
-        //     // 处理供应商数据
-        //     this.parentList[item].name = '[' + this.parentList[item].code + ']' + this.parentList[item].name
-        //   }
-        // })
-        // .catch((err) => {
-        //     this.$message.error("加载父级列表失败，请刷新页面重新尝试" + err)
-        // })
       }
+      // getParentCategory() {
+      //   const data = {
+      //     page: this.page,
+      //     pageSize: 0,
+      //     lowerLevelEquals: this.form.level
+      //   }
+      //   BasicService.getCateGoryQuery(data)
+      //   .then((res) => {
+      //     this.parentList = res.records
+      //     for (const item in res.records) {
+      //       // 处理供应商数据
+      //       this.parentList[item].name = '[' + this.parentList[item].code + ']' + this.parentList[item].name
+      //     }
+      //   })
+      //   .catch((err) => {
+      //       this.$message.error("加载父级列表失败，请刷新页面重新尝试" + err)
+      //   })
+      // }
     },
     created() {
       this.getQueryStatus()
+
+      StorageService.getDcQuery()
+        .then(res => {
+          this.records = res.records;
+          console.log(this.records)
+        }).catch((err) => {
+            this.$message.error("获取物流中心失败" + err)
+        })
     },
     filters: {
       categoryLevel(level) {
