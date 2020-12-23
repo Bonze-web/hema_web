@@ -10,7 +10,7 @@
                     <el-select v-model="form.status" placeholder="请选择状态">
                     <el-option label="全部" value=""></el-option>
                     <el-option label="启用" value="OPEN"></el-option>
-                    <el-option label="停用" value="COLOSED"></el-option>
+                    <el-option label="禁用" value="COLOSED"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item>
@@ -22,7 +22,7 @@
         <div style="height:20px" />
         <div style="background:#fff">
           <el-row>
-            <router-link :to="{ path: '/storageinfo/wharf/edit', query:{ status: 'create'} }">
+            <router-link :to="{ path: '/storageinfo/wharf/add', query:{ status: 'create'} }">
             <!-- <span v-if="child.meta&&child.meta.title" :title="child.meta.title">{{child.meta.title}}</span> -->
             <el-button style="margin:18px 10px" type="primary" size="mini">新建</el-button>
             </router-link>
@@ -50,7 +50,7 @@
                 </el-table-column>
                 <el-table-column prop="status" label="状态" >
                   <template slot-scope="scope">
-                    {{ scope.row.status | sourceType }}
+                    {{ scope.row.status | suppliersStatus }}
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -205,12 +205,12 @@ export default {
         const _this = this;    
         // 将当前组件的实例记录起来，这些都是我在data中自己写的数据
         const data = {
+          codeEquals: this.form.nameOrCode || null,
           page: this.page,
           pageSize: this.pageSize,
           searchCount: true,
-          // 上面的不用修改，只要修改下面的两个地方
-          codeOrNameEquals: this.form.nameOrCode,
-          status: this.form.status
+          nameLike: this.form.nameOrCode || null,
+          statusEquals: this.form.status || null
         }
         // 获取数据,然后将自己组件中的数据发送到后台
         WharfService.getSuppliersList(data)
@@ -255,6 +255,8 @@ export default {
             }
             // 获取数据后,存到自己的数组里面
             _this.suppliersData.push(obj);
+            // 将数组反向
+            _this.suppliersData.reverse();
           }
         })
       },
@@ -290,7 +292,7 @@ export default {
         case false:
           return "禁用"
         default:
-          return '未知';
+          return '全部';
       }
     },
     purposeChange(val) {

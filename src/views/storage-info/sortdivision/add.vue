@@ -58,6 +58,33 @@
                                     <textarea v-model="form.remark" maxlength="200" @change="levelChange"></textarea>
                                 </el-form-item>
                             </el-form>
+                            <!-- <el-form :model="form" :rules="createRules" ref="form" label-width="100px" class="demo-ruleForm">
+                                <el-row :gutter="20">
+                                    <el-col :span="6" class="info-box">
+                                        <el-form-item label="代码" prop="code">
+                                            <el-input v-model="form.code" maxlength="16"></el-input>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="6" class="info-box">
+                                        <el-form-item label="名称" prop="name">
+                                            <el-input v-model="form.name" maxlength="40"></el-input>
+                                        </el-form-item>
+                                    </el-col>
+                                   <el-col :span="6" class="info-box">
+                                        <el-form-item label="货位范围" prop="binScope">
+                                            <el-input v-model="form.binScope" maxlength="40"></el-input>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-form-item label="配送中心" prop="dcId">
+                                            <el-select v-model="form.dcId" placeholder="请择配送中心" >
+                                                <el-option v-for="(ele,idx) in materials" :key="idx" :label="ele.name" :value="ele.id"></el-option>
+                                            </el-select>
+                                      </el-form-item>
+                                </el-row>
+                                <el-form-item label="备注">
+                                    <textarea v-model="form.remark" maxlength="200" @change="levelChange"></textarea>
+                                </el-form-item>
+                            </el-form> -->
                         </el-tab-pane>
                         <!-- <el-tab-pane label="配送中心范围" name="range">配置管理</el-tab-pane>
                         <el-tab-pane label="操作日志" name="log">角色管理</el-tab-pane> -->

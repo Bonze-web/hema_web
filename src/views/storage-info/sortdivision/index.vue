@@ -15,7 +15,7 @@
         <div style="height:20px" />
         <div style="background:#fff">
           <el-row>
-            <router-link :to="{ path: '/storageinfo/wharf/edit', query:{ status: 'create'} }">
+            <router-link :to="{ path: '/storageinfo/sortdivision/add', query:{ status: 'create'} }">
             <!-- <span v-if="child.meta&&child.meta.title" :title="child.meta.title">{{child.meta.title}}</span> -->
             <el-button style="margin:18px 10px" type="primary" size="mini">新建</el-button>
             </router-link>
@@ -30,7 +30,7 @@
                 </el-table-column> -->
                 <el-table-column prop="code" label="代码">
                     <template slot-scope="scope">
-                        <router-link style="color:#409EFF" :to="{ path: '/storageinfo/wharf/edit', query:{ status: 'read', id: scope.row.id} }">
+                        <router-link style="color:#409EFF" :to="{ path: '/storageinfo/sortdivsion/edit', query:{ status: 'read', id: scope.row.id} }">
                             <span>{{ scope.row.code }}</span>
                         </router-link>
                     </template>
@@ -195,18 +195,18 @@ export default {
         const _this = this;    
         // 将当前组件的实例记录起来，这些都是我在data中自己写的数据
         const data = {
+          codeEquals: this.form.nameOrCode || null,
           page: this.page,
           pageSize: this.pageSize,
           searchCount: true,
-          // 上面的不用修改，只要修改下面的两个地方
-          codeOrNameEquals: this.form.nameOrCode,
-          status: this.form.status
+          nameLike: this.form.nameOrCode || null,
+          statusEquals: this.form.status || null
         }
+        console.log(data);
         // 获取数据,然后将自己组件中的数据发送到后台
         WharfService.getSuppliersList(data)
         .then((res) => {
           console.log(res);
-          if (!res) return false;
           // 初始化自己定义的数据
           _this.suppliersData = [];
           // 将总数,赋值给自己定义的变量
@@ -285,12 +285,12 @@ export default {
     },
     purposeChange(val) {
       if (!val) return false;
-    let str = '';
-    for (let i = 0; i < val.length; i++) {
-      str += val[i];
-    }
-      return str;
-    }
+      let str = '';
+      for (let i = 0; i < val.length; i++) {
+        str += val[i];
+      }
+        return str;
+      }
   }
 };
 </script>

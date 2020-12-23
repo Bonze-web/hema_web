@@ -12,43 +12,49 @@ export default {
   // 分页的接口请求
   getSuppliersList(data) {
     // return request.post('/wms/dock/query', {param: data});
-    return request.get('/product/productSupplier/query', {param: data})
+    return request.post('/wms/pickarea/query', {param: data})
   },
   /**
    * 获取详情
    */
   getSuppliersDetail(id) {
-    return request.get('/wms/dock/getDetail?id=' + id)
+    return request.get('/wms/pickarea/getDetail?id=' + id)
   },
   /**
-   * 创建新的码头的按钮
+   * 创建
    */
   createSuppliers(postData) {
-    const param = {
-      ...postData
-    }
-    return request.post('/wms/dock/create', param)
+    return request.post('/wms/pickarea/create', postData)
   },
+ 
   /**
+   * 编辑的接口
+   */
+  updateSupplier(postData) {
+    return request.post('/wms/pickarea/update', postData)
+  },
+
+   /**
    * 启用状态
    */
   openSuppliers(id, version) {
-    return request.put('/wms/dock/updateStatus?id=' + id + '&version=' + version + '&status=' + true);
+    return request.put('/wms/dock/updateStatus?id=' + id + '&version=' + version);
   },
   /**
    * 禁用状态
    */
   closeSuppliers(id, version) {
-    return request.put('/wms/dock/updateStatus?id=' + id + '&version=' + version + '&status=' + false);
+    return request.put('/wms/dock/updateStatus?id=' + id + '&version=' + version);
   },
-  /**
-   * 编辑的接口
+   /**
+   * 去调取物流中心的接口,让用户来选物流中心
    */
-  updateSupplier(postData) {
-    const param = {
-        ...postData
+  getdcdata() {
+    var postData = {
+      page: 0,
+      pageSize: 0
     }
-    return request.post('/wms/dock/update', param)
+    return request.get('/sys/dc/query', postData);
   }
 }
 
