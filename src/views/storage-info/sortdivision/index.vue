@@ -1,17 +1,10 @@
 <template>
     <div class="table-index">        
         <div class="select-head">
-            <el-form ref="form" style="display:flex" :model="form" label-width="120px" label-position="right">
-                <el-form-item label="拣货分区设置">
+            <el-form ref="form" style="display:flex" :model="form" label-width="80px" label-position="right">
+                <el-form-item label="拣货分区">
                     <!-- 输入码头的id,方便后面的查找,查找和一开始获取数据的接口是同一个 -->
                     <el-input type='text' placeholder="请输入代码/名称" v-model="form.nameOrCode" class="input-width"></el-input>
-                </el-form-item>
-                <el-form-item label="状态">
-                    <el-select v-model="form.status" placeholder="请选择状态">
-                    <el-option label="全部" value=""></el-option>
-                    <el-option label="启用" value="OPEN"></el-option>
-                    <el-option label="停用" value="COLOSED"></el-option>
-                    </el-select>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" size="mini" @click="onSubmit">立即搜索</el-button>
@@ -35,7 +28,7 @@
                     type="selection"
                     width="55">
                 </el-table-column> -->
-                <el-table-column fixed prop="code" label="代码">
+                <el-table-column prop="code" label="代码">
                     <template slot-scope="scope">
                         <router-link style="color:#409EFF" :to="{ path: '/storageinfo/wharf/edit', query:{ status: 'read', id: scope.row.id} }">
                             <span>{{ scope.row.code }}</span>
@@ -43,35 +36,25 @@
                     </template>
                 </el-table-column>
                 <el-table-column prop="name" label="名称"></el-table-column>
-                <el-table-column prop="dockerusage" label="用途">
+                <el-table-column prop="dockerusage" label="货位范围">
                     <template slot-scope="scope">
-                        {{ scope.row.dockerusage }}
+                        {{ scope.row.dockerusage | purposeChange}}
                     </template>
                 </el-table-column>
-                <el-table-column prop="status" label="状态" >
+                <el-table-column
+                label="操作">
                   <template slot-scope="scope">
-                    {{ scope.row.status | sourceType }}
+                      <div style="color:#409EFF;cursor:pointer" @click="deleteChange(scope.row.id)">删除</div>
                   </template>
                 </el-table-column>
-                <el-table-column
-                fixed="right"
-                label="操作"
-                width="200">
-                  <template slot-scope="scope">
-                    <el-button :disabled="scope.row.status" size="mini" type="text" @click="statusChange(scope.row.status, scope.row.id, scope.row.version)">启用</el-button>
-                    <el-button :disabled="!scope.row.status" size="mini" type="text" @click="statusChange(scope.row.status, scope.row.id, scope.row.version)">禁用</el-button>
-                  </template>
-                </el-table-column>
-                <el-table-column
-                fixed="right"
-                label="编辑"
-                width="200">
+                <!-- <el-table-column
+                label="编辑">
                   <template slot-scope="scope">
                       <router-link :to="{ path: '/storageinfo/wharf/edit', query:{ status: 'edit', id: scope.row.id} }">
                             <el-button size="mini" type="text">编辑</el-button>
                       </router-link>
                   </template>
-                </el-table-column>
+                </el-table-column> -->
             </el-table>
             <!-- 下面这个是翻页 -->
             <el-pagination
@@ -111,6 +94,10 @@ export default {
   computed: {
   },
   methods: {
+    // 删除按钮
+    deleteChange(id) {
+      // 调用删除的接口,然后分页查询的接口重新渲染页面
+    },
     // 搜索功能
       onSubmit: function() {
         this.page = 1;
@@ -120,31 +107,82 @@ export default {
           }
         })
       },
+      // statusChange: function(status, id, version) {
+      //    console.log(status, id, version);
+      //   // 修改供应商状态
+      //   this.$confirm('此操作将改变供应商状态, 是否继续?', '提示', {
+      //     confirmButtonText: '确定',
+      //     cancelButtonText: '取消',
+      //     type: 'warning'
+      //   }).then(() => {
+      //     if (status) {
+      //     WharfService.closeSuppliers(id, version, status)
+      //     .then((res) => {
+      //       console.log(res);
+      //       this.$message.success("禁用成功")
+      //       // 自己修改数据
+      //       this.getSuppliersList()
+      //     })
+      //     .catch((err) => {
+      //       this.$message.error("禁用失败" + err.message)
+      //       this.getSuppliersList()
+      //     })
+      //   } else {
+      //     WharfService.openSuppliers(id, version)
+      //     .then((res) => {
+      //       this.$message.success("启用成功")
+      //       this.getSuppliersList()
+      //     })
+      //     .catch((err) => {
+      //       this.$message.error("启用失败" + err.message)
+      //       this.getSuppliersList()
+      //     })
+      //   }
+      //   }).catch(() => {
+      //     this.$message({
+      //       type: 'info',
+      //       message: '已取消'
+      //     })        
+      //   })
+      // },
       statusChange: function(status, id, version) {
-        // 启用的状态
-        console.log(status);
+      // 修改仓库状态
+      const _this = this;
+      this.$confirm('是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
         if (status) {
+          // 禁用
           WharfService.closeSuppliers(id, version)
           .then((res) => {
-            this.$message.success("禁用成功")
-            this.getSuppliersList()
+            _this.$message.success("禁止用成功")
+            _this.getSuppliersList();
           })
           .catch((err) => {
-            this.$message.error("禁用失败" + err)
-            this.getSuppliersList()
+            _this.$message.error("禁用失败" + err)
+            _this.getSuppliersList();
           })
         } else {
+          // 启用
           WharfService.openSuppliers(id, version)
           .then((res) => {
-            this.$message.success("启用成功")
-            this.getSuppliersList()
+            _this.$message.success("启用成功")
+            _this.getSuppliersList();
           })
           .catch((err) => {
-            this.$message.error("启用失败" + err)
-            this.getSuppliersList()
+            _this.$message.error("启用失败" + err)
+            _this.getSuppliersList();
           })
         }
-      },
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消'
+        })        
+      })
+    },
       clearInput: function() {
         this.form = {
           nameOrCode: '',
@@ -166,12 +204,23 @@ export default {
         }
         // 获取数据,然后将自己组件中的数据发送到后台
         WharfService.getSuppliersList(data)
-
         .then((res) => {
+          console.log(res);
+          if (!res) return false;
           // 初始化自己定义的数据
           _this.suppliersData = [];
           // 将总数,赋值给自己定义的变量
-          this.totalCount = res.totalCount;
+          // res = {
+          //   records: [{
+          //       totalCount: 10,
+          //       id: "1341338404906762241",
+          //       code: '0001',
+          //       name: 'yang',
+          //       version: 9999999999999,
+          //       dockerusage: ['发货']
+          //     }]
+          // }
+          _this.totalCount = res.totalCount;
           for (const item in res.records) {
             // 数组循环后,将过去到的值,全部放在suppliersData这个数组中,我要模拟数据也要使用这个数组
             const obj = {
@@ -180,21 +229,22 @@ export default {
               // 代码
               code: res.records[item].code,
               name: res.records[item].name,
+              version: res.records[item].version,
               // 用途
-              dockerusage: res.records[item].dockerusage
+              dockerusage: res.records[item].dockerusage,
               // anotherName: res.records[item].anotherName,
-              // status: res.records[item].status,
+              status: res.records[item].status
               // address: res.records[item].address,
               // sourceType: res.records[item].sourceType,
               // version: res.records[item].version
             }
-            if (obj.status === "OPEN") {
+            if (obj.status === "OFF") {
               obj.status = true
             } else {
               obj.status = false
             }
             // 获取数据后,存到自己的数组里面
-            _this.suppliersData.push(obj)
+            _this.suppliersData.push(obj);
           }
         })
       },
@@ -232,6 +282,14 @@ export default {
         default:
           return '未知';
       }
+    },
+    purposeChange(val) {
+      if (!val) return false;
+    let str = '';
+    for (let i = 0; i < val.length; i++) {
+      str += val[i];
+    }
+      return str;
     }
   }
 };

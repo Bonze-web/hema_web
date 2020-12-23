@@ -484,7 +484,6 @@ const StorageInfoPackage = {
       component: () =>
         import('@/views/storage-info/sortdivision/index'),
         hidden: true,
-<<<<<<< HEAD
       meta: {
         title: '拣货分区设置展示',
         icon: 'table'
@@ -498,34 +497,6 @@ const StorageInfoPackage = {
       meta: {
         title: '编辑',
         icon: 'table'
-=======
-        meta: {
-          title: '货位类型',
-          icon: 'table'
-        }
-      },
-      {
-        path: "edit",
-        name: "Edit",
-        component: () =>
-          import('@/views/storage-info/location-type/edit'),
-        hidden: true,
-        meta: {
-          title: '货位详情',
-          icon: 'table'
-        }
-      },
-      {
-        path: "add",
-        name: "Add",
-        component: () =>
-          import('@/views/storage-info/location-type/edit'),
-        hidden: true,
-        meta: {
-          title: '新建货位',
-          icon: 'table'
-        }
->>>>>>> 8756b2dc3d9680ddc6cb5eaf6711997922f24236
       }
     }] 
   }
