@@ -255,6 +255,8 @@ export default {
             }
             // 获取数据后,存到自己的数组里面
             _this.suppliersData.push(obj);
+            // 将数组反向
+            _this.suppliersData.reverse();
           }
         })
       },

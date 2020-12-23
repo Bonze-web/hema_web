@@ -15,7 +15,7 @@
         <div style="height:20px" />
         <div style="background:#fff">
           <el-row>
-            <router-link :to="{ path: '/storageinfo/wharf/add', query:{ status: 'create'} }">
+            <router-link :to="{ path: '/storageinfo/sortdivision/edit', query:{ status: 'create'} }">
             <!-- <span v-if="child.meta&&child.meta.title" :title="child.meta.title">{{child.meta.title}}</span> -->
             <el-button style="margin:18px 10px" type="primary" size="mini">新建</el-button>
             </router-link>
@@ -30,7 +30,7 @@
                 </el-table-column> -->
                 <el-table-column prop="code" label="代码">
                     <template slot-scope="scope">
-                        <router-link style="color:#409EFF" :to="{ path: '/storageinfo/wharf/edit', query:{ status: 'read', id: scope.row.id} }">
+                        <router-link style="color:#409EFF" :to="{ path: '/storageinfo/sortdivsion/edit', query:{ status: 'read', id: scope.row.id} }">
                             <span>{{ scope.row.code }}</span>
                         </router-link>
                     </template>
@@ -202,6 +202,7 @@ export default {
           nameLike: this.form.nameOrCode || null,
           statusEquals: this.form.status || null
         }
+        console.log(data);
         // 获取数据,然后将自己组件中的数据发送到后台
         WharfService.getSuppliersList(data)
         .then((res) => {

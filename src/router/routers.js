@@ -518,18 +518,38 @@ const StorageInfoPackage = {
         import('@/views/storage-info/wharf/edit'),
         hidden: true,
         meta: {
-          title: '货位详情',
+          title: '码头编辑',
           icon: 'table'
         }
       },
       {
         path: "add",
-        name: "Add",
+        name: "WharfAdd",
         component: () =>
-          import('@/views/storage-info/location-type/add'),
+          import('@/views/storage-info/wharf/add'),
+        hidden: true,
+        meta: {
+          title: '新建码头',
+          icon: 'table'
+        }
+      }] 
+  },
+  {
+    path: "sortdivision",
+    name: "Sortdivision",
+    component: AModule,
+    meta: {
+      title: '拣货分区',
+      icon: 'table'
+    },
+    children: [{
+      path: "",
+      name: "SortdivisionView",
+      component: () =>
+        import('@/views/storage-info/sortdivision/index'),
         hidden: true,
       meta: {
-        title: '拣货分区设置展示',
+        title: '拣货分区展示',
         icon: 'table'
       }
     }, {
@@ -538,21 +558,22 @@ const StorageInfoPackage = {
       component: () =>
         import('@/views/storage-info/sortdivision/edit'),
         hidden: true,
-      meta: {
-        title: '编辑',
-        icon: 'table'
-      }
-    }, {
-      path: "add",
-      name: "Add",
-      component: () =>
-        import('@/views/storage-info/sortdivision/add'),
-      hidden: true,
-      meta: {
-        title: '新建码头',
-        icon: 'table'
-      }
-    }] 
+        meta: {
+          title: '拣货分区编辑',
+          icon: 'table'
+        }
+      },
+      {
+        path: "add",
+        name: "SortdivisionAdd",
+        component: () =>
+          import('@/views/storage-info/sortdivision/add'),
+        hidden: true,
+        meta: {
+          title: '新建拣货分区',
+          icon: 'table'
+        }
+      }] 
   }
 ]
 }

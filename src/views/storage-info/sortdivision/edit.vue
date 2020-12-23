@@ -42,22 +42,8 @@
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
-                                        <el-form-item label="用途" prop="dockerusage">
-                                          <el-select v-model="form.dockerusage" multiple placeholder="请选择用途">
-                                            <el-option label="收货" value="RECEIVE"></el-option>
-                                            <el-option label="出货" value="OUT"></el-option>
-                                            <el-option label="退货" value="RETURN"></el-option>
-                                          </el-select>
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col :span="6" class="info-box">
-                                        <el-form-item label="配送中心" prop="dcId">
-                                            <el-select v-model="form.dcId" placeholder="请择配送中心" @change="levelChange">
-                                                <el-option label="配送中心1" value="0001"></el-option>
-                                                <el-option label="配送中心2" value="0002"></el-option>
-                                                <el-option label="配送中心3" value="0003"></el-option>
-                                                <el-option label="配送中心4" value="0004 "></el-option>
-                                            </el-select>
+                                        <el-form-item label="货位范围" prop="binscope ">
+                                            <el-input v-model="form.binscope" maxlength="40"></el-input>
                                         </el-form-item>
                                     </el-col>
                                 </el-row>
@@ -87,8 +73,8 @@
                                 <div>{{ suppliersInfo.name }}</div>
                             </el-col>
                             <el-col :span="6" class="info-box">
-                                <div>用途:</div>
-                                <div>{{ suppliersInfo.dockerusage }}</div>
+                                <div>货位范围:</div>
+                                <div>000</div>
                             </el-col>
                             <el-col class="info-box">
                                 <div>备注:</div>
@@ -119,7 +105,7 @@ export default {
           name: '',
           remark: '',
           // 用途
-          dockerusage: ''
+          binscope: ''
         },
         suppliersInfo: {}, 
         createRules: {
@@ -129,8 +115,9 @@ export default {
           name: [
             { required: true, message: '请输入码头名称', trigger: 'blur' }
           ],
-          dockerusage: [
-            { required: true, message: '请填写用途', trigger: 'blur' }
+          binscope: [
+            { required: true, message: '请输入货位范围', trigger: 'blur' }
+            // { required: true, message: '满足格式10、10（1/2）、10-20、多个逗号隔开', trigger: 'blur' }
           ]
         }
       }
@@ -206,10 +193,6 @@ export default {
         // 创建新的码头的按钮
         this.$refs.form.validate(valid => {
           if (valid) {
-              if (!this.form.dcId) {
-              this.$message.error("请选择一个配送中心")
-              return
-            }
             if (this.status === 'create') {
               // 创建新的码头的按钮
               console.log(this.form);

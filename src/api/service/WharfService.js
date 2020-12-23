@@ -15,7 +15,7 @@ export default {
       ...postData
     }
     // return request.post('/wms/dock/query', param)
-    return request.post('/wms/warehouse/query', param)
+    return request.post('/wms/dock/query', param)
     // return request.get('/product/productSupplier/query', {param: data})
   },
   /**
@@ -25,17 +25,14 @@ export default {
     console.log(id);
     // return request.get('/wms/dock/getDetail?id=' + id)
     // return request.get('/wms/dock/getDetail?id=' + id)
-    return request.get('/wms/warehouse/getDetail?id=' + id)
+    return request.get('/wms/dock/getDetail?id=' + id)
   },
   /**
    * 创建新的码头的按钮
    */
   createSuppliers(postData) {
-    const param = {
-      ...postData
-    }
     // return request.post('/wms/dock/create', param)
-    return request.post('/wms/warehouse/create', param)
+    return request.post('/wms/dock/create', postData)
   },
   /**
    * 启用状态
@@ -43,24 +40,31 @@ export default {
   openSuppliers(id, version, status) {
     console.log(id, version, status);
     // return request.put('/wms/dock/updateStatus?id=' + id + '&version=' + version + '&status=' + true);
-    return request.put('/wms/warehouse/open?id=' + id + '&version=' + version)
+    return request.put('/wms/dock/updateStatus?id=' + id + '&version=' + version)
   },
   /**
    * 禁用状态
    */
   closeSuppliers(id, version) {
     // return request.put('/wms/dock/updateStatus?id=' + id + '&version=' + version + '&status=' + false);
-    return request.put('/wms/warehouse/close?id=' + id + '&version=' + version)
+    return request.put('/wms/dock/updateStatus?id=' + id + '&version=' + version)
   },
   /**
    * 编辑的接口
    */
   updateSupplier(postData) {
-    const param = {
-        ...postData
-    }
     // return request.post('/wms/dock/update', param)
-    return request.post('/wms/warehouse/update', param)
+    return request.post('/wms/dock/update', postData)
+  },
+  /**
+   * 去调取物流中心的接口,让用户来选物流中心
+   */
+  getdcdata() {
+    var postData = {
+      page: 0,
+      pageSize: 0
+    }
+    return request.get('/sys/dc/query', postData);
   }
 }
 

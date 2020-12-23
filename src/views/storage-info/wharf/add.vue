@@ -42,8 +42,8 @@
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
-                                        <el-form-item label="用途" prop="dockerusage">
-                                          <el-select v-model="form.dockerusage" multiple placeholder="请选择用途">
+                                        <el-form-item label="用途" prop="usages">
+                                          <el-select v-model="form.usages" multiple placeholder="请选择用途">
                                             <el-option label="收货" value="RECEIVE"></el-option>
                                             <el-option label="出货" value="OUT"></el-option>
                                             <el-option label="退货" value="RETURN"></el-option>
@@ -51,18 +51,21 @@
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
+                                      <!-- <el-form-item label="配送中心" prop="dcId">
+                                          <el-input v-model="form.dcId"></el-input>
+                                      </el-form-item> -->
                                         <el-form-item label="配送中心" prop="dcId">
                                             <el-select v-model="form.dcId" placeholder="请择配送中心" @change="levelChange">
-                                                <el-option label="配送中心1" value="0001"></el-option>
-                                                <el-option label="配送中心2" value="0002"></el-option>
+                                                <el-option v-for="(ele,idx) in materials" :key="idx" :label="ele.name" :value="ele.id"></el-option>
+                                                <!-- <el-option label="配送中心2" value="0002"></el-option>
                                                 <el-option label="配送中心3" value="0003"></el-option>
-                                                <el-option label="配送中心4" value="0004 "></el-option>
+                                                <el-option label="配送中心4" value="0004 "></el-option> -->
                                             </el-select>
                                         </el-form-item>
                                     </el-col>
                                 </el-row>
                                 <el-form-item label="备注">
-                                    <textarea v-model="form.remark" maxlength="200"></textarea>
+                                    <textarea v-model="form.remark" maxlength="200" @change="levelChange"></textarea>
                                 </el-form-item>
                             </el-form>
                         </el-tab-pane>
@@ -88,7 +91,7 @@
                             </el-col>
                             <el-col :span="6" class="info-box">
                                 <div>用途:</div>
-                                <div>{{ suppliersInfo.dockerusage }}</div>
+                                <div>{{ suppliersInfo.usages }}</div>
                             </el-col>
                             <el-col class="info-box">
                                 <div>备注:</div>
@@ -113,13 +116,14 @@ export default {
         id: '', 
         tabActiveName: 'suppliers', // tab栏名称
         dcId: '',
+        materials: [],
         form: {
           dcId: '',
           code: '',
           name: '',
           remark: '',
           // 用途
-          dockerusage: ''
+          usages: []
         },
         suppliersInfo: {}, 
         createRules: {
@@ -129,7 +133,7 @@ export default {
           name: [
             { required: true, message: '请输入码头名称', trigger: 'blur' }
           ],
-          dockerusage: [
+          usages: [
             { required: true, message: '请填写用途', trigger: 'blur' }
           ]
         }
@@ -206,19 +210,17 @@ export default {
         // 创建新的码头的按钮
         this.$refs.form.validate(valid => {
           if (valid) {
-              if (!this.form.dcId) {
-              this.$message.error("请选择一个配送中心")
-              return
-            }
             if (this.status === 'create') {
               // 创建新的码头的按钮
               console.log(this.form);
               WharfService.createSuppliers(this.form)
               .then(res => {
+                console.log(res);
                 this.$message.success("创建成功")
                 this.$router.go(-1)
               })
               .catch(err => {
+                console.log(err);
                 this.$message.error("创建失败" + err)
               })
             } else {
@@ -255,7 +257,16 @@ export default {
       }
     },
     created() {
-      this.getQueryStatus()
+      this.getQueryStatus();
+      const _this = this;
+      WharfService.getdcdata().then(function(res) {
+        res.records.forEach(function(ele, idx) {
+           _this.materials.push({
+              name: ele.name,
+              id: ele.id
+           })
+        })
+      })
     },
     filters: {
     
