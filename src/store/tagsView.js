@@ -1,3 +1,5 @@
+import Bus from "@/utils/bus.js";
+
 const cachedRoutes = ['BasicInfo', 'Suppliers', "Category"]
 const state = {
   visitedViews: [],
@@ -83,6 +85,7 @@ const actions = {
     return new Promise(resolve => {
       dispatch('delVisitedView', view)
       dispatch('delCachedView', view)
+      Bus.$emit("removeCache", "closeSelectedTag", view);
       resolve({
         visitedViews: [...state.visitedViews],
         cachedViews: [...state.cachedViews]

@@ -271,9 +271,11 @@ export default {
             message: "权限设置成功",
             type: "success"
           });
-          this.$router.push({
-            name: "RoleList"
-          });
+          // this.$router.push({
+          //   name: "RoleList"
+          // });
+          this.$store.dispatch("tagsView/delView", this.$route);
+          this.$router.go(-1);
         })
         .catch(err => {
           console.log(err);
@@ -282,9 +284,11 @@ export default {
     },
     /* 取消操作 */
     handleCancel() {
-      this.$router.push({
-        name: "RoleList"
-      });
+      // this.$router.push({
+      //   name: "RoleList"
+      // });
+      this.$store.dispatch("tagsView/delView", this.$route);
+      this.$router.go(-1);
     }
   },
   mounted() {
