@@ -16,15 +16,6 @@
           <el-input type="text" placeholder="请输入名称" v-model="form.nameLike" class="input-width" ></el-input>
         </el-form-item>
 
-        <!-- <el-form-item label="上级类别">
-          <el-input
-            type="text"
-            placeholder="请输入上级仓库编号/名称"
-            v-model="form.parentEquals"
-            class="input-width"
-          ></el-input>
-        </el-form-item> -->
-
         <el-form-item label="状态">
           <el-select v-model="form.status" placeholder="请选择状态">
             <el-option label="全部" value=""></el-option>
@@ -65,12 +56,7 @@
           </template>
         </el-table-column>
         <el-table-column prop="name" label="名称"></el-table-column>
-        <!-- <el-table-column prop="anotherName" label="上级类别">
-          <template slot-scope="scope">
-            {{ scope.row.parentName ? scope.row.parentName : "&lt;空&gt;" }}
-          </template>
-        </el-table-column> -->
-        
+
         <el-table-column prop="level" label="物流中心">
           <template slot-scope="scope">
             {{ scope.row.dcId }}
@@ -251,6 +237,12 @@ export default {
   },
   created() {
     this.warehouseInit();
+  },
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      // 通过 `vm` 访问组件实例
+      vm.warehouseInit(0);
+    })
   },
   filters: {
     categoryLevel(level) {

@@ -71,15 +71,31 @@ export default {
      * 
      */
     getWmsBintypeQuery(opt) {
-        const { page, pageSize } = opt
-        console.log({ page, pageSize })
-        return request.get(`/wms/wmsBintype/query?page=${page}&pageSize=${pageSize}`)
+        return request.get(`/wms/wmsBintype/query`, {params: opt})
     },
     /**
      * 新建货位类型
      */
     openWmsBintype(opt) {
-        console.log(opt)
         return request.post('/wms/wmsBintype/create', opt)
+    },
+    /**
+     * 查询详情
+     */
+    getWmsBintypeDetails(id) {
+        return request.get(`/wms/wmsBintype/getById?id=${id}`)
+    },
+    /**
+     * 更新货位
+     */
+    updateWmsBintype(opt) {
+        return request.put('/wms/wmsBintype/update', opt)
+    },
+    /**
+     * 删除货位
+     */
+    deleteWmsBintype(id, version) {
+        return request.delete(`/wms/wmsBintype/delete?id=${id}&version=${version}`)
     }
+    
 }
