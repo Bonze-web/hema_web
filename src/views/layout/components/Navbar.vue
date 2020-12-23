@@ -7,26 +7,28 @@
         </div>
         <hamburger class="hamburger-container" :toggleClick="toggleSideBar" :isActive="sidebar.opened"></hamburger>
         <breadcrumb></breadcrumb>
-        <el-dropdown class="org-container" trigger="click" @command="handleChangeOrg" v-if="user.orgId !== 0 && user.orgId !== '0'">
-          <span class="el-dropdown-link">
-            切换登录组织
-            <i class="el-icon-arrow-down el-icon--right"></i>
-          </span>
-          <el-dropdown-menu class="user-dropdown" slot="dropdown">
-            <el-dropdown-item :command="item" v-for="item in orgList" :key="item.id" :disabled="item.id === workingOrg.id">{{item.name}}</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-        <el-dropdown class="avatar-container" trigger="click" @command="handleCommand">
-          <span class="el-dropdown-link">
-            欢迎 {{user? user.realName: ''}}
-            <i class="el-icon-arrow-down el-icon--right"></i>
-          </span>
-          <el-dropdown-menu class="user-dropdown" slot="dropdown">
-            <el-dropdown-item command="index">首页</el-dropdown-item>
-            <el-dropdown-item divided command="updatePwd">修改密码</el-dropdown-item>
-            <el-dropdown-item divided command="logout">注销</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
+        <div class="navbar-right-container">
+          <el-dropdown class="org-container" trigger="click" @command="handleChangeOrg" v-if="user.orgId !== 0 && user.orgId !== '0'">
+            <span class="el-dropdown-link">
+              切换登录组织
+              <i class="el-icon-arrow-down el-icon--right"></i>
+            </span>
+            <el-dropdown-menu class="user-dropdown" slot="dropdown">
+              <el-dropdown-item :command="item" v-for="item in orgList" :key="item.id" :disabled="item.id === workingOrg.id">{{item.name}}</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+          <el-dropdown class="avatar-container" trigger="click" @command="handleCommand">
+            <span class="el-dropdown-link">
+              欢迎 {{user? user.realName: ''}}
+              <i class="el-icon-arrow-down el-icon--right"></i>
+            </span>
+            <el-dropdown-menu class="user-dropdown" slot="dropdown">
+              <el-dropdown-item command="index">首页</el-dropdown-item>
+              <el-dropdown-item divided command="updatePwd">修改密码</el-dropdown-item>
+              <el-dropdown-item divided command="logout">注销</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+        </div>
       </el-menu>
     </div>
     <el-dialog title="密码设置" :visible.sync="dialogVisible" width="400px" center>
@@ -245,11 +247,20 @@ export default {
       top: 16px;
       color: red;
     }
+    .navbar-right-container {
+      height: 50px;
+      position: absolute;
+      right: 35px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      top: 0;
+    }
     .avatar-container {
       height: 50px;
       display: inline-block;
-      position: absolute;
-      right: 35px;
+      // position: absolute;
+      // right: 35px;
       cursor: pointer;
       .avatar-wrapper {
         margin-top: 5px;
@@ -270,9 +281,10 @@ export default {
     .org-container {
       height: 50px;
       display: inline-block;
-      position: absolute;
-      right: 180px;
+      // position: absolute;
+      // right: 180px;
       cursor: pointer;
+      margin-right: 20px;
     }
   }
 }
