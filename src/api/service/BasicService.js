@@ -167,6 +167,41 @@ export default {
   },
 
   /**
+   * 
+   * 
+   * 
+   * 容器接口开始
+   * 
+   * 
+   * 
+   * 
+   */
+
+  /**
+   * 容器列表查询
+   */
+  quertOcntainer(data) {
+    return request.get('/wms/ocntainer/query', {params: data})
+  },
+
+   /**
+   * 新建容器
+   */
+  batchCreateOcntainer(data) {
+    return request.post('/wms/ocntainer/batchCreate', data)
+  },
+   /**
+   * 
+   * 
+   * 
+   * 容器接口结束
+   * 
+   * 
+   * 
+   * 
+   */
+
+  /**
    * 仓库资料接口 
    */
   /**

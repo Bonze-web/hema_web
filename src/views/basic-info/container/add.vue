@@ -21,36 +21,32 @@
 
                                 <el-row :gutter="20">
                                   <el-col :span="6" class="info-box">
-                                    <el-form-item label="容器类型" prop="dcId">
-                                      <el-select v-model="form.dcId" placeholder="请选择容器类型">
-                                        <el-option v-for="(item, index) in records" :key="index" :label="item.name" :value="item.id"></el-option>
+                                    <el-form-item label="容器类型" prop="containerTypeId">
+                                      <el-select v-model="form.containerTypeId" placeholder="请选择容器类型">
+                                        <el-option v-for="(item, index) in containerType" :key="index" :label="item.name" :value="item.id"></el-option>
                                       </el-select>
                                     </el-form-item>
                                   </el-col>
 
                                   <el-col :span="6" class="info-box">
-                                    <el-form-item label="前缀" prop="code">
-                                        <el-input v-model="form.code" placeholder="请输入前缀"></el-input>
+                                    <el-form-item label="前缀" prop="prefix">
+                                        <el-input v-model="form.prefix" placeholder="请输入前缀"></el-input>
                                     </el-form-item>
                                   </el-col>
 
                                   <el-col :span="6" class="info-box">
-                                    <el-form-item label="起始条码段" prop="code">
-                                        <el-input v-model="form.code" placeholder="请输入起始条码段"></el-input>
+                                    <el-form-item label="起始条码段" prop="startCode">
+                                        <el-input v-model="form.startCode" placeholder="请输入起始条码段"></el-input>
                                     </el-form-item>
                                   </el-col>
 
                                   <el-col :span="6" class="info-box">
-                                    <el-form-item label="生成数量" prop="code">
-                                        <el-input v-model="form.code" placeholder="请输入生成数量"></el-input>
+                                    <el-form-item label="生成数量" prop="num">
+                                        <el-input v-model="form.num" placeholder="请输入生成数量"></el-input>
                                     </el-form-item>
                                   </el-col>
 
                                 </el-row>
-
-                                <el-form-item label="备注" prop="remark">
-                                    <textarea v-model="form.remark"></textarea>
-                                </el-form-item>
 
                             </el-form>
                         </el-tab-pane>
@@ -63,63 +59,37 @@
 
 <script>
 // import { mapGetters } from "vuex";
-import StorageService from "@/api/service/StorageService";
+import BasicService from "@/api/service/BasicService";
 
 export default {
   data() {
       return {
         tabActiveName: 'category',
         form: {
-          code: '',
-          name: '',
-          storageNumber: '',
-          remark: '',
-          length: '',
-          width: '',
-          height: '',
-          weight: '',
-          plotRatio: '',
-          dcId: ''
+          containerTypeId: '',
+          num: '',
+          prefix: '',
+          startCode: ''
         },
         createRules: {
-          code: [
-            { required: true, message: '请输入类别代码', trigger: 'blur' },
-            { required: true, max: 16, message: '最多输入16位', trigger: 'change' }
+          // containerTypeId: [
+          //   { required: true, message: '请输入容器类型', trigger: 'blur' },
+          //   { required: true, max: 16, message: '最多输入16位', trigger: 'change' }
+          // ],
+          num: [
+            { required: true, message: '请输入容器数量', trigger: 'blur' },
+            { pattern: /^\d{1,6}(\.\d+)?$/, message: '请输入1-6之间的数字', trigger: 'change' }
           ],
-          name: [
-            { required: true, message: '请输入类别名称', trigger: 'blur' },
-            { required: true, max: 40, message: '最多输入40位', trigger: 'change' }
+          prefix: [
+            { required: true, message: '请输入前缀', trigger: 'blur' },
+            { required: true, max: 4, message: '请输入1-4为之间的数字', trigger: 'change' }
           ],
-          storageNumber: [
-            { required: true, message: '请选输入存储盘数量', trigger: 'blur' },
-            { pattern: /^\d{1,9}(\.\d+)?$/, message: '请输入1-999999999之间的数字', trigger: 'change' }
-          ],
-          remark: [
-            { required: true, message: '请输入备注', trigger: 'blur' },
-            { required: true, max: 200, message: '最多输入200位', trigger: 'change' }
-          ],
-          length: [
-            { required: true, message: '请输入长度', trigger: 'blur' },
-            { pattern: /^\d{1,4}(\.\d+)?$/, message: '请输入1-9999之间的数字', trigger: 'change' }
-          ],
-          width: [
-            { required: true, message: '请输入宽度', trigger: 'blur' },
-            { pattern: /^\d{1,4}(\.\d+)?$/, message: '请输入1-9999之间的数字', trigger: 'change' }
-          ],
-          height: [
-            { required: true, message: '请输入高度', trigger: 'blur' },
-            { pattern: /^\d{1,4}(\.\d+)?$/, message: '请输入1-9999之间的数字', trigger: 'change' }
-          ],
-          weight: [
-            { required: true, message: '请输入承重', trigger: 'blur' },
-            { pattern: /^\d{1,4}(\.\d+)?$/, message: '请输入1-9999之间的数字', trigger: 'change' }
-          ],
-          plotRatio: [
-            { required: true, message: '请输入容积率', trigger: 'blur' },
-            { pattern: /^\d{1,2}(\.\d+)?$/, message: '请输入1-99之间的数字', trigger: 'change' }
+          startCode: [
+            { required: true, message: '请输入起始条码段', trigger: 'blur' },
+            { required: true, max: 12, message: '请输入1-12位之间的数字', trigger: 'change' }
           ]
         },
-        records: []
+        containerType: []
       }
     },
     computed: {
@@ -130,28 +100,34 @@ export default {
         this.$router.go(-1)
       },
       confirm() {
-       // 创建新的仓位
+       // 创建新的容器
         this.$refs.form.validate(valid => {
           if (valid) {
-            StorageService.openWmsBintype(this.form)
+            BasicService.batchCreateOcntainer(this.form)
             .then(res => {
-              this.$message.success("创建成功")
+              this.$message.success(`容器创建成功${res.successNum}个,失败${res.failNum}个`)
               this.$store.dispatch("tagsView/delView", this.$route);
               this.$router.go(-1)
             })
             .catch(err => {
-              this.$message.error("创建失败" + err)
+              this.$message.error("创建失败" + err.message)
             })
           }
         })
       }
     },
     created() {
-      StorageService.getDcQuery()
+      BasicService.getContainerTypeList({
+        page: 1,
+        pageSize: 0,
+        statusEquals: 'ON'
+      })
       .then(res => {
-        this.records = res.records;
-      }).catch((err) => {
-          this.$message.error("获取物流中心失败" + err)
+        console.log(res)
+        this.containerType = res.records
+      })
+      .catch(err => {
+        this.$message.error("获取容器类型失败" + err.message)
       })
     },
     filters: {}
