@@ -73,7 +73,7 @@
 
 <script>
 // 引入公共模块
-import WharfService from "@/api/service/WharfService";
+import StorpartitionService from "@/api/service/StorpartitionService";
 // import { mapGetters } from "vuex";
 
 export default {
@@ -107,44 +107,6 @@ export default {
           }
         })
       },
-      // statusChange: function(status, id, version) {
-      //    console.log(status, id, version);
-      //   // 修改供应商状态
-      //   this.$confirm('此操作将改变供应商状态, 是否继续?', '提示', {
-      //     confirmButtonText: '确定',
-      //     cancelButtonText: '取消',
-      //     type: 'warning'
-      //   }).then(() => {
-      //     if (status) {
-      //     WharfService.closeSuppliers(id, version, status)
-      //     .then((res) => {
-      //       console.log(res);
-      //       this.$message.success("禁用成功")
-      //       // 自己修改数据
-      //       this.getSuppliersList()
-      //     })
-      //     .catch((err) => {
-      //       this.$message.error("禁用失败" + err.message)
-      //       this.getSuppliersList()
-      //     })
-      //   } else {
-      //     WharfService.openSuppliers(id, version)
-      //     .then((res) => {
-      //       this.$message.success("启用成功")
-      //       this.getSuppliersList()
-      //     })
-      //     .catch((err) => {
-      //       this.$message.error("启用失败" + err.message)
-      //       this.getSuppliersList()
-      //     })
-      //   }
-      //   }).catch(() => {
-      //     this.$message({
-      //       type: 'info',
-      //       message: '已取消'
-      //     })        
-      //   })
-      // },
       statusChange: function(status, id, version) {
       // 修改仓库状态
       const _this = this;
@@ -155,7 +117,7 @@ export default {
       }).then(() => {
         if (status) {
           // 禁用
-          WharfService.closeSuppliers(id, version)
+          StorpartitionService.closeSuppliers(id, version)
           .then((res) => {
             _this.$message.success("禁止用成功")
             _this.getSuppliersList();
@@ -166,7 +128,7 @@ export default {
           })
         } else {
           // 启用
-          WharfService.openSuppliers(id, version)
+          StorpartitionService.openSuppliers(id, version)
           .then((res) => {
             _this.$message.success("启用成功")
             _this.getSuppliersList();
@@ -204,22 +166,11 @@ export default {
         }
         console.log(data);
         // 获取数据,然后将自己组件中的数据发送到后台
-        WharfService.getSuppliersList(data)
+        StorpartitionService.getSuppliersList(data)
         .then((res) => {
           console.log(res);
           // 初始化自己定义的数据
           _this.suppliersData = [];
-          // 将总数,赋值给自己定义的变量
-          // res = {
-          //   records: [{
-          //       totalCount: 10,
-          //       id: "1341338404906762241",
-          //       code: '0001',
-          //       name: 'yang',
-          //       version: 9999999999999,
-          //       dockerusage: ['发货']
-          //     }]
-          // }
           _this.totalCount = res.totalCount;
           for (const item in res.records) {
             // 数组循环后,将过去到的值,全部放在suppliersData这个数组中,我要模拟数据也要使用这个数组

@@ -395,7 +395,7 @@ import StorageService from "@/api/service/StorageService";
           resolve()
         }
       })
-      .catch((err) => {
+      .catch(() => {
         resolve()
       })
       }
