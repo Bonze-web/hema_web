@@ -579,12 +579,38 @@ const StorageInfoPackage = {
 }
 
 /**
+ * 报表管理包
+ */
+const ReportModule = {
+  path: '/report',
+  component: Layout,
+  name: 'Report',
+  alwaysShow: true,
+  meta: {
+    title: '报表管理',
+    icon: 'report',
+    permission: PermIds.REPORT_DYNAMIC
+  },
+  children: [{
+    path: "preview/:id",
+    name: "Preview",
+    hidden: true,
+    component: () =>
+      import('@/views/report/custom/customReportPreview'),
+    meta: {
+      title: '预览报表',
+      icon: 'table'
+    }
+  }]
+}
+/**
  * 动态路由
  */
 export const asyncRouterMap = [
   SystemPackage,
   BasicInfoPackage,
   StorageInfoPackage,
+  ReportModule,
   {
     path: '*',
     redirect: '/sys',

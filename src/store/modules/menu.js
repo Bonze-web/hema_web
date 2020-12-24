@@ -95,22 +95,22 @@ function getReportModule() {
 // }
 
 function buildReportModule(rptModule, reports) {
-  // for (var rpt of reports) {
-  //   rptModule.children.push({
-  //     path: 'preview/' + rpt.id,
-  //     params: {
-  //       id: rpt.id
-  //     },
-  //     name: rpt.name,
-  //     component: () =>
-  //       import('@/views/report/custom/customReportPreview'),
-  //     meta: {
-  //       title: rpt.name,
-  //       icon: 'table'
-  //       // permission: PermIds.REPORT_DYNAMIC + ":" + rpt.name
-  //     }
-  //   })
-  // }
+  for (var rpt of reports) {
+    rptModule.children.push({
+      path: 'preview/' + rpt.id,
+      params: {
+        id: rpt.id
+      },
+      name: rpt.name,
+      component: () =>
+        import('@/views/report/custom/customReportPreview'),
+      meta: {
+        title: rpt.name,
+        icon: 'table'
+        // permission: PermIds.REPORT_DYNAMIC + ":" + rpt.name
+      }
+    })
+  }
 }
 
 /**
