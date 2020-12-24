@@ -190,6 +190,13 @@ export default {
   batchCreateOcntainer(data) {
     return request.post('/wms/ocntainer/batchCreate', data)
   },
+
+   /**
+   * 查看容器详情
+   */
+  ocntainerOcntainer(id) {
+    return request.get('/wms/ocntainer/getDetail?id=' + id)
+  },
    /**
    * 
    * 

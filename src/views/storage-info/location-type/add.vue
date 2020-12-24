@@ -30,18 +30,18 @@
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
-                                      <el-form-item label="存储盘数" prop="storageNumber">
+                                      <el-form-item label="存储托盘数" prop="storageNumber">
                                           <el-input v-model="form.storageNumber"></el-input>
                                       </el-form-item>
                                     </el-col>
 
-                                    <el-col :span="6" class="info-box">
+                                    <!-- <el-col :span="6" class="info-box">
                                       <el-form-item label="物流中心" prop="dcId">
                                         <el-select v-model="form.dcId" placeholder="请选择物流中心">
                                           <el-option v-for="(item, index) in records" :key="index" :label="item.name" :value="item.id"></el-option>
                                         </el-select>
                                       </el-form-item>
-                                    </el-col>
+                                    </el-col> -->
                                 </el-row>
 
                                 <el-form-item label="备注" prop="remark">
@@ -107,8 +107,7 @@ export default {
           width: '',
           height: '',
           weight: '',
-          plotRatio: '',
-          dcId: ''
+          plotRatio: ''
         },
         createRules: {
           code: [
@@ -120,13 +119,13 @@ export default {
             { required: true, max: 40, message: '最多输入40位', trigger: 'change' }
           ],
           storageNumber: [
-            { required: true, message: '请选输入存储盘数量', trigger: 'blur' },
-            { pattern: /^\d{1,9}(\.\d+)?$/, message: '请输入1-999999999之间的数字', trigger: 'change' }
+            { required: true, message: '请输入存储托盘数量', trigger: 'blur' },
+            { pattern: /^[1-9]\d*$/, message: '请输入正整数', trigger: 'change' }
           ],
-          remark: [
-            { required: true, message: '请输入备注', trigger: 'blur' },
-            { required: true, max: 200, message: '最多输入200位', trigger: 'change' }
-          ],
+          // remark: [
+          //   { required: true, message: '请输入备注', trigger: 'blur' },
+          //   { required: true, max: 200, message: '最多输入200位', trigger: 'change' }
+          // ],
           length: [
             { required: true, message: '请输入长度', trigger: 'blur' },
             { pattern: /^\d{1,4}(\.\d+)?$/, message: '请输入1-9999之间的数字', trigger: 'change' }
@@ -145,10 +144,9 @@ export default {
           ],
           plotRatio: [
             { required: true, message: '请输入容积率', trigger: 'blur' },
-            { pattern: /^\d{1,2}(\.\d+)?$/, message: '请输入1-99之间的数字', trigger: 'change' }
+            { pattern: /^100$|^(\d|[1-9]\d)(\.\d+)*$/, message: '请输入1-100之间的数字', trigger: 'change' }
           ]
         },
-        records: []
       }
     },
     computed: {
@@ -176,12 +174,12 @@ export default {
       }
     },
     created() {
-      StorageService.getDcQuery()
-      .then(res => {
-        this.records = res.records;
-      }).catch((err) => {
-          this.$message.error("获取物流中心失败" + err.message)
-      })
+      // StorageService.getDcQuery()
+      // .then(res => {
+      //   this.records = res.records;
+      // }).catch((err) => {
+      //     this.$message.error("获取物流中心失败" + err.message)
+      // })
     },
     filters: {}
 };
