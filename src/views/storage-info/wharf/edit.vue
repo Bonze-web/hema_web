@@ -247,7 +247,7 @@ export default {
     },
     filters: {
         purposeChange(val) {
-          if(!val) return false;
+          if (!val) return false;
           var str = "";
           for (let i = 0; i < val.length; i++) {
             console.log(val);

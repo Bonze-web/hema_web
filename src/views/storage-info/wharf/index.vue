@@ -68,7 +68,7 @@
                     
                     <!-- <el-button :disabled="scope.row.status" size="mini" type="text" @click="statusChange(scope.row.status, scope.row.id, scope.row.version)">休闲</el-button>
                     <el-button :disabled="!scope.row.status" size="mini" type="text" @click="statusChange(scope.row.status, scope.row.id, scope.row.version)">使用中</el-button>
-                    <el-button :disabled="!scope.row.status" size="mini" type="text" @click="statusChange(scope.row.status, scope.row.id, scope.row.version)">已完成</el-button> -->
+                    <el-button :disabled="!scope.row.status" size="mini" type="text" @click="statusChange(scope.row.status, scope.row.id, scope.row.version)">停用</el-button> -->
                     <el-dropdown :hide-on-click="true" trigger="click" @command="statusChange" placement="bottom">
                       <span class="el-dropdown-link" style="color:#409EFF; font-size:12px;">
                         设置状态
@@ -76,7 +76,7 @@
                       <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item :disabled="scope.row.status=='IDLE'" :command="[scope.row.id, scope.row.version, 'IDLE']">休闲</el-dropdown-item>
                         <el-dropdown-item :disabled="scope.row.status=='USING'" :command="[scope.row.id, scope.row.version, 'USING']">使用中</el-dropdown-item>
-                        <el-dropdown-item :disabled="scope.row.status=='STOP'" :command="[scope.row.id, scope.row.version, 'STOP']">已完成</el-dropdown-item>
+                        <el-dropdown-item :disabled="scope.row.status=='STOP'" :command="[scope.row.id, scope.row.version, 'STOP']">停用</el-dropdown-item>
                       </el-dropdown-menu>
                     </el-dropdown>
                   </template>
@@ -257,7 +257,7 @@ export default {
             // } else if (obj.status === "USING") {
             //   obj.status = "使用中"
             // } else if(obj.status === "STOP") {
-            //   obj.status = "已完成"
+            //   obj.status = "停用"
             // }
             // 获取数据后,存到自己的数组里面
             _this.suppliersData.push(obj);
@@ -297,7 +297,7 @@ export default {
         case "USING":
           return "使用中"
         case "STOP":
-          return '已完成';
+          return '停用';
       }
     },
     purposeChange(val) {
