@@ -225,8 +225,7 @@ const BasicInfoPackage = {
   alwaysShow: true,
   meta: {
     title: '基本资料',
-    icon: 'basic-info',
-    permission: PermIds.REPORT_DYNAMIC
+    icon: 'basic-info'
   },
   children: [
     {
@@ -235,7 +234,8 @@ const BasicInfoPackage = {
     component: AModule,
     meta: {
       title: '供应商',
-      icon: 'table'
+      icon: 'table',
+      permission: PermIds.PRODUCT_SUPPLIER
     },
     children: [{
       path: "",
@@ -245,7 +245,8 @@ const BasicInfoPackage = {
       hidden: true,
       meta: {
         title: '供应商',
-        icon: 'table'
+        icon: 'table',
+        permission: PermIds.PRODUCT_SUPPLIER_VIEW
       }
     }, {
       path: "edit",
@@ -255,7 +256,8 @@ const BasicInfoPackage = {
       hidden: true,
       meta: {
         title: '查看供应商',
-        icon: 'table'
+        icon: 'table',
+        permission: PermIds.PRODUCT_SUPPLIER_VIEW
       }
     }, {
       path: "add",
@@ -265,7 +267,8 @@ const BasicInfoPackage = {
       hidden: true,
       meta: {
         title: '新建供应商',
-        icon: 'table'
+        icon: 'table',
+        permission: PermIds.PRODUCT_SUPPLIER_CREATE
       }
     }]
     }, {
@@ -274,7 +277,8 @@ const BasicInfoPackage = {
       component: AModule,
       meta: {
         title: '商品类别',
-        icon: 'table'
+        icon: 'table',
+        permission: PermIds.PRODUCT_CATEGORY
       },
       children: [{
         path: "",
@@ -284,7 +288,8 @@ const BasicInfoPackage = {
         hidden: true,
         meta: {
           title: '商品类别',
-          icon: 'table'
+          icon: 'table',
+          permission: PermIds.PRODUCT_CATEGORY_VIEW
         }
       }, {
         path: "edit",
@@ -294,7 +299,8 @@ const BasicInfoPackage = {
         hidden: true,
         meta: {
           title: '查看商品类别',
-          icon: 'table'
+          icon: 'table',
+          permission: PermIds.PRODUCT_CATEGORY_UPDATE
         }
       }, {
         path: "add",
@@ -304,7 +310,8 @@ const BasicInfoPackage = {
         hidden: true,
         meta: {
           title: '新建商品类别',
-          icon: 'table'
+          icon: 'table',
+          permission: PermIds.PRODUCT_CATEGORY_CREATE
         }
       }]
     }, {
@@ -313,7 +320,8 @@ const BasicInfoPackage = {
       component: AModule,
       meta: {
         title: '容器类型',
-        icon: 'table'
+        icon: 'table',
+        permission: PermIds.WMS_CONTAINER_TYPE
       },
       children: [{
         path: "",
@@ -323,7 +331,8 @@ const BasicInfoPackage = {
         hidden: true,
         meta: {
           title: '容器类型',
-          icon: 'table'
+          icon: 'table',
+          permission: PermIds.WMS_CONTAINER_TYPE_VIEW
         }
       }, {
         path: "edit",
@@ -333,7 +342,8 @@ const BasicInfoPackage = {
         hidden: true,
         meta: {
           title: '查看容器类型',
-          icon: 'table'
+          icon: 'table',
+          permission: PermIds.WMS_CONTAINER_TYPE_VIEW
         }
       }, {
         path: "add",
@@ -343,7 +353,8 @@ const BasicInfoPackage = {
         hidden: true,
         meta: {
           title: '新建容器类型',
-          icon: 'table'
+          icon: 'table',
+          permission: PermIds.WMS_CONTAINER_TYPE_CREATE
         }
       }]
     }, {
@@ -352,7 +363,8 @@ const BasicInfoPackage = {
       component: AModule,
       meta: {
         title: '物流中心',
-        icon: 'table'
+        icon: 'table',
+        permission: PermIds.SYS_DC
       },
       children: [{
         path: "",
@@ -362,7 +374,8 @@ const BasicInfoPackage = {
         hidden: true,
         meta: {
           title: '物流中心',
-          icon: 'table'
+          icon: 'table',
+          permission: PermIds.SYS_DC_VIEW
         }
       }, {
         path: "edit",
@@ -372,7 +385,8 @@ const BasicInfoPackage = {
         hidden: true,
         meta: {
           title: '查看物流中心',
-          icon: 'table'
+          icon: 'table',
+          permission: PermIds.SYS_DC_VIEW
         }
       }, {
         path: "add",
@@ -382,7 +396,8 @@ const BasicInfoPackage = {
         hidden: true,
         meta: {
           title: '新建物流中心',
-          icon: 'table'
+          icon: 'table',
+          permission: PermIds.SYS_DC_CREATE
         }
       }]
     }, {
@@ -391,7 +406,8 @@ const BasicInfoPackage = {
       component: AModule,
       meta: {
         title: '容器',
-        icon: 'table'
+        icon: 'table',
+        permission: PermIds.WMS_CONTAINER
       },
       children: [
         {
@@ -402,7 +418,8 @@ const BasicInfoPackage = {
         hidden: true,
         meta: {
           title: '容器',
-          icon: 'table'
+          icon: 'table',
+          permission: PermIds.WMS_CONTAINER_VIEW
         }
       }, {
         path: "edit",
@@ -412,7 +429,8 @@ const BasicInfoPackage = {
         hidden: true,
         meta: {
           title: '查看容器',
-          icon: 'table'
+          icon: 'table',
+          permission: PermIds.WMS_CONTAINER_VIEW
         }
       }, {
         path: "add",
@@ -422,7 +440,8 @@ const BasicInfoPackage = {
         hidden: true,
         meta: {
           title: '新建容器',
-          icon: 'table'
+          icon: 'table',
+          permission: PermIds.WMS_CONTAINER_CREATE
         }
       }] 
     }
@@ -439,8 +458,7 @@ const StorageInfoPackage = {
   alwaysShow: true,
   meta: {
     title: '仓储资料',
-    icon: 'storage-info',
-    permission: PermIds.REPORT_DYNAMIC
+    icon: 'storage-info'
   },
   children: [
   {
@@ -449,7 +467,8 @@ const StorageInfoPackage = {
     component: AModule,
     meta: {
       title: '仓库',
-      icon: 'table'
+      icon: 'table',
+      permission: PermIds.WMS_WAREHOUSE
     },
     children: [
       {
@@ -460,7 +479,8 @@ const StorageInfoPackage = {
       hidden: true,
       meta: {
         title: '仓库',
-        icon: 'table'
+        icon: 'table',
+        permission: PermIds.WMS_WAREHOUSE_VIEW
       }
     }, {
       path: "edit",
@@ -470,7 +490,8 @@ const StorageInfoPackage = {
       hidden: true,
       meta: {
         title: '查看仓库',
-        icon: 'table'
+        icon: 'table',
+        permission: PermIds.WMS_WAREHOUSE_VIEW
       }
     }, {
       path: "add",
@@ -480,7 +501,8 @@ const StorageInfoPackage = {
       hidden: true,
       meta: {
         title: '新建仓库',
-        icon: 'table'
+        icon: 'table',
+        permission: PermIds.WMS_WAREHOUSE_CREATE
       }
     }] 
   },
@@ -490,7 +512,8 @@ const StorageInfoPackage = {
     component: AModule,
     meta: {
       title: '货位类型',
-      icon: 'table'
+      icon: 'table',
+      permission: PermIds.WMS_BINTYPE
     },
     children: [
       {
@@ -501,7 +524,8 @@ const StorageInfoPackage = {
       hidden: true,
       meta: {
         title: '货位类型',
-        icon: 'table'
+        icon: 'table',
+        permission: PermIds.WMS_BINTYPE_VIEW
       }
     }, {
       path: "edit",
@@ -511,7 +535,8 @@ const StorageInfoPackage = {
       hidden: true,
       meta: {
         title: '查看货位',
-        icon: 'table'
+        icon: 'table',
+        permission: PermIds.WMS_BINTYPE_VIEW
       }
     }, {
       path: "add",
@@ -521,17 +546,8 @@ const StorageInfoPackage = {
       hidden: true,
       meta: {
         title: '新建货位',
-        icon: 'table'
-      }
-    }, {
-      path: "add",
-      name: "Add",
-      component: () =>
-        import('@/views/storage-info/wharf/add'),
-      hidden: true,
-      meta: {
-        title: '新建码头',
-        icon: 'table'
+        icon: 'table',
+        permission: PermIds.WMS_BINTYPE_CREATE
       }
     }] 
   }, {
@@ -540,7 +556,8 @@ const StorageInfoPackage = {
     component: AModule,
     meta: {
       title: '码头',
-      icon: 'table'
+      icon: 'table',
+      permission: PermIds.WMS_DOCK
     },
     children: [{
       path: "",
@@ -550,7 +567,8 @@ const StorageInfoPackage = {
         hidden: true,
       meta: {
         title: '码头',
-        icon: 'table'
+        icon: 'table',
+        permission: PermIds.WMS_DOCK_VIEW
       }
     }, {
       path: "edit",
@@ -560,7 +578,8 @@ const StorageInfoPackage = {
         hidden: true,
         meta: {
           title: '编辑码头',
-          icon: 'table'
+          icon: 'table',
+          permission: PermIds.WMS_DOCK_VIEW
         }
       },
       {
@@ -571,7 +590,8 @@ const StorageInfoPackage = {
         hidden: true,
         meta: {
           title: '新建码头',
-          icon: 'table'
+          icon: 'table',
+          permission: PermIds.WMS_DOCK_CREATE
         }
       }] 
   },
@@ -622,7 +642,8 @@ const StorageInfoPackage = {
     component: AModule,
     meta: {
       title: '存储分区',
-      icon: 'table'
+      icon: 'table',
+      permission: PermIds.WMS_STORAGEAREA
     },
     children: [{
       path: "",
@@ -632,7 +653,8 @@ const StorageInfoPackage = {
         hidden: true,
       meta: {
         title: '存储分区',
-        icon: 'table'
+        icon: 'table',
+        permission: PermIds.WMS_STORAGEAREA_VIEW
       }
     }, {
       path: "edit",
@@ -642,7 +664,8 @@ const StorageInfoPackage = {
         hidden: true,
         meta: {
           title: '编辑存储分区',
-          icon: 'table'
+          icon: 'table',
+          permission: PermIds.WMS_STORAGEAREA_VIEW
         }
       },
       {
@@ -653,7 +676,8 @@ const StorageInfoPackage = {
         hidden: true,
         meta: {
           title: '新建存储分区',
-          icon: 'table'
+          icon: 'table',
+          permission: PermIds.WMS_STORAGEAREA_CREATE
         }
       }] 
   }, {

@@ -260,6 +260,15 @@ export default {
   WMS_BINTYPE_UPDATE: "wms:bintype:update",
   WMS_BINTYPE_DELETE: "wms:bintype:remove",
 
+  /**
+   * 存储分区
+   */
+  WMS_STORAGEAREA: "wms:storagearea",
+  WMS_STORAGEAREA_CREATE: "wms:storagearea:create",
+  WMS_STORAGEAREA_UPDATE: "wms:storagearea:update",
+  WMS_STORAGEAREA_VIEW: "wms:storagearea:view",
+  WMS_STORAGEAREA_DELETE: "wms:storagearea:delete",
+
   /** ******************************* 微信小程序组件 *******************************************/
 
   /**
