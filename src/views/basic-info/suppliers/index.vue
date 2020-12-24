@@ -19,6 +19,7 @@
             </el-form>
         </div>
         <div style="height:20px" />
+
         <div style="background:#fff">
           <el-row>
             <router-link :to="{ path: '/basicinfo/suppliers/add', query:{ status: 'create'} }">
@@ -26,6 +27,7 @@
               <el-button style="margin:18px 10px" type="primary" size="mini">新建</el-button>
             </router-link>
           </el-row>
+          
             <el-table
                 :data="suppliersData"
                 style="width: 100%;text-align:center"

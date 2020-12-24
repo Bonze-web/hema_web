@@ -310,31 +310,31 @@ export default {
           ],
           inlength: [
             { required: true, message: '请输入内长', trigger: 'blur' },
-            { pattern: /^\d{1,6}(\.\d+)?$/, message: '请输入1-99999之间的数字', trigger: 'change' }
+            { pattern: /^\d{1,6}(\.\d+)?$/, message: '请输入1-999999之间的数字', trigger: 'change' }
           ],
           outlength: [
             { required: true, message: '请输入外长', trigger: 'blur' },
-            { pattern: /^\d{1,6}(\.\d+)?$/, message: '请输入1-99999之间的数字', trigger: 'change' }
+            { pattern: /^\d{1,6}(\.\d+)?$/, message: '请输入1-999999之间的数字', trigger: 'change' }
           ],
           inwidth: [
             { required: true, message: '请输入内宽', trigger: 'blur' },
-            { pattern: /^\d{1,6}(\.\d+)?$/, message: '请输入1-99999之间的数字', trigger: 'change' }
+            { pattern: /^\d{1,6}(\.\d+)?$/, message: '请输入1-999999之间的数字', trigger: 'change' }
           ],
           outwidth: [
             { required: true, message: '请输入外宽', trigger: 'blur' },
-            { pattern: /^\d{1,6}(\.\d+)?$/, message: '请输入1-99999之间的数字', trigger: 'change' }
+            { pattern: /^\d{1,6}(\.\d+)?$/, message: '请输入1-999999之间的数字', trigger: 'change' }
           ],
           inheight: [
             { required: true, message: '请输入内高', trigger: 'blur' },
-            { pattern: /^\d{1,6}(\.\d+)?$/, message: '请输入1-99999之间的数字', trigger: 'change' }
+            { pattern: /^\d{1,6}(\.\d+)?$/, message: '请输入1-999999之间的数字', trigger: 'change' }
           ],
           outheight: [
             { required: true, message: '请输入外高', trigger: 'blur' },
-            { pattern: /^\d{1,6}(\.\d+)?$/, message: '请输入1-99999之间的数字', trigger: 'change' }
+            { pattern: /^\d{1,6}(\.\d+)?$/, message: '请输入1-999999之间的数字', trigger: 'change' }
           ],
           weight: [
             { required: true, message: '请输入自重', trigger: 'blur' },
-            { pattern: /^\d{1,6}(\.\d+)?$/, message: '请输入1-99999之间的数字', trigger: 'change' }
+            { pattern: /^\d{1,6}(\.\d+)?$/, message: '请输入1-999999之间的数字', trigger: 'change' }
           ],
           plotratio: [
             { required: true, message: '请输入容积率', trigger: 'blur' },
@@ -342,7 +342,7 @@ export default {
           ],
           bearingweight: [
             { required: true, message: '请输入承重', trigger: 'blur' },
-            { pattern: /^\d{1,6}(\.\d+)?$/, message: '请输入1-99999之间的数字', trigger: 'change' }
+            { pattern: /^\d{1,6}(\.\d+)?$/, message: '请输入1-999999之间的数字', trigger: 'change' }
           ]
         }
       }

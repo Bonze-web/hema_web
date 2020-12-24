@@ -40,14 +40,14 @@ export default {
   openSuppliers(id, version, status) {
     console.log(id, version, status);
     // return request.put('/wms/dock/updateStatus?id=' + id + '&version=' + version + '&status=' + true);
-    return request.put('/wms/dock/updateStatus?id=' + id + '&version=' + version)
+    return request.put('/wms/dock/updateStatus?id=' + id + '&version=' + version + '&status=' + status)
   },
   /**
    * 禁用状态
    */
-  closeSuppliers(id, version) {
+  closeSuppliers(status, id, version) {
     // return request.put('/wms/dock/updateStatus?id=' + id + '&version=' + version + '&status=' + false);
-    return request.put('/wms/dock/updateStatus?id=' + id + '&version=' + version)
+    return request.put('/wms/dock/updateStatus?id=' + id + '&version=' + version + '&status=' + status)
   },
   /**
    * 编辑的接口
