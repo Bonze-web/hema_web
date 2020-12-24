@@ -5,9 +5,9 @@
                 <el-form-item label="类别">
                     <el-input type='text' placeholder="请输入类别编号/名称" v-model="form.nameOrCode" class="input-width"></el-input>
                 </el-form-item>
-                <el-form-item label="上级类别">
+                <!-- <el-form-item label="上级类别">
                     <el-input type='text' placeholder="请输入上级类别编号/名称" v-model="form.parentEquals" class="input-width"></el-input>
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item label="状态">
                     <el-select v-model="form.status" placeholder="请选择状态">
                       <el-option label="全部" value=""></el-option>
@@ -48,7 +48,7 @@
                 <el-table-column prop="name" label="名称"></el-table-column>
                 <el-table-column prop="anotherName" label="上级类别">
                   <template slot-scope="scope">
-                    {{ scope.row.parentName ? scope.row.parentName : "&lt;空&gt;" }}
+                    {{ scope.row.parentName ? '[' + scope.row.parentCode + ']' + scope.row.parentName : "&lt;空&gt;" }}
                   </template>
                 </el-table-column>
                 <el-table-column prop="level" label="级别">

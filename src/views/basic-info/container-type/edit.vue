@@ -27,7 +27,7 @@
             </div>
             <div>
                 <el-button @click="back">返回</el-button>
-                <el-button type="primary" @click="editContainerType" v-if="hasPermission(PermIds.WMS_CONTAINER_TYPE_UPDATE)">编辑</el-button>
+                <el-button type="primary" @click="editContainerType" :disabled="!containerTypeInfo.status" v-if="hasPermission(PermIds.WMS_CONTAINER_TYPE_UPDATE)">编辑</el-button>
             </div>
         </div>
         <div style="height:20px" />
@@ -50,8 +50,15 @@
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
+                                        <el-form-item label="名称" prop="wrh">
+                                            <el-select v-model="form.wrhId" placeholder="请选择所属仓库">
+                                              <el-option v-for="item in wrhList" :key="item.id" :label="item.name" :value="item.id"></el-option>
+                                            </el-select>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="6" class="info-box">
                                         <el-form-item label="条码前缀" prop="barcodeprefix">
-                                            <el-input :disabled="containerTypeInfo.barcodeprefix" v-model="form.barcodeprefix"></el-input>
+                                            <el-input v-model="form.barcodeprefix"></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
@@ -174,6 +181,10 @@
                                 <div>{{ containerTypeInfo.name }}</div>
                             </el-col>
                             <el-col :span="6" class="info-box">
+                                <div>所属仓库:</div>
+                                <div>{{ containerTypeInfo.name }}</div>
+                            </el-col>
+                            <el-col :span="6" class="info-box">
                                 <div>条码前缀:</div>
                                 <div>{{ containerTypeInfo.barcodeprefix }}</div>
                             </el-col>
@@ -243,8 +254,8 @@
                                 <div>{{ containerTypeInfo.plotratio }}</div>
                             </el-col>
                         </el-tab-pane>
-                        <!-- <el-tab-pane label="配送中心范围" name="range">配置管理</el-tab-pane>
-                        <el-tab-pane label="操作日志" name="log">角色管理</el-tab-pane> -->
+                        <!-- <el-tab-pane label="配送中心范围" name="range">配置管理</el-tab-pane> -->
+                        <el-tab-pane label="操作日志" name="log">角色管理</el-tab-pane>
                     </el-tabs>
                 </template>
             </div>
@@ -256,10 +267,12 @@
 import PermIds from "@/api/permissionIds";
 import { mapGetters } from "vuex";
 import BasicService from "@/api/service/BasicService";
+import StorageService from "@/api/service/StorageService";
 
 export default {
   data() {
       return {
+        wrhList: [],
         PermIds: PermIds,
         status: '', // 页面状态
         id: '', // 供应商ID
@@ -285,7 +298,7 @@ export default {
           weight: '', // 自重
           remark: '',
           version: '',
-          wrhId: '1'
+          wrhId: ''
         },
         containerTypeInfo: {}, // 供应商信息
         createRules: {
@@ -296,6 +309,9 @@ export default {
           name: [
             { required: true, message: '请输入名称', trigger: 'blur' },
             { required: true, max: 32, message: '最多输入32位', trigger: 'change' }
+          ],
+          wrh: [
+            { required: true, message: '请选择所属仓库', trigger: 'blur' },
           ],
           barcodeprefix: [
             { required: true, message: '请输入联系方式', trigger: 'blur' },
@@ -421,6 +437,19 @@ export default {
       },
       tabClick: function() {  
       },
+      getWrhQuery: function() {
+      const data = {
+        page: 1,
+        pageSize: 0
+      }
+      StorageService.warehouseInit(data)
+      .then((res) => {
+        this.wrhList = res.records
+      })
+      .catch((err) => {
+        this.$message('获取仓库列表失败' + err.message)
+      })
+    },
       createContainerType: function() {
         // 创建新的供应商
         this.$refs.form.validate(valid => {
@@ -465,6 +494,7 @@ export default {
     },
     created() {
       this.getQueryStatus()
+      this.getWrhQuery()
     },
     // beforeRouteEnter(to, from, next) {
     //   next(vm => {

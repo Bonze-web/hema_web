@@ -29,6 +29,13 @@
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
+                                        <el-form-item label="名称" prop="wrh">
+                                            <el-select v-model="form.wrhId" placeholder="请选择所属仓库">
+                                              <el-option v-for="item in wrhList" :key="item.id" :label="item.name" :value="item.id"></el-option>
+                                            </el-select>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="6" class="info-box">
                                         <el-form-item label="条码前缀" prop="barcodeprefix">
                                             <el-input :disabled="containerTypeInfo.barcodeprefix" v-model="form.barcodeprefix"></el-input>
                                         </el-form-item>
@@ -144,10 +151,12 @@
 <script>
 // import { mapGetters } from "vuex";
 import BasicService from "@/api/service/BasicService";
+import StorageService from "@/api/service/StorageService";
 
 export default {
   data() {
       return {
+        wrhList: [],
         status: '', // 页面状态
         id: '', // 供应商ID
         tabActiveName: 'containerType', // tab栏名称
@@ -183,6 +192,9 @@ export default {
           name: [
             { required: true, message: '请输入名称', trigger: 'blur' },
             { required: true, max: 32, message: '最多输入32位', trigger: 'change' }
+          ],
+          wrh: [
+            { required: true, message: '请选择所属仓库', trigger: 'blur' },
           ],
           barcodeprefix: [
             { required: true, message: '请输入联系方式', trigger: 'blur' },
@@ -242,6 +254,19 @@ export default {
       back: function() {
         this.$router.go(-1)
       },
+      getWrhQuery: function() {
+      const data = {
+        page: 1,
+        pageSize: 0
+      }
+      StorageService.warehouseInit(data)
+      .then((res) => {
+        this.wrhList = res.records
+      })
+      .catch((err) => {
+        this.$message('获取仓库列表失败' + err.message)
+      })
+    },
       statusChange: function() {
         // 修改供应商状态
         const _this = this
@@ -329,6 +354,7 @@ export default {
     },
     created() {
       this.getQueryStatus()
+      this.getWrhQuery()
     },
     beforeRouteEnter(to, from, next) {
       next(vm => {

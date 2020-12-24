@@ -127,65 +127,86 @@
                     <el-tabs v-model="tabActiveName" @tab-click="tabClick">
                         <el-tab-pane label="物流中心" name="dc">
                             <div class="info-title">基本信息</div>
-                            <el-col :span="6" class="info-box">
-                                <div>类型:</div>
-                                <div>{{ dcInfo.type | dcType }}</div>
-                            </el-col>
-                            <el-col :span="6" v-if="dcInfo.type === 'FRONT'" class="info-box">
-                                <div>所属仓库:</div>
-                                <div>{{ dcInfo.dcName }}</div>
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>代码:</div>
-                                <div>{{ dcInfo.code }}</div>
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>名称:</div>
-                                <div>{{ dcInfo.name }}</div>
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>来源代码:</div>
-                                <div>{{ dcInfo.sourceCode ? dcInfo.sourceCode : "&lt;空&gt;" }}</div>
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>简称:</div>
-                                <div>{{ dcInfo.shortName ? dcInfo.shortName : "&lt;空&gt;" }}</div>
-                            </el-col>
-                            <!-- <el-col :span="6" class="info-box">
-                                <div>货主:</div>
-                                <div></div>
-                            </el-col> -->
-                            <el-col :span="6" class="info-box">
-                                <div>联系人:</div>
-                                <div>{{ dcInfo.contactor }}</div>
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>联系方式:</div>
-                                <div>{{ dcInfo.contactPhone }}</div>
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>地址:</div>
-                                <div>{{ dcInfo.address }}</div>
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>经营面积:</div>
-                                <div>{{ dcInfo.operatingArea ? dcInfo.operatingArea : "&lt;空&gt;" }}</div>
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>邮编:</div>
-                                <div>{{ dcInfo.zipCode ? dcInfo.zipCode : "&lt;空&gt;" }}</div>
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>主体码:</div>
-                                <div>{{ dcInfo.subjectCode ? dcInfo.subjectCode : "&lt;空&gt;" }}</div>
-                            </el-col>
-                            <el-col class="info-box">
-                                <div style="width:32px">备注:</div>
-                                <div>{{ dcInfo.remark ? dcInfo.remark : "&lt;空&gt;" }}</div>
-                            </el-col>
+                            <el-form :model="form" :rules="createRules" ref="form" label-width="100px" class="demo-ruleForm">
+                                <el-row :gutter="20">
+                                    <el-col :span="6" class="info-box">
+                                        <el-form-item label="类型" prop="type">
+                                          <el-select v-model="form.type" placeholder="请选择类型" @change="getDcCenter">
+                                            <el-option label="中心仓" value="CENTER"></el-option>
+                                            <el-option label="网格仓" value="FRONT"></el-option>
+                                          </el-select>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="6" class="info-box" v-if="form.type === 'FRONT'">
+                                        <el-form-item label="所属仓库" prop="type">
+                                          <el-select v-model="form.dcId" placeholder="请选择仓库">
+                                            <el-option v-for="item in dcList" :key="item.id" :label="'[' + item.code + ']' + item.name" :value="item.id"></el-option>
+                                          </el-select>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="6" class="info-box">
+                                        <el-form-item label="代码" prop="code">
+                                            <el-input maxlength="16" v-model="form.code"></el-input>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="6" class="info-box">
+                                        <el-form-item label="名称" prop="name">
+                                            <el-input maxlength="40" v-model="form.name"></el-input>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="6" class="info-box">
+                                        <el-form-item label="来源代码">
+                                            <el-input maxlength="40" v-model="form.sourceCode"></el-input>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="6" class="info-box">
+                                        <el-form-item label="简称">
+                                            <el-input maxlength="40" v-model="form.shortName"></el-input>
+                                        </el-form-item>
+                                    </el-col>
+                                    <!-- <el-col :span="6" class="info-box">
+                                        <el-form-item label="货主" prop="name">
+                                            <el-input></el-input>
+                                        </el-form-item>
+                                    </el-col> -->
+                                    <el-col :span="6" class="info-box">
+                                        <el-form-item label="联系人" prop="contactor">
+                                            <el-input maxlength="40" v-model="form.contactor"></el-input>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="6" class="info-box">
+                                        <el-form-item label="联系方式" prop="contactPhone">
+                                            <el-input maxlength="40" v-model="form.contactPhone"></el-input>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="6" class="info-box">
+                                        <el-form-item label="地址" prop="address">
+                                            <el-input maxlength="100" v-model="form.address"></el-input>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="6" class="info-box">
+                                        <el-form-item label="经营面积(m2)">
+                                            <el-input @change="areaChange" type="number" placeholder="0.000" v-model="form.operatingArea"></el-input>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="6" class="info-box">
+                                        <el-form-item label="邮编" prop="port">
+                                            <el-input maxlength="6" v-model="form.zipCode"></el-input>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="6" class="info-box">
+                                        <el-form-item label="主体码">
+                                            <el-input maxlength="40" v-model="form.subjectCode"></el-input>
+                                        </el-form-item>
+                                    </el-col>
+                                </el-row>
+                                <el-form-item label="备注">
+                                    <textarea maxlength="200" v-model="form.remark"></textarea>
+                                </el-form-item>
+                            </el-form>
                         </el-tab-pane>
-                        <!-- <el-tab-pane label="配送中心范围" name="range">配置管理</el-tab-pane>
-                        <el-tab-pane label="操作日志" name="log">角色管理</el-tab-pane> -->
+                        <!-- <el-tab-pane label="配送中心范围" name="range">配置管理</el-tab-pane> -->
+                        <el-tab-pane label="操作日志" name="log">角色管理</el-tab-pane>
                     </el-tabs>
                 </template>
             </div>
@@ -244,6 +265,9 @@ export default {
           ],
           type: [
             { required: true, message: '请选择配送中心类型', trigger: 'blur' }
+          ],
+          port: [
+            { pattern: /^[0-9]{6}$/, message: '请输入正确的邮编', trigger: 'blur' }
           ]
         }
       }

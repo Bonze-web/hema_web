@@ -54,7 +54,7 @@
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
-                                        <el-form-item label="邮编">
+                                        <el-form-item label="邮编" prop="port">
                                             <el-input v-model="form.postCode"></el-input>
                                         </el-form-item>
                                     </el-col>
@@ -75,7 +75,7 @@
                                     </el-col>
                                 </el-row>
                                 <el-form-item label="备注">
-                                    <textarea v-model="form.remark"></textarea>
+                                    <textarea maxlength="250" v-model="form.remark"></textarea>
                                 </el-form-item>
                             </el-form>
                         </el-tab-pane>
@@ -116,7 +116,7 @@ export default {
         suppliersInfo: {}, // 供应商信息
         createRules: {
           code: [
-            { required: true, message: '请输入类别代码', trigger: 'blur' }
+            { required: true, message: '请输入代码', trigger: 'blur' }
           ],
           name: [
             { required: true, message: '请输入供应商名称', trigger: 'blur' }
@@ -130,6 +130,9 @@ export default {
           ],
           address: [
             { required: true, message: '请输入地址', trigger: 'blur' }
+          ],
+          port: [
+            { pattern: /^[0-9]{6}$/, message: '请输入正确的邮编', trigger: 'blur' }
           ]
         }
       }

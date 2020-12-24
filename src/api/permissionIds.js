@@ -101,7 +101,6 @@ export default {
   SYS_DC_DISABLE: "sys:dc:disable",
   SYS_DC_ENABLE: "sys:dc:enable",
 
-
     /**
    * 货位管理模块
    */

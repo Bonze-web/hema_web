@@ -75,7 +75,7 @@
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
-                                        <el-form-item label="邮编">
+                                        <el-form-item label="邮编" prop="port">
                                             <el-input v-model="form.postCode"></el-input>
                                         </el-form-item>
                                     </el-col>
@@ -100,8 +100,8 @@
                                 </el-form-item>
                             </el-form>
                         </el-tab-pane>
-                        <!-- <el-tab-pane label="配送中心范围" name="range">配置管理</el-tab-pane>
-                        <el-tab-pane label="操作日志" name="log">角色管理</el-tab-pane> -->
+                        <!-- <el-tab-pane label="配送中心范围" name="range">配置管理</el-tab-pane> -->
+                        <el-tab-pane label="操作日志" name="log">角色管理</el-tab-pane>
                     </el-tabs>
                 </template>
             </div>
@@ -122,7 +122,7 @@
                             </el-col>
                             <el-col :span="6" class="info-box">
                                 <div>简称:</div>
-                                <div>{{ suppliersInfo.anotherName }}</div>
+                                <div>{{ suppliersInfo.anotherName ? suppliersInfo.anotherName : "&lt;空&gt;"  }}</div>
                             </el-col>
                             <!-- <el-col :span="6" class="info-box">
                                 <div>货主:</div>
@@ -185,8 +185,8 @@ export default {
           id: '',
           code: '',
           name: '',
-          anotherName: '',
-          contactName: '',
+          anotherName: '', // 简称
+          contactName: '', // 联系人
           mobile: '',
           address: '',
           postCode: '',
@@ -214,6 +214,9 @@ export default {
           ],
           address: [
             { required: true, message: '请输入地址', trigger: 'blur' }
+          ],
+          port: [
+            { pattern: /^[0-9]{6}$/, message: '请输入正确的邮编', trigger: 'blur' }
           ]
         }
       }

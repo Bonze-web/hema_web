@@ -91,7 +91,7 @@ export default {
         totalCount: 0,
         form: {
           nameOrCode: '',
-          status: ''
+          status: 'ON'
         },
         dcData: [],
         multipleSelection: [] // 选择的列表
