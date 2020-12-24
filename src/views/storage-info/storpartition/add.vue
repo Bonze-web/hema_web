@@ -188,7 +188,7 @@ export default {
               })
               .catch(err => {
                 console.log(err);
-                this.$message.error("创建失败" + err)
+                this.$message.error("创建失败" + err.message)
               })
             } else {
               // 因为提交的时候,需要传递状态值,所以先转换一下,这里是编辑
@@ -198,7 +198,7 @@ export default {
                 this.$router.go(-1)
               })
               .catch(err => {
-                this.$message.error("更新失败" + err)
+                this.$message.error("更新失败" + err.message)
               })
             }
           } else {
