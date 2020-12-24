@@ -337,14 +337,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "src/styles/mixin.scss";
+// @import "src/styles/mixin.scss";
+// /deep/ .el-table .cell{
+//       line-height: 32px !important;
+// }
 </style>
 <style lang="scss">
 .table-index{
 @import "src/styles/mixin.scss";
 @include elTable;
-}
-.table-index .el-table .cell{
-  padding: 3px 0;
 }
 </style>
