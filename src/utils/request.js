@@ -49,7 +49,7 @@ function isHideLoading() {
  */
 request.interceptors.request.use(config => {
   if (process.env.PRJ === "SAAS") {
-    var tenant = localStorage.getItem("_tenant_")
+    const tenant = localStorage.getItem("_tenant_")
     if (tenant) {
       // request.setBaseURL("/" + tenant + config.baseURL);
       // console.log(config.url)
@@ -57,7 +57,23 @@ request.interceptors.request.use(config => {
       config.headers['tenant'] = tenant;
     }
   } else {
-    config.headers['tenant'] = "hema";
+    const tenant = localStorage.getItem("_tenant_");
+    if (config.url.indexOf("/user/login") >= 0) {
+      var data = config.data;
+      if (data.username.toLowerCase() === "root") {
+        localStorage.setItem("_tenant_", "0");
+        config.headers['tenant'] = "0";
+      } else {
+        localStorage.setItem("_tenant_", "hema");
+        config.headers['tenant'] = "hema";
+      }
+    } else {
+      if (tenant) {
+        config.headers['tenant'] = tenant;
+      } else {
+        config.headers['tenant'] = "hema";
+      }
+    }
   }
   if (!isHideLoading()) {
     loading = Loading.service();
