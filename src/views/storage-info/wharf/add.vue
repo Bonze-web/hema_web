@@ -12,10 +12,10 @@
         <div class="head" v-if="status === 'read'">
             <div class="head-title">
                 <div style="margin:8px">{{ '[' + suppliersInfo.code + ']' + suppliersInfo.name }}</div>
-                <template>
+                <!-- <template>
                   <el-button type="text" @click="statusChange" v-if="suppliersInfo.status">禁用</el-button>
                   <el-button type="text" @click="statusChange" v-if="!suppliersInfo.status">启用</el-button>
-                </template>
+                </template> -->
             </div>
             <div>
                 <el-button @click="back">返回</el-button>
@@ -33,7 +33,7 @@
                                 <el-row :gutter="20">
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="代码" prop="code">
-                                            <el-input v-model="form.code" maxlength="16"></el-input>
+                                            <el-input :disabled="!status === 'create'" v-model="form.code" maxlength="16"></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
@@ -50,22 +50,10 @@
                                           </el-select>
                                         </el-form-item>
                                     </el-col>
-                                    <el-col :span="6" class="info-box">
-                                      <!-- <el-form-item label="配送中心" prop="dcId">
-                                          <el-input v-model="form.dcId"></el-input>
-                                      </el-form-item> -->
-                                        <el-form-item label="配送中心" prop="dcId">
-                                            <el-select v-model="form.dcId" placeholder="请择配送中心" @change="levelChange">
-                                                <el-option v-for="(ele,idx) in materials" :key="idx" :label="ele.name" :value="ele.id"></el-option>
-                                                <!-- <el-option label="配送中心2" value="0002"></el-option>
-                                                <el-option label="配送中心3" value="0003"></el-option>
-                                                <el-option label="配送中心4" value="0004 "></el-option> -->
-                                            </el-select>
-                                        </el-form-item>
-                                    </el-col>
+
                                 </el-row>
                                 <el-form-item label="备注">
-                                    <textarea v-model="form.remark" maxlength="200" @change="levelChange"></textarea>
+                                    <textarea v-model="form.remark" maxlength="200"></textarea>
                                 </el-form-item>
                             </el-form>
                         </el-tab-pane>
@@ -115,16 +103,14 @@ export default {
         status: '', // 页面状态
         id: '', 
         tabActiveName: 'suppliers', // tab栏名称
-        dcId: '',
-        materials: [],
+        // dcId: '',
         form: {
-          dcId: '',
+          // dcId: '',
           code: '',
           name: '',
           remark: '',
           // 用途
-          usages: []
-          // status: ""
+          usages: ''
         },
         suppliersInfo: {}, 
         createRules: {
@@ -135,7 +121,7 @@ export default {
             { required: true, message: '请输入码头名称', trigger: 'blur' }
           ],
           usages: [
-            { required: true, message: '请填写用途', trigger: 'blur' }
+            { required: true, message: '请选择用途', trigger: 'blur' }
           ]
         }
       }
@@ -145,7 +131,7 @@ export default {
     },
     methods: {
       levelChange() {
-        this.dc_id = this.form.dcId
+        // this.dc_id = this.form.dcId
         console.log(this.form)
       },
       back: function() {
@@ -196,11 +182,11 @@ export default {
           this.suppliersInfo = res
           // 根据状态修改供应商开启switch
           // 首先是根据数据去修改名字后面的两个按钮
-          if (this.suppliersInfo.status === "OPEN") {
-            this.suppliersInfo.status = true
-          } else {
-            this.suppliersInfo.status = false
-          }
+          // if (this.suppliersInfo.status === "OPEN") {
+          //   this.suppliersInfo.status = true
+          // } else {
+          //   this.suppliersInfo.status = false
+          // }
         })
         .catch((err) => {
           this.$message.error("获取详情失败" + err)
@@ -221,17 +207,22 @@ export default {
                 this.$router.go(-1)
               })
               .catch(err => {
-                console.log(err);
-                this.$message.error("创建失败" + err)
+                if (err === "") {
+                  this.$message.success("创建成功")
+                  this.$router.go(-1)
+                } else {
+                  this.$message.error("创建失败" + err)
+                }
               })
             } else {
               console.log(this.form, this.form.status);
               // 因为提交的时候,需要传递状态值,所以先转换一下,这里是编辑
-              if (this.form.status) {
-                this.form.status = "OPEN"
-              } else {
-                this.form.status = "CLOSED"
-              }
+              // if (this.form.status) {
+              //   this.form.status = "OPEN"
+              // } else {
+              //   this.form.status = "CLOSED"
+              // }
+              this.form.id = this.id;
               WharfService.updateSupplier(this.form)
               .then(res => {
                 console.log(res)
@@ -253,21 +244,13 @@ export default {
         // 这个form肯定就是编辑页面的数据,suppliersInfo是前一个页面传递过来的数据
         // 传递的是form是用户填写的数据
         console.log(this.status);
+        this.form.id = this.id;
         this.form = Object.assign(this.form, this.suppliersInfo)
         console.log(this.form, this.suppliersInfo)
       }
     },
     created() {
-      this.getQueryStatus();
-      const _this = this;
-      WharfService.getdcdata().then(function(res) {
-        res.records.forEach(function(ele, idx) {
-           _this.materials.push({
-              name: ele.name,
-              id: ele.id
-           })
-        })
-      })
+      this.getQueryStatus()
     },
     filters: {
     

@@ -9,6 +9,7 @@
                 </el-form-item>
                 <el-form-item label="状态">
                     <el-select v-model="form.status" placeholder="请选择状态">
+                    <el-option label="全部" value=""></el-option>
                     <el-option label="空闲" value="IDLE"></el-option>
                     <el-option label="使用中" value="USING"></el-option>
                     <el-option label="停用" value="STOP"></el-option>
@@ -68,14 +69,14 @@
                     <!-- <el-button :disabled="scope.row.status" size="mini" type="text" @click="statusChange(scope.row.status, scope.row.id, scope.row.version)">休闲</el-button>
                     <el-button :disabled="!scope.row.status" size="mini" type="text" @click="statusChange(scope.row.status, scope.row.id, scope.row.version)">使用中</el-button>
                     <el-button :disabled="!scope.row.status" size="mini" type="text" @click="statusChange(scope.row.status, scope.row.id, scope.row.version)">已完成</el-button> -->
-                    <el-dropdown :hide-on-click="true" trigger="click" @command="statusChange">
+                    <el-dropdown :hide-on-click="true" trigger="click" @command="statusChange" placement="bottom">
                       <span class="el-dropdown-link" style="color:#409EFF; font-size:12px;">
-                        设置状态<i class="el-icon-arrow-down el-icon--right"></i>
+                        设置状态
                       </span>
                       <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item :disabled="scope.row.status=='IDLE'" :command="[scope.row.id, scope.row.version, 'IDLE']">休闲</el-dropdown-item>
                         <el-dropdown-item :disabled="scope.row.status=='USING'" :command="[scope.row.id, scope.row.version, 'USING']">使用中</el-dropdown-item>
-                        <el-dropdown-item :disabled="!scope.row.status=='STOP'" :command="[scope.row.id, scope.row.version, 'STOP']">已完成</el-dropdown-item>
+                        <el-dropdown-item :disabled="scope.row.status=='STOP'" :command="[scope.row.id, scope.row.version, 'STOP']">已完成</el-dropdown-item>
                       </el-dropdown-menu>
                     </el-dropdown>
                   </template>
@@ -209,7 +210,8 @@ export default {
         const _this = this;    
         // 将当前组件的实例记录起来，这些都是我在data中自己写的数据
         const data = {
-          codeEquals: this.form.nameOrCode || null,
+          codeEqOrNameLike: this.form.codeEqOrNameLike,
+          codeEquals: this.form.codeEqOrNameLike || null,
           page: this.page,
           pageSize: this.pageSize,
           searchCount: true,
@@ -241,7 +243,9 @@ export default {
               // 码头的id
               id: res.records[i].id,
               // 代码
-              codeEqOrNameLike: res.records[i].codeEqOrNameLike,
+              code: res.records[i].code,
+              name: res.records[i].name,
+              // codeEqOrNameLike: res.records[i].codeEqOrNameLike,
               version: res.records[i].version,
               // 用途
               usages: res.records[i].usages,
@@ -297,16 +301,36 @@ export default {
       }
     },
     purposeChange(val) {
+      var str = "";
       for (let i = 0; i < val.length; i++) {
         switch (val[i]) {
           case "RECEIVE":
-            return "收货"
+            if (i < val.length-1) {
+              str += "收货,";
+              break
+            } else {
+              str += "收货";
+              break
+            }
           case "OUT":
-            return "出货"
+            if (i < val.length-1) {
+              str += "出货,";
+              break
+            } else {
+              str += "出货";
+              break
+            }
           case "RETURN":
-            return '退货';
+            if (i < val.length-1) {
+              str += "退货,";
+              break
+            } else {
+              str += "退货";
+              break
+            }
         }
       }
+      return str;
     }
   }
 };

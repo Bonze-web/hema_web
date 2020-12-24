@@ -41,6 +41,15 @@
                                             <el-input v-model="form.name" maxlength="40"></el-input>
                                         </el-form-item>
                                     </el-col>
+                                    <el-col :span="6" class="info-box">
+                                        <el-form-item label="用途" prop="usages">
+                                          <el-select v-model="form.usages" multiple placeholder="请选择用途">
+                                            <el-option label="收货" value="RECEIVE"></el-option>
+                                            <el-option label="出货" value="OUT"></el-option>
+                                            <el-option label="退货" value="RETURN"></el-option>
+                                          </el-select>
+                                        </el-form-item>
+                                    </el-col>
 
                                 </el-row>
                                 <el-form-item label="备注">
@@ -70,7 +79,7 @@
                             </el-col>
                             <el-col :span="6" class="info-box">
                                 <div>用途:</div>
-                                <div>{{ suppliersInfo.usages }}</div>
+                                <div>{{ suppliersInfo.usages | purposeChange}}</div>
                             </el-col>
                             <el-col class="info-box">
                                 <div>备注:</div>
@@ -238,7 +247,40 @@ export default {
       this.getQueryStatus()
     },
     filters: {
-    
+        purposeChange(val) {
+          var str = "";
+          for (let i = 0; i < val.length; i++) {
+            switch (val[i]) {
+              case "RECEIVE":
+                if (i < val.length-1) {
+                  str += "收货,";
+                  break
+                } else {
+                  str += "收货";
+                  break
+                }
+              case "OUT":
+                if (i < val.length-1) {
+                  str += "出货,";
+                  break
+                } else {
+                  str += "出货";
+                  break
+                }
+                break
+              case "RETURN":
+                if (i < val.length-1) {
+                  str += "退货,";
+                  break
+                } else {
+                  str += "退货";
+                  break
+                }
+                break
+            }
+          }
+          return str;
+        }
     }
 };
 </script>
