@@ -13,9 +13,9 @@ module.exports = {
     proxyTable: {
       /** 服务接口 */
       '/wms/': {
-        target: 'http://localhost:8080', // 本地环境
+        // target: 'http://localhost:8080', // 本地环境
         // target: 'http://139.224.14.153:8080', // 测试环境
-        // target: 'http://192.168.1.118:8080',
+        target: 'http://192.168.1.118:8080',
         changeOrigin: true,
         secure: false,
         // pathRewrite: { '^/api': '' }

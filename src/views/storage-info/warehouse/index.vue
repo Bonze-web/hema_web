@@ -264,6 +264,9 @@ export default {
 
 <style lang="scss" scoped>
 @import "src/styles/mixin.scss";
+/deep/.el-table--enable-row-transition .el-table__body td {
+  text-align: center;
+}
 </style>
 <style lang="scss">
 .table-index {

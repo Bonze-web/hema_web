@@ -189,7 +189,7 @@ export default {
                 this.$router.go(-1)
               })
               .catch(err => {
-                if(err && err.code !== 200) {
+                if (err && err.code !== 200) {
                   this.$message.error("创建失败" + err.message)
                 }
                 // this.$message.error("创建失败" + err.message)

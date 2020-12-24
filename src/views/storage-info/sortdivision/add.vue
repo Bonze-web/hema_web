@@ -23,7 +23,7 @@
             <div>
                 <template>
                     <el-tabs v-model="tabActiveName">
-                        <el-tab-pane label="码头" name="suppliers">
+                        <el-tab-pane label="拣货分区" name="suppliers">
                             <div class="info-title">基本信息</div>
                              <el-form :model="form" :rules="createRules" ref="form" label-width="100px" class="demo-ruleForm">
                                 <el-row :gutter="20">
@@ -53,7 +53,7 @@
             <div>
                 <template>
                     <el-tabs v-model="tabActiveName">
-                        <el-tab-pane label="码头" name="suppliers">
+                        <el-tab-pane label="拣货分区" name="suppliers">
                             <div class="info-title">基本信息</div>
                             <el-col :span="6" class="info-box">
                                 <div>代码:</div>
@@ -74,9 +74,9 @@
         </div>
         <!-- 下面是添加存储分区的顺序页面 -->
         <div style="height:20px;background:#fff" />
-        <div style="background:#fff">
+        <div style="background:#fff" class="table-index">
           <el-row>
-             <el-button style="margin:18px 10px" type="primary" size="mini"><span class="iconfont iconplus-fill" style="font-size:12px;"></span> 新建</el-button>
+             <el-button style="margin:18px 10px" type="primary" size="mini" @click="establish = true"><span class="iconfont iconplus-fill" style="font-size:12px;"></span> 新建</el-button>
           </el-row>
           <el-table
               :data="storageList"
@@ -98,9 +98,10 @@
                     size="mini"
                     type="text"
                     @click="
-                      statusChange(scope.row.status, scope.row.id, scope.row.version)
+                     dialogFormVisible = true
                     "
-                    >启用</el-button
+                    class="setting-up-procedure"
+                    >调序</el-button
                   >
                   <el-button
                     size="mini"
@@ -108,7 +109,7 @@
                     @click="
                       statusChange(scope.row.status, scope.row.id, scope.row.version)
                     "
-                    >禁用</el-button
+                    >删除</el-button
                   >
                 </template>
             </el-table-column>
@@ -125,73 +126,64 @@
               :total="totalCount">
           </el-pagination>
         </div>
-        <div class="pop-up-pag" v-show="popShow">
-           <!-- 左边的按钮 -->
-            <div class="right-popstorge">
-              <div class="count-tatle">
-                {{'1'}}/{{'625'}}项
-              </div>
-              <div class="center-pag">
-                 <el-input
-                  placeholder="请输入内容"
-                  v-model="popstorge.searchOne">
-                  <i slot="prefix" class="el-input__icon el-icon-search"></i>
-                </el-input>
-                <div>
-                    <el-checkbox v-model="popstorge.checkedOne">存储分区</el-checkbox>
-                </div>
-                <ul class="list-pop-ui">
-                  <li>
-                    <el-checkbox v-model="popstorge.checkedOne"></el-checkbox>
-                    <div class="content-checked-one">
-                        狗蛋
-                    </div>
-                  </li>
-                </ul>
-              </div>
-               <!-- 下面这个是翻页 -->
-              <el-pagination
-                  style="float:right"
-                  @size-change="handleSizeChange"
-                  @current-change="handleCurrentChange"
-                  :current-page="1"
-                  :page-size="pageSize"
-                  layout="prev, pager, next"
-                  :total="totalCount">
-              </el-pagination>
+        <!-- 添加存储分区 -->
+         <el-dialog title="添加存储分区" :visible.sync="establish">
+            <div style="text-align: center">
+              <el-transfer
+                style="text-align: left; display: inline-block; height : 400px;"
+                v-model="value"
+                filterable
+                :left-default-checked="[2, 3]"
+                :right-default-checked="[1]"
+                :render-content="renderFunc"
+                :titles="['存储分区', '存储分区']"
+                :format="{
+                  noChecked: '${total}',
+                  hasChecked: '${checked}/${total}'
+                }"
+                @change="handleChange"
+                :data="data">
+                <el-pagination
+                :small="true"
+                slot="left-footer"
+                layout="prev, pager, next"
+                :total="1000">
+                </el-pagination>
+                <el-pagination
+                :small="true"
+                slot="right-footer"
+                layout="prev, pager, next"
+                :total="1000">
+                </el-pagination>
+                <!-- <el-button class="transfer-footer" slot="left-footer" size="small">操作</el-button> -->
+                <!-- <el-button class="transfer-footer" slot="right-footer" size="small">操作</el-button> -->
+              </el-transfer>
             </div>
-            <!-- 右边的按钮 -->
-            <div class="left-popstorge">
-              <div class="count-tatle">
-                {{'1'}}/{{'625'}}项
-              </div>
-               <el-input
-                  placeholder="请输入内容"
-                  v-model="popstorge.searchTwo">
-                  <i slot="prefix" class="el-input__icon el-icon-search"></i>
-              </el-input>
-              <div>
-                 <el-checkbox v-model="popstorge.checkedTwo">存储分区</el-checkbox>
-              </div>
-              <ul>
-                <li>
-                  <div>
-                      
-                  </div>
-                </li>
-              </ul>
-               <!-- 下面这个是翻页 -->
-              <el-pagination
-                  style="float:right"
-                  @size-change="handleSizeChange"
-                  @current-change="handleCurrentChange"
-                  :current-page="1"
-                  :page-size="pageSize"
-                  layout="prev, pager, next"
-                  :total="totalCount">
-              </el-pagination>
+            <div slot="footer" class="dialog-footer">
+              <el-button @click="establish = fasle;">取 消</el-button>
+              <el-button type="primary" @click="establish = fasle;">确 定</el-button>
             </div>
-        </div>
+        </el-dialog>
+        <el-dialog title="存储方案调序" :visible.sync="dialogFormVisible">
+          <el-form :model="form">
+            <el-form-item label="存储方案:" :label-width="formLabelWidth">
+              {{'[' + numberPop.code + ']' + numberPop.name}}
+            </el-form-item>
+            <el-form-item label="存储方案数量:" :label-width="formLabelWidth">
+              {{numberPop.totality}}
+            </el-form-item>
+            <el-form-item label="当前序号:" :label-width="formLabelWidth">
+              {{numberPop.curNum}}
+            </el-form-item>
+            <el-form-item label="调整序号:" :label-width="formLabelWidth">
+               <el-input-number size="mini" v-model="numberPop.afterNum" :max="numberPop.totality" :min="1"></el-input-number>
+            </el-form-item>
+          </el-form>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="dialogFormVisible = fasle;">取 消</el-button>
+            <el-button type="primary" @click="Cancellation">确 定</el-button>
+          </div>
+        </el-dialog>
     </div>
 </template>
 
@@ -202,6 +194,8 @@ import SortdivisionService from "@/api/service/SortdivisionService";
 export default {
   data() {
       return {
+        dialogFormVisible: false,
+        establish: false,
         // 弹出页面的存储
         popShow: false,
         popstorgeList: [],
@@ -216,11 +210,22 @@ export default {
         // 存储分区页面的展示 开始
         storageList: [
           {
+            code: "999",
             name: "天心区域",
-            orderNumber: 0,
+            orderNumber: 1,
             storageId: "111"
           }
         ],
+        // 调序的弹出框
+        numberPop: {
+          code: "999",
+          name: "天心区域",
+          orderNumber: 0,
+          storageId: "111",
+          totality: 2,
+          curNum: 1,
+          afterNum: 1
+        },
         // 存储分区页面的展示 结束
         status: '', // 页面状态
         id: '', 
@@ -237,7 +242,7 @@ export default {
             { required: true, message: '请输入代码', trigger: 'blur' }
           ],
           name: [
-            { required: true, message: '请输入码头名称', trigger: 'blur' }
+            { required: true, message: '请输入拣货分区名称', trigger: 'blur' }
           ],
           binScope: [
             { required: true, message: '请填写货位范围', trigger: 'blur' }
@@ -249,6 +254,11 @@ export default {
 
     },
     methods: {
+      // 计数区域的修改
+      Cancellation(idx) {
+        this.numberPop.curNum = this.numberPop.afterNum;
+        this.dialogFormVisible = false;
+      },
       levelChange() {
         console.log(this.form)
       },
@@ -310,13 +320,13 @@ export default {
           this.$message.error("获取详情失败" + err)
         })
       },
-      // 创建码头
+      // 创建拣货分区
       createSuppliers: function() {
-        // 创建新的码头的按钮
+        // 创建新的拣货分区的按钮
         this.$refs.form.validate(valid => {
           if (valid) {
             if (this.status === 'create') {
-              // 创建新的码头的按钮
+              // 创建新的拣货分区的按钮
               const reg = /^([1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[,]+[1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[-]+[1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[(]+[1-9]+\/[1-9]+[)]+)$/;
               console.log();
               if (!reg.test(this.form.binScope)) {
@@ -392,7 +402,6 @@ export default {
 
 <style lang="scss" scoped>
 @import "src/styles/mixin.scss";
-// 弹出框
 .pop-up-pag {
   position: absolute;
   left: 50%;
@@ -463,5 +472,14 @@ export default {
 .info-title{
     margin: 12px 0;
 }
-
+// 弹出框
+/deep/ .el-transfer-panel {
+  height : 100% !important;
+}
+</style>
+<style lang="scss">
+.table-index{
+@import "src/styles/mixin.scss";
+@include elTable;
+}
 </style>
