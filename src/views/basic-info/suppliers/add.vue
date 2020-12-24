@@ -54,7 +54,7 @@
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
-                                        <el-form-item label="邮编" prop="port">
+                                        <el-form-item label="邮编" prop="postCode">
                                             <el-input v-model="form.postCode"></el-input>
                                         </el-form-item>
                                     </el-col>
@@ -131,7 +131,7 @@ export default {
           address: [
             { required: true, message: '请输入地址', trigger: 'blur' }
           ],
-          port: [
+          postCode: [
             { pattern: /^[0-9]{6}$/, message: '请输入正确的邮编', trigger: 'blur' }
           ]
         }

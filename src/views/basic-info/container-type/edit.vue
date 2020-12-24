@@ -50,7 +50,7 @@
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
-                                        <el-form-item label="名称" prop="wrh">
+                                        <el-form-item label="所属仓库" prop="wrhId">
                                             <el-select v-model="form.wrhId" placeholder="请选择所属仓库">
                                               <el-option v-for="item in wrhList" :key="item.id" :label="item.name" :value="item.id"></el-option>
                                             </el-select>
@@ -310,7 +310,7 @@ export default {
             { required: true, message: '请输入名称', trigger: 'blur' },
             { required: true, max: 32, message: '最多输入32位', trigger: 'change' }
           ],
-          wrh: [
+          wrhId: [
             { required: true, message: '请选择所属仓库', trigger: 'blur' }
           ],
           barcodeprefix: [
@@ -425,6 +425,11 @@ export default {
         .then((res) => {
           this.containerTypeInfo = res
           // 根据状态修改
+          if (this.containerTypeInfo.shipflage) {
+            this.containerTypeInfo.shipflage = "true"
+          } else {
+            this.containerTypeInfo.shipflage = "false"
+          }
           if (this.containerTypeInfo.status === "ON") {
             this.containerTypeInfo.status = true
           } else {
@@ -459,6 +464,7 @@ export default {
               .then(res => {
                 console.log(res)
                 this.$message.success("创建成功")
+                this.$store.dispatch("tagsView/delView", this.$route);
                 this.$router.go(-1)
               })
               .catch(err => {

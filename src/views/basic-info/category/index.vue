@@ -183,7 +183,8 @@ export default {
               status: res.records[item].status,
               sourceType: res.records[item].sourceType,
               level: res.records[item].level,
-              parentName: res.records[item].parentName
+              parentName: res.records[item].parentName,
+              parentCode: res.records[item].parentCode
             }
             if (obj.status === "enabled") {
               obj.status = true

@@ -79,7 +79,7 @@
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
-                                        <el-form-item label="邮编" prop="port">
+                                        <el-form-item label="邮编" prop="zipCode">
                                             <el-input maxlength="6" v-model="form.zipCode"></el-input>
                                         </el-form-item>
                                     </el-col>
@@ -138,7 +138,7 @@ export default {
             { required: true, message: '请输入类别代码', trigger: 'blur' }
           ],
           name: [
-            { required: true, message: '请输入供应商名称', trigger: 'blur' }
+            { required: true, message: '请输入物流中心名称', trigger: 'blur' }
           ],
           contactPhone: [
             { required: true, message: '请输入联系方式', trigger: 'blur' },
@@ -151,9 +151,9 @@ export default {
             { required: true, message: '请输入地址', trigger: 'blur' }
           ],
           type: [
-            { required: true, message: '请选择配送中心类型', trigger: 'blur' }
+            { required: true, message: '请选择物流中心类型', trigger: 'blur' }
           ],
-          port: [
+          zipCode: [
             { pattern: /^[0-9]{6}$/, message: '请输入正确的邮编', trigger: 'blur' }
           ]
         }
@@ -256,6 +256,7 @@ export default {
               .then(res => {
                 console.log(res)
                 this.$message.success("更新成功")
+                this.$store.dispatch("tagsView/delView", this.$route);
                 this.$router.go(-1)
               })
               .catch(err => {

@@ -75,7 +75,7 @@
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
-                                        <el-form-item label="邮编" prop="port">
+                                        <el-form-item label="邮编" prop="postCode">
                                             <el-input v-model="form.postCode"></el-input>
                                         </el-form-item>
                                     </el-col>
@@ -161,8 +161,8 @@
                                 <div>{{ suppliersInfo.remark ? suppliersInfo.remark : "&lt;空&gt;" }}</div>
                             </el-col>
                         </el-tab-pane>
-                        <!-- <el-tab-pane label="配送中心范围" name="range">配置管理</el-tab-pane>
-                        <el-tab-pane label="操作日志" name="log">角色管理</el-tab-pane> -->
+                        <!-- <el-tab-pane label="配送中心范围" name="range">配置管理</el-tab-pane> -->
+                        <el-tab-pane label="操作日志" name="log">角色管理</el-tab-pane>
                     </el-tabs>
                 </template>
             </div>
@@ -213,10 +213,10 @@ export default {
             { required: true, message: '请输入联系人名称', trigger: 'blur' }
           ],
           address: [
-            { required: true, message: '请输入地址', trigger: 'blur' }
+            { required: false, message: '请输入地址', trigger: 'blur' }
           ],
-          port: [
-            { pattern: /^[0-9]{6}$/, message: '请输入正确的邮编', trigger: 'blur' }
+          postCode: [
+            { pattern: /^[0-9]{6,6}$/, message: '请输入正确的邮编', trigger: 'blur' }
           ]
         }
       }
