@@ -70,7 +70,7 @@
                     <el-button :disabled="!scope.row.status" size="mini" type="text" @click="statusChange(scope.row.status, scope.row.id, scope.row.version)">使用中</el-button>
                     <el-button :disabled="!scope.row.status" size="mini" type="text" @click="statusChange(scope.row.status, scope.row.id, scope.row.version)">停用</el-button> -->
                     <el-dropdown :hide-on-click="true" trigger="click" @command="statusChange" placement="bottom">
-                      <span class="el-dropdown-link" style="color:#409EFF; font-size:12px;">
+                      <span class="el-dropdown-link" style="color:#409EFF; font-size:12px;padding:7px 0;">
                         设置状态
                       </span>
                       <el-dropdown-menu slot="dropdown">

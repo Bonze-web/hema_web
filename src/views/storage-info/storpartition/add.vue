@@ -183,12 +183,16 @@ export default {
               }
               StorpartitionService.createSuppliers(this.form)
               .then(res => {
+                // console.log(res);
+               
                 this.$message.success("创建成功")
                 this.$router.go(-1)
               })
               .catch(err => {
-                console.log(err);
-                this.$message.error("创建失败" + err.message)
+                if(err && err.code !== 200) {
+                  this.$message.error("创建失败" + err.message)
+                }
+                // this.$message.error("创建失败" + err.message)
               })
             } else {
               // 因为提交的时候,需要传递状态值,所以先转换一下,这里是编辑
