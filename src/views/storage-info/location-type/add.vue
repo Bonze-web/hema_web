@@ -169,7 +169,7 @@ export default {
               this.$router.go(-1)
             })
             .catch(err => {
-              this.$message.error("创建失败" + err)
+              this.$message.error("创建失败" + err.message)
             })
           }
         })
@@ -180,7 +180,7 @@ export default {
       .then(res => {
         this.records = res.records;
       }).catch((err) => {
-          this.$message.error("获取物流中心失败" + err)
+          this.$message.error("获取物流中心失败" + err.message)
       })
     },
     filters: {}

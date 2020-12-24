@@ -70,9 +70,6 @@
 
 
       <el-table :data="listData" @selection-change="handleSelectionChange"  style="width: 100%; text-align: center" :row-style="{ height: '16px', padding: '-4px' }" >
-
-        <!-- <el-table-column  type="selection"  style="height: 20px"></el-table-column> -->
-
         <el-table-column prop="code" label="条码" style="height: 20px">
           <template slot-scope="scope">
             <router-link style="color: #409eff" :to="{ path: '/basicinfo/container/edit' }" >
@@ -248,7 +245,6 @@ export default {
 
 <style lang="scss" scoped>
 @import "src/styles/mixin.scss";
-
 .table-index .el-table .cell{
   padding: 7px 0;
 }

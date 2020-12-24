@@ -95,7 +95,7 @@
 
 
         <!-- 展示 -->
-        <div class="info-content">
+        <div class="info-content table-index">
             <div>
                 <template>
                     <el-tabs v-model="tabActiveName">
@@ -129,8 +129,37 @@
                                 <div>目标位置:</div>
                                 <div>{{ wmsBintypeInfo.remark ? wmsBintypeInfo.remark : "&lt;空&gt;" }}</div>
                             </el-col>
+                            <br>
 
-                            <div class="info-title title">子容器</div>
+                            <el-col>
+                                <div  class="info-title title">子容器</div>
+                            </el-col>
+
+                            <div style="height:20px" />
+
+                            <el-table :data="listData" @selection-change="handleSelectionChange"  style="width: 100%; text-align: center" :row-style="{ height: '16px', padding: '-4px' }" >
+
+
+                            <el-table-column prop="code" label="条码" style="height: 20px">
+                              <template slot-scope="scope">
+                                <router-link style="color: #409eff" :to="{ path: '/basicinfo/container/edit' }" >
+                                  <span>条码{{ scope.row.code }}</span>
+                                </router-link>
+                              </template>
+                            </el-table-column>
+
+                            <el-table-column prop="code" label="容器类型" style="height: 20px">
+                              <template slot-scope="scope">
+                                <router-link style="color: #409eff" :to="{ path: '/basicinfo/container-type' }" >
+                                  <span>容器类型{{ scope.row.code }}</span>
+                                </router-link>
+                              </template>
+                            </el-table-column>
+
+                            <el-table-column prop="height" label="状态"></el-table-column>
+
+                          </el-table>
+
 
                         </el-tab-pane>
 
@@ -337,5 +366,12 @@ export default {
 }
 .info-title{
     margin: 12px 0;
+}
+
+</style>
+<style lang="scss">
+.table-index {
+  @import "src/styles/mixin.scss";
+  @include elTable;
 }
 </style>
