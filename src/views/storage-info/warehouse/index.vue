@@ -39,12 +39,8 @@
         </router-link>
       </el-row>
 
-      <el-table
-        :data="listData"
-        style="width: 100%; text-align: center"
-        :row-style="{ height: '16px', padding: '-4px' }"
-      >
-        <el-table-column fixed prop="code" label="代码" style="height: 20px">
+      <el-table :data="listData" style="width: 100%; text-align: center" :row-style="{ height: '16px'}">
+        <el-table-column prop="code" label="代码" style="height: 20px">
           <template slot-scope="scope">
             <router-link style="color: #409eff" :to="{ path: '/storageinfo/warehouse/edit', query: { status: 'read', id: scope.row.id }, }" >
               <span>{{ scope.row.code }}</span>
@@ -65,7 +61,7 @@
             {{ scope.row.status | categoryStatus }}
           </template>
         </el-table-column>
-        <el-table-column fixed="right" label="操作" width="200">
+        <el-table-column label="操作" width="200">
           <template slot-scope="scope">
             <el-button
               :disabled="scope.row.status"

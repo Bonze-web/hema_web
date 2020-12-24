@@ -101,6 +101,20 @@ export default {
     removeArea(id, version) {
         return request.delete('/wms/bin/deleteZone?id=' + id + '&version=' + version)
     },
+    /**
+     * 
+     * 更新货区
+     */
+    updateArea() {
+        return request.put('/wms/bin/updateZone')
+    },
+    /**
+     * 
+     *  查询货区详情 
+     */
+    getAreaDetail(id) {
+        return request.get('/wms/bin/getZoneById?id=' + id)
+    },
      /**
       * 查询所有货区
       */
@@ -116,7 +130,7 @@ export default {
       * 新建货道
       */
      createLane(postData) {
-        return request.post('/wms/bin/createPath', postData)
+        return request.post('/wms/bin/batchCreatePath', postData)
      },
      /**
       * 删除货道
@@ -139,7 +153,7 @@ export default {
       * 新建货架
       */
      createShelf(postData) {
-        return request.post('/wms/bin/createShelf', postData)
+        return request.post('/wms/bin/batchCreateShelf', postData)
      },
      /**
       * 删除货架
@@ -162,13 +176,27 @@ export default {
       * 新建货位
       */
      createSpace(postData) {
-        return request.post('/wms/bin/createBin', postData)
+        return request.post('/wms/bin/batchCreateBin', postData)
      },
      /**
       * 删除货位
       */
     removeSpace(id, version) {
         return request.delete('/wms/bin/deleteBin?id=' + id + '&version=' + version)
+    },
+    /**
+     * 
+     *  查询货位详情 
+     */
+    getLaneDetail(id) {
+        return request.get('/wms/bin/getBinById?id=' + id)
+    },
+    /**
+     * 
+     * 更新货位 
+     */
+    updateSpace() {
+        return request.put('/wms/bin/updateBin')
     },
      /**
       * 查询所有货位
