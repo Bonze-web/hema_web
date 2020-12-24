@@ -58,7 +58,7 @@ export default {
       searchCount: true,
       ...opts
     }
-    return request.get('/rpt/custom/definition/query', {
+    return request.get('/report/customReport/query', {
       params: params,
       paramsSerializer: function(params) {
         // 用来解决axios默认将数组参数序列化成a[]=1&a[]=2...，导致后台无法识别参数
@@ -72,7 +72,7 @@ export default {
    * 新增报表
    */
   create(postData) {
-    return request.post('/rpt/custom/definition/create', postData);
+    return request.post('/report/customReport/create', postData);
   },
   /**
    * 根据id查询报表
@@ -82,7 +82,7 @@ export default {
     var params = {
       id: id
     }
-    return request.get('/rpt/custom/definition/getById', {
+    return request.get('/report/customReport/getById', {
       params: params
     });
   },
@@ -92,7 +92,7 @@ export default {
    * @param id 报表标识
    */
   online(id) {
-    return request.put('/rpt/custom/definition/online?id=' + id);
+    return request.put('/report/customReport/online?id=' + id);
   },
 
   /**
@@ -100,13 +100,13 @@ export default {
    * @param id 报表标识
    */
   offline(id) {
-    return request.put('/rpt/custom/definition/offline?id=' + id);
+    return request.put('/report/customReport/offline?id=' + id);
   },
   /**
    * 修改报表
    */
   update(postData) {
-    return request.put('/rpt/custom/definition/update', postData);
+    return request.put('/report/customReport/update', postData);
   },
   /**
    * 查询报表

@@ -13,7 +13,7 @@ export default {
     var params = {
       id: id
     }
-    return request.get('/rpt/custom/definition/getById', {
+    return request.get('/report/customReport/getById', {
       params: params
     })
   },
@@ -22,7 +22,7 @@ export default {
    * 取得当前用户已授权的报表列表
    */
   getReports() {
-    return request.get('/rpt/custom/definition/getAuthorized')
+    return request.get('/report/customReport/getAuthorized')
   },
 
   /**
