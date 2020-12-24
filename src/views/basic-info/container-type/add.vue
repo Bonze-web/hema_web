@@ -194,7 +194,7 @@ export default {
             { required: true, max: 32, message: '最多输入32位', trigger: 'change' }
           ],
           wrh: [
-            { required: true, message: '请选择所属仓库', trigger: 'blur' },
+            { required: true, message: '请选择所属仓库', trigger: 'blur' }
           ],
           barcodeprefix: [
             { required: true, message: '请输入联系方式', trigger: 'blur' },
