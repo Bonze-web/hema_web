@@ -63,7 +63,7 @@
               type="text"
               size="mini"
               v-if="node.level === 1 || node.level === 4"
-              @click="() => append(data)">
+              @click="() => edit(data)">
               编辑
             </el-button>
             <el-button
@@ -104,17 +104,17 @@
     <!-- 新增货道 -->
       <el-dialog width="40%" title="新增货道" :visible.sync="dialogFormLane">
         <el-form :model="formLane" :rules="laneRules" ref="formLane">
-          <el-form-item label="起始货区" :label-width="formLabelWidth" prop="statrAreaAndEnd">
-            <el-input v-model="formLane.startZoneCode" autocomplete="off"></el-input>
+          <el-form-item label="起始货区" :label-width="formLabelWidth" prop="startZoneCode">
+            <el-input v-model="formLane.startZoneCode"></el-input>
           </el-form-item>
-          <el-form-item label="截止货区" :label-width="formLabelWidth" prop="statrAreaAndEnd">
-            <el-input v-model="formLane.endZoneCode" autocomplete="off"></el-input>
+          <el-form-item label="截止货区" :label-width="formLabelWidth" prop="endZoneCode">
+            <el-input v-model="formLane.endZoneCode"></el-input>
           </el-form-item>
-          <el-form-item label="起始货道" :label-width="formLabelWidth" prop="startLane">
-            <el-input v-model="formLane.startPath" autocomplete="off"></el-input>
+          <el-form-item label="起始货道" :label-width="formLabelWidth" prop="startPath">
+            <el-input v-model="formLane.startPath"></el-input>
           </el-form-item>
-          <el-form-item label="平均货道数" :label-width="formLabelWidth" prop="averageLane">
-            <el-input v-model="formLane.size" autocomplete="off"></el-input>
+          <el-form-item label="平均货道数" :label-width="formLabelWidth" prop="size">
+            <el-input v-model="formLane.size"></el-input>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -127,17 +127,17 @@
     <!-- 新增货架 -->
       <el-dialog width="40%" title="新增货架" :visible.sync="dialogFormShelf">
         <el-form :model="formShelf" :rules="shelfRules" ref="formShelf">
-          <el-form-item label="起始货道" :label-width="formLabelWidth" prop="statrLaneAndEnd">
-            <el-input v-model="formLane.startPathCode" autocomplete="off"></el-input>
+          <el-form-item label="起始货道" :label-width="formLabelWidth" prop="startPathCode">
+            <el-input v-model="formShelf.startPathCode"></el-input>
           </el-form-item>
-          <el-form-item label="截止货道" :label-width="formLabelWidth" prop="statrLaneAndEnd">
-            <el-input v-model="formLane.endPathCode" autocomplete="off"></el-input>
+          <el-form-item label="截止货道" :label-width="formLabelWidth" prop="endPathCode">
+            <el-input v-model="formShelf.endPathCode"></el-input>
           </el-form-item>
           <el-form-item label="起始货架" :label-width="formLabelWidth" prop="startShelf">
-            <el-input v-model="formLane.startShelf" autocomplete="off"></el-input>
+            <el-input v-model="formShelf.startShelf"></el-input>
           </el-form-item>
-          <el-form-item label="平均货道数" :label-width="formLabelWidth" prop="averageShelf">
-            <el-input v-model="formLane.szie" autocomplete="off"></el-input>
+          <el-form-item label="平均货道数" :label-width="formLabelWidth" prop="szie">
+            <el-input v-model="formShelf.szie"></el-input>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -152,47 +152,47 @@
         <el-form :model="formSpace" ref="formSpace" :rules="spaceRules">
           <el-row :gutter="20">
             <el-col :span="12">
-              <el-form-item label="货架范围" :label-width="formLabelWidth" prop="statrShelfAndEnd">
+              <el-form-item label="货架范围" :label-width="formLabelWidth" prop="startShelfCode">
                 <el-input v-model="formSpace.startShelfCode" autocomplete="off"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="7">
-            <el-form-item label="" prop="statrShelfAndEnd">
+            <el-form-item label="" prop="endShelfCode">
               <el-input v-model="formSpace.endShelfCode" autocomplete="off"></el-input>
             </el-form-item>
             </el-col>
           </el-row>
           <el-row :gutter="20">
             <el-col :span="12">
-              <el-form-item label="列码范围" :label-width="formLabelWidth" prop="startAndEndRow">
+              <el-form-item label="列码范围" :label-width="formLabelWidth" prop="startRowCode">
                 <el-input v-model="formSpace.startRowCode" autocomplete="off"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="7">
-            <el-form-item label="" prop="startAndEndRow">
+            <el-form-item label="" prop="endRowCode">
               <el-input v-model="formSpace.endRowCode" autocomplete="off"></el-input>
             </el-form-item>
             </el-col>
           </el-row>
           <el-row :gutter="20">
             <el-col :span="12">
-              <el-form-item label="层码范围" :label-width="formLabelWidth" prop="startAndEndFloor">
+              <el-form-item label="层码范围" :label-width="formLabelWidth" prop="startFloorCode">
                 <el-input v-model="formSpace.startFloorCode" autocomplete="off"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="7">
-            <el-form-item label="" prop="startAndEndFloor">
+            <el-form-item label="" prop="endFloorCode">
               <el-input v-model="formSpace.endFloorCode" autocomplete="off"></el-input>
             </el-form-item>
             </el-col>
           </el-row>
           
-          <el-form-item label="货位用途" :label-width="formLabelWidth" prop="spaceUsage">
+          <el-form-item label="货位用途" :label-width="formLabelWidth" prop="binusage">
             <el-select v-model="formSpace.binusage" placeholder="请选择货位用途">
               <el-option v-for="item in binUsage" :key="item.value" :label="item.name" :value="item.value"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="货位类型" :label-width="formLabelWidth" prop="spaceType">
+          <el-form-item label="货位类型" :label-width="formLabelWidth" prop="bintypeId">
             <el-select v-model="formSpace.bintypeId" placeholder="请选择货位类型">
               <el-option v-for="item in bintypeList" :key="item.id" :label="item.name" :value="item.id"></el-option>
             </el-select>
@@ -244,7 +244,7 @@ import StorageService from "@/api/service/StorageService";
         wrhList: [], // 仓库列表
         formLabelWidth: '120px',
         props: {
-          label: 'name',
+          label: 'label',
           children: [],
           isLeaf: 'leaf'
         },
@@ -279,15 +279,17 @@ import StorageService from "@/api/service/StorageService";
           startPath: '' // 起始货道
         },
         laneRules: {
-          statrAreaAndEnd: [
+          startZoneCode: [
             { required: true, pattern: /^[A-Z0-9]{0,2}$/, message: '请输入最多两位的数字和大写字母的组合(例:H1)', trigger: 'change' }
           ],
-          averageLane: [
+          endZoneCode: [
+            { required: true, pattern: /^[A-Z0-9]{0,2}$/, message: '请输入最多两位的数字和大写字母的组合(例:H1)', trigger: 'change' }
+          ],
+          size: [
             { required: true, pattern: /^([1-9]|[1-9]\\d|100)$/, message: '请输入1-100的整数', trigger: 'change' }
           ],
-          startLane: [
-            { required: true, max: 2, message: '最多输入两位数字', trigger: 'change' },
-            { type: 'number', message: '只能输入数字', trigger: 'change' }
+          startPath: [
+            { required: true, pattern: /^[A-Z0-9]{0,2}$/, message: '只能输入最多两位数字', trigger: 'change' }
           ]
         },
         dialogFormLane: false,
@@ -299,15 +301,17 @@ import StorageService from "@/api/service/StorageService";
           startShelf: ''
         },
         shelfRules: {
-          statrLaneAndEnd: [
+          startPathCode: [
             { required: true, pattern: /^[A-Z0-9]{0,2}$/, message: '请输入最多两位的数字和大写字母的组合(例:H1)', trigger: 'change' }
           ],
-          averageShelf: [
+          endPathCode: [
+            { required: true, pattern: /^[A-Z0-9]{0,2}$/, message: '请输入最多两位的数字和大写字母的组合(例:H1)', trigger: 'change' }
+          ],
+          size: [
             { required: true, pattern: /^([1-9]|[1-9]\\d|100)$/, message: '请输入1-100的整数', trigger: 'change' }
           ],
           startShelf: [
-            { required: true, max: 2, message: '最多输入两位数字', trigger: 'change' },
-            { type: 'number', message: '只能输入数字', trigger: 'change' }
+            { required: true, pattern: /^[A-Z0-9]{0,2}$/, message: '只能输入最多两位数字', trigger: 'change' }
           ]
         },
         dialogFormShelf: false,
@@ -324,19 +328,28 @@ import StorageService from "@/api/service/StorageService";
           remark: ''
         },
         spaceRules: {
-          statrShelfAndEnd: [
-            { required: true, pattern: /^[A-Z0-9]{6,6}$/, message: '请输入六位的数字和大写字母的组合(例:H1H1H1)', trigger: 'change' }
+          startShelfCode: [
+            { required: true, pattern: /^[A-Z0-9]{6,6}$/, message: '请输入六位数字与字母的组合', trigger: 'change' }
           ],
-          startAndEndRow: [
+          endShelfCode: [
+            { required: true, pattern: /^[A-Z0-9]{6,6}$/, message: '请输入六位数字与字母的组合', trigger: 'change' }
+          ],
+          startRowCode: [
             { required: true, pattern: /^[1-9]{1}$/, message: '请输入1-9的数字', trigger: 'change' }
           ],
-          startAndEndFloor: [
+          endRowCode: [
             { required: true, pattern: /^[1-9]{1}$/, message: '请输入1-9的数字', trigger: 'change' }
           ],
-          spaceType: [
+          startFloorCode: [
+            { required: true, pattern: /^[1-9]{1}$/, message: '请输入1-9的数字', trigger: 'change' }
+          ],
+          endFloorCode: [
+            { required: true, pattern: /^[1-9]{1}$/, message: '请输入1-9的数字', trigger: 'change' }
+          ],
+          bintypeId: [
             { required: true, message: '请选择货位类型', trigger: 'blur' }
           ],
-          spaceUsage: [
+          binusage: [
             { required: true, message: '请选择货位用途', trigger: 'blur' }
           ]
         },
@@ -377,7 +390,8 @@ import StorageService from "@/api/service/StorageService";
         // this.dialogFormArea = false
         this.createArea()
       } else if (this.dialogFormLane) {
-        this.dialogFormLane = false
+        // this.dialogFormLane = false
+        this.createLane()
       } else if (this.dialogFormShelf) {
         this.dialogFormShelf = false
       } else if (this.dialogFormSpace) {
@@ -392,11 +406,12 @@ import StorageService from "@/api/service/StorageService";
       .then((res) => {
         node.children = res.records
         if (res.records.length === 0) {
-          resolve()
+          resolve([])
         }
       })
-      .catch(() => {
-        resolve()
+      .catch((err) => {
+        this.$message.error('加载失败' + err.message)
+        resolve([])
       })
       }
     },
@@ -422,6 +437,7 @@ import StorageService from "@/api/service/StorageService";
         this.$message.error('加载货区失败' + err.message)
       })
     },
+    // 创建
     createArea: function() {
       // 新建货区
       this.$refs.formArea.validate(valid => {
@@ -515,6 +531,7 @@ import StorageService from "@/api/service/StorageService";
         }
       })
     },
+    // 货区所有仓库
     getWrhQuery: function() {
       const data = {
         page: 1,
@@ -528,6 +545,7 @@ import StorageService from "@/api/service/StorageService";
         this.$message('获取仓库列表失败' + err.message)
       })
     },
+    // 货区货位类型
     getBinType: function() {
       const data = {
         page: 1,
@@ -539,6 +557,49 @@ import StorageService from "@/api/service/StorageService";
       })
       .catch((err) => {
         this.$message.error('获取货位类型失败' + err.message)
+      })
+    },
+    remove: function(node, data){
+      const parent = node.parent;
+      const children = parent.data.children || parent.data;
+      const index = children.findIndex(d => d.id === data.id);
+      children.splice(index, 1);
+    },
+    // 删除
+    removeArea: function() {
+      StorageService.removeArea(id, version)
+      .then((res) => {
+        this.$message.success('删除成功')
+      })
+      .catct((err) => {
+        this.$message.error('删除失败' + err.message)
+      })
+    },
+    removeSpace: function() {
+      StorageService.removeSpace(id, version)
+      .then((res) => {
+        this.$message.success('删除成功')
+      })
+      .catct((err) => {
+        this.$message.error('删除失败' + err.message)
+      })
+    },
+    removeLane: function() {
+      StorageService.removeLane(id, version)
+      .then((res) => {
+        this.$message.success('删除成功')
+      })
+      .catct((err) => {
+        this.$message.error('删除失败' + err.message)
+      })
+    },
+    removeShelf: function() {
+      StorageService.removeShelf(id, version)
+      .then((res) => {
+        this.$message.success('删除成功')
+      })
+      .catct((err) => {
+        this.$message.error('删除失败' + err.message)
       })
     }
   },

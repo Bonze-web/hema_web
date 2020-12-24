@@ -9,7 +9,7 @@
                     <el-select v-model="form.status" placeholder="请选择状态">
                     <el-option label="全部" value=""></el-option>
                     <el-option label="启用" value="OPEN"></el-option>
-                    <el-option label="禁用" value="COLOSED"></el-option>
+                    <el-option label="禁用" value="CLOSED"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item>
@@ -158,7 +158,7 @@ export default {
           pageSize: this.pageSize,
           searchCount: true,
           codeOrNameEquals: this.form.nameOrCode,
-          status: this.form.status
+          statusEquals: this.form.status
         }
         BasicService.getSuppliersList(data)
         .then((res) => {
