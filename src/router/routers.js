@@ -492,8 +492,7 @@ const StorageInfoPackage = {
         icon: 'table'
       }
     }] 
-  },
-  {
+  }, {
     path: "wharf",
     name: "Wharf",
     component: AModule,
@@ -615,8 +614,26 @@ const StorageInfoPackage = {
           icon: 'table'
         }
       }] 
-  }
-]
+  }, {
+    path: "freightarea",
+    name: "FreightArea",
+    component: AModule,
+    meta: {
+      title: '货区',
+      icon: 'table'
+    },
+    children: [{
+      path: "",
+      name: "FreightAreaView",
+      component: () =>
+        import('@/views/storage-info/freight-area/index'),
+        hidden: true,
+      meta: {
+        title: '货区',
+        icon: 'table'
+      }
+    }]
+  }]
 }
 
 /**

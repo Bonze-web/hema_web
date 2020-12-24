@@ -75,7 +75,7 @@ import { mapGetters } from "vuex";
 
 const ORG_TYPE_NAMES = {
   GROUP: "总公司",
-  COMPANY: "分公司"
+  DC: "物流中心"
 };
 
 export default {
