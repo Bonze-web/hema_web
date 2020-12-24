@@ -42,9 +42,7 @@
 
         <el-form-item label="容器类型：">
           <el-select v-model="form.containerTypeCodeEquals" placeholder="请选择容器类型：">
-            <el-option label="全部" value=""></el-option>
-            <el-option label="启用" value="OFF"></el-option>
-            <el-option label="禁用" value="ON"></el-option>
+            <el-option v-for="(item, index) in containerType" :key="index" :label="item.name" :value="item.id"></el-option>
           </el-select>
         </el-form-item>
 
@@ -113,20 +111,21 @@
 </template>
 
 <script>
-// import BasicService from "@/api/service/BasicService";
+import BasicService from "@/api/service/BasicService";
 
 export default {
   data() {
     return {
       listData: [], // 列表数据
-      // form: {
-      //   barCodeLikes: '',//条码
-      //   useStatusEquals: '', //状态
-      //   positionCodeOrNameEquals: '',// 当前位置
-      //   parentBarcodeLikes: '',//父容器
-      //   containerTypeCodeEquals: '',//容器类型code值
-      //   useNameOrCodeLikes: ''//使用对象名称或者代码的值
-      // },
+      containerType: [], // 容器类型
+      form: {
+        barCodeLikes: '', // 条码
+        useStatusEquals: '', // 状态
+        positionCodeOrNameEquals: '', // 当前位置
+        parentBarcodeLikes: '', // 父容器
+        containerTypeCodeEquals: '', // 容器类型code值
+        useNameOrCodeLikes: '' // 使用对象名称或者代码的值
+      },
       page: 1,
       pageSize: 10,
       totalCount: 0
@@ -143,7 +142,7 @@ export default {
 
       this.$refs.form.validate((result) => {
         if (result) {
-          _this.getWmsBintypeQuery();
+          _this.quertOcntainer();
         }
       });
     },
@@ -155,10 +154,10 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        // StorageService.deleteWmsBintype(id, version)
+        // BasicService.deleteWmsBintype(id, version)
         // .then(res => {
         //   this.$message.success("删除成功")
-        //   _this.getWmsBintypeQuery()
+        //   _this.quertOcntainer()
         // })
         // .catch(err => {
         //   this.$message.error("删除失败" + err.message)
@@ -172,64 +171,72 @@ export default {
     },
     clearInput: function() {
       this.form = {
-        code: "",
-        name: ""
+        barCodeLikes: '',
+        useStatusEquals: '',
+        positionCodeOrNameEquals: '',
+        parentBarcodeLikes: '',
+        containerTypeCodeEquals: '',
+        useNameOrCodeLikes: ''
       };
     },
-    getWmsBintypeQuery: function(reset) {
-      // 获取货位列表
+    quertOcntainer: function() {
+      // 获取容器列表
       this.suppliersData = []
 
-      // const _this = this;
+      const _this = this;
 
-      // const data = {
-      //   codeEqualsOrNameLike: this.form.codeEqualsOrNameLike,
-      //   page: this.page,
-      //   pageSize: this.pageSize,
-      //   searchCount: true
-      // };
 
-      // StorageService.getWmsBintypeQuery(data).then((res) => {
-      //   const records = res.records;
+      const data = {
+        barCodeLikes: this.form.barCodeLikes,
+        useStatusEquals: this.form.useStatusEquals,
+        positionCodeOrNameEquals: this.form.positionCodeOrNameEquals,
+        parentBarcodeLikes: this.form.parentBarcodeLikes,
+        containerTypeCodeEquals: this.form.containerTypeCodeEquals,
+        useNameOrCodeLikes: this.form.useNameOrCodeLikes
+      };
 
-      //   this.totalCount = res.totalCount;
+      BasicService.quertOcntainer(data).then((res) => {
+        const records = res.records;
 
-      //   _this.listData = records;
-      // }).catch(err => {
-      //   this.$message.error("数据请求失败" + err.message)
-      // });
+        this.totalCount = res.totalCount;
+
+        _this.listData = records;
+      }).catch(err => {
+        this.$message.error("数据请求失败" + err.message)
+      });
     },
     handleCurrentChange: function(e) {
       this.page = Number(e);
-      this.getWmsBintypeQuery(true);
+      this.quertOcntainer(true);
     },
     handleSizeChange: function(e) {
       this.pageSize = Number(e);
       this.page = 1;
-      this.getWmsBintypeQuery(true);
+      this.quertOcntainer(true);
+    },
+    getContainerType: function() {
+      // 获取容器类型
+      BasicService.getContainerTypeList({
+        page: 1,
+        pageSize: 0,
+        statusEquals: 'ON'
+      })
+      .then(res => {
+        this.containerType = res.records
+      })
+      .catch(err => {
+        this.$message.error("获取容器类型失败" + err.message)
+      })
     }
-    // getWmsBintypeQuery: function() {
-    //   const data = {
-    //     page: this.page,
-    //     pageSize: this.pageSize
-    //   };
-
-    //   BasicService.getWmsBintypeQuery(data)
-    //   .then(res => {
-    //     console.log(res)
-    //   })
-    //   .catch(err => {
-    //     this.$message.error("数据请求失败" + err.message)
-    //   });
-    // }
   },
   created() {
-    this.getWmsBintypeQuery();
+    this.quertOcntainer();
+    this.getContainerType() // 获容器类型
   },
   beforeRouteEnter(to, from, next) {
     next(vm => {
       // 通过 `vm` 访问组件实例
-      vm.getWmsBintypeQuery(0);
+      vm.quertOcntainer(0);
     })
   },
   filters: {}
