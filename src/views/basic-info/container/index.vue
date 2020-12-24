@@ -193,7 +193,9 @@ export default {
         positionCodeOrNameEquals: this.form.positionCodeOrNameEquals,
         parentBarcodeLikes: this.form.parentBarcodeLikes,
         containerTypeCodeEquals: this.form.containerTypeCodeEquals,
-        useNameOrCodeLikes: this.form.useNameOrCodeLikes
+        useNameOrCodeLikes: this.form.useNameOrCodeLikes,
+        page: this.page,
+        pageSize: this.pageSize
       };
 
       BasicService.quertOcntainer(data).then((res) => {
@@ -231,8 +233,8 @@ export default {
     }
   },
   created() {
-    this.quertOcntainer();
-    this.getContainerType() // 获容器类型
+    // this.quertOcntainer();
+    // this.getContainerType() // 获容器类型
   },
   beforeRouteEnter(to, from, next) {
     next(vm => {

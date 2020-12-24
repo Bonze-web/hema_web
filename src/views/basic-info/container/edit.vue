@@ -1,30 +1,31 @@
 <template>
     <div>
-        <div class="head" v-if="status === 'create' || status === 'edit'">
+        <!-- <div class="head">
             <div style="margin-top:8px" v-if="status === 'create'">新建类别</div>
             <div style="margin-top:8px" v-else>编辑</div>
             <div>
-                <el-button @click="back">取消</el-button>
-                <el-button type="primary" @click="createCategory">确认</el-button>
+                <el-button @click="back">返回</el-button>
+                <el-button type="primary" @click="createCategory">打印</el-button>
             </div>
-        </div>
+        </div> -->
 
-        <div class="head" v-if="status === 'read'">
+        <div class="head">
             <div class="head-title">
                 <div style="margin:8px">{{ '[' + wmsBintypeInfo.code + ']' + wmsBintypeInfo.name }}</div>
                 <template>
-                  <el-button type="text" @click="deleteWmsBintype">删除</el-button>
+                  <el-button type="text" @click="deleteWmsBintype">状态</el-button>
                 </template>
             </div>
             <div>
                 <el-button @click="back">返回</el-button>
-                <el-button type="primary" @click="editCategory">编辑</el-button>
+                <el-button type="primary" @click="editCategory">打印</el-button>
             </div>
         </div>
         <div style="height:20px" />
 
+
         <!-- 编辑 -->
-        <div class="info-content" v-if="status === 'create' || status === 'edit'">
+        <!-- <div class="info-content" v-if="status === 'create' || status === 'edit'">
             <div>
                 <template>
                     <el-tabs v-model="tabActiveName">
@@ -90,57 +91,52 @@
                     </el-tabs>
                 </template>
             </div>
-        </div>
+        </div> -->
 
 
         <!-- 展示 -->
-        <div class="info-content" v-if="status === 'read'">
+        <div class="info-content">
             <div>
                 <template>
                     <el-tabs v-model="tabActiveName">
                         <el-tab-pane label="货位类型" name="category">
                             <div class="info-title">基本信息</div>
                             <el-col :span="6" class="info-box">
-                                <div>代码:</div>
+                                <div>条码:</div>
                                 <div>{{ wmsBintypeInfo.code }}</div>
                             </el-col>
                             <el-col :span="6" class="info-box">
-                                <div>名称:</div>
-                                <div>{{ wmsBintypeInfo.name }}</div>
+                                <div>容器类型:</div>
+                                <router-link style="color: #409eff" :to="{ path: '/basicinfo/container/edit' }" >
+                                  {{ '[' + wmsBintypeInfo.code + ']' + wmsBintypeInfo.name }}
+                                </router-link>
                             </el-col>
                             <el-col :span="6" class="info-box">
-                                <div>存储盘数:</div>
+                                <div>所属对象:</div>
                                 <div>{{ wmsBintypeInfo.storageNumber }}</div>
                             </el-col>
-                            <el-col class="info-box">
-                                <div>备注:</div>
+                            <el-col :span="6" class="info-box">
+                                <div>父容器:</div>
                                 <div>{{ wmsBintypeInfo.remark ? wmsBintypeInfo.remark : "&lt;空&gt;" }}</div>
                             </el-col>
-                            </br>
-                            <div class="info-title" style="padding-top:22px">规格信息</div>
+
                             <el-col :span="6" class="info-box">
-                                <div>长度(cm):</div>
-                                <div>{{ wmsBintypeInfo.length }}</div>
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>宽度(cm):</div>
-                                <div>{{ wmsBintypeInfo.width }}</div>
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>高度(cm):</div>
+                                <div>当前位置:</div>
                                 <div>{{ wmsBintypeInfo.height }}</div>
                             </el-col>
+
                             <el-col :span="6" class="info-box">
-                                <div>承重(kg):</div>
-                                <div>{{ wmsBintypeInfo.weight }}</div>
+                                <div>目标位置:</div>
+                                <div>{{ wmsBintypeInfo.remark ? wmsBintypeInfo.remark : "&lt;空&gt;" }}</div>
                             </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>容积率(%):</div>
-                                <div>{{ wmsBintypeInfo.plotRatio }}</div>
-                            </el-col>
+
+                            <div class="info-title title">子容器</div>
+
                         </el-tab-pane>
 
-                        <!-- <el-tab-pane label="消息中心">消息中心</el-tab-pane> -->
+                        <el-tab-pane label="操作日志" name="active">
+                          1111
+                        </el-tab-pane>
                     </el-tabs>
                 </template>
             </div>
@@ -149,7 +145,6 @@
 </template>
 
 <script>
-// import { mapGetters } from "vuex";
 import StorageService from "@/api/service/StorageService";
 
 export default {
