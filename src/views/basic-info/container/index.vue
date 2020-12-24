@@ -185,10 +185,11 @@ export default {
 
       const _this = this;
 
+      console.log(this.form.useStatusEquals.toUpperCase())
 
       const data = {
         barCodeLikes: this.form.barCodeLikes,
-        useStatusEquals: this.form.useStatusEquals,
+        useStatusEquals: this.form.useStatusEquals.toUpperCase(),
         positionCodeOrNameEquals: this.form.positionCodeOrNameEquals,
         parentBarcodeLikes: this.form.parentBarcodeLikes,
         containerTypeCodeEquals: this.form.containerTypeCodeEquals,
@@ -245,14 +246,14 @@ export default {
 
 <style lang="scss" scoped>
 @import "src/styles/mixin.scss";
+
+.table-index .el-table .cell{
+  padding: 7px 0;
+}
 </style>
 <style lang="scss">
 .table-index {
   @import "src/styles/mixin.scss";
   @include elTable;
-}
-
-.table-index .el-table .cell{
-  padding: 7px 0;
 }
 </style>
