@@ -2,7 +2,7 @@
     <div>
         <div class="head">
             <div class="head-title">
-                <div style="margin:8px">新建货位类型</div>
+                <div style="margin:8px">新建容器</div>
             </div>
             <div>
                 <el-button @click="back">取消</el-button>
@@ -15,72 +15,43 @@
             <div>
                 <template>
                     <el-tabs v-model="tabActiveName">
-                        <el-tab-pane label="货位类型" name="category">
+                        <el-tab-pane label="容器" name="category">
                           <div class="info-title">基本信息</div>
                             <el-form :model="form" :rules="createRules" ref="form" label-width="100px" class="demo-ruleForm">
-                                <el-row :gutter="20">
-                                    <el-col :span="6" class="info-box">
-                                        <el-form-item label="代码" prop="code">
-                                            <el-input v-model="form.code"></el-input>
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col :span="6" class="info-box">
-                                        <el-form-item label="名称" prop="name">
-                                            <el-input v-model="form.name"></el-input>
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col :span="6" class="info-box">
-                                      <el-form-item label="存储盘数" prop="storageNumber">
-                                          <el-input v-model="form.storageNumber"></el-input>
-                                      </el-form-item>
-                                    </el-col>
 
-                                    <el-col :span="6" class="info-box">
-                                      <el-form-item label="物流中心" prop="dcId">
-                                        <el-select v-model="form.dcId" placeholder="请选择物流中心">
-                                          <el-option v-for="(item, index) in records" :key="index" :label="item.name" :value="item.id"></el-option>
-                                        </el-select>
-                                      </el-form-item>
-                                    </el-col>
+                                <el-row :gutter="20">
+                                  <el-col :span="6" class="info-box">
+                                    <el-form-item label="容器类型" prop="dcId">
+                                      <el-select v-model="form.dcId" placeholder="请选择容器类型">
+                                        <el-option v-for="(item, index) in records" :key="index" :label="item.name" :value="item.id"></el-option>
+                                      </el-select>
+                                    </el-form-item>
+                                  </el-col>
+
+                                  <el-col :span="6" class="info-box">
+                                    <el-form-item label="前缀" prop="code">
+                                        <el-input v-model="form.code" placeholder="请输入前缀"></el-input>
+                                    </el-form-item>
+                                  </el-col>
+
+                                  <el-col :span="6" class="info-box">
+                                    <el-form-item label="起始条码段" prop="code">
+                                        <el-input v-model="form.code" placeholder="请输入起始条码段"></el-input>
+                                    </el-form-item>
+                                  </el-col>
+
+                                  <el-col :span="6" class="info-box">
+                                    <el-form-item label="生成数量" prop="code">
+                                        <el-input v-model="form.code" placeholder="请输入生成数量"></el-input>
+                                    </el-form-item>
+                                  </el-col>
+
                                 </el-row>
 
                                 <el-form-item label="备注" prop="remark">
                                     <textarea v-model="form.remark"></textarea>
                                 </el-form-item>
 
-                             <div class="info-title">规格信息</div>
-
-                                <el-row :gutter="20">
-                                    <el-col :span="6" class="info-box">
-                                        <el-form-item label="长度(cm)" prop="length">
-                                            <el-input v-model="form.length"></el-input>
-                                        </el-form-item>
-                                    </el-col>
-
-                                    <el-col :span="6" class="info-box">
-                                        <el-form-item label="宽度(cm)" prop="width">
-                                            <el-input v-model="form.width"></el-input>
-                                        </el-form-item>
-                                    </el-col>
-
-                                    <el-col :span="6" class="info-box">
-                                      <el-form-item label="高度(cm)" prop="height">
-                                          <el-input v-model="form.height"></el-input>
-                                      </el-form-item>
-                                    </el-col>
-
-                                    <el-col :span="6" class="info-box">
-                                      <el-form-item label="承重(kg)" prop="weight">
-                                          <el-input v-model="form.weight"></el-input>
-                                      </el-form-item>
-                                    </el-col>
-
-                                    <el-col :span="6" class="info-box">
-                                      <el-form-item label="容积率(%)" prop="plotRatio">
-                                          <el-input v-model="form.plotRatio"></el-input>
-                                      </el-form-item>
-                                    </el-col>
-                                </el-row>
                             </el-form>
                         </el-tab-pane>
                     </el-tabs>

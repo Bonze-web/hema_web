@@ -4,13 +4,15 @@
             <el-form ref="form" style="display:flex" :model="form" label-width="60px" label-position="right">
                 <el-form-item label="码头">
                     <!-- 输入码头的id,方便后面的查找,查找和一开始获取数据的接口是同一个 -->
-                    <el-input type='text' placeholder="请输入代码/名称" v-model="form.nameOrCode" class="input-width"></el-input>
+                    <el-input type='text' placeholder="请输入代码/名称" v-model="form.codeEqOrNameLike" class="input-width"></el-input>
+                    <!-- <el-input type='text' placeholder="请输入名称" v-model="form.name" class="input-width"></el-input> -->
                 </el-form-item>
                 <el-form-item label="状态">
                     <el-select v-model="form.status" placeholder="请选择状态">
                     <el-option label="全部" value=""></el-option>
-                    <el-option label="启用" value="OPEN"></el-option>
-                    <el-option label="禁用" value="COLOSED"></el-option>
+                    <el-option label="空闲" value="IDLE"></el-option>
+                    <el-option label="使用中" value="USING"></el-option>
+                    <el-option label="停用" value="STOP"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item>
@@ -19,7 +21,9 @@
                 </el-form-item>
             </el-form>
         </div>
+        
         <div style="height:20px" />
+
         <div style="background:#fff">
           <el-row>
             <router-link :to="{ path: '/storageinfo/wharf/add', query:{ status: 'create'} }">
@@ -29,7 +33,7 @@
           </el-row>
             <el-table
                 :data="suppliersData"
-                style="width: 100%;text-align:center"
+                style="width: 100%"
             >
                 <!-- <el-table-column
                     type="selection"
@@ -43,22 +47,38 @@
                     </template>
                 </el-table-column>
                 <el-table-column prop="name" label="名称"></el-table-column>
-                <el-table-column prop="dockerusage" label="用途">
+                <el-table-column prop="usages" label="用途">
                     <template slot-scope="scope">
-                        {{ scope.row.dockerusage | purposeChange}}
+                        {{ scope.row.usages | purposeChange}}
                     </template>
                 </el-table-column>
                 <el-table-column prop="status" label="状态" >
                   <template slot-scope="scope">
+                    <!-- {{scope.row.status}} -->
                     {{ scope.row.status | suppliersStatus }}
                   </template>
                 </el-table-column>
                 <el-table-column
                 label="操作">
                   <template slot-scope="scope">
-                    <el-button :disabled="scope.row.status" size="mini" type="text" @click="statusChange(scope.row.status, scope.row.id, scope.row.version)">启用</el-button>
-                    <!-- <el-button :disabled="scope.row.status" size="mini" type="text" @click="statusChange(scope)">启用</el-button> -->
-                    <el-button :disabled="!scope.row.status" size="mini" type="text" @click="statusChange(scope.row.status, scope.row.id, scope.row.version)">禁用</el-button>
+                    <!-- <div class="status-chnage-box">
+                        <el-button size="mini" type="text" @click="statusChange(scope.row.status, scope.row.id, scope.row.version)">修改状态</el-button>
+                        
+                    </div> -->
+                    
+                    <!-- <el-button :disabled="scope.row.status" size="mini" type="text" @click="statusChange(scope.row.status, scope.row.id, scope.row.version)">休闲</el-button>
+                    <el-button :disabled="!scope.row.status" size="mini" type="text" @click="statusChange(scope.row.status, scope.row.id, scope.row.version)">使用中</el-button>
+                    <el-button :disabled="!scope.row.status" size="mini" type="text" @click="statusChange(scope.row.status, scope.row.id, scope.row.version)">停用</el-button> -->
+                    <el-dropdown :hide-on-click="true" trigger="click" @command="statusChange" placement="bottom">
+                      <span class="el-dropdown-link" style="color:#409EFF; font-size:12px;">
+                        设置状态
+                      </span>
+                      <el-dropdown-menu slot="dropdown">
+                        <el-dropdown-item :disabled="scope.row.status=='IDLE'" :command="[scope.row.id, scope.row.version, 'IDLE']">休闲</el-dropdown-item>
+                        <el-dropdown-item :disabled="scope.row.status=='USING'" :command="[scope.row.id, scope.row.version, 'USING']">使用中</el-dropdown-item>
+                        <el-dropdown-item :disabled="scope.row.status=='STOP'" :command="[scope.row.id, scope.row.version, 'STOP']">停用</el-dropdown-item>
+                      </el-dropdown-menu>
+                    </el-dropdown>
                   </template>
                 </el-table-column>
                 <!-- <el-table-column
@@ -98,7 +118,9 @@ export default {
         pageSize: 10,
         totalCount: 0,
         form: {
-          nameOrCode: '',
+          // code: '',
+          // name: '',
+          codeEqOrNameLike: '',
           status: ''
         },
         suppliersData: [],
@@ -117,95 +139,79 @@ export default {
           }
         })
       },
-      // statusChange: function(status, id, version) {
-      //    console.log(status, id, version);
-      //   // 修改供应商状态
-      //   this.$confirm('此操作将改变供应商状态, 是否继续?', '提示', {
-      //     confirmButtonText: '确定',
-      //     cancelButtonText: '取消',
-      //     type: 'warning'
-      //   }).then(() => {
-      //     if (status) {
-      //     WharfService.closeSuppliers(id, version, status)
-      //     .then((res) => {
-      //       console.log(res);
-      //       this.$message.success("禁用成功")
-      //       // 自己修改数据
-      //       this.getSuppliersList()
-      //     })
-      //     .catch((err) => {
-      //       this.$message.error("禁用失败" + err.message)
-      //       this.getSuppliersList()
-      //     })
-      //   } else {
-      //     WharfService.openSuppliers(id, version)
-      //     .then((res) => {
-      //       this.$message.success("启用成功")
-      //       this.getSuppliersList()
-      //     })
-      //     .catch((err) => {
-      //       this.$message.error("启用失败" + err.message)
-      //       this.getSuppliersList()
-      //     })
-      //   }
-      //   }).catch(() => {
-      //     this.$message({
-      //       type: 'info',
-      //       message: '已取消'
-      //     })        
-      //   })
-      // },
-      statusChange: function(status, id, version) {
+      statusChange: function(command) {
       // 修改仓库状态
       const _this = this;
-      this.$confirm('是否继续?', '提示', {
+      this.$confirm('此操作将改变码头状态,是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        if (status) {
-          // 禁用
-          WharfService.closeSuppliers(id, version)
+        console.log(command);
+        if (command[2] === "IDLE") {
+          WharfService.openSuppliers(command[0], command[1], command[2])
           .then((res) => {
-            _this.$message.success("禁止用成功")
+            console.log(res);
+            _this.$message.success("休闲状态修改成功")
             _this.getSuppliersList();
           })
           .catch((err) => {
-            _this.$message.error("禁用失败" + err)
+            if (err === "") {
+              _this.$message.success("休闲状态修改成功")
+            } else {
+              _this.$message.error("休闲状态修改失败" + err)
+            }
             _this.getSuppliersList();
           })
-        } else {
-          // 启用
-          WharfService.openSuppliers(id, version)
+        } else if (command[2] === "USING") {
+            WharfService.openSuppliers(command[0], command[1], command[2])
+            .then((res) => {
+              _this.$message.success("使用中状态修改成功")
+              _this.getSuppliersList();
+            }).catch((err) => {
+              if (err === "") {
+                _this.$message.success("使用中状态修改成功")
+              } else {
+                _this.$message.error("使用中状态修改失败" + err)
+              }
+              _this.getSuppliersList();
+            })
+        } else if (command[2] === "STOP") {
+          WharfService.openSuppliers(command[0], command[1], command[2])
           .then((res) => {
-            _this.$message.success("启用成功")
+            _this.$message.success("已完成状态修改成功")
             _this.getSuppliersList();
           })
           .catch((err) => {
-            _this.$message.error("启用失败" + err)
-            _this.getSuppliersList();
+              if (err === "") {
+                _this.$message.success("已完成状态修改成功")
+              } else {
+                _this.$message.error("已完成状态修改失败" + err)
+              }
+              _this.getSuppliersList();
           })
         }
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消'
-        })        
-      })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消'
+          })        
+        })
     },
       clearInput: function() {
         this.form = {
-          nameOrCode: '',
+          codeEqOrNameLike: '',
           status: ''
         }
       },
       // 向后台请求数据,这里是查询功能和一开始就调取数据列表
-      getSuppliersList: function(reset) {
+      getSuppliersList: function() {
        // 请求码头的数据
         const _this = this;    
         // 将当前组件的实例记录起来，这些都是我在data中自己写的数据
         const data = {
-          codeEquals: this.form.nameOrCode || null,
+          codeEqOrNameLike: this.form.codeEqOrNameLike,
+          codeEquals: this.form.codeEqOrNameLike || null,
           page: this.page,
           pageSize: this.pageSize,
           searchCount: true,
@@ -215,8 +221,6 @@ export default {
         // 获取数据,然后将自己组件中的数据发送到后台
         WharfService.getSuppliersList(data)
         .then((res) => {
-          console.log(res);
-          if (!res) return false;
           // 初始化自己定义的数据
           _this.suppliersData = [];
           // 将总数,赋值给自己定义的变量
@@ -227,36 +231,37 @@ export default {
           //       code: '0001',
           //       name: 'yang',
           //       version: 9999999999999,
-          //       dockerusage: ['发货']
+          //       usages: ['发货']
           //     }]
           // }
           _this.totalCount = res.totalCount;
-          for (const item in res.records) {
+          console.log(res.records);
+          for (var i = 0; i < res.records.length; i++) {
+            console.log(i);
             // 数组循环后,将过去到的值,全部放在suppliersData这个数组中,我要模拟数据也要使用这个数组
             const obj = {
               // 码头的id
-              id: res.records[item].id,
+              id: res.records[i].id,
               // 代码
-              code: res.records[item].code,
-              name: res.records[item].name,
-              version: res.records[item].version,
+              code: res.records[i].code,
+              name: res.records[i].name,
+              // codeEqOrNameLike: res.records[i].codeEqOrNameLike,
+              version: res.records[i].version,
               // 用途
-              dockerusage: res.records[item].dockerusage,
-              // anotherName: res.records[item].anotherName,
-              status: res.records[item].status
-              // address: res.records[item].address,
-              // sourceType: res.records[item].sourceType,
-              // version: res.records[item].version
+              usages: res.records[i].usages,
+              status: res.records[i].status
+              
             }
-            if (obj.status === "OFF") {
-              obj.status = true
-            } else {
-              obj.status = false
-            }
+            // if (obj.status === "IDLE") {
+            //   obj.status = "空闲"
+            // } else if (obj.status === "USING") {
+            //   obj.status = "使用中"
+            // } else if(obj.status === "STOP") {
+            //   obj.status = "停用"
+            // }
             // 获取数据后,存到自己的数组里面
             _this.suppliersData.push(obj);
             // 将数组反向
-            _this.suppliersData.reverse();
           }
         })
       },
@@ -287,20 +292,44 @@ export default {
     },
     suppliersStatus(status) {
       switch (status) {
-        case true:
-          return "启用"
-        case false:
-          return "禁用"
-        default:
-          return '全部';
+        case "IDLE":
+          return "空闲"
+        case "USING":
+          return "使用中"
+        case "STOP":
+          return '停用';
       }
     },
     purposeChange(val) {
-      if (!val) return false;
-    let str = '';
-    for (let i = 0; i < val.length; i++) {
-      str += val[i];
-    }
+      var str = "";
+      for (let i = 0; i < val.length; i++) {
+        switch (val[i]) {
+          case "RECEIVE":
+            if (i < val.length - 1) {
+              str += "收货,";
+              break
+            } else {
+              str += "收货";
+              break
+            }
+          case "OUT":
+            if (i < val.length - 1) {
+              str += "出货,";
+              break
+            } else {
+              str += "出货";
+              break
+            }
+          case "RETURN":
+            if (i < val.length - 1) {
+              str += "退货,";
+              break
+            } else {
+              str += "退货";
+              break
+            }
+        }
+      }
       return str;
     }
   }
@@ -314,5 +343,8 @@ export default {
 .table-index{
 @import "src/styles/mixin.scss";
 @include elTable;
+}
+.table-index .el-table .cell{
+  padding: 3px 0;
 }
 </style>

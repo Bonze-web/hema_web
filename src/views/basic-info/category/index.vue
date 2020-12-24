@@ -255,6 +255,7 @@ export default {
 
 <style lang="scss" scoped>
 @import "src/styles/mixin.scss";
+
 </style>
 <style lang="scss">
 .table-index{

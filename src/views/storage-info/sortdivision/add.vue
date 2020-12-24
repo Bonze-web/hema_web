@@ -123,6 +123,73 @@
                 </template>
             </div>
         </div>
+        <div class="pop-up-pag">
+           <!-- 左边的按钮 -->
+            <div class="right-popstorge">
+              <div class="count-tatle">
+                {{'1'}}/{{'625'}}项
+              </div>
+              <div class="center-pag">
+                 <el-input
+                  placeholder="请输入内容"
+                  v-model="popstorge.searchOne">
+                  <i slot="prefix" class="el-input__icon el-icon-search"></i>
+                </el-input>
+                <div>
+                    <el-checkbox v-model="popstorge.checkedOne">存储分区</el-checkbox>
+                </div>
+                <ul class="list-pop-ui">
+                  <li>
+                    <el-checkbox v-model="popstorge.checkedOne"></el-checkbox>
+                    <div class="content-checked-one">
+                        狗蛋
+                    </div>
+                  </li>
+                </ul>
+              </div>
+               <!-- 下面这个是翻页 -->
+              <el-pagination
+                  style="float:right"
+                  @size-change="handleSizeChange"
+                  @current-change="handleCurrentChange"
+                  :current-page="1"
+                  :page-size="pageSize"
+                  layout="prev, pager, next"
+                  :total="totalCount">
+              </el-pagination>
+            </div>
+            <!-- 右边的按钮 -->
+            <div class="left-popstorge">
+              <div class="count-tatle">
+                {{'1'}}/{{'625'}}项
+              </div>
+               <el-input
+                  placeholder="请输入内容"
+                  v-model="popstorge.searchTwo">
+                  <i slot="prefix" class="el-input__icon el-icon-search"></i>
+              </el-input>
+              <div>
+                 <el-checkbox v-model="popstorge.checkedTwo">存储分区</el-checkbox>
+              </div>
+              <ul>
+                <li>
+                  <div>
+                      
+                  </div>
+                </li>
+              </ul>
+               <!-- 下面这个是翻页 -->
+              <el-pagination
+                  style="float:right"
+                  @size-change="handleSizeChange"
+                  @current-change="handleCurrentChange"
+                  :current-page="1"
+                  :page-size="pageSize"
+                  layout="prev, pager, next"
+                  :total="totalCount">
+              </el-pagination>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -133,6 +200,16 @@ import SortdivisionService from "@/api/service/SortdivisionService";
 export default {
   data() {
       return {
+        // 弹出页面的存储
+        popstorgeList: [],
+        popstorge: {
+          checkedOne: false,
+          checkedTwo: false,
+          pageSize: 10,
+          totalCount: 0,
+          searchOne: "",
+          searchTwo: ""
+        },
         status: '', // 页面状态
         id: '', 
         tabActiveName: 'suppliers', // tab栏名称
@@ -281,6 +358,13 @@ export default {
         console.log(this.status);
         this.form = Object.assign(this.form, this.suppliersInfo)
         console.log(this.form, this.suppliersInfo)
+      },
+      // 弹出界面的方法
+      handleSizeChange() {
+
+      },
+      handleCurrentChange() {
+        
       }
     },
     created() {
@@ -303,6 +387,51 @@ export default {
 
 <style lang="scss" scoped>
 @import "src/styles/mixin.scss";
+// 弹出框
+.pop-up-pag {
+  position: absolute;
+  left: 50%;
+  margin-top: -300px;
+  transform: translateX(-50%);
+  background-color: skyblue;
+  width: 800px;
+  // height: 600px;
+  display: flex;
+  justify-content: space-between;
+  .right-popstorge,
+  .left-popstorge {
+    .count-tatle{
+      padding: 10px;
+      font-size: 12px;
+    }
+    .center-pag {
+      padding: 0 10px;
+    }
+    .list-pop-ui {
+      margin: 0;
+      li {
+        display: flex;
+        align-items: center;
+        padding: 20px;
+        .content-checked-one {
+          font-size: 12px;
+        }
+      }
+    }
+    border: #E4E7ED solid 1px;
+    width: 350px;
+    height: 600px;
+  }
+  .right-popstorge {
+    margin-left: 20px;
+  }
+  .left-popstorge {
+    margin-right: 20px;
+  }
+  ul {
+    list-style: none;
+  }
+}
 .head{
     background: #fff;
     padding: 15px 12px;
@@ -329,4 +458,5 @@ export default {
 .info-title{
     margin: 12px 0;
 }
+
 </style>

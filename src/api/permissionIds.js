@@ -79,116 +79,186 @@ export default {
   SYS_NOTIFY_ABORT: "sys:notify:abort",
   SYS_NOTIFY_VIEW: "sys:notify:view",
   SYS_NOTIFY_SYS_EDIT: "sys:notify:sys:edit",
-  /**
-   * 微信订阅消息模块
-   */
-  SYS_WX_TEMPLATE: "sys:wx_template",
-  SYS_WX_TEMPLATE_SYNC: "sys:wx_template:sync",
+
   /**
    * 系统组件-系统配置项
    */
   SYS_OPTIONS_UPDATE: "sys:options:update",
   SYS_OPTIONS_VIEW: "sys:options:view",
 
-  /** ******************************* 商城组件 *******************************************/
-  MALL: "mall",
+/**
+   * 系统组件-上传文件
+   */
+  // public static final String SYS_DFS_UPLOAD = "sys:dfs:upload";
+  // SYS_OPTIONS_UPDATE: "sys:options:update",
+  /**
+   * 物流中心模块
+   */
+  SYS_DC: "sys:dc",
+  SYS_DC_CREATE: "sys:dc:create",
+  SYS_DC_UPDATE: "sys:dc:update",
+  SYS_DC_VIEW: "sys:dc:view",
+  SYS_DC_DISABLE: "sys:dc:disable",
+  SYS_DC_ENABLE: "sys:dc:enable",
 
   /**
-   * 商城组件-商品
+   * 系统组件-日志查询
    */
-  MALL_PRODUCT: "mall:product",
-  MALL_PRODUCT_VIEW: "mall:product:view",
-  MALL_PRODUCT_CREATE: "mall:product:create",
-  MALL_PRODUCT_UPDATE: "mall:product:update",
-  MALL_PRODUCT_REMOVE: "mall:product:remove",
-  MALL_PRODUCT_RECOVER: "mall:product:recover",
-  MALL_PRODUCT_CREATEINDEX: "mall:product:createIndex",
+  SYS_LOG: "sys:log",
+  SYS_LOG_VIEW: "sys:log:view",
 
-  /**
-   * 商城组件-订单
-   */
-  MALL_ORDER: "mall:order",
-  MALL_ORDER_VIEW: "mall:order:view",
-  MALL_ORDER_CREATE: "mall:order:create",
-  MALL_ORDER_PAY: "mall:order:pay",
-  MALL_ORDER_CANCEL: "mall:order:cancel",
-  MALL_ORDER_CONFIRM_RECEIVE: "mall:order:confirm_receive",
-  MALL_ORDER_PUSH_TO_3RD: "mall:order:push_to_3rd",
-  MALL_ORDER_MERCHANT_DISTRIBUTION: "mall:order:merchant_distribution",
-  MALL_ORDER_PRINT_DELIVERY_BILL: "mall:order:print_delivery_bill",
-
-  /**
-   * 商城组件-订单备注
-   */
-  MALL_ORDER_REMARK: "mall:order_remark",
-  MALL_ORDER_REMARK_VIEW: "mall:order_remark:view",
-
-  /**
-   * 商城组件-门店
-   */
-  MALL_STORE: "mall:store",
-  MALL_STORE_VIEW: "mall:store:view",
-  MALL_STORE_CREATE: "mall:store:create",
-  MALL_STORE_UPDATE: "mall:store:update",
-
-  /**
-   * 商城组件-订单配送
-   */
-  MALL_DELIVERY: "mall:delivery",
-  MALL_DELIVERY_GET_RIDE: "mall:delivery:get_ride",
-  MALL_DELIVERY_PUSH_RECORD: "mall:delivery:push_record",
-  MALL_DELIVERY_PUSH: "mall:delivery:push",
-
-  /**
-   * 商城组件-退款单
-   */
-  MALL_REFUND: "mall:refund",
-  MALL_REFUND_VIEW: "mall:refund:view",
-  MALL_REFUND_CREATE: "mall:refund:create",
-  MALL_REFUND_APPROVE: "mall:refund:approve",
-
-  /** ******************************* 促销组件 *******************************************/
-  PROMOTION: "promotion",
-
-  /**
-   * 促销组件-促销单
-   */
-  PROMOTION_BILL: "promotion:bill",
-  PROMOTION_BILL_VIEW: "promotion:bill:view",
-  PROMOTION_BILL_CREATE: "promotion:bill:create",
-  PROMOTION_BILL_UPDATE: "promotion:bill:update",
-  PROMOTION_BILL_REMOVE: "promotion:bill:remove",
-  PROMOTION_BILL_SUBMIT: "promotion:bill:submit",
-  PROMOTION_BILL_ABOLISH: "promotion:bill:abolish",
-
-  /** ******************************* 会员组件 *******************************************/
-  MBR: "mbr",
-
-  /**
-   * 卖家
-   */
-  MBR_SELLER: "mbr:seller",
-  MBR_SELLER_VIEW: "mbr:seller:view",
-
-  /**
-   * 卖家退款
-   */
-  MBR_SELLER_WITHDRAW_ACCOUNT: "mbr:seller_withdraw:account",
-  MBR_SELLER_WITHDRAW_ACCOUNT_VIEW: "mbr:seller_withdraw_account:view",
-  MBR_SELLER_WITHDRAW_FLOW_VIEW: "mbr:seller_withdraw_flow:view",
-  MBR_SELLER_QUERY: "mbr:seller:query",
-  MBR_SELLER_CREATE: "mbr:seller:create",
-  MBR_SELLER_WITHDRAW_FLOW_QUERY_INTO_ACCOUNT_AMOUNT: "mbr:seller_withdraw_flow:query_into_account_amount",
-  MBR_SELLER_WITHDRAW_FLOW_QUERY_CAN_WITHDRAW_AMOUNT: "mbr:seller_withdraw_flow:query_can_withdraw_amount",
-  MBR_SELLER_UPDATE: "mbr:seller:update",
-
-  /** ******************************** 报表组件 *******************************************/
   REPORT: "report",
+  /**
+   * 报表组件-商品
+   */
+  REPORT_PRODUCT: "report:product",
+  /**
+   * 商品排行榜
+   */
+  REPORT_PRODUCT_LIST_VIEW: "report:product:list_view",
+  /**
+   * 商品滞销列表
+   */
+  REPORT_PRODUCT_UNSALE_LIST_VIEW: "report:product:unsale_list_view",
+  /**
+   * 待自提商品列表
+   */
+  REPORT_PRODUCT_PENDING_LIST_VIEW: "report:product:penging_list_view",
+  /**
+   * 报表组件-订单
+   */
+  REPORT_ORDER: "report:order",
+  /**
+   * 分享订单报表列表
+   */
+  REPORT_ORDER_SHARE_LIST: "report:order:share_list",
+  /**
+   * 报表组件-门店销售额
+   */
+  REPORT_STORE_SALES: "report:store_sales",
+  /**
+   * 报表组件-门店销售额-门店销售额报表详情
+   */
+  REPORT_STORE_SALES_VIEW: "report:store_sales:view",
+  /**
+   * 报表组件-门店客流量
+   */
+  REPORT_MEMBERS_FLOW: "report:members_flow",
+  /**
+   * 报表组件-查看门店客流量
+   */
+  REPORT_MEMBERS_FLOW_VIEW: "report:members_flow:view",
   /**
    * 报表组件-动态报表
    */
   REPORT_DYNAMIC: "report:dynamic",
   REPORT_DYNAMIC_DESIGNER: "report:dynamic:designer",
+
+  /**
+   * 商品模块
+   */
+  PRODUCT: "product",
+  /**
+   * 商品模块
+   */
+  PRODUCT_PRODUCT: "product:product",
+  PRODUCT_PRODUCT_VIEW: "product:product:view",
+  PRODUCT_PRODUCT_CREATE: "product:product:create",
+  PRODUCT_PRODUCT_UPDATE: "product:product:update",
+  PRODUCT_PRODUCT_ENABLE: "product:product:enable",
+  PRODUCT_PRODUCT_DISABLE: "product:product:disable",
+  /**
+   * 商品规格明细模块
+   */
+  PRODUCT_QPC: "product:qpc",
+  PRODUCT_QPC_VIEW: "product:qpc:view",
+  PRODUCT_QPC_CREATE: "product:qpc:create",
+  PRODUCT_QPC_UPDATE: "product:qpc:update",
+  PRODUCT_QPC_REMOVE: "product:qpc:remove",
+  PRODUCT_QPC_SET_DEFAULT: "product:qpc:set_default",
+  PRODUCT_QPC_CANCEL_DEFAULT: "product:qpc:cancel_default",
+  /**
+   * 商品条码模块
+   */
+  PRODUCT_BARCODE: "product:barcode",
+  PRODUCT_BARCODE_VIEW: "product:barcode:view",
+  PRODUCT_BARCODE_CREATE: "product:barcode:create",
+  PRODUCT_BARCODE_UPDATE: "product:barcode:update",
+  PRODUCT_BARCODE_REMOVE: "product:barcode:remove",
+
+  /**
+   * 商品类别模块
+   */
+  PRODUCT_CATEGORY: "product:category",
+  PRODUCT_CATEGORY_VIEW: "product:category:view",
+  PRODUCT_CATEGORY_CREATE: "product:category:create",
+  PRODUCT_CATEGORY_UPDATE: "product:category:update",
+  PRODUCT_CATEGORY_ENABLE: "product:category:enable",
+  PRODUCT_CATEGORY_DISABLE: "product:category:disable",
+  PRODUCT_CATEGORY_REMOVE: "product:category:remove",
+  /**
+   * 商品供应商模块
+   */
+  PRODUCT_SUPPLIER: "product:supplier",
+  PRODUCT_SUPPLIER_CREATE: "product:supplier:create",
+  PRODUCT_SUPPLIER_UPDATE: "product:supplier:update",
+  PRODUCT_SUPPLIER_VIEW: "product:supplier:view",
+  PRODUCT_SUPPLIER_MODLIFY: "product:supplier:modlify",
+
+  /**
+   * 资料模块
+   */
+  WMS: "wms",
+
+  WMS_PICKAREA: "wms:pickarea",
+  WMS_PICKAREA_CREATE: "wms:pickarea:create",
+  WMS_PICKAREA_VIEW: "wms:pickarea_view",
+  WMS_PICKAREA_UPDATE: "wms:pickarea_update",
+  WMS_PICKAREA_DELETE: "wms:pickarea_delete",
+
+  /**
+   * 容器类型
+   */
+  WMS_CONTAINER_TYPE: "wms:container:type",
+  WMS_CONTAINER_TYPE_CREATE: "wms:container:type:create",
+  WMS_CONTAINER_TYPE_UPDATE: "wms:container:type:update",
+  WMS_CONTAINER_TYPE_VIEW: "wms:container:type:view",
+  WMS_CONTAINER_TYPE_MODIFY: "wms:container:type:modify",
+
+  /**
+   * 容器模块
+   */
+  WMS_CONTAINER: "wms:container",
+  WMS_CONTAINER_CREATE: "wms:container:create",
+  WMS_CONTAINER_VIEW: "wms:container:view",
+
+  /**
+   * 仓库模块
+   */
+  WMS_WAREHOUSE: "wms:warehouse",
+  WMS_WAREHOUSE_CREATE: "wms:warehouse:create",
+  WMS_WAREHOUSE_UPDATE: "wms:warehouse:update",
+  WMS_WAREHOUSE_VIEW: "wms:warehouse:view",
+  WMS_WAREHOUSE_MODIFY: "wms:warehouse:modify",
+  WMS_WAREHOUSE_DELETE: "wms:warehouse:delete",
+
+  /**
+   * 码头模块
+   */
+  WMS_DOCK: "wms:dock",
+  WMS_DOCK_CREATE: "wms:dock:create",
+  WMS_DOCK_UPDATE: "wms:dock:update",
+  WMS_DOCK_VIEW: "wms:dock:view",
+  WMS_DOCK_MODIFY: "wms:dock:modify",
+
+  /**
+   * 货位类型模块
+   */
+  WMS_BINTYPE: "wms:bintype",
+  WMS_BINTYPE_VIEW: "wms:bintype:view",
+  WMS_BINTYPE_CREATE: "wms:bintype:create",
+  WMS_BINTYPE_UPDATE: "wms:bintype:update",
+  WMS_BINTYPE_DELETE: "wms:bintype:remove",
 
   /** ******************************* 微信小程序组件 *******************************************/
 
