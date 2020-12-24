@@ -305,7 +305,7 @@ export default {
       for (let i = 0; i < val.length; i++) {
         switch (val[i]) {
           case "RECEIVE":
-            if (i < val.length-1) {
+            if (i < val.length - 1) {
               str += "收货,";
               break
             } else {
@@ -313,7 +313,7 @@ export default {
               break
             }
           case "OUT":
-            if (i < val.length-1) {
+            if (i < val.length - 1) {
               str += "出货,";
               break
             } else {
@@ -321,7 +321,7 @@ export default {
               break
             }
           case "RETURN":
-            if (i < val.length-1) {
+            if (i < val.length - 1) {
               str += "退货,";
               break
             } else {
