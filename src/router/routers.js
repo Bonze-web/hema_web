@@ -549,7 +549,7 @@ const StorageInfoPackage = {
         import('@/views/storage-info/wharf/index'),
         hidden: true,
       meta: {
-        title: '码头展示',
+        title: '码头',
         icon: 'table'
       }
     }, {
@@ -559,7 +559,7 @@ const StorageInfoPackage = {
         import('@/views/storage-info/wharf/edit'),
         hidden: true,
         meta: {
-          title: '码头编辑',
+          title: '编辑码头',
           icon: 'table'
         }
       },
@@ -590,7 +590,7 @@ const StorageInfoPackage = {
         import('@/views/storage-info/sortdivision/index'),
         hidden: true,
       meta: {
-        title: '拣货分区展示',
+        title: '拣货分区',
         icon: 'table'
       }
     }, {
@@ -600,7 +600,7 @@ const StorageInfoPackage = {
         import('@/views/storage-info/sortdivision/edit'),
         hidden: true,
         meta: {
-          title: '拣货分区编辑',
+          title: '编辑拣货分区',
           icon: 'table'
         }
       },
@@ -631,7 +631,7 @@ const StorageInfoPackage = {
         import('@/views/storage-info/storpartition/index'),
         hidden: true,
       meta: {
-        title: '存储分区展示',
+        title: '存储分区',
         icon: 'table'
       }
     }, {
@@ -641,7 +641,7 @@ const StorageInfoPackage = {
         import('@/views/storage-info/storpartition/edit'),
         hidden: true,
         meta: {
-          title: '存储分区编辑',
+          title: '编辑存储分区',
           icon: 'table'
         }
       },

@@ -11,16 +11,15 @@ export default {
   // 一开始我就要请求的接口
   // 分页的接口请求
   getSuppliersList(postData) {
- 
+    console.log(postData);
     // return request.post('/wms/storagearea/query', param)
     // return request.get('/wms/storagearea/query', param)
-    // return request.get('/wms/storagearea/query', {param: data})
+    return request.get('/wms/storagearea/query', {param: postData})
   },
   /**
    * 获取详情
    */
   getSuppliersDetail(id) {
-    console.log(id);
     // return request.get('/wms/storagearea/getDetail?id=' + id)
     // return request.get('/wms/storagearea/getDetail?id=' + id)
     return request.get('/wms/storagearea/getDetail?id=' + id)
@@ -63,6 +62,13 @@ export default {
       pageSize: 0
     }
     return request.get('/sys/dc/query', postData);
+  },
+  deleteData(id, version) {
+    const postData = {
+      id: id,
+      version: version
+    }
+    return request.post('/wms/storagearea/delete', postData)
   }
 }
 

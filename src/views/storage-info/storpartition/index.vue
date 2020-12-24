@@ -15,7 +15,7 @@
         <div style="height:20px" />
         <div style="background:#fff">
           <el-row>
-            <router-link :to="{ path: '/storageinfo/sortdivision/add', query:{ status: 'create'} }">
+            <router-link :to="{ path: '/storageinfo/storpartition/add', query:{ status: 'create'} }">
             <!-- <span v-if="child.meta&&child.meta.title" :title="child.meta.title">{{child.meta.title}}</span> -->
             <el-button style="margin:18px 10px" type="primary" size="mini">新建</el-button>
             </router-link>
@@ -30,21 +30,21 @@
                 </el-table-column> -->
                 <el-table-column prop="code" label="代码">
                     <template slot-scope="scope">
-                        <router-link style="color:#409EFF" :to="{ path: '/storageinfo/sortdivsion/edit', query:{ status: 'read', id: scope.row.id} }">
+                        <router-link style="color:#409EFF" :to="{ path: '/storageinfo/storpartition/edit', query:{ status: 'read', id: scope.row.id} }">
                             <span>{{ scope.row.code }}</span>
                         </router-link>
                     </template>
                 </el-table-column>
                 <el-table-column prop="name" label="名称"></el-table-column>
-                <el-table-column prop="dockerusage" label="货位范围">
+                <el-table-column prop="binScope" label="货位范围">
                     <template slot-scope="scope">
-                        {{ scope.row.dockerusage | purposeChange}}
+                        {{ scope.row.binScope}}
                     </template>
                 </el-table-column>
                 <el-table-column
                 label="操作">
                   <template slot-scope="scope">
-                      <div style="color:#409EFF;cursor:pointer" @click="deleteChange(scope.row.id)">删除</div>
+                      <div style="color:#409EFF;cursor:pointer" @click="deleteChange(scope.row.id, scope.row.version)">删除</div>
                   </template>
                 </el-table-column>
                 <!-- <el-table-column
@@ -95,8 +95,22 @@ export default {
   },
   methods: {
     // 删除按钮
-    deleteChange(id) {
+    deleteChange(id, version) {
+      const _this = this;
+      console.log(id);
       // 调用删除的接口,然后分页查询的接口重新渲染页面
+      StorpartitionService.deleteData(id, version)
+      .then((res) => {
+        _this.$message.error("删除成功")
+        _this.getSuppliersList();
+      }).catch((err) => {
+        if (err === "") {
+          _this.$message.error("删除成功" + err)
+        } else {
+          _this.$message.error("删除失败" + err)
+        }
+        _this.getSuppliersList();
+      })
     },
     // 搜索功能
       onSubmit: function() {
@@ -153,49 +167,37 @@ export default {
       },
       // 向后台请求数据,这里是查询功能和一开始就调取数据列表
       getSuppliersList: function(reset) {
-       // 请求码头的数据
+        // 请求码头的数据
         const _this = this;    
         // 将当前组件的实例记录起来，这些都是我在data中自己写的数据
         const data = {
-          codeEquals: this.form.nameOrCode || null,
+          codeOrNameEquals: this.form.nameOrCode || null,
           page: this.page,
           pageSize: this.pageSize,
-          searchCount: true,
-          nameLike: this.form.nameOrCode || null,
-          statusEquals: this.form.status || null
-        }
-        console.log(data);
+          searchCount: true
+        };
         // 获取数据,然后将自己组件中的数据发送到后台
         StorpartitionService.getSuppliersList(data)
         .then((res) => {
-          console.log(res);
           // 初始化自己定义的数据
           _this.suppliersData = [];
           _this.totalCount = res.totalCount;
-          for (const item in res.records) {
+            for (var i = 0; i < res.records.length; i++) {
             // 数组循环后,将过去到的值,全部放在suppliersData这个数组中,我要模拟数据也要使用这个数组
             const obj = {
               // 码头的id
-              id: res.records[item].id,
+              id: res.records[i].id,
               // 代码
-              code: res.records[item].code,
-              name: res.records[item].name,
-              version: res.records[item].version,
-              // 用途
-              dockerusage: res.records[item].dockerusage,
-              // anotherName: res.records[item].anotherName,
-              status: res.records[item].status
-              // address: res.records[item].address,
-              // sourceType: res.records[item].sourceType,
-              // version: res.records[item].version
-            }
-            if (obj.status === "OFF") {
-              obj.status = true
-            } else {
-              obj.status = false
+              code: res.records[i].code,
+              name: res.records[i].name,
+              version: res.records[i].version,
+              status: res.records[i].status,
+              orgId: res.records[i].orgId,
+              binScope: res.records[i].binScope
             }
             // 获取数据后,存到自己的数组里面
             _this.suppliersData.push(obj);
+            // 将数组反向
           }
         })
       },
@@ -242,6 +244,14 @@ export default {
       }
         return str;
       }
+  },
+  beforeRouteEnter(to, from, next) {
+    console.log(from);
+    next(vm => {
+      if (from.path === '/storageinfo/storpartition/add' || from.path === '/storageinfo/storpartition/edit') {
+        vm.getSuppliersList();
+      } 
+    })
   }
 };
 </script>

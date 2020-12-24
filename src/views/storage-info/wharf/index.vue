@@ -179,14 +179,14 @@ export default {
         } else if (command[2] === "STOP") {
           WharfService.openSuppliers(command[0], command[1], command[2])
           .then((res) => {
-            _this.$message.success("已完成状态修改成功")
+            _this.$message.success("停用状态修改成功")
             _this.getSuppliersList();
           })
           .catch((err) => {
               if (err === "") {
-                _this.$message.success("已完成状态修改成功")
+                _this.$message.success("停用状态修改成功")
               } else {
-                _this.$message.error("已完成状态修改失败" + err)
+                _this.$message.error("停用状态修改失败" + err)
               }
               _this.getSuppliersList();
           })
@@ -341,10 +341,14 @@ export default {
 // /deep/ .el-table .cell{
 //       line-height: 32px !important;
 // }
+.table-index .el-table .cell {
+  padding:  7px 0;
+}
 </style>
 <style lang="scss">
 .table-index{
 @import "src/styles/mixin.scss";
 @include elTable;
 }
+
 </style>
