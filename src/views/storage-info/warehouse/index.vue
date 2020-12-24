@@ -9,11 +9,7 @@
         label-position="right"
       >
         <el-form-item label="仓库">
-          <el-input type="text" placeholder="请输入仓库编号" v-model="form.codeEquals" class="input-width" ></el-input>
-        </el-form-item>
-
-        <el-form-item label="名称">
-          <el-input type="text" placeholder="请输入名称" v-model="form.nameLike" class="input-width" ></el-input>
+          <el-input type="text" placeholder="请输入仓库编号/名称" v-model="form.codeEqOrNameLike" class="input-width" ></el-input>
         </el-form-item>
 
         <el-form-item label="状态">
@@ -31,7 +27,7 @@
         </el-form-item>
       </el-form>
     </div>
-    
+      
     <div style="height: 20px" />
 
     <div style="background: #fff">
@@ -118,8 +114,7 @@ export default {
       pageSize: 10,
       totalCount: 0,
       form: {
-        codeEquals: "",
-        nameLike: "",
+        codeEqOrNameLike: '',
         status: ""
       },
       listData: [], // 列表数据
@@ -178,8 +173,7 @@ export default {
     },
     clearInput: function() {
       this.form = {
-        codeEquals: "",
-        nameLike: "",
+        codeEqOrNameLike: "",
         status: ""
       };
     },
@@ -190,11 +184,10 @@ export default {
       // 获取供应商列表
       const _this = this;
       const data = {
-        codeEquals: this.form.codeEquals || null,
         page: this.page,
         pageSize: this.pageSize,
         searchCount: true,
-        nameLike: this.form.nameLike || null,
+        codeEqOrNameLike: this.form.codeEqOrNameLike ? this.form.codeEqOrNameLike : null,
         statusEquals: this.form.status || null
       };
 

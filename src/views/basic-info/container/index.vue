@@ -1,16 +1,39 @@
 <template>
   <div class="table-index">
     <div class="select-head">
-      <el-form ref="form" style="display: flex" :model="form" label-width="80px" label-position="right" >
+      <el-form ref="form" style="display: flex;flex-wrap:wrap;" :model="form" label-width="90px" label-position="right" >
 
-        <el-form-item label="代码：">
-          <el-input type="text" placeholder="请输入代码/名称" v-model="form.codeEqualsOrNameLike" class="input-width" ></el-input>
+        <el-form-item label="条码：">
+          <el-input type="text" placeholder="请输入条码" v-model="form.codeEqualsOrNameLike" class="input-width" ></el-input>
         </el-form-item>
-        <!-- 
-        <el-form-item label="名称：">
-          <el-input type="text" placeholder="请输入名称" v-model="form.name" class="input-width" ></el-input>
-        </el-form-item> -->
 
+        <el-form-item label="状态：">
+          <el-select v-model="form.status" placeholder="请选择状态">
+            <el-option label="全部" value=""></el-option>
+            <el-option label="启用" value="OFF"></el-option>
+            <el-option label="禁用" value="ON"></el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="当前位置：">
+          <el-input type="text" placeholder="请输入当前位置：" v-model="form.codeEqualsOrNameLike" class="input-width" ></el-input>
+        </el-form-item>
+
+        <el-form-item label="父容器：">
+          <el-input type="text" placeholder="请输入父容器：" v-model="form.codeEqualsOrNameLike" class="input-width" ></el-input>
+        </el-form-item>
+
+        <el-form-item label="容器类型：">
+          <el-select v-model="form.status" placeholder="请选择状态">
+            <el-option label="全部" value=""></el-option>
+            <el-option label="启用" value="OFF"></el-option>
+            <el-option label="禁用" value="ON"></el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="所属对象：">
+          <el-input type="text" placeholder="请输入所属对象：" v-model="form.codeEqualsOrNameLike" class="input-width" ></el-input>
+        </el-form-item>
 
         <el-form-item>
           <el-button type="primary" size="mini" @click="onSubmit" >立即搜索</el-button>
@@ -23,33 +46,44 @@
 
     <div style="background: #fff;">
       <el-row>
-        <router-link :to="{ path: '/storageinfo/locationtype/add' }" >
+        <router-link :to="{ path: '/logistics/container/add' }" >
           <el-button style="margin: 18px 10px" type="primary" size="mini" >新建</el-button>
         </router-link>
+
+        <el-button style="margin: 18px 10px" size="mini" >打印</el-button>
       </el-row>
 
-      <el-table :data="listData" style="width: 100%; text-align: center" :row-style="{ height: '16px', padding: '-4px' }" >
-        <el-table-column prop="code" label="代码" style="height: 20px">
+
+      <el-table :data="listData" @selection-change="handleSelectionChange"  style="width: 100%; text-align: center" :row-style="{ height: '16px', padding: '-4px' }" >
+
+        <el-table-column  type="selection"  style="height: 20px"></el-table-column>
+
+        <el-table-column prop="code" label="条码" style="height: 20px">
           <template slot-scope="scope">
             <router-link style="color: #409eff" :to="{ path: '/storageinfo/locationtype/edit', query: { status: 'read', id: scope.row.id }, }" >
               <span>{{ scope.row.code }}</span>
             </router-link>
           </template>
         </el-table-column>
-        <el-table-column prop="name" label="名称"></el-table-column>
-        <el-table-column prop="length" label="长度(cm)"></el-table-column>
-        <el-table-column prop="width" label="宽度(cm)"></el-table-column>
-        <el-table-column prop="height" label="高度(cm)"></el-table-column>
-        <el-table-column prop="weight" label="承重(kg)"></el-table-column>
-        <el-table-column prop="plotRatio" label="容积率(%)"></el-table-column>
-        <el-table-column prop="storageNumber" label="存储容器数量"></el-table-column>
 
-        <el-table-column label="操作">
+        <el-table-column prop="code" label="容器类型" style="height: 20px">
           <template slot-scope="scope">
-            <!-- :disabled="!scope.row.status" -->
-            <el-button size="mini" type="text" @click="deleteWmsBintype(scope.row.id, scope.row.version)">删除</el-button>
+            <router-link style="color: #409eff" :to="{ path: '/storageinfo/locationtype/edit', query: { status: 'read', id: scope.row.id }, }" >
+              <span>{{ scope.row.code }}</span>
+            </router-link>
           </template>
         </el-table-column>
+
+        <el-table-column prop="name" label="当前位置"></el-table-column>
+        <el-table-column prop="length" label="目标位置"></el-table-column>
+        <el-table-column prop="width" label="使用对象"></el-table-column>
+        <el-table-column prop="height" label="状态"></el-table-column>
+
+        <!-- <el-table-column label="操作">
+          <template slot-scope="scope">
+            <el-button size="mini" type="text" @click="deleteWmsBintype(scope.row.id, scope.row.version)">删除</el-button>
+          </template>
+        </el-table-column> -->
       </el-table>
 
       <el-pagination
@@ -83,6 +117,9 @@ export default {
   },
   computed: {},
   methods: {
+    handleSelectionChange(val) {
+      console.log(val)
+    },
     onSubmit: function() {
       const _this = this;
       this.page = 1;

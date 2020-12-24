@@ -228,7 +228,8 @@ const BasicInfoPackage = {
     icon: 'basic-info',
     permission: PermIds.REPORT_DYNAMIC
   },
-  children: [{
+  children: [
+    {
     path: "suppliers",
     name: "Suppliers",
     component: AModule,
@@ -267,124 +268,165 @@ const BasicInfoPackage = {
         icon: 'table'
       }
     }]
-  }, {
-    path: "category",
-    name: "Category",
-    component: AModule,
-    meta: {
-      title: '商品类别',
-      icon: 'table'
-    },
-    children: [{
-      path: "",
-      name: "CategoryView",
-      component: () =>
-        import('@/views/basic-info/category/index'),
-      hidden: true,
+    }, {
+      path: "category",
+      name: "Category",
+      component: AModule,
       meta: {
         title: '商品类别',
         icon: 'table'
-      }
+      },
+      children: [{
+        path: "",
+        name: "CategoryView",
+        component: () =>
+          import('@/views/basic-info/category/index'),
+        hidden: true,
+        meta: {
+          title: '商品类别',
+          icon: 'table'
+        }
+      }, {
+        path: "edit",
+        name: "CategoryEdit",
+        component: () =>
+          import('@/views/basic-info/category/edit'),
+        hidden: true,
+        meta: {
+          title: '查看商品类别',
+          icon: 'table'
+        }
+      }, {
+        path: "add",
+        name: "CategoryAdd",
+        component: () =>
+          import('@/views/basic-info/category/add'),
+        hidden: true,
+        meta: {
+          title: '新建商品类别',
+          icon: 'table'
+        }
+      }]
     }, {
-      path: "edit",
-      name: "CategoryEdit",
-      component: () =>
-        import('@/views/basic-info/category/edit'),
-      hidden: true,
-      meta: {
-        title: '查看商品类别',
-        icon: 'table'
-      }
-    }, {
-      path: "add",
-      name: "CategoryAdd",
-      component: () =>
-        import('@/views/basic-info/category/add'),
-      hidden: true,
-      meta: {
-        title: '新建商品类别',
-        icon: 'table'
-      }
-    }]
-  }, {
-    path: "containertype",
-    name: "ContainerType",
-    component: AModule,
-    meta: {
-      title: '容器类型',
-      icon: 'table'
-    },
-    children: [{
-      path: "",
-      name: "ContainerTypeView",
-      component: () =>
-        import('@/views/basic-info/container-type/index'),
-      hidden: true,
+      path: "containertype",
+      name: "ContainerType",
+      component: AModule,
       meta: {
         title: '容器类型',
         icon: 'table'
-      }
+      },
+      children: [{
+        path: "",
+        name: "ContainerTypeView",
+        component: () =>
+          import('@/views/basic-info/container-type/index'),
+        hidden: true,
+        meta: {
+          title: '容器类型',
+          icon: 'table'
+        }
+      }, {
+        path: "edit",
+        name: "ContainerTypeEdit",
+        component: () =>
+          import('@/views/basic-info/container-type/edit'),
+        hidden: true,
+        meta: {
+          title: '查看容器类型',
+          icon: 'table'
+        }
+      }, {
+        path: "add",
+        name: "ContainerTypeAdd",
+        component: () =>
+          import('@/views/basic-info/container-type/add'),
+        hidden: true,
+        meta: {
+          title: '新建容器类型',
+          icon: 'table'
+        }
+      }]
     }, {
-      path: "edit",
-      name: "ContainerTypeEdit",
-      component: () =>
-        import('@/views/basic-info/container-type/edit'),
-      hidden: true,
-      meta: {
-        title: '查看容器类型',
-        icon: 'table'
-      }
-    }, {
-      path: "add",
-      name: "ContainerTypeAdd",
-      component: () =>
-        import('@/views/basic-info/container-type/add'),
-      hidden: true,
-      meta: {
-        title: '新建容器类型',
-        icon: 'table'
-      }
-    }]
-  }, {
-    path: "dc",
-    name: "Dc",
-    component: AModule,
-    meta: {
-      title: '物流中心',
-      icon: 'table'
-    },
-    children: [{
-      path: "",
-      name: "DcView",
-      component: () =>
-        import('@/views/basic-info/dc/index'),
-      hidden: true,
+      path: "dc",
+      name: "Dc",
+      component: AModule,
       meta: {
         title: '物流中心',
         icon: 'table'
-      }
+      },
+      children: [{
+        path: "",
+        name: "DcView",
+        component: () =>
+          import('@/views/basic-info/dc/index'),
+        hidden: true,
+        meta: {
+          title: '物流中心',
+          icon: 'table'
+        }
+      }, {
+        path: "edit",
+        name: "DcEdit",
+        component: () =>
+          import('@/views/basic-info/dc/edit'),
+        hidden: true,
+        meta: {
+          title: '查看物流中心',
+          icon: 'table'
+        }
+      }, {
+        path: "add",
+        name: "DcAdd",
+        component: () =>
+          import('@/views/basic-info/dc/edit'),
+        hidden: true,
+        meta: {
+          title: '新建物流中心',
+          icon: 'table'
+        }
+      }]
     }, {
-      path: "edit",
-      name: "DcEdit",
-      component: () =>
-        import('@/views/basic-info/dc/edit'),
-      hidden: true,
+      path: "container",
+      name: "Container",
+      component: AModule,
       meta: {
-        title: '查看物流中心',
+        title: '容器',
         icon: 'table'
-      }
-    }, {
-      path: "add",
-      name: "DcAdd",
-      component: () =>
-        import('@/views/basic-info/dc/edit'),
-      hidden: true,
-      meta: {
-        title: '新建物流中心',
-        icon: 'table'
-      }
-    }]
-  }]
+      },
+      children: [
+        {
+        path: "",
+        name: "View",
+        component: () =>
+          import('@/views/basic-info/container/index'),
+        hidden: true,
+        meta: {
+          title: '容器',
+          icon: 'table'
+        }
+      }, {
+        path: "edit",
+        name: "Edit",
+        component: () =>
+          import('@/views/basic-info/container/edit'),
+        hidden: true,
+        meta: {
+          title: '查看容器',
+          icon: 'table'
+        }
+      }, {
+        path: "add",
+        name: "Add",
+        component: () =>
+          import('@/views/basic-info/container/add'),
+        hidden: true,
+        meta: {
+          title: '新建容器',
+          icon: 'table'
+        }
+      }] 
+    }
+  ]
 }
 
 /**
