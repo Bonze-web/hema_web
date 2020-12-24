@@ -73,7 +73,7 @@
 
 <script>
 // 引入公共模块
-import WharfService from "@/api/service/WharfService";
+import SortdivisionService from "@/api/service/SortdivisionService";
 // import { mapGetters } from "vuex";
 
 export default {
@@ -116,7 +116,7 @@ export default {
       //     type: 'warning'
       //   }).then(() => {
       //     if (status) {
-      //     WharfService.closeSuppliers(id, version, status)
+      //     SortdivisionService.closeSuppliers(id, version, status)
       //     .then((res) => {
       //       console.log(res);
       //       this.$message.success("禁用成功")
@@ -128,7 +128,7 @@ export default {
       //       this.getSuppliersList()
       //     })
       //   } else {
-      //     WharfService.openSuppliers(id, version)
+      //     SortdivisionService.openSuppliers(id, version)
       //     .then((res) => {
       //       this.$message.success("启用成功")
       //       this.getSuppliersList()
@@ -155,7 +155,7 @@ export default {
       }).then(() => {
         if (status) {
           // 禁用
-          WharfService.closeSuppliers(id, version)
+          SortdivisionService.closeSuppliers(id, version)
           .then((res) => {
             _this.$message.success("禁止用成功")
             _this.getSuppliersList();
@@ -166,7 +166,7 @@ export default {
           })
         } else {
           // 启用
-          WharfService.openSuppliers(id, version)
+          SortdivisionService.openSuppliers(id, version)
           .then((res) => {
             _this.$message.success("启用成功")
             _this.getSuppliersList();
@@ -204,7 +204,7 @@ export default {
         }
         console.log(data);
         // 获取数据,然后将自己组件中的数据发送到后台
-        WharfService.getSuppliersList(data)
+        SortdivisionService.getSuppliersList(data)
         .then((res) => {
           console.log(res);
           // 初始化自己定义的数据

@@ -203,12 +203,14 @@ export default {
               WharfService.createSuppliers(this.form)
               .then(res => {
                 console.log(res);
-                this.$message.success("创建成功")
+                this.$message.success("创建成功");
+                this.$store.dispatch("tagsView/delView", this.$route);
                 this.$router.go(-1)
               })
               .catch(err => {
                 if (err === "") {
-                  this.$message.success("创建成功")
+                  this.$message.success("创建成功");
+                  this.$store.dispatch("tagsView/delView", this.$route);
                   this.$router.go(-1)
                 } else {
                   this.$message.error("创建失败" + err)
@@ -226,11 +228,12 @@ export default {
               WharfService.updateSupplier(this.form)
               .then(res => {
                 console.log(res)
-                this.$message.success("更新成功")
+                this.$message.success("更新成功");
+                this.$store.dispatch("tagsView/delView", this.$route);
                 this.$router.go(-1)
               })
               .catch(err => {
-                this.$message.error("更新失败" + err)
+                this.$message.error("更新失败" + err);
               })
             }
           } else {

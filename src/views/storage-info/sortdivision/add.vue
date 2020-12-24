@@ -12,10 +12,6 @@
         <div class="head" v-if="status === 'read'">
             <div class="head-title">
                 <div style="margin:8px">{{ '[' + suppliersInfo.code + ']' + suppliersInfo.name }}</div>
-                <template>
-                  <el-button type="text" @click="statusChange" v-if="suppliersInfo.status">禁用</el-button>
-                  <el-button type="text" @click="statusChange" v-if="!suppliersInfo.status">启用</el-button>
-                </template>
             </div>
             <div>
                 <el-button @click="back">返回</el-button>
@@ -33,61 +29,22 @@
                                 <el-row :gutter="20">
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="代码" prop="code">
-                                            <el-input v-model="form.code" maxlength="16"></el-input>
+                                            <el-input v-model="form.code" maxlength="32"></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="名称" prop="name">
-                                            <el-input v-model="form.name" maxlength="40"></el-input>
+                                            <el-input v-model="form.name" maxlength="32"></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="货位范围" prop="binScope">
-                                            <el-input v-model="form.binScope" maxlength="40"></el-input>
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col :span="6" class="info-box">
-                                        <el-form-item label="配送中心" prop="dcId">
-                                            <el-select v-model="form.dcId" placeholder="请择配送中心" @change="levelChange">
-                                                <el-option v-for="(ele,idx) in materials" :key="idx" :label="ele.name" :value="ele.id"></el-option>
-                                            </el-select>
+                                            <el-input v-model="form.binScope" maxlength="64"></el-input>
                                         </el-form-item>
                                     </el-col>
                                 </el-row>
-                                <el-form-item label="备注">
-                                    <textarea v-model="form.remark" maxlength="200" @change="levelChange"></textarea>
-                                </el-form-item>
                             </el-form>
-                            <!-- <el-form :model="form" :rules="createRules" ref="form" label-width="100px" class="demo-ruleForm">
-                                <el-row :gutter="20">
-                                    <el-col :span="6" class="info-box">
-                                        <el-form-item label="代码" prop="code">
-                                            <el-input v-model="form.code" maxlength="16"></el-input>
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col :span="6" class="info-box">
-                                        <el-form-item label="名称" prop="name">
-                                            <el-input v-model="form.name" maxlength="40"></el-input>
-                                        </el-form-item>
-                                    </el-col>
-                                   <el-col :span="6" class="info-box">
-                                        <el-form-item label="货位范围" prop="binScope">
-                                            <el-input v-model="form.binScope" maxlength="40"></el-input>
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-form-item label="配送中心" prop="dcId">
-                                            <el-select v-model="form.dcId" placeholder="请择配送中心" >
-                                                <el-option v-for="(ele,idx) in materials" :key="idx" :label="ele.name" :value="ele.id"></el-option>
-                                            </el-select>
-                                      </el-form-item>
-                                </el-row>
-                                <el-form-item label="备注">
-                                    <textarea v-model="form.remark" maxlength="200" @change="levelChange"></textarea>
-                                </el-form-item>
-                            </el-form> -->
                         </el-tab-pane>
-                        <!-- <el-tab-pane label="配送中心范围" name="range">配置管理</el-tab-pane>
-                        <el-tab-pane label="操作日志" name="log">角色管理</el-tab-pane> -->
                     </el-tabs>
                 </template>
             </div>
@@ -110,20 +67,65 @@
                                 <div>货位范围:</div>
                                 <div>{{ suppliersInfo.binScope }}</div>
                             </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>配送中心:</div>
-                                <div>{{ suppliersInfo.dcId }}</div>
-                            </el-col>
-                            <el-col class="info-box">
-                                <div>备注:</div>
-                                <div>{{ suppliersInfo.remark ? suppliersInfo.remark : "&lt;空&gt;" }}</div>
-                            </el-col>
                         </el-tab-pane>
                     </el-tabs>
                 </template>
             </div>
         </div>
-        <div class="pop-up-pag">
+        <!-- 下面是添加存储分区的顺序页面 -->
+        <div style="height:20px;background:#fff" />
+        <div style="background:#fff">
+          <el-row>
+             <el-button style="margin:18px 10px" type="primary" size="mini"><span class="iconfont iconplus-fill" style="font-size:12px;"></span> 新建</el-button>
+          </el-row>
+          <el-table
+              :data="storageList"
+              style="width: 100%;text-align:center"
+          >
+            <el-table-column prop="name" label="存储分区">
+                <template slot-scope="scope">
+                     <span style="color:#409EFF">{{ scope.row.name }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column prop="orderNumber" label="顺序">
+                <template slot-scope="scope">
+                    {{ scope.row.orderNumber}}
+                </template>
+            </el-table-column>
+            <el-table-column label="操作" width="200">
+                <template slot-scope="scope">
+                  <el-button
+                    size="mini"
+                    type="text"
+                    @click="
+                      statusChange(scope.row.status, scope.row.id, scope.row.version)
+                    "
+                    >启用</el-button
+                  >
+                  <el-button
+                    size="mini"
+                    type="text"
+                    @click="
+                      statusChange(scope.row.status, scope.row.id, scope.row.version)
+                    "
+                    >禁用</el-button
+                  >
+                </template>
+            </el-table-column>
+          </el-table>
+          <!-- 下面这个是翻页 -->
+          <el-pagination
+              style="float:right"
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page="1"
+              :page-sizes="[10, 20, 30, 50]"
+              :page-size="pageSize"
+              layout="total, sizes, prev, pager, next, jumper"
+              :total="totalCount">
+          </el-pagination>
+        </div>
+        <div class="pop-up-pag" v-show="popShow">
            <!-- 左边的按钮 -->
             <div class="right-popstorge">
               <div class="count-tatle">
@@ -201,6 +203,7 @@ export default {
   data() {
       return {
         // 弹出页面的存储
+        popShow: false,
         popstorgeList: [],
         popstorge: {
           checkedOne: false,
@@ -210,13 +213,19 @@ export default {
           searchOne: "",
           searchTwo: ""
         },
+        // 存储分区页面的展示 开始
+        storageList: [
+          {
+            name: "天心区域",
+            orderNumber: 0,
+            storageId: "111"
+          }
+        ],
+        // 存储分区页面的展示 结束
         status: '', // 页面状态
         id: '', 
-        tabActiveName: 'suppliers', // tab栏名称
-        dcId: '',
         materials: [],
         form: {
-          dcId: '',
           code: '',
           name: '',
           remark: '',
@@ -232,9 +241,6 @@ export default {
           ],
           binScope: [
             { required: true, message: '请填写货位范围', trigger: 'blur' }
-          ],
-          dcId: [
-            { required: true, message: '请填写配送中心', trigger: 'blur' }
           ]
         }
       }
@@ -244,7 +250,6 @@ export default {
     },
     methods: {
       levelChange() {
-        this.dc_id = this.form.dcId
         console.log(this.form)
       },
       back: function() {
