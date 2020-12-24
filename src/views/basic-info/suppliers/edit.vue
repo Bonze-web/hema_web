@@ -27,7 +27,7 @@
             </div>
             <div>
                 <el-button @click="back">返回</el-button>
-                <el-button type="primary" @click="editSupplier">编辑</el-button>
+                <el-button type="primary" @click="editSupplier" v-if="hasPermission(PermIds.PRODUCT_SUPPLIER_UPDATE)">编辑</el-button>
             </div>
         </div>
         <div style="height:20px" />
@@ -171,8 +171,9 @@
 </template>
 
 <script>
-// import { mapGetters } from "vuex";
 import BasicService from "@/api/service/BasicService";
+import PermIds from "@/api/permissionIds";
+import { mapGetters } from "vuex";
 
 export default {
   data() {
@@ -195,6 +196,7 @@ export default {
           remark: '',
           version: ''
         },
+        PermIds: PermIds,
         suppliersInfo: {}, // 供应商信息
         createRules: {
           code: [
@@ -217,6 +219,7 @@ export default {
       }
     },
     computed: {
+      ...mapGetters(["hasPermission"])
     },
     methods: {
       back: function() {

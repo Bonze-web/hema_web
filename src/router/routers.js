@@ -686,7 +686,8 @@ const StorageInfoPackage = {
     component: AModule,
     meta: {
       title: '货区',
-      icon: 'table'
+      icon: 'table',
+      permission: PermIds.WMS_BIN
     },
     children: [{
       path: "",
@@ -696,7 +697,8 @@ const StorageInfoPackage = {
         hidden: true,
       meta: {
         title: '货区',
-        icon: 'table'
+        icon: 'table',
+        permission: PermIds.WMS_BIN_VIEW
       }
     }]
   }]

@@ -31,7 +31,7 @@
           <el-row>
             <router-link :to="{ path: '/basicinfo/dc/add', query:{ status: 'create'} }">
             <!-- <span v-if="child.meta&&child.meta.title" :title="child.meta.title">{{child.meta.title}}</span> -->
-            <el-button style="margin:18px 10px" type="primary" size="mini">新建</el-button>
+            <el-button style="margin:18px 10px" type="primary" size="mini" v-if="hasPermission(PermIds.SYS_DC_CREATE)">新建</el-button>
         </router-link>
           </el-row>
             <el-table
@@ -85,7 +85,8 @@
 
 <script>
 import BasicService from "@/api/service/BasicService";
-// import { mapGetters } from "vuex";
+import PermIds from "@/api/permissionIds";
+import { mapGetters } from "vuex";
 
 export default {
   data() {
@@ -99,11 +100,13 @@ export default {
           status: '',
           type: ''
         },
+        PermIds: PermIds,
         dcData: [],
         multipleSelection: [] // 选择的列表
       }
     },
   computed: {
+    ...mapGetters(["hasPermission"])
   },
   methods: {
       onSubmit: function() {

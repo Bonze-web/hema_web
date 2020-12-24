@@ -27,7 +27,7 @@
             </div>
             <div>
                 <el-button @click="back">返回</el-button>
-                <el-button type="primary" @click="editDc">编辑</el-button>
+                <el-button type="primary" @click="editDc" v-if="hasPermission(PermIds.SYS_DC_UPDATE)">编辑</el-button>
             </div>
         </div>
         <div style="height:20px" />
@@ -194,12 +194,14 @@
 </template>
 
 <script>
-// import { mapGetters } from "vuex";
+import PermIds from "@/api/permissionIds";
+import { mapGetters } from "vuex";
 import BasicService from "@/api/service/BasicService";
 
 export default {
   data() {
       return {
+        PermIds: PermIds,
         dcList: [], // 中心仓列表
         status: '', // 页面状态
         id: '', // 配送中心ID
@@ -247,6 +249,7 @@ export default {
       }
     },
     computed: {
+      ...mapGetters(["hasPermission"])
     },
     methods: {
       back: function() {

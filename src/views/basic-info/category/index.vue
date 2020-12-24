@@ -26,7 +26,7 @@
           <el-row>
             <router-link :to="{ path: '/basicinfo/category/add', query:{ status: 'create'} }">
                 <!-- <span v-if="child.meta&&child.meta.title" :title="child.meta.title">{{child.meta.title}}</span> -->
-                <el-button style="margin:18px 10px" type="primary" size="mini">新建</el-button>
+                <el-button style="margin:18px 10px" type="primary" size="mini" v-if="hasPermission(PermIds.PRODUCT_CATEGORY_CREATE)">新建</el-button>
             </router-link>
           </el-row>
             <el-table
@@ -85,11 +85,13 @@
 
 <script>
 import BasicService from "@/api/service/BasicService";
-// import { mapGetters } from "vuex";
+import PermIds from "@/api/permissionIds";
+import { mapGetters } from "vuex";
 
 export default {
   data() {
       return {
+        PermIds: PermIds,
         suppliersId: '',
         page: 1,
         pageSize: 10,
@@ -104,6 +106,7 @@ export default {
       }
     },
   computed: {
+    ...mapGetters(["hasPermission"])
   },
   methods: {
       onSubmit: function() {

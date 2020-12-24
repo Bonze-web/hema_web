@@ -17,7 +17,7 @@
       </el-form>
     </div>
     <div style="height:16px"></div>
-    <el-dropdown @command="createCommand" size="mini" :split-button="true" type="primary">
+    <el-dropdown @command="createCommand" size="mini" :split-button="true" v-if="hasPermission(PermIds.WMS_BIN_CREATE)" type="primary">
       <span>新建</span>
       <el-dropdown-menu slot="dropdown">
         <el-dropdown-item command="area">新建货区</el-dropdown-item>
@@ -61,11 +61,12 @@
             <el-button
               type="text"
               size="mini"
-              v-if="node.level === 4"
+              v-if="node.level === 4 && hasPermission(PermIds.WMS_BIN_UPDATE)"
               @click.stop="() => edit(node, data)">
               编辑
             </el-button>
             <el-button
+              v-if="hasPermission(PermIds.WMS_BIN_DELETE)"
               type="text"
               size="mini"
               @click.stop="() => remove(node, data)">
@@ -238,13 +239,15 @@
 <script>
 // import BasicService from "@/api/service/BasicService";
 import StorageService from "@/api/service/StorageService";
-// import { mapGetters } from "vuex";
+import { mapGetters } from "vuex";
+import PermIds from "@/api/permissionIds";
 
 // let id = 1000;
 
   export default {
     data() {
       return {
+        PermIds: PermIds,
         treeDataId: '', // 保存树结构货位ID以便后期修改时改变页面数据
         ShelfName: '',
         formEditSpace: {
@@ -389,6 +392,7 @@ import StorageService from "@/api/service/StorageService";
       }
     },
   computed: {
+    ...mapGetters(["hasPermission"])
   },
   methods: {
     onSubmit: function() {

@@ -27,7 +27,7 @@
             </div>
             <div>
                 <el-button @click="back">返回</el-button>
-                <el-button type="primary" @click="editContainerType">编辑</el-button>
+                <el-button type="primary" @click="editContainerType" v-if="hasPermission(PermIds.WMS_CONTAINER_TYPE_UPDATE)">编辑</el-button>
             </div>
         </div>
         <div style="height:20px" />
@@ -253,12 +253,14 @@
 </template>
 
 <script>
-// import { mapGetters } from "vuex";
+import PermIds from "@/api/permissionIds";
+import { mapGetters } from "vuex";
 import BasicService from "@/api/service/BasicService";
 
 export default {
   data() {
       return {
+        PermIds: PermIds,
         status: '', // 页面状态
         id: '', // 供应商ID
         tabActiveName: 'containerType', // tab栏名称
@@ -348,6 +350,7 @@ export default {
       }
     },
     computed: {
+      ...mapGetters(["hasPermission"])
     },
     methods: {
       back: function() {

@@ -101,6 +101,15 @@ export default {
   SYS_DC_DISABLE: "sys:dc:disable",
   SYS_DC_ENABLE: "sys:dc:enable",
 
+
+    /**
+   * 货位管理模块
+   */
+  WMS_BIN: "wms:bin",
+  WMS_BIN_VIEW: "wms:bin:view",
+  WMS_BIN_CREATE: "wms:bin:create",
+  WMS_BIN_UPDATE: "wms:bin:update",
+  WMS_BIN_DELETE: "wms:bin:remove",
   /**
    * 系统组件-日志查询
    */
