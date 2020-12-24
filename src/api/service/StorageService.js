@@ -195,8 +195,8 @@ export default {
      * 
      * 更新货位 
      */
-    updateSpace() {
-        return request.put('/wms/bin/updateBin')
+    updateSpace(data) {
+        return request.put('/wms/bin/updateBin', data)
     },
      /**
       * 查询所有货位

@@ -39,37 +39,36 @@
         <span>{{ node.label }}</span>
         <span class="tree-content">
           <div class="content-info">
-            <div class="tree-box">
-              代码:{{ data.code }}
+            <div class="tree-box" v-if="node.level === 1">
+              名称：{{ data.name }}
             </div>
-            <div class="tree-box">
-              仓库:{{ data.name }}
+            <div class="tree-box" v-if="node.level === 4" style="margin-right:48px">
+              货位类型：{{ data.bintypeName }}
             </div>
             <div class="tree-box" v-if="node.level === 1">
-              名称:{{ data.name }}
+              备注：{{ data.remark ? data.remark : '&lt;空&gt;'}}
             </div>
             <div class="tree-box" v-if="node.level === 4">
-              货位类型{{ data.name }}
+              货位用途：{{ data.binusage | binUsage }}
             </div>
-            <div class="tree-box" v-if="node.level === 1">
-              备注:{{ data.remark ? data.remark : '&lt;空&gt;'}}
-            </div>
-            <div class="tree-box" v-if="node.level === 4">
-              货位用途
-            </div>
+            <!-- <div class="tree-box" v-if="node.level === 4">
+              <el-select v-model="formEditSpace.binusage" placeholder="请选择货位用途">
+                <el-option v-for="item in binUsage" :key="item.value" :label="item.name" :value="item.value"></el-option>
+              </el-select>
+            </div> -->
           </div>
           <div>
             <el-button
               type="text"
               size="mini"
-              v-if="node.level === 1 || node.level === 4"
-              @click="() => edit(data)">
+              v-if="node.level === 4"
+              @click.stop="() => edit(node, data)">
               编辑
             </el-button>
             <el-button
               type="text"
               size="mini"
-              @click="() => remove(node, data)">
+              @click.stop="() => remove(node, data)">
               删除
             </el-button>
           </div>
@@ -136,8 +135,8 @@
           <el-form-item label="起始货架" :label-width="formLabelWidth" prop="startShelf">
             <el-input v-model="formShelf.startShelf"></el-input>
           </el-form-item>
-          <el-form-item label="平均货道数" :label-width="formLabelWidth" prop="szie">
-            <el-input v-model="formShelf.szie"></el-input>
+          <el-form-item label="平均货道数" :label-width="formLabelWidth" prop="size">
+            <el-input v-model="formShelf.size"></el-input>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -192,6 +191,7 @@
               <el-option v-for="item in binUsage" :key="item.value" :label="item.name" :value="item.value"></el-option>
             </el-select>
           </el-form-item>
+
           <el-form-item label="货位类型" :label-width="formLabelWidth" prop="bintypeId">
             <el-select v-model="formSpace.bintypeId" placeholder="请选择货位类型">
               <el-option v-for="item in bintypeList" :key="item.id" :label="item.name" :value="item.id"></el-option>
@@ -209,6 +209,28 @@
       </el-dialog>
 
 
+    <!-- 更新货区 -->
+      <el-dialog width="40%" title="修改货位用途" :visible.sync="editFormSpace">
+        <el-form :model="formEditSpace" ref="formArea" :rules="areaRules">
+
+          <el-form-item label="货道" :label-width="formLabelWidth" prop="name">
+            {{ ShelfName }}
+          </el-form-item>
+  
+          <el-form-item label="货位用途" :label-width="formLabelWidth" prop="binusage">
+            <el-select v-model="formEditSpace.binusage" placeholder="请选择货位用途">
+              <el-option v-for="item in binUsage" :key="item.value" :label="item.name" :value="item.value"></el-option>
+            </el-select>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="cancelEdit">取 消</el-button>
+          <el-button type="primary" @click="subEdit">确 定</el-button>  
+        </div>
+      </el-dialog>
+
+    <!-- 更新货位 -->
+
   </div>
     </div>
 </template>
@@ -223,6 +245,15 @@ import StorageService from "@/api/service/StorageService";
   export default {
     data() {
       return {
+        treeDataId: '', // 保存树结构货位ID以便后期修改时改变页面数据
+        ShelfName: '',
+        formEditSpace: {
+          id: '',
+          binusage: '',
+          version: '',
+          bintypeId: ''
+        },
+        editFormSpace: false,
         bintypeList: [], // 货位类型
         binUsage: [
           { name: "统配收货暂存位", value: "UNIFYRECEIVE" },
@@ -246,7 +277,7 @@ import StorageService from "@/api/service/StorageService";
         props: {
           label: 'label',
           children: [],
-          isLeaf: 'leaf'
+          isLeaf: 'isLeaf'
         },
         form: {
           // 搜索筛选
@@ -302,10 +333,10 @@ import StorageService from "@/api/service/StorageService";
         },
         shelfRules: {
           startPathCode: [
-            { required: true, pattern: /^[A-Z0-9]{0,2}$/, message: '请输入最多两位的数字和大写字母的组合(例:H1)', trigger: 'change' }
+            { required: true, pattern: /^[A-Z0-9]{4,4}$/, message: '请输入四位的数字和大写字母的组合(例:H1)', trigger: 'change' }
           ],
           endPathCode: [
-            { required: true, pattern: /^[A-Z0-9]{0,2}$/, message: '请输入最多两位的数字和大写字母的组合(例:H1)', trigger: 'change' }
+            { required: true, pattern: /^[A-Z0-9]{4,4}$/, message: '请输入四位的数字和大写字母的组合(例:H1)', trigger: 'change' }
           ],
           size: [
             { required: true, pattern: /^([1-9]|[1-9]\\d|100)$/, message: '请输入1-100的整数', trigger: 'change' }
@@ -329,10 +360,10 @@ import StorageService from "@/api/service/StorageService";
         },
         spaceRules: {
           startShelfCode: [
-            { required: true, pattern: /^[A-Z0-9]{6,6}$/, message: '请输入六位数字与字母的组合', trigger: 'change' }
+            { required: true, pattern: /^[A-Z0-9]{6,6}$/, message: '请输入六位数字与字母', trigger: 'change' }
           ],
           endShelfCode: [
-            { required: true, pattern: /^[A-Z0-9]{6,6}$/, message: '请输入六位数字与字母的组合', trigger: 'change' }
+            { required: true, pattern: /^[A-Z0-9]{6,6}$/, message: '请输入六位数字与字母', trigger: 'change' }
           ],
           startRowCode: [
             { required: true, pattern: /^[1-9]{1}$/, message: '请输入1-9的数字', trigger: 'change' }
@@ -361,7 +392,32 @@ import StorageService from "@/api/service/StorageService";
   },
   methods: {
     onSubmit: function() {
-
+      this.getFreightArea()
+    },
+    edit: function(node, data) {
+      console.log(node)
+      this.ShelfName = data.code.substring(0, 4)
+      this.editFormSpace = true
+      this.formEditSpace.id = data.id
+      this.formEditSpace.version = data.version
+      this.formEditSpace.bintypeId = data.bintypeId
+      this.formEditSpace.binusage = data.binusage
+      this.treeDataId = node.id
+    },
+    cancelEdit: function() {
+      this.editFormSpace = false
+    },
+    subEdit: function() {
+      StorageService.updateSpace(this.formEditSpace)
+      .then((res) => {
+        this.$message.success('修改成功')
+        this.editFormSpace = false
+        // this.treeData
+        this.getFreightArea()
+      })
+      .catch((err) => {
+        this.$message.error('修改失败' + err.message)
+      })
     },
     createCommand: function(command) {
       if (command === "area") {
@@ -393,42 +449,102 @@ import StorageService from "@/api/service/StorageService";
         // this.dialogFormLane = false
         this.createLane()
       } else if (this.dialogFormShelf) {
-        this.dialogFormShelf = false
+        // this.dialogFormShelf = false
+        this.createShelf()
       } else if (this.dialogFormSpace) {
-        this.dialogFormSpace = false
+        // this.dialogFormSpace = false
+        this.createSpace()
       }
     },
     loadNode: function(node, resolve) {
       console.log(node)
+      // 点击树结构结点
       if (node.level === 1) {
       // 获取货道
-      StorageService.getAllFreightLane()
-      .then((res) => {
-        node.children = res.records
-        if (res.records.length === 0) {
-          resolve([])
+        const data = {
+          zoneIdEquals: node.key,
+          keyWord: this.form.keyWord  
         }
-      })
-      .catch((err) => {
-        this.$message.error('加载失败' + err.message)
-        resolve([])
-      })
+        StorageService.getAllFreightLane(data)
+        .then((res) => {
+          node.children = res.records
+          if (res.records.length === 0) {
+            resolve([])
+          } else {
+            res.records.forEach((item) => {
+              item.label = item.code
+            })
+            resolve(res.records)
+          }
+        })
+        .catch((err) => {
+          this.$message.error('加载失败' + err.message)
+          resolve([])
+        })
+      } else if (node.level === 2) {
+        // 获取货架
+        const data = {
+          pathIdEquals: node.key,
+          keyWord: this.form.keyWord
+        }
+        StorageService.getAllFreightShelf(data)
+        .then((res) => {
+          node.children = res.records
+          if (res.records.length === 0) {
+            resolve([])
+          } else {
+            res.records.forEach((item) => {
+              item.label = item.code
+            })
+            resolve(res.records)
+          }
+        })
+        .catch((err) => {
+          this.$message.error('加载失败' + err.message)
+          resolve([])
+        })
+      } else if (node.level === 3) {
+        // 获取货位
+        const data = {
+          shelfIdEquals: node.key,
+          codeLike: this.form.keyWord
+        }
+        StorageService.getAllFreightSpace(data)
+        .then((res) => {
+          node.children = res.records
+          if (res.records.length === 0) {
+            resolve([])
+          } else {
+            res.records.forEach((item) => {
+              item.label = item.code
+              item.isLeaf = true
+            })
+            resolve(res.records)
+          }
+        })
+        .catch((err) => {
+          this.$message.error('加载失败' + err.message)
+          resolve([])
+        })
       }
     },
     getFreightArea: function() {
       // 查询所有分区
       const data = {
-        codeOrNameLike: this.form.keyWord
+        keyWord: this.form.keyWord
       }
+      this.treeData = []
       StorageService.getAllFreightArea(data)
       .then((res) => {
         for (const item in res.records) {
           const obj = {
+            id: res.records[item].id,
             label: '[' + res.records[item].code + ']' + res.records[item].name,
             code: res.records[item].code,
             name: res.records[item].name,
             wrhName: res.records[item].name,
-            remark: res.records[item].remark
+            remark: res.records[item].remark,
+            version: res.records[item].version
           }
           this.treeData.push(obj)
         }
@@ -453,6 +569,7 @@ import StorageService from "@/api/service/StorageService";
               wrhId: '',
               remark: ''
             }
+            this.getFreightArea()
           })
           .catch((err) => {
             this.$message.error('新建货区失败' + err.message)
@@ -475,6 +592,7 @@ import StorageService from "@/api/service/StorageService";
               size: '', // 平均货道数
               startPath: '' // 起始货道
             }
+            this.getFreightArea()
           })
           .catch((err) => {
             this.$message.error('新建货道失败' + err.message)
@@ -484,9 +602,9 @@ import StorageService from "@/api/service/StorageService";
     },
     createShelf: function() {
       // 新建货架
-      this.$refs.formLane.validate(valid => {
+      this.$refs.formShelf.validate(valid => {
         if (valid) {
-          StorageService.createShelf(this.formLane)
+          StorageService.createShelf(this.formShelf)
           .then((res) => {
             this.$message.success('新建货架成功')
             this.dialogFormShelf = false
@@ -497,6 +615,7 @@ import StorageService from "@/api/service/StorageService";
               size: '',
               startShelf: ''
             }
+            this.getFreightArea()
           })
           .catch((err) => {
             this.$message.error('新建货架失败' + err.message)
@@ -506,9 +625,9 @@ import StorageService from "@/api/service/StorageService";
     },
     createSpace: function() {
        // 新建货位
-      this.$refs.formLane.validate(valid => {
+      this.$refs.formSpace.validate(valid => {
         if (valid) {
-          StorageService.createSpace(this.formLane)
+          StorageService.createSpace(this.formSpace)
           .then((res) => {
             this.$message.success('新建货位成功')
             this.dialogFormSpace = false
@@ -524,6 +643,7 @@ import StorageService from "@/api/service/StorageService";
               bintypeId: '', // 货位类型
               remark: ''
             }
+            this.getFreightArea()
           })
           .catch((err) => {
             this.$message.error('新建货位失败' + err.message)
@@ -559,46 +679,75 @@ import StorageService from "@/api/service/StorageService";
         this.$message.error('获取货位类型失败' + err.message)
       })
     },
-    remove: function(node, data){
-      const parent = node.parent;
-      const children = parent.data.children || parent.data;
-      const index = children.findIndex(d => d.id === data.id);
-      children.splice(index, 1);
+    remove: function(node, data) {
+      console.log(node, data)
+      const _this = this
+      _this.$confirm('此操作将进行删除, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          if (node.level === 1) {
+            _this.removeArea(data, node)
+          } else if (node.level === 2) {
+            _this.removeLane(data, node)
+          } else if (node.level === 3) {
+            _this.removeShelf(data, node)
+          } else if (node.level === 4) {
+            _this.removeSpace(data, node)
+          }         
+        });
     },
     // 删除
-    removeArea: function() {
-      StorageService.removeArea(id, version)
+    removeArea: function(data, node) {
+      StorageService.removeArea(data.id, data.version)
       .then((res) => {
         this.$message.success('删除成功')
+        const parent = node.parent;
+        const children = parent.childNodes;
+        const index = children.findIndex(d => d.id === data.id);
+        children.splice(index, 1);
       })
-      .catct((err) => {
+      .catch((err) => {
         this.$message.error('删除失败' + err.message)
       })
     },
-    removeSpace: function() {
-      StorageService.removeSpace(id, version)
+    removeSpace: function(data, node) {
+      StorageService.removeSpace(data.id, data.version)
       .then((res) => {
         this.$message.success('删除成功')
+        const parent = node.parent;
+        const children = parent.childNodes;
+        const index = children.findIndex(d => d.id === data.id);
+        children.splice(index, 1);
       })
-      .catct((err) => {
+      .catch((err) => {
         this.$message.error('删除失败' + err.message)
       })
     },
-    removeLane: function() {
-      StorageService.removeLane(id, version)
+    removeLane: function(data, node) {
+      StorageService.removeLane(data.id, data.version)
       .then((res) => {
         this.$message.success('删除成功')
+        const parent = node.parent;
+        const children = parent.childNodes;
+        const index = children.findIndex(d => d.id === data.id);
+        children.splice(index, 1);
       })
-      .catct((err) => {
+      .catch((err) => {
         this.$message.error('删除失败' + err.message)
       })
     },
-    removeShelf: function() {
-      StorageService.removeShelf(id, version)
+    removeShelf: function(data, node) {
+      StorageService.removeShelf(data.id, data.version)
       .then((res) => {
         this.$message.success('删除成功')
+        const parent = node.parent;
+        const children = parent.childNodes;
+        const index = children.findIndex(d => d.id === data.id);
+        children.splice(index, 1);
       })
-      .catct((err) => {
+      .catch((err) => {
         this.$message.error('删除失败' + err.message)
       })
     }
@@ -609,6 +758,42 @@ import StorageService from "@/api/service/StorageService";
     this.getBinType()
   },
   filters: {
+    binUsage(type) {
+      switch (type) {
+        case "UNIFYRECEIVE":
+          return "统配收货暂存位"
+        case "PUTAWAY":
+          return "上架中转位"
+        case "PICK":
+          return "拣货位"
+        case "STORAGE":
+          return "存储位"
+        case "PICK_STORAGE":
+          return "拣货存储位"
+        case "UNIFYPICK":
+          return "统配拣货暂存位"
+        case "UNIFYCOLLECT":
+          return "统配集货存储位"
+        case "RPL":
+          return "补货暂存位"
+        case "TRANSFERRECEIVE":
+          return "中转收货暂存位"
+        case "TRANSFERCOLLECT":
+          return "中转集货暂存位"
+        case "DIRECTRECEIVE":
+          return "直通收货暂存位"
+        case "STORECROSSALLOCATE":
+          return "门店分拨位"
+        case "STORERTN":
+          return "门店退货收货暂存位"
+        case "VENDORRTN":
+          return "供应商退货位"
+        case "VENDORCOLLECT":
+          return "供应商集货位"
+        default:
+          return "未知"
+      }
+    }
   }
 };
 </script>
