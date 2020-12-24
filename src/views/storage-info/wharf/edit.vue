@@ -224,6 +224,7 @@ export default {
                 this.$router.go(-1)
               })
               .catch(err => {
+                console.log(err);
                 this.$message.error("更新失败" + err)
               })
             }
@@ -237,10 +238,8 @@ export default {
         this.status = "edit"
         // 这个form肯定就是编辑页面的数据,suppliersInfo是前一个页面传递过来的数据
         // 传递的是form是用户填写的数据
-        console.log(this.status);
         this.form.id = this.id;
         this.form = Object.assign(this.form, this.suppliersInfo)
-        console.log(this.form, this.suppliersInfo)
       }
     },
     created() {
@@ -248,11 +247,13 @@ export default {
     },
     filters: {
         purposeChange(val) {
+          if(!val) return false;
           var str = "";
           for (let i = 0; i < val.length; i++) {
+            console.log(val);
             switch (val[i]) {
               case "RECEIVE":
-                if (i < val.length - 1) {
+               if (i < val.length - 1) {
                   str += "收货,";
                   break
                 } else {
