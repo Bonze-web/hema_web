@@ -11,10 +11,9 @@
 
         <div class="head" v-if="status === 'read'">
             <div class="head-title">
-                <div style="margin:8px">{{ '[' + warehouseInfo.code + ']' + warehouseInfo.name }}</div>
+                <div style="margin:8px">{{ '[' + wmsBintypeInfo.code + ']' + wmsBintypeInfo.name }}</div>
                 <template>
-                  <el-button type="text" @click="statusChange" v-if="warehouseInfo.status">禁用</el-button>
-                  <el-button type="text" @click="statusChange" v-if="!warehouseInfo.status">启用</el-button>
+                  <el-button type="text" @click="deleteWmsBintype">删除</el-button>
                 </template>
             </div>
             <div>
@@ -98,48 +97,50 @@
         <div class="info-content" v-if="status === 'read'">
             <div>
                 <template>
-                    <el-tabs v-model="tabActiveName" @tab-click="tabClick">
-                        <el-tab-pane label="商品类别" name="category">
+                    <el-tabs v-model="tabActiveName">
+                        <el-tab-pane label="货位类型" name="category">
                             <div class="info-title">基本信息</div>
                             <el-col :span="6" class="info-box">
                                 <div>代码:</div>
-                                <div>{{ warehouseInfo.code }}</div>
+                                <div>{{ wmsBintypeInfo.code }}</div>
                             </el-col>
                             <el-col :span="6" class="info-box">
                                 <div>名称:</div>
-                                <div>{{ warehouseInfo.name }}</div>
+                                <div>{{ wmsBintypeInfo.name }}</div>
                             </el-col>
                             <el-col :span="6" class="info-box">
                                 <div>存储盘数:</div>
-                                <div>{{ warehouseInfo.dcId }}</div>
+                                <div>{{ wmsBintypeInfo.storageNumber }}</div>
                             </el-col>
                             <el-col class="info-box">
                                 <div>备注:</div>
-                                <div>{{ warehouseInfo.remark ? warehouseInfo.remark : "&lt;空&gt;" }}</div>
+                                <div>{{ wmsBintypeInfo.remark ? wmsBintypeInfo.remark : "&lt;空&gt;" }}</div>
                             </el-col>
                             </br>
                             <div class="info-title" style="padding-top:22px">规格信息</div>
                             <el-col :span="6" class="info-box">
                                 <div>长度(cm):</div>
-                                <div>{{ warehouseInfo.code }}</div>
+                                <div>{{ wmsBintypeInfo.length }}</div>
                             </el-col>
                             <el-col :span="6" class="info-box">
                                 <div>宽度(cm):</div>
-                                <div>{{ warehouseInfo.code }}</div>
+                                <div>{{ wmsBintypeInfo.width }}</div>
                             </el-col>
                             <el-col :span="6" class="info-box">
                                 <div>高度(cm):</div>
-                                <div>{{ warehouseInfo.code }}</div>
+                                <div>{{ wmsBintypeInfo.height }}</div>
                             </el-col>
                             <el-col :span="6" class="info-box">
                                 <div>承重(kg):</div>
-                                <div>{{ warehouseInfo.code }}</div>
+                                <div>{{ wmsBintypeInfo.weight }}</div>
                             </el-col>
                             <el-col :span="6" class="info-box">
                                 <div>容积率(%):</div>
-                                <div>{{ warehouseInfo.code }}</div>
+                                <div>{{ wmsBintypeInfo.plotRatio }}</div>
                             </el-col>
                         </el-tab-pane>
+
+                        <!-- <el-tab-pane label="消息中心">消息中心</el-tab-pane> -->
                     </el-tabs>
                 </template>
             </div>
@@ -154,31 +155,61 @@ import StorageService from "@/api/service/StorageService";
 export default {
   data() {
       return {
-        parentList: [], // 父级类别列表
-        level: "one", // 新建类别级别
-        status: '', // 页面状态
-        id: '', // 商品类别ID
         tabActiveName: 'category', // tab栏名称
+        active: 'ccc',
+        status: '', // 页面状态
+        id: '', // 货位类别ID
         form: {
           code: '',
           name: '',
-          dcId: '',
-          remark: ''
+          storageNumber: '',
+          remark: '',
+          length: '',
+          width: '',
+          height: '',
+          weight: '',
+          plotRatio: '',
+          dcId: ''
         },
-        page: 0,
-        pageSize: 10,
-        warehouseInfo: {}, // 仓库信息
         createRules: {
           code: [
-            { required: true, message: '请输入类别代码', trigger: 'blur' }
+            { required: true, message: '请输入类别代码', trigger: 'blur' },
+            { required: true, max: 16, message: '最多输入16位', trigger: 'change' }
           ],
           name: [
-            { required: true, message: '请输入类别名称', trigger: 'blur' }
+            { required: true, message: '请输入类别名称', trigger: 'blur' },
+            { required: true, max: 40, message: '最多输入40位', trigger: 'change' }
           ],
-          level: [
-            { required: true, message: '请选择类别级别', trigger: 'blur' }
+          storageNumber: [
+            { required: true, message: '请选输入存储盘数量', trigger: 'blur' },
+            { pattern: /^\d{1,9}(\.\d+)?$/, message: '请输入1-999999999之间的数字', trigger: 'change' }
+          ],
+          remark: [
+            { required: true, message: '请输入备注', trigger: 'blur' },
+            { required: true, max: 200, message: '最多输入200位', trigger: 'change' }
+          ],
+          length: [
+            { required: true, message: '请输入长度', trigger: 'blur' },
+            { pattern: /^\d{1,4}(\.\d+)?$/, message: '请输入1-9999之间的数字', trigger: 'change' }
+          ],
+          width: [
+            { required: true, message: '请输入宽度', trigger: 'blur' },
+            { pattern: /^\d{1,4}(\.\d+)?$/, message: '请输入1-9999之间的数字', trigger: 'change' }
+          ],
+          height: [
+            { required: true, message: '请输入高度', trigger: 'blur' },
+            { pattern: /^\d{1,4}(\.\d+)?$/, message: '请输入1-9999之间的数字', trigger: 'change' }
+          ],
+          weight: [
+            { required: true, message: '请输入承重', trigger: 'blur' },
+            { pattern: /^\d{1,4}(\.\d+)?$/, message: '请输入1-9999之间的数字', trigger: 'change' }
+          ],
+          plotRatio: [
+            { required: true, message: '请输入容积率', trigger: 'blur' },
+            { pattern: /^\d{1,2}(\.\d+)?$/, message: '请输入1-99之间的数字', trigger: 'change' }
           ]
-        }
+        },
+        wmsBintypeInfo: {} // 货位
       }
     },
     computed: {
@@ -188,37 +219,23 @@ export default {
         this.$store.dispatch("tagsView/delView", this.$route);
         this.$router.go(-1)
       },
-      statusChange: function() {
-        // 修改仓库状态
+      deleteWmsBintype: function() {
+        // 删除货位
         const _this = this;
-        this.$confirm('此操作将改变仓库状态，是否继续?', '提示', {
+        this.$confirm('操作将删除此货位，是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          if (_this.warehouseInfo.status) {
-            // 禁用
-            StorageService.closeWarehouse(_this.warehouseInfo.id, _this.warehouseInfo.version)
-            .then((res) => {
-              _this.$message.success("禁止用成功")
-              _this.getCategory(_this.id)
-            })
-            .catch((err) => {
-              _this.$message.error("禁用失败" + err)
-              _this.getCategory(_this.id)
-            })
-          } else {
-            // 启用
-            StorageService.openWarehouse(_this.warehouseInfo.id, _this.warehouseInfo.version)
-            .then((res) => {
-              _this.$message.success("启用成功")
-              _this.getCategory(_this.id)
-            })
-            .catch((err) => {
-              _this.$message.error("启用失败" + err)
-              _this.getCategory(_this.id)
-            })
-          }
+          StorageService.deleteWmsBintype(_this.wmsBintypeInfo.id, _this.wmsBintypeInfo.version)
+          .then(res => {
+            this.$message.success("删除成功")
+            this.$store.dispatch("tagsView/delView", this.$route);
+            this.$router.go(-1)
+          })
+          .catch(err => {
+            this.$message.error("删除失败" + err.message)
+          })
         }).catch(() => {
           this.$message({
             type: 'info',
@@ -231,107 +248,49 @@ export default {
 
         if (this.status === 'read') {
           this.id = this.$route.query.id;
-
-          this.getCategory(this.id)
+          this.getWmsBintypeDetails(this.id)
         }
       },
-      getCategory: function(id) {
-        StorageService.warehouseDetails(id)
+      getWmsBintypeDetails: function(id) {
+        StorageService.getWmsBintypeDetails(id)
         .then((res) => {
           console.log(res)
-          this.warehouseInfo = res;
+          this.wmsBintypeInfo = res;
           // 根据状态修改仓库开启switch
-          if (this.warehouseInfo.status === "OFF") {
-            this.warehouseInfo.status = true
+          if (this.wmsBintypeInfo.status === "OFF") {
+            this.wmsBintypeInfo.status = true
           } else {
-            this.warehouseInfo.status = false
+            this.wmsBintypeInfo.status = false
           }
 
-          this.form = this.warehouseInfo;
-          // if (res.level !== "one") {
-          //   this.level = res.level
-          // }
+          this.form = this.wmsBintypeInfo;
         })
         .catch((err) => {
           this.$message.error("获取详情失败" + err)
         })
       },
-      tabClick: function() {  
-      },
       createCategory: function() {
-        // 创建新的仓位
+        // 更新货位
         this.$refs.form.validate(valid => {
           if (valid) {
-            if (!this.form.dcId) {
-              this.$message.error("请选择一个配送中心")
-              return
-            }
+            const opt = Object.assign(this.wmsBintypeInfo, this.from)
+            opt.status = 'NORMAL';
 
-            if (this.status === 'create') {
-              StorageService.createWarehouse(this.form)
-              .then(res => {
-                this.$message.success("创建成功")
-                this.$store.dispatch("tagsView/delView", this.$route);
-                this.$router.go(-1)
-              })
-              .catch(err => {
-                this.$message.error("创建失败" + err)
-              })
-            } else {
-              if (this.form.status) {
-                this.form.status = "NO"
-              } else {
-                this.form.status = "OFF"
-              }
-              StorageService.updateWarehouse(this.form)
-              .then(res => {
-                console.log(res)
-                this.$message.success("更新成功")
-
-                this.$store.dispatch("tagsView/delView", this.$route);
-                this.$router.go(-1)
-              })
-              .catch(err => {
-                this.$message.error("更新失败" + err)
-              })
-            }
+            StorageService.updateWmsBintype(opt)
+            .then(res => {
+              this.$message.success("更新成功")
+              this.$store.dispatch("tagsView/delView", this.$route);
+              this.$router.go(-1)
+            })
+            .catch(err => {
+              this.$message.error("更新失败" + err.message)
+            })
           }
         })
       },
       editCategory() {
         this.status = "edit"
         this.form = Object.assign(this.form, this.categoryInfo)
-        console.log(this.form)
-        if (this.level !== "one") {
-          this.getParentCategory()
-        }
-      },
-      levelChange() {
-        this.level = this.form.level
-        console.log(this.form)
-        // if (this.form.level === "one") {
-        //   return
-        // }
-        // this.form.parentId = ""
-        // this.getParentCategory()
-      },
-      getParentCategory() {
-        // const data = {
-        //   page: this.page,
-        //   pageSize: 0,
-        //   lowerLevelEquals: this.form.level
-        // }
-        // BasicService.getCateGoryQuery(data)
-        // .then((res) => {
-        //   this.parentList = res.records
-        //   for (const item in res.records) {
-        //     // 处理供应商数据
-        //     this.parentList[item].name = '[' + this.parentList[item].code + ']' + this.parentList[item].name
-        //   }
-        // })
-        // .catch((err) => {
-        //     this.$message.error("加载父级列表失败，请刷新页面重新尝试" + err)
-        // })
       }
     },
     created() {

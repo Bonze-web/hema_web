@@ -51,7 +51,7 @@
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
-                                        <el-form-item label="配送中心" prop="dcId">
+                                        <el-form-item label="物流中心" prop="dcId">
                                           <el-select v-model="form.dcId" placeholder="请选择物流中心" @change="levelChange">
                                             <el-option v-for="(item, index) in records" :key="index" :label="item.name" :value="item.id"></el-option>
                                           </el-select>
@@ -82,27 +82,12 @@
                                 <div>名称:</div>
                                 <div>{{ warehouseInfo.name }}</div>
                             </el-col>
-                            <!-- <el-col :span="6" class="info-box">
-                                <div>配送中心:</div>
-                                <div>{{ warehouseInfo.dcId }}</div>
-                            </el-col> -->
-
-                            <!-- <el-col :span="6" class="info-box">
-                                <div>货主:</div>
-                                <div></div>
-                            </el-col> -->
-                            <!-- <el-col :span="6" class="info-box">
-                                <div>上级类别:</div>
-                                <div>{{ warehouseInfo.parentName ? warehouseInfo.parentName : "&lt;空&gt;" }}</div>
-                            </el-col> -->
 
                             <el-col class="info-box">
                                 <div>备注:</div>
                                 <div>{{ warehouseInfo.remark ? warehouseInfo.remark : "&lt;空&gt;" }}</div>
                             </el-col>
                         </el-tab-pane>
-                        <!-- <el-tab-pane label="配送中心范围" name="range">配置管理</el-tab-pane>
-                        <el-tab-pane label="操作日志" name="log">角色管理</el-tab-pane> -->
                     </el-tabs>
                 </template>
             </div>
@@ -227,7 +212,7 @@ export default {
         this.$refs.form.validate(valid => {
           if (valid) {
             if (!this.form.dcId) {
-              this.$message.error("请选择一个配送中心")
+              this.$message.error("请选择一个物流中心")
               return
             }
 

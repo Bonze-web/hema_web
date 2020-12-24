@@ -34,7 +34,16 @@
                                           <el-input v-model="form.storageNumber"></el-input>
                                       </el-form-item>
                                     </el-col>
+
+                                    <el-col :span="6" class="info-box">
+                                      <el-form-item label="物流中心" prop="dcId">
+                                        <el-select v-model="form.dcId" placeholder="请选择物流中心">
+                                          <el-option v-for="(item, index) in records" :key="index" :label="item.name" :value="item.id"></el-option>
+                                        </el-select>
+                                      </el-form-item>
+                                    </el-col>
                                 </el-row>
+
                                 <el-form-item label="备注" prop="remark">
                                     <textarea v-model="form.remark"></textarea>
                                 </el-form-item>
@@ -49,8 +58,8 @@
                                     </el-col>
 
                                     <el-col :span="6" class="info-box">
-                                        <el-form-item label="宽度(cm)" prop="widht">
-                                            <el-input v-model="form.widht"></el-input>
+                                        <el-form-item label="宽度(cm)" prop="width">
+                                            <el-input v-model="form.width"></el-input>
                                         </el-form-item>
                                     </el-col>
 
@@ -95,10 +104,11 @@ export default {
           storageNumber: '',
           remark: '',
           length: '',
-          widht: '',
+          width: '',
           height: '',
           weight: '',
-          plotRatio: ''
+          plotRatio: '',
+          dcId: ''
         },
         createRules: {
           code: [
@@ -111,7 +121,7 @@ export default {
           ],
           storageNumber: [
             { required: true, message: '请选输入存储盘数量', trigger: 'blur' },
-            { pattern: /^[0-9]{9}$/, message: '请输入1-999999999之间的数字', trigger: 'change' }
+            { pattern: /^\d{1,9}(\.\d+)?$/, message: '请输入1-999999999之间的数字', trigger: 'change' }
           ],
           remark: [
             { required: true, message: '请输入备注', trigger: 'blur' },
@@ -119,25 +129,26 @@ export default {
           ],
           length: [
             { required: true, message: '请输入长度', trigger: 'blur' },
-            { pattern: /^\d{1,6}(\.\d+)?$/, message: '请输入1-99999之间的数字', trigger: 'change' }
+            { pattern: /^\d{1,4}(\.\d+)?$/, message: '请输入1-9999之间的数字', trigger: 'change' }
           ],
-          widht: [
+          width: [
             { required: true, message: '请输入宽度', trigger: 'blur' },
-            { pattern: /^\d{1,6}(\.\d+)?$/, message: '请输入1-99999之间的数字', trigger: 'change' }
+            { pattern: /^\d{1,4}(\.\d+)?$/, message: '请输入1-9999之间的数字', trigger: 'change' }
           ],
           height: [
             { required: true, message: '请输入高度', trigger: 'blur' },
-            { pattern: /^\d{1,6}(\.\d+)?$/, message: '请输入1-99999之间的数字', trigger: 'change' }
+            { pattern: /^\d{1,4}(\.\d+)?$/, message: '请输入1-9999之间的数字', trigger: 'change' }
           ],
           weight: [
             { required: true, message: '请输入承重', trigger: 'blur' },
-            { pattern: /^\d{1,6}(\.\d+)?$/, message: '请输入1-99999之间的数字', trigger: 'change' }
+            { pattern: /^\d{1,4}(\.\d+)?$/, message: '请输入1-9999之间的数字', trigger: 'change' }
           ],
           plotRatio: [
             { required: true, message: '请输入容积率', trigger: 'blur' },
-            { pattern: /^[0-9]{2}$/, message: '请输入1-9999之间的数字', trigger: 'change' }
+            { pattern: /^\d{1,2}(\.\d+)?$/, message: '请输入1-99之间的数字', trigger: 'change' }
           ]
-        }
+        },
+        records: []
       }
     },
     computed: {
@@ -148,13 +159,14 @@ export default {
         this.$router.go(-1)
       },
       confirm() {
-        // 确认
        // 创建新的仓位
         this.$refs.form.validate(valid => {
           if (valid) {
             StorageService.openWmsBintype(this.form)
             .then(res => {
-              console.log(res)
+              this.$message.success("创建成功")
+              this.$store.dispatch("tagsView/delView", this.$route);
+              this.$router.go(-1)
             })
             .catch(err => {
               this.$message.error("创建失败" + err)
@@ -163,23 +175,15 @@ export default {
         })
       }
     },
-    created() {},
-    filters: {
-      categoryLevel(level) {
-        switch (level) {
-          case "one":
-            return "一级"
-          case "two":
-            return "二级"
-          case "three":
-            return "三级"
-          case "four":
-            return "四级"
-          default:
-            return '未知';
-        }
-      }
-    }
+    created() {
+      StorageService.getDcQuery()
+      .then(res => {
+        this.records = res.records;
+      }).catch((err) => {
+          this.$message.error("获取物流中心失败" + err)
+      })
+    },
+    filters: {}
 };
 </script>
 
