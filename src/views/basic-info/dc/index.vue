@@ -10,7 +10,7 @@
                     <el-select v-model="form.status" placeholder="请选择状态">
                     <el-option label="全部" value=""></el-option>
                     <el-option label="启用" value="ON"></el-option>
-                    <el-option label="停用" value="OFF"></el-option>
+                    <el-option label="禁用" value="OFF"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="类型">
