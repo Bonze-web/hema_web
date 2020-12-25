@@ -59,6 +59,7 @@
                                             <el-input v-model="form.code"></el-input>
                                         </el-form-item>
                                     </el-col>
+                                </el-row>
                             </el-form>
                         </el-tab-pane>
                         <!-- <el-tab-pane label="配送中心范围" name="range">配置管理</el-tab-pane>
