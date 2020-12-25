@@ -5,7 +5,7 @@
       <el-form ref="form" style="display: flex" :model="form" label-width="10px" label-position="right" >
 
         <el-form-item>
-          <el-input placeholder="请输入内容" v-model="form.keyWord">
+          <el-input placeholder="请输入内容" v-model="form.keyword">
             <i slot="prefix" class="el-input__icon el-icon-search"></i>
           </el-input>
         </el-form-item>
@@ -87,7 +87,7 @@
           </el-form-item>
           <el-form-item label="所属仓库" :label-width="formLabelWidth" prop="wrhId">
             <el-select v-model="formArea.wrhId" placeholder="请选择所属仓库">
-              <el-option v-for="item in wrhList" :key="item.id" :label="item.name" :value="item.id"></el-option>
+              <el-option v-for="item in wrhList" :key="item.id" :label="'[' + item.code + ']' + item.name" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="备注" :label-width="formLabelWidth">
@@ -284,7 +284,7 @@ import PermIds from "@/api/permissionIds";
         },
         form: {
           // 搜索筛选
-          keyWord: ''
+          keyword: ''
         },
         formArea: {
           // 货区
@@ -320,7 +320,7 @@ import PermIds from "@/api/permissionIds";
             { required: true, pattern: /^[A-Z0-9]{0,2}$/, message: '请输入最多两位的数字和大写字母的组合(例:H1)', trigger: 'change' }
           ],
           size: [
-            { required: true, pattern: /^([1-9]|[1-9]\\d|100)$/, message: '请输入1-100的整数', trigger: 'change' }
+            { required: true, pattern: /^([1-9]|[1-9]{2,2}|100)$/, message: '请输入1-100的整数', trigger: 'change' }
           ],
           startPath: [
             { required: true, pattern: /^[A-Z0-9]{0,2}$/, message: '只能输入最多两位数字', trigger: 'change' }
@@ -336,13 +336,13 @@ import PermIds from "@/api/permissionIds";
         },
         shelfRules: {
           startPathCode: [
-            { required: true, pattern: /^[A-Z0-9]{4,4}$/, message: '请输入四位的数字和大写字母的组合(例:H1)', trigger: 'change' }
+            { required: true, pattern: /^[A-Z0-9]{4,4}$/, message: '请输入四位的数字和大写字母的组合', trigger: 'change' }
           ],
           endPathCode: [
-            { required: true, pattern: /^[A-Z0-9]{4,4}$/, message: '请输入四位的数字和大写字母的组合(例:H1)', trigger: 'change' }
+            { required: true, pattern: /^[A-Z0-9]{4,4}$/, message: '请输入四位的数字和大写字母的组合', trigger: 'change' }
           ],
           size: [
-            { required: true, pattern: /^([1-9]|[1-9]\\d|100)$/, message: '请输入1-100的整数', trigger: 'change' }
+            { required: true, pattern: /^([1-9]|[1-9]{2,2}|100)$/, message: '请输入1-100的整数', trigger: 'change' }
           ],
           startShelf: [
             { required: true, pattern: /^[A-Z0-9]{0,2}$/, message: '只能输入最多两位数字', trigger: 'change' }
@@ -467,7 +467,7 @@ import PermIds from "@/api/permissionIds";
       // 获取货道
         const data = {
           zoneIdEquals: node.key,
-          keyWord: this.form.keyWord  
+          keyword: this.form.keyword  
         }
         StorageService.getAllFreightLane(data)
         .then((res) => {
@@ -489,7 +489,7 @@ import PermIds from "@/api/permissionIds";
         // 获取货架
         const data = {
           pathIdEquals: node.key,
-          keyWord: this.form.keyWord
+          keyword: this.form.keyword
         }
         StorageService.getAllFreightShelf(data)
         .then((res) => {
@@ -511,7 +511,7 @@ import PermIds from "@/api/permissionIds";
         // 获取货位
         const data = {
           shelfIdEquals: node.key,
-          codeLike: this.form.keyWord
+          codeLike: this.form.keyword
         }
         StorageService.getAllFreightSpace(data)
         .then((res) => {
@@ -535,7 +535,7 @@ import PermIds from "@/api/permissionIds";
     getFreightArea: function() {
       // 查询所有分区
       const data = {
-        keyWord: this.form.keyWord
+        keyword: this.form.keyword
       }
       this.treeData = []
       StorageService.getAllFreightArea(data)
