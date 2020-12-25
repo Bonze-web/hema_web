@@ -64,11 +64,7 @@ export default {
     return request.get('/sys/dc/query', postData);
   },
   deleteData(id, version) {
-    const postData = {
-      id: id,
-      version: version
-    }
-    return request.post('/wms/storagearea/delete', postData)
+    return request.put('/wms/storagearea/delete?id=' + id + '&version=' + version);
   }
 }
 

@@ -22,7 +22,7 @@
         <div class="info-content" v-if="status === 'create' || status === 'edit'">
             <div>
                 <template>
-                    <el-tabs v-model="tabActiveName">
+                    <el-tabs value="suppliers">
                         <el-tab-pane label="拣货分区" name="suppliers">
                             <div class="info-title">基本信息</div>
                              <el-form :model="form" :rules="createRules" ref="form" label-width="100px" class="demo-ruleForm">
@@ -76,7 +76,7 @@
         <div style="height:20px;background:#fff" />
         <div style="background:#fff" class="table-index">
           <el-row>
-             <el-button style="margin:18px 10px" type="primary" size="mini" @click="establish = true"><span class="iconfont iconplus-fill" style="font-size:12px;"></span> 新建</el-button>
+             <el-button style="margin:18px 10px" type="primary" size="mini" @click="clickstoredContentChange"><span class="iconfont iconplus-fill" style="font-size:12px;"></span> 新建</el-button>
           </el-row>
           <el-table
               :data="storageList"
@@ -114,49 +114,25 @@
                 </template>
             </el-table-column>
           </el-table>
-          <!-- 下面这个是翻页 -->
-          <el-pagination
-              style="float:right"
-              @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
-              :current-page="1"
-              :page-sizes="[10, 20, 30, 50]"
-              :page-size="pageSize"
-              layout="total, sizes, prev, pager, next, jumper"
-              :total="totalCount">
-          </el-pagination>
         </div>
         <!-- 添加存储分区 -->
-         <el-dialog title="添加存储分区" :visible.sync="establish">
-            <div style="text-align: center">
+        <el-dialog title="添加存储分区" :visible.sync="time" style="margin-top: 7vh">
+            <div style="text-align: center; position: relative">
+              <div class="searchBox">
+                  <el-input v-model="searchDataLeft" placeholder="请输入搜索的内容" @change="searchDataLeftChange"><i slot="prefix" class="el-input__icon el-icon-search" style="right:0" @click="searchDataLeftChange"></i></el-input>
+                  <el-input v-model="searchDataRight" placeholder="请输入搜索的内容" @change="searchDataRightChange"><i slot="prefix" class="el-input__icon el-icon-search" style="right:0"></i></el-input>
+              </div>
               <el-transfer
                 style="text-align: left; display: inline-block; height : 400px;"
-                v-model="value"
-                filterable
-                :left-default-checked="[2, 3]"
-                :right-default-checked="[1]"
+                v-model="myval"
                 :render-content="renderFunc"
                 :titles="['存储分区', '存储分区']"
                 :format="{
-                  noChecked: '${total}',
-                  hasChecked: '${checked}/${total}'
+                  noChecked: storedContentTotalCount,
+                  hasChecked: storedContentCur
                 }"
-                @change="handleChange"
-                :data="data">
-                <el-pagination
-                :small="true"
-                slot="left-footer"
-                layout="prev, pager, next"
-                :total="1000">
-                </el-pagination>
-                <el-pagination
-                :small="true"
-                slot="right-footer"
-                layout="prev, pager, next"
-                :total="1000">
-                </el-pagination>
-                <!-- <el-button class="transfer-footer" slot="left-footer" size="small">操作</el-button> -->
-                <!-- <el-button class="transfer-footer" slot="right-footer" size="small">操作</el-button> -->
+                :data="storedContent"
+              >
               </el-transfer>
             </div>
             <div slot="footer" class="dialog-footer">
@@ -164,18 +140,97 @@
               <el-button type="primary" @click="establish = fasle;">确 定</el-button>
             </div>
         </el-dialog>
+
+
+        <el-dialog title="添加存储分区" :visible.sync="establish" style="margin-top: 7vh" class="shuttle-box">
+            <div style="text-align: center; position: relative">
+              <div class="shuttle">
+                  <div class="shuttle-left">
+                    <div class="shuttle-left-header">
+                        1/626 项
+                    </div>
+                    <el-input v-model="searchDataLeft" placeholder="请输入搜索的内容" @change="searchDataLeftChange"><i slot="prefix" class="el-input__icon el-icon-search" style="right:0" @click="searchDataLeftChange"></i></el-input>
+                    <div>
+                      <el-table
+                        ref="multipleTable"
+                        :data="tableData"
+                        tooltip-effect="dark"
+                        style="width: 100%"
+                        @selection-change="handleSelectionChange">
+                          <el-table-column
+                            type="selection"
+                            width="55">
+                          </el-table-column>
+                          <el-table-column
+                            label="存储分区"
+                            width="calc(100% - 55px)">
+                            <template slot-scope="scope">{{ scope.row.date }}</template>
+                          </el-table-column>
+                      </el-table>
+                    </div>
+                    <div class="block">
+                      <el-pagination
+                        small
+                        layout="prev, pager, next"
+                        :total="1000">
+                      </el-pagination>
+                    </div>
+                  </div>
+                  <div class="shuttle-center">
+                    <el-button type="primary" style="margin-left:0; margin-bottom: 5px;"><span class="iconfont iconyou" style="font-size:12px;"></span></el-button>
+                    <el-button type="primary" style="margin-left:0; margin-top: 5px;"><span class="iconfont iconzuo"  style="font-size:12px;"></span></el-button>
+                  </div>
+                  <div class="shuttle-right">
+                    <div class="shuttle-right-header">
+                        1/626 项
+                    </div>
+                    <el-input v-model="searchDataRight" placeholder="请输入搜索的内容" @change="searchDataRightChange"><i slot="prefix" class="el-input__icon el-icon-search" style="right:0"></i></el-input>
+                    <div>
+                      <el-table
+                        ref="multipleTable"
+                        :data="tableData"
+                        tooltip-effect="dark"
+                        style="width: 100%"
+                        @selection-change="handleSelectionChange">
+                          <el-table-column
+                            type="selection"
+                            width="55">
+                          </el-table-column>
+                          <el-table-column
+                            label="存储分区"
+                            width="calc(100% - 55px)">
+                            <template slot-scope="scope">{{ scope.row.date }}</template>
+                          </el-table-column>
+                      </el-table>
+                    </div>
+                    <div class="block">
+                      <el-pagination
+                        small
+                        layout="prev, pager, next"
+                        :total="100">
+                      </el-pagination>
+                    </div>
+                  </div>
+              </div>
+            </div>
+            <div slot="footer" class="dialog-footer">
+              <el-button @click="establish = fasle;">取 消</el-button>
+              <el-button type="primary" @click="establish = fasle;">确 定</el-button>
+            </div>
+        </el-dialog>
+
         <el-dialog title="存储方案调序" :visible.sync="dialogFormVisible">
           <el-form :model="form">
-            <el-form-item label="存储方案:" :label-width="formLabelWidth">
+            <el-form-item label="存储方案:" >
               {{'[' + numberPop.code + ']' + numberPop.name}}
             </el-form-item>
-            <el-form-item label="存储方案数量:" :label-width="formLabelWidth">
+            <el-form-item label="存储方案数量:">
               {{numberPop.totality}}
             </el-form-item>
-            <el-form-item label="当前序号:" :label-width="formLabelWidth">
+            <el-form-item label="当前序号:" >
               {{numberPop.curNum}}
             </el-form-item>
-            <el-form-item label="调整序号:" :label-width="formLabelWidth">
+            <el-form-item label="调整序号:" >
                <el-input-number size="mini" v-model="numberPop.afterNum" :max="numberPop.totality" :min="1"></el-input-number>
             </el-form-item>
           </el-form>
@@ -194,6 +249,36 @@ import SortdivisionService from "@/api/service/SortdivisionService";
 export default {
   data() {
       return {
+        tableData: [{
+          date: '2016-05-03',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄'
+        }, {
+          date: '2016-05-02',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄'
+        }, {
+          date: '2016-05-04',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄'
+        }, {
+          date: '2016-05-01',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄'
+        }, {
+          date: '2016-05-08',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄'
+        }, {
+          date: '2016-05-06',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄'
+        }, {
+          date: '2016-05-07',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄'
+        }],
+        time: false,
         dialogFormVisible: false,
         establish: false,
         // 弹出页面的存储
@@ -207,7 +292,7 @@ export default {
           searchOne: "",
           searchTwo: ""
         },
-        // 存储分区页面的展示 开始
+        // 新建分区页面的展示 开始
         storageList: [
           {
             code: "999",
@@ -230,11 +315,33 @@ export default {
         status: '', // 页面状态
         id: '', 
         materials: [],
+        // 弹出来的存储选项 start
+        myval: [],
+        storedContentTotalCount: 0,
+        storedContentCur: 0,
+        storedContent: [],
+        renderFunc(h, option) {
+          return <span>[{ option.code }]{ option.label }</span>;
+        },
+        mySelfPage: 1,
+        mySelfPageSize: 10,
+        mySelfcodeOrName: null,
+        mySelfGetFlag: 0,
+        searchDataLeft: "",
+        searchDataRight: "",
+        searchDataRightStor: [],
+        // 弹出来的存储选项 end
         form: {
           code: '',
           name: '',
-          remark: '',
-          binScope: ''
+          binScope: '',
+          storageList: [
+            {
+              name: "rrr",
+              orderNumber: 0,
+              storageId: "666"
+            }
+          ]
         },
         suppliersInfo: {}, 
         createRules: {
@@ -253,7 +360,106 @@ export default {
     computed: {
 
     },
+    watch: {
+      myval(newVal, oldVal) {
+        for(let i = 0; i < newVal.length; i++) {
+          if(newVal[i].code) {
+            this.storedContent = storedContentArr[newVal[i]];
+          }
+        }
+      }
+    },
     methods: {
+      handleSelectionChange(val) {
+        console.log(val);
+      },
+      searchDataLeftChange() {
+        this.storedContentChangeDr();
+      },
+      searchDataRightChange() {
+
+        console.log(this._data.myval)
+
+        // this.myVal = [];
+        // for(let i = 0; i < this.storedContent.length; i++) {
+        //   if(this.searchDataRight === "" || this.storedContent[i].code.includes(this.searchDataRight) || this.storedContent[i].name.includes(this.searchDataRight)) {
+        //       this.myVal.push(this.storedContent[i]);
+        //   }
+        // }
+        // console.log(this.myVal);
+      },
+      // 通过后台获取存储分区的内容 start
+      clickstoredContentChange() {
+          this.establish = true;
+          this.storedContentChange();
+      },
+      storedContentChangeDr() {
+        this.storedContent = [];
+        this.mySelfPage = 1;
+        this.mySelfPageSize = 10;
+        const mySelfData = {
+          codeOrNameEquals: this.searchDataLeft,
+          page: this.mySelfPage,
+          pageSize: this.mySelfPageSize,
+          searchCount: true
+        }
+        SortdivisionService.storedContentService(mySelfData)
+        .then((res) => {
+          console.log(res);
+          this.storedContent = res.records;
+          this.storedContentTotalCount = res.totalCount;
+          const storedContentArr = [];
+          for (let i = 0; i < this.storedContent.length; i++) {
+              storedContentArr.push({
+                key: i,
+                label: this.storedContent[i].name,
+                disabled: false,
+                binScope: "10",
+                code: this.storedContent[i].code,
+                id: this.storedContent[i].id,
+                name: this.storedContent[i].name,
+                version: this.storedContent[i].version
+              })
+          }
+          this.storedContent = storedContentArr;
+          this.$message.success("获取存储信息成功");
+        }).catch((err) => {
+          this.$message.error("获取存储信息失败" + err)
+        })
+      },
+      storedContentChange() {
+        this.storedContent = [];
+        const mySelfData = {
+          codeOrNameEquals: this.mySelfcodeOrName,
+          page: this.mySelfPage,
+          pageSize: this.mySelfPageSize,
+          searchCount: true
+        }
+        SortdivisionService.storedContentService(mySelfData)
+        .then((res) => {
+          console.log(res);
+          this.storedContent = res.records;
+          this.storedContentTotalCount = res.totalCount;
+          const storedContentArr = [];
+          for (let i = 0; i < this.storedContent.length; i++) {
+              storedContentArr.push({
+                key: i,
+                label: this.storedContent[i].name,
+                disabled: false,
+                binScope: "10",
+                code: this.storedContent[i].code,
+                id: this.storedContent[i].id,
+                name: this.storedContent[i].name,
+                version: this.storedContent[i].version
+              })
+          }
+          this.storedContent = storedContentArr;
+          this.$message.success("获取存储信息成功");
+        }).catch((err) => {
+          this.$message.error("获取存储信息失败" + err)
+        })
+      },
+      // 通过后台获取存储分区的内容 end
       // 计数区域的修改
       Cancellation(idx) {
         this.numberPop.curNum = this.numberPop.afterNum;
@@ -297,7 +503,6 @@ export default {
         if (this.status === 'read') {
           // 如果是编辑的话,还要将id传递过来
           this.id = this.$route.query.id;
-          console.log(this.id);
           this.getSuppliers(this.id)
         }
       },
@@ -392,7 +597,7 @@ export default {
               id: ele.id
            })
         })
-      })
+      });
     },
     filters: {
     
@@ -475,6 +680,69 @@ export default {
 // 弹出框
 /deep/ .el-transfer-panel {
   height : 100% !important;
+}
+/deep/ .el-transfer__buttons .el-button {
+  display: block;
+  margin: 10px auto;
+}
+/deep/ .el-transfer__buttons {
+  padding: 0 10px;
+}
+
+
+.shuttle-box {
+  margin-top: -10vh !important;
+  /deep/ .el-dialog {
+    min-width: 670px;
+    width: 70%;
+  }
+  .shuttle {
+    width: 100%;
+    height: 450px;
+    display: flex;
+    justify-content: space-between;
+    border: 1px solid #eee;
+    border-radius: 10px;
+    .shuttle-left {
+      border-radius: 10px;
+      // width: 250px;
+      flex: 1;
+      .shuttle-left-header {
+        text-align: left;
+        padding: 10px 20px 10px 20px;
+        border-bottom: 1px solid #eee;
+        margin-bottom: 10px;
+      }
+    }
+    .shuttle-center {
+      margin : 0 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .shuttle-right {
+      border-radius: 10px;
+      .shuttle-right-header {
+        text-align: left;
+        padding: 10px 20px 10px 20px;
+        border-bottom: 1px solid #eee;
+        margin-bottom: 10px;
+      }
+      // width: 250px;
+      flex: 1;
+    }
+    /deep/ .block {
+      margin-top: 10px;
+    }
+    /deep/ .el-input__prefix {
+      width: 30px;
+      left: calc(100% - 30px);
+    }
+    /deep/ .el-input--prefix .el-input__inner {
+      padding-left: 20px;
+    }
+  }
 }
 </style>
 <style lang="scss">

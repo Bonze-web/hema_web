@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="head" v-if="status === 'edit'">
+        <div class="head" v-if="status === 'create' || status === 'edit'">
             <div style="margin-top:8px" v-if="status === 'create'">编辑拣货分区</div>
             <div style="margin-top:8px" v-else>编辑</div>
             <div>
@@ -19,8 +19,6 @@
             </div>
         </div>
         <div style="height:20px" />
-
-
         <div class="info-content" v-if="status === 'create' || status === 'edit'">
             <div>
                 <template>
@@ -55,7 +53,7 @@
             <div>
                 <template>
                     <el-tabs v-model="tabActiveName">
-                        <el-tab-pane label="拣货分区" name="suppliers">
+                        <el-tab-pane label="存储分区" name="suppliers">
                             <div class="info-title">基本信息</div>
                             <el-col :span="6" class="info-box">
                                 <div>代码:</div>
@@ -70,50 +68,27 @@
                                 <div>{{ suppliersInfo.binScope }}</div>
                             </el-col>
                         </el-tab-pane>
-                        <el-pagination
-                          style="float:right"
-                          @size-change="handleSizeChange"
-                          @current-change="handleCurrentChange"
-                          :current-page="1"
-                          :page-sizes="[10, 20, 30, 50]"
-                          :page-size="pageSize"
-                          layout="total, sizes, prev, pager, next, jumper"
-                          :total="totalCount">
-                        </el-pagination>
-                    </el-tabs>
-                    <el-tabs v-model="tabActiveName">
-                      <el-tab-pane label="操作日志" name="suppliers">
-                          <el-col :span="6" class="info-box">
-                                <div>操作时间:</div>
+                        <el-tab-pane label="操作日志" name="suppliers1">
+                            <div class="info-title">基本信息</div>
+                            <el-col :span="6" class="info-box">
+                                <div>代码:</div>
                                 <div>{{ suppliersInfo.code }}</div>
                             </el-col>
                             <el-col :span="6" class="info-box">
-                                <div>操作人:</div>
+                                <div>名称:</div>
                                 <div>{{ suppliersInfo.name }}</div>
                             </el-col>
                             <el-col :span="6" class="info-box">
-                                <div>事件:</div>
+                                <div>货位范围:</div>
                                 <div>{{ suppliersInfo.binScope }}</div>
                             </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>详情:</div>
-                                <div>{{ suppliersInfo.binScope }}</div>
-                            </el-col>
-                      </el-tab-pane>
-                      <el-pagination
-                          style="float:right"
-                          @size-change="handleSizeChange"
-                          @current-change="handleCurrentChange"
-                          :current-page="1"
-                          :page-sizes="[10, 20, 30, 50]"
-                          :page-size="pageSize"
-                          layout="total, sizes, prev, pager, next, jumper"
-                          :total="totalCount">
-                      </el-pagination>
+                        </el-tab-pane>
                     </el-tabs>
+                   
                 </template>
             </div>
         </div>
+        
         <!-- 下面是添加存储分区的顺序页面 -->
         <div style="height:20px;background:#fff" />
         <div style="background:#fff" class="table-index">
@@ -156,7 +131,6 @@
                 </template>
             </el-table-column>
           </el-table>
-          <!-- 下面这个是翻页 -->
           <el-pagination
               style="float:right"
               @size-change="handleSizeChange"
@@ -168,6 +142,7 @@
               :total="totalCount">
           </el-pagination>
         </div>
+
         <!-- 添加存储分区 -->
          <el-dialog title="添加存储分区" :visible.sync="establish">
             <div style="text-align: center">

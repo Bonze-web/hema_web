@@ -97,17 +97,16 @@ export default {
     // 删除按钮
     deleteChange(id, version) {
       const _this = this;
-      console.log(id);
       // 调用删除的接口,然后分页查询的接口重新渲染页面
       StorpartitionService.deleteData(id, version)
       .then((res) => {
-        _this.$message.error("删除成功")
+        _this.$message.success("删除成功")
         _this.getSuppliersList();
       }).catch((err) => {
         if (err === "") {
-          _this.$message.error("删除成功" + err)
+          _this.$message.success("删除成功" + err.message)
         } else {
-          _this.$message.error("删除失败" + err)
+          _this.$message.error("删除失败" + err.message)
         }
         _this.getSuppliersList();
       })
@@ -246,7 +245,6 @@ export default {
       }
   },
   beforeRouteEnter(to, from, next) {
-    console.log(from);
     next(vm => {
       if (from.path === '/storageinfo/storpartition/add' || from.path === '/storageinfo/storpartition/edit') {
         vm.getSuppliersList();
