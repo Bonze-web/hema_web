@@ -27,7 +27,7 @@
             </div>
             <div>
                 <el-button @click="back">返回</el-button>
-                <el-button type="primary" @click="editCategory">编辑</el-button>
+                <el-button type="primary" @click="editCategory" v-if="hasPermission(PermIds.PRODUCT_CATEGORY_UPDATE)">编辑</el-button>
             </div>
         </div>
         <div style="height:20px" />
@@ -72,8 +72,8 @@
                                 </el-form-item>
                             </el-form>
                         </el-tab-pane>
-                        <!-- <el-tab-pane label="配送中心范围" name="range">配置管理</el-tab-pane>
-                        <el-tab-pane label="操作日志" name="log">角色管理</el-tab-pane> -->
+                        <!-- <el-tab-pane label="配送中心范围" name="range">配置管理</el-tab-pane> -->
+                        <el-tab-pane label="操作日志" name="log">角色管理</el-tab-pane>
                     </el-tabs>
                 </template>
             </div>
@@ -119,7 +119,8 @@
 </template>
 
 <script>
-// import { mapGetters } from "vuex";
+import PermIds from "@/api/permissionIds";
+import { mapGetters } from "vuex";
 import BasicService from "@/api/service/BasicService";
 
 export default {
@@ -138,6 +139,7 @@ export default {
           parentId: '',
           remark: ''
         },
+        PermIds: PermIds,
         page: 0,
         pageSize: 10,
         categoryInfo: {}, // 供应商信息
@@ -155,6 +157,7 @@ export default {
       }
     },
     computed: {
+      ...mapGetters(["hasPermission"])
     },
     methods: {
       back: function() {

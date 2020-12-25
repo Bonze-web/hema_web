@@ -24,7 +24,7 @@
           <el-row>
             <router-link :to="{ path: '/basicinfo/suppliers/add', query:{ status: 'create'} }">
               <!-- <span v-if="child.meta&&child.meta.title" :title="child.meta.title">{{child.meta.title}}</span> -->
-              <el-button style="margin:18px 10px" type="primary" size="mini">新建</el-button>
+              <el-button style="margin:18px 10px" type="primary" size="mini" v-if="hasPermission(PermIds.PRODUCT_SUPPLIER_CREATE)">新建</el-button>
             </router-link>
           </el-row>
           
@@ -80,7 +80,8 @@
 
 <script>
 import BasicService from "@/api/service/BasicService";
-// import { mapGetters } from "vuex";
+import PermIds from "@/api/permissionIds";
+import { mapGetters } from "vuex";
 
 export default {
   data() {
@@ -94,10 +95,12 @@ export default {
           status: ''
         },
         suppliersData: [],
-        multipleSelection: [] // 选择的列表
+        multipleSelection: [], // 选择的列表
+        PermIds: PermIds
       }
     },
   computed: {
+    ...mapGetters(["hasPermission"])
   },
   methods: {
       onSubmit: function() {
@@ -148,6 +151,7 @@ export default {
           nameOrCode: '',
           status: ''
         }
+        this.getSuppliersList()
       },
       getSuppliersList: function(reset) {
         // 获取供应商列表

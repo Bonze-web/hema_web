@@ -42,7 +42,7 @@
         <el-table-column prop="height" label="高度(cm)"></el-table-column>
         <el-table-column prop="weight" label="承重(kg)"></el-table-column>
         <el-table-column prop="plotRatio" label="容积率(%)"></el-table-column>
-        <el-table-column prop="storageNumber" label="存储容器数量"></el-table-column>
+        <el-table-column prop="storageNumber" label="存储托盘数"></el-table-column>
 
         <el-table-column label="操作">
           <template slot-scope="scope">

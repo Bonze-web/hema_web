@@ -58,7 +58,7 @@
                                         </el-form-item>
                                     </el-col>
                                 </el-row>
-                                <el-form-item label="备注">
+                                <el-form-item label="备注" prop="remark">
                                     <textarea v-model="form.remark"></textarea>
                                 </el-form-item>
                             </el-form>
@@ -131,13 +131,19 @@ export default {
         warehouseInfo: {}, // 仓库信息
         createRules: {
           code: [
-            { required: true, message: '请输入类别代码', trigger: 'blur' }
+            { required: true, message: '请输入类别代码', trigger: 'blur' },
+            { required: true, max: 16, message: '请输入1到16位字符', trigger: 'change' }
           ],
           name: [
-            { required: true, message: '请输入类别名称', trigger: 'blur' }
+            { required: true, message: '请输入类别名称', trigger: 'blur' },
+            { required: true, max: 40, message: '请输入1到4位字符', trigger: 'change' }
           ],
           level: [
             { required: true, message: '请选择类别级别', trigger: 'blur' }
+          ],
+          remark: [
+            { required: true, message: '请输入备注', trigger: 'blur' },
+            { required: true, max: 200, message: '最多输入200位', trigger: 'change' }
           ]
         },
         records: []
@@ -166,7 +172,7 @@ export default {
               _this.getCategory(_this.id)
             })
             .catch((err) => {
-              _this.$message.error("禁用失败" + err)
+              _this.$message.error("禁用失败" + err.message)
               _this.getCategory(_this.id)
             })
           } else {
@@ -177,7 +183,7 @@ export default {
               _this.getCategory(_this.id)
             })
             .catch((err) => {
-              _this.$message.error("启用失败" + err)
+              _this.$message.error("启用失败" + err.message)
               _this.getCategory(_this.id)
             })
           }
@@ -215,7 +221,7 @@ export default {
           // }
         })
         .catch((err) => {
-          this.$message.error("获取详情失败" + err)
+          this.$message.error("获取详情失败" + err.message)
         })
       },
       tabClick: function() {  
@@ -237,7 +243,7 @@ export default {
                 this.$router.go(-1)
               })
               .catch(err => {
-                this.$message.error("创建失败" + err)
+                this.$message.error("创建失败" + err.message)
               })
             } else {
               if (this.form.status) {
@@ -254,7 +260,7 @@ export default {
                 this.$router.go(-1)
               })
               .catch(err => {
-                this.$message.error("更新失败" + err)
+                this.$message.error("更新失败" + err.message)
               })
             }
           }
@@ -305,7 +311,7 @@ export default {
           this.records = res.records;
           console.log(this.records)
         }).catch((err) => {
-            this.$message.error("获取物流中心失败" + err)
+            this.$message.error("获取物流中心失败" + err.message)
         })
     },
     filters: {

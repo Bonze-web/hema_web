@@ -1,12 +1,12 @@
 <template>
     <div>
         <div class="head" v-if="status === 'create' || status === 'edit'">
-            <div style="margin-top:8px" v-if="status === 'create'">新建</div>
+            <div style="margin-top:8px" v-if="status === 'create'">新建容器类型</div>
             <div style="margin-top:8px" v-else>编辑</div>
             <div>
                 <el-button @click="back">取消</el-button>
                 <el-button type="primary" @click="createContainerType">确认</el-button>
-                <!-- <el-button type="primary" v-if="status === 'create'">确认并创建</el-button> -->
+                <el-button type="primary" @click="createContainerType('and')">确认并创建</el-button>
             </div>
         </div>
         <div style="height:20px" />
@@ -26,6 +26,13 @@
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="名称" prop="name">
                                             <el-input v-model="form.name"></el-input>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="6" class="info-box">
+                                        <el-form-item label="所属仓库" prop="wrhId">
+                                            <el-select v-model="form.wrhId" placeholder="请选择所属仓库">
+                                              <el-option v-for="item in wrhList" :key="item.id" :label="item.name" :value="item.id"></el-option>
+                                            </el-select>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
@@ -144,10 +151,12 @@
 <script>
 // import { mapGetters } from "vuex";
 import BasicService from "@/api/service/BasicService";
+import StorageService from "@/api/service/StorageService";
 
 export default {
   data() {
       return {
+        wrhList: [],
         status: '', // 页面状态
         id: '', // 供应商ID
         tabActiveName: 'containerType', // tab栏名称
@@ -159,8 +168,8 @@ export default {
           barcodetype: 'FOREVER', // 条码类型
           barcodelength: '', // 条码长度
           recycletype: 'BY_QTY', // 回收类型
-          shipflage: '', // 是否随车
-          attachment: '', // 是否为附件
+          shipflage: 'false', // 是否随车
+          attachment: 'false', // 是否为附件
           inlength: '', // 内长
           outlength: '',
           inwidth: '', // 内宽
@@ -172,7 +181,7 @@ export default {
           weight: '', // 自重
           remark: '',
           version: '',
-          wrhId: '1'
+          wrhId: ''
         },
         containerTypeInfo: {}, // 供应商信息
         createRules: {
@@ -183,6 +192,9 @@ export default {
           name: [
             { required: true, message: '请输入名称', trigger: 'blur' },
             { required: true, max: 32, message: '最多输入32位', trigger: 'change' }
+          ],
+          wrhId: [
+            { required: true, message: '请选择所属仓库', trigger: 'blur' }
           ],
           barcodeprefix: [
             { required: true, message: '请输入联系方式', trigger: 'blur' },
@@ -242,6 +254,19 @@ export default {
       back: function() {
         this.$router.go(-1)
       },
+      getWrhQuery: function() {
+      const data = {
+        page: 1,
+        pageSize: 0
+      }
+      StorageService.warehouseInit(data)
+      .then((res) => {
+        this.wrhList = res.records
+      })
+      .catch((err) => {
+        this.$message('获取仓库列表失败' + err.message)
+      })
+    },
       statusChange: function() {
         // 修改供应商状态
         const _this = this
@@ -290,7 +315,7 @@ export default {
       },
       tabClick: function() {  
       },
-      createContainerType: function() {
+      createContainerType: function(value) {
         // 创建新的供应商
         this.$refs.form.validate(valid => {
           if (valid) {
@@ -299,8 +324,34 @@ export default {
               .then(res => {
                 console.log(res)
                 this.$message.success("创建成功")
-                this.$store.dispatch("tagsView/delView", this.$route);
-                this.$router.go(-1)
+                if (value === "and") {
+                  this.form = {
+                    id: '',
+                    code: '',
+                    name: '',
+                    barcodeprefix: '', // 条码前缀
+                    barcodetype: 'FOREVER', // 条码类型
+                    barcodelength: '', // 条码长度
+                    recycletype: 'BY_QTY', // 回收类型
+                    shipflage: 'false', // 是否随车
+                    attachment: 'false', // 是否为附件
+                    inlength: '', // 内长
+                    outlength: '',
+                    inwidth: '', // 内宽
+                    outwidth: '',
+                    inheight: '', // 内高
+                    outheight: '',
+                    bearingweight: '', // 承重
+                    plotratio: '', // 容积率
+                    weight: '', // 自重
+                    remark: '',
+                    version: '',
+                    wrhId: ''
+                  }
+                } else {
+                  this.$store.dispatch("tagsView/delView", this.$route);
+                  this.$router.go(-1)
+                }  
               })
               .catch(err => {
                 this.$message.error("创建失败" + err.message)
@@ -315,6 +366,7 @@ export default {
               .then(res => {
                 console.log(res)
                 this.$message.success("更新成功")
+                this.$store.dispatch("tagsView/delView", this.$route);
                 this.$router.go(-1)
               })
               .catch(err => {
@@ -329,6 +381,7 @@ export default {
     },
     created() {
       this.getQueryStatus()
+      this.getWrhQuery()
     },
     beforeRouteEnter(to, from, next) {
       next(vm => {

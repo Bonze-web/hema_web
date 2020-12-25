@@ -5,9 +5,9 @@
                 <el-form-item label="类别">
                     <el-input type='text' placeholder="请输入类别编号/名称" v-model="form.nameOrCode" class="input-width"></el-input>
                 </el-form-item>
-                <el-form-item label="上级类别">
+                <!-- <el-form-item label="上级类别">
                     <el-input type='text' placeholder="请输入上级类别编号/名称" v-model="form.parentEquals" class="input-width"></el-input>
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item label="状态">
                     <el-select v-model="form.status" placeholder="请选择状态">
                       <el-option label="全部" value=""></el-option>
@@ -26,7 +26,7 @@
           <el-row>
             <router-link :to="{ path: '/basicinfo/category/add', query:{ status: 'create'} }">
                 <!-- <span v-if="child.meta&&child.meta.title" :title="child.meta.title">{{child.meta.title}}</span> -->
-                <el-button style="margin:18px 10px" type="primary" size="mini">新建</el-button>
+                <el-button style="margin:18px 10px" type="primary" size="mini" v-if="hasPermission(PermIds.PRODUCT_CATEGORY_CREATE)">新建</el-button>
             </router-link>
           </el-row>
             <el-table
@@ -48,7 +48,7 @@
                 <el-table-column prop="name" label="名称"></el-table-column>
                 <el-table-column prop="anotherName" label="上级类别">
                   <template slot-scope="scope">
-                    {{ scope.row.parentName ? scope.row.parentName : "&lt;空&gt;" }}
+                    {{ scope.row.parentName ? '[' + scope.row.parentCode + ']' + scope.row.parentName : "&lt;空&gt;" }}
                   </template>
                 </el-table-column>
                 <el-table-column prop="level" label="级别">
@@ -85,11 +85,13 @@
 
 <script>
 import BasicService from "@/api/service/BasicService";
-// import { mapGetters } from "vuex";
+import PermIds from "@/api/permissionIds";
+import { mapGetters } from "vuex";
 
 export default {
   data() {
       return {
+        PermIds: PermIds,
         suppliersId: '',
         page: 1,
         pageSize: 10,
@@ -104,6 +106,7 @@ export default {
       }
     },
   computed: {
+    ...mapGetters(["hasPermission"])
   },
   methods: {
       onSubmit: function() {
@@ -180,7 +183,8 @@ export default {
               status: res.records[item].status,
               sourceType: res.records[item].sourceType,
               level: res.records[item].level,
-              parentName: res.records[item].parentName
+              parentName: res.records[item].parentName,
+              parentCode: res.records[item].parentCode
             }
             if (obj.status === "enabled") {
               obj.status = true

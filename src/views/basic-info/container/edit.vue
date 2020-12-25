@@ -1,24 +1,15 @@
 <template>
     <div>
-        <!-- <div class="head">
-            <div style="margin-top:8px" v-if="status === 'create'">新建类别</div>
-            <div style="margin-top:8px" v-else>编辑</div>
-            <div>
-                <el-button @click="back">返回</el-button>
-                <el-button type="primary" @click="createCategory">打印</el-button>
-            </div>
-        </div> -->
-
         <div class="head">
             <div class="head-title">
-                <div style="margin:8px">{{ '[' + wmsBintypeInfo.code + ']' + wmsBintypeInfo.name }}</div>
-                <template>
-                  <el-button type="text" @click="deleteWmsBintype">状态</el-button>
-                </template>
+                <div style="margin:8px">{{ dataList.barcode  }}</div>
+                <!-- <template> -->
+                  <div style="margin:11px 0 5px 0; font-size: 12px; color: #999">{{ state }}</div>
+                <!-- </template> -->
             </div>
             <div>
                 <el-button @click="back">返回</el-button>
-                <el-button type="primary" @click="editCategory">打印</el-button>
+                <el-button type="primary"  @click="printingBtn">打印</el-button>
             </div>
         </div>
         <div style="height:20px" />
@@ -95,47 +86,107 @@
 
 
         <!-- 展示 -->
-        <div class="info-content">
+        <div class="info-content table-index">
             <div>
                 <template>
                     <el-tabs v-model="tabActiveName">
-                        <el-tab-pane label="货位类型" name="category">
+                        <el-tab-pane label="容器详情" name="category">
                             <div class="info-title">基本信息</div>
                             <el-col :span="6" class="info-box">
                                 <div>条码:</div>
-                                <div>{{ wmsBintypeInfo.code }}</div>
+                                <div>{{ dataList.barcode }}</div>
                             </el-col>
                             <el-col :span="6" class="info-box">
                                 <div>容器类型:</div>
-                                <router-link style="color: #409eff" :to="{ path: '/basicinfo/container/edit' }" >
-                                  {{ '[' + wmsBintypeInfo.code + ']' + wmsBintypeInfo.name }}
-                                </router-link>
+                                <!-- <router-link style="color: #409eff" :to="{ path: '/basicinfo/container/edit' }" > -->
+                                  {{ '[' + dataList.useStatus + ']' + dataList.containerTypeName }}
+                                <!-- </router-link> -->
                             </el-col>
                             <el-col :span="6" class="info-box">
                                 <div>所属对象:</div>
-                                <div>{{ wmsBintypeInfo.storageNumber }}</div>
+                                <div>{{ dataList.storageNumber }}</div>
                             </el-col>
                             <el-col :span="6" class="info-box">
                                 <div>父容器:</div>
-                                <div>{{ wmsBintypeInfo.remark ? wmsBintypeInfo.remark : "&lt;空&gt;" }}</div>
+                                <div>{{ dataList.parentId ? dataList.parentId : "&lt;空&gt;" }}</div>
                             </el-col>
 
                             <el-col :span="6" class="info-box">
                                 <div>当前位置:</div>
-                                <div>{{ wmsBintypeInfo.height }}</div>
+                                <div>{{ dataList.positionCode }}</div>
                             </el-col>
 
                             <el-col :span="6" class="info-box">
                                 <div>目标位置:</div>
-                                <div>{{ wmsBintypeInfo.remark ? wmsBintypeInfo.remark : "&lt;空&gt;" }}</div>
+                                <div>{{ dataList.toPositionCode ? dataList.toPositionCode : "&lt;空&gt;" }}</div>
+                            </el-col>
+                            <br>
+
+                            <el-col>
+                                <div  class="info-title title">子容器</div>
                             </el-col>
 
-                            <div class="info-title title">子容器</div>
+                            <div style="height:20px" />
+
+                            <el-table :data="dataList.sonList" style="width: 100%; text-align: center" :row-style="{ height: '16px', padding: '-4px' }" >
+
+                            <el-table-column prop="a" label="条码" style="height: 20px">
+                              <template slot-scope="scope">
+                                <!-- <router-link style="color: #409eff" :to="{ path: '/basicinfo/container/edit' }" > -->
+                                  <span>条码{{ scope.row.a }}</span>
+                                <!-- </router-link> -->
+                              </template>
+                            </el-table-column>
+
+                            <el-table-column prop="b" label="容器类型" style="height: 20px">
+                              <template slot-scope="scope">
+                                <!-- <router-link style="color: #409eff" :to="{ path: '/basicinfo/container-type' }" > -->
+                                  <span>容器类型{{ scope.row.b }}</span>
+                                <!-- </router-link> -->
+                              </template>
+                            </el-table-column>
+
+                            <el-table-column prop="c" label="状态">
+                              <template slot-scope="scope">
+                                {{ scope.row.c }}
+                              </template>
+                            </el-table-column>
+
+                          </el-table>
+
 
                         </el-tab-pane>
 
                         <el-tab-pane label="操作日志" name="active">
-                          1111
+                          <el-table :data="dataList.sonList" style="width: 100%; text-align: center" :row-style="{ height: '16px', padding: '-4px' }" >
+
+                            <el-table-column prop="a" label="操作时间" style="height: 20px">
+                              <template slot-scope="scope">
+                                  <span>条码{{ scope.row.a }}</span>
+                              </template>
+                            </el-table-column>
+
+                            <el-table-column prop="b" label="操作类型" style="height: 20px">
+                              <template slot-scope="scope">
+                                <!-- <router-link style="color: #409eff" :to="{ path: '/basicinfo/container-type' }" > -->
+                                  <span>容器类型{{ scope.row.b }}</span>
+                                <!-- </router-link> -->
+                              </template>
+                            </el-table-column>
+
+                            <el-table-column prop="c" label="事件">
+                              <template slot-scope="scope">
+                                {{ scope.row.c }}
+                              </template>
+                            </el-table-column>
+
+                            <el-table-column prop="d" label="修改">
+                              <template slot-scope="scope">
+                                {{ scope.row.d }}
+                              </template>
+                            </el-table-column>
+
+                          </el-table>
                         </el-tab-pane>
                     </el-tabs>
                 </template>
@@ -145,66 +196,17 @@
 </template>
 
 <script>
-import StorageService from "@/api/service/StorageService";
+import BasicService from "@/api/service/BasicService";
 
 export default {
   data() {
       return {
+        state: '', // 状态
         tabActiveName: 'category', // tab栏名称
         active: 'ccc',
         status: '', // 页面状态
         id: '', // 货位类别ID
-        form: {
-          code: '',
-          name: '',
-          storageNumber: '',
-          remark: '',
-          length: '',
-          width: '',
-          height: '',
-          weight: '',
-          plotRatio: '',
-          dcId: ''
-        },
-        createRules: {
-          code: [
-            { required: true, message: '请输入类别代码', trigger: 'blur' },
-            { required: true, max: 16, message: '最多输入16位', trigger: 'change' }
-          ],
-          name: [
-            { required: true, message: '请输入类别名称', trigger: 'blur' },
-            { required: true, max: 40, message: '最多输入40位', trigger: 'change' }
-          ],
-          storageNumber: [
-            { required: true, message: '请选输入存储盘数量', trigger: 'blur' },
-            { pattern: /^\d{1,9}(\.\d+)?$/, message: '请输入1-999999999之间的数字', trigger: 'change' }
-          ],
-          remark: [
-            { required: true, message: '请输入备注', trigger: 'blur' },
-            { required: true, max: 200, message: '最多输入200位', trigger: 'change' }
-          ],
-          length: [
-            { required: true, message: '请输入长度', trigger: 'blur' },
-            { pattern: /^\d{1,4}(\.\d+)?$/, message: '请输入1-9999之间的数字', trigger: 'change' }
-          ],
-          width: [
-            { required: true, message: '请输入宽度', trigger: 'blur' },
-            { pattern: /^\d{1,4}(\.\d+)?$/, message: '请输入1-9999之间的数字', trigger: 'change' }
-          ],
-          height: [
-            { required: true, message: '请输入高度', trigger: 'blur' },
-            { pattern: /^\d{1,4}(\.\d+)?$/, message: '请输入1-9999之间的数字', trigger: 'change' }
-          ],
-          weight: [
-            { required: true, message: '请输入承重', trigger: 'blur' },
-            { pattern: /^\d{1,4}(\.\d+)?$/, message: '请输入1-9999之间的数字', trigger: 'change' }
-          ],
-          plotRatio: [
-            { required: true, message: '请输入容积率', trigger: 'blur' },
-            { pattern: /^\d{1,2}(\.\d+)?$/, message: '请输入1-99之间的数字', trigger: 'change' }
-          ]
-        },
-        wmsBintypeInfo: {} // 货位
+        dataList: {} // 详情数据
       }
     },
     computed: {
@@ -214,94 +216,61 @@ export default {
         this.$store.dispatch("tagsView/delView", this.$route);
         this.$router.go(-1)
       },
-      deleteWmsBintype: function() {
-        // 删除货位
-        const _this = this;
-        this.$confirm('操作将删除此货位，是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          StorageService.deleteWmsBintype(_this.wmsBintypeInfo.id, _this.wmsBintypeInfo.version)
-          .then(res => {
-            this.$message.success("删除成功")
-            this.$store.dispatch("tagsView/delView", this.$route);
-            this.$router.go(-1)
-          })
-          .catch(err => {
-            this.$message.error("删除失败" + err.message)
-          })
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消'
-          })        
-        })
-      },
       getQueryStatus: function() {
-        this.status = this.$route.query.status
-
-        if (this.status === 'read') {
-          this.id = this.$route.query.id;
-          this.getWmsBintypeDetails(this.id)
-        }
+        this.id = this.$route.query.id;
+        this.ocntainerOcntainer(this.id) // 获取详情
       },
-      getWmsBintypeDetails: function(id) {
-        StorageService.getWmsBintypeDetails(id)
+      ocntainerOcntainer: function(id) {
+        BasicService.ocntainerOcntainer(id)
         .then((res) => {
-          console.log(res)
-          this.wmsBintypeInfo = res;
-          // 根据状态修改仓库开启switch
-          if (this.wmsBintypeInfo.status === "OFF") {
-            this.wmsBintypeInfo.status = true
+          let state = '';
+
+          const arr = [];          
+
+          if (res.status === 'ON') {
+            state = '已使用'
+          } else if (res.status === 'OFF') {
+            state = '未使用'
           } else {
-            this.wmsBintypeInfo.status = false
+            state = '未知'
           }
 
-          this.form = this.wmsBintypeInfo;
+          for (let i = 0; i < 5; i++) {
+            const obj = {
+              a: '模拟数据A' + i,
+              b: '模拟数据B' + i,
+              c: '模拟数据C' + i,
+              d: '模拟数据D' + i
+            }
+
+            arr.push(obj)
+          }
+
+          this.dataList = res;
+          this.dataList.sonList = arr;
+
+          console.log(this.dataList.sonList)
+
+          this.state = state
         })
         .catch((err) => {
-          this.$message.error("获取详情失败" + err)
+          this.$message.error("获取详情失败" + err.message)
         })
       },
-      createCategory: function() {
-        // 更新货位
-        this.$refs.form.validate(valid => {
-          if (valid) {
-            const opt = Object.assign(this.wmsBintypeInfo, this.from)
-            opt.status = 'NORMAL';
-
-            StorageService.updateWmsBintype(opt)
-            .then(res => {
-              this.$message.success("更新成功")
-              this.$store.dispatch("tagsView/delView", this.$route);
-              this.$router.go(-1)
-            })
-            .catch(err => {
-              this.$message.error("更新失败" + err.message)
-            })
-          }
-        })
-      },
-      editCategory() {
-        this.status = "edit"
-        this.form = Object.assign(this.form, this.categoryInfo)
+      printingBtn() {
+        this.$message.error("打印功能还未开通")
       }
     },
     created() {
       this.getQueryStatus()
     },
     filters: {
-      categoryLevel(level) {
-        switch (level) {
-          case "one":
-            return "一级"
-          case "two":
-            return "二级"
-          case "three":
-            return "三级"
-          case "four":
-            return "四级"
+      dcStatus(status) {
+        switch (status) {
+          case 'ON':
+            return "已使用"
+          case 'OFF':
+            return "未使用"
           default:
             return '未知';
         }
@@ -337,5 +306,12 @@ export default {
 }
 .info-title{
     margin: 12px 0;
+}
+
+</style>
+<style lang="scss">
+.table-index {
+  @import "src/styles/mixin.scss";
+  @include elTable;
 }
 </style>

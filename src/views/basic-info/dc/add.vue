@@ -35,22 +35,22 @@
                                     </el-col>
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="代码" prop="code">
-                                            <el-input v-model="form.code"></el-input>
+                                            <el-input maxlength="16" v-model="form.code"></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="名称" prop="name">
-                                            <el-input v-model="form.name"></el-input>
+                                            <el-input maxlength="40" v-model="form.name"></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="来源代码">
-                                            <el-input v-model="form.sourceCode"></el-input>
+                                            <el-input maxlength="40" v-model="form.sourceCode"></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="简称">
-                                            <el-input v-model="form.shortName"></el-input>
+                                            <el-input maxlength="40" v-model="form.shortName"></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <!-- <el-col :span="6" class="info-box">
@@ -60,17 +60,17 @@
                                     </el-col> -->
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="联系人" prop="contactor">
-                                            <el-input v-model="form.contactor"></el-input>
+                                            <el-input maxlength="40" v-model="form.contactor"></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="联系方式" prop="contactPhone">
-                                            <el-input v-model="form.contactPhone"></el-input>
+                                            <el-input maxlength="40" v-model="form.contactPhone"></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="地址" prop="address">
-                                            <el-input v-model="form.address"></el-input>
+                                            <el-input maxlength="100" v-model="form.address"></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
@@ -79,18 +79,18 @@
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
-                                        <el-form-item label="邮编">
-                                            <el-input v-model="form.zipCode"></el-input>
+                                        <el-form-item label="邮编" prop="zipCode">
+                                            <el-input maxlength="6" v-model="form.zipCode"></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="主体码">
-                                            <el-input v-model="form.subjectCode"></el-input>
+                                            <el-input maxlength="40" v-model="form.subjectCode"></el-input>
                                         </el-form-item>
                                     </el-col>
                                 </el-row>
                                 <el-form-item label="备注">
-                                    <textarea v-model="form.remark"></textarea>
+                                    <textarea maxlength="200" v-model="form.remark"></textarea>
                                 </el-form-item>
                             </el-form>
                         </el-tab-pane>
@@ -138,7 +138,7 @@ export default {
             { required: true, message: '请输入类别代码', trigger: 'blur' }
           ],
           name: [
-            { required: true, message: '请输入供应商名称', trigger: 'blur' }
+            { required: true, message: '请输入物流中心名称', trigger: 'blur' }
           ],
           contactPhone: [
             { required: true, message: '请输入联系方式', trigger: 'blur' },
@@ -151,7 +151,10 @@ export default {
             { required: true, message: '请输入地址', trigger: 'blur' }
           ],
           type: [
-            { required: true, message: '请选择配送中心类型', trigger: 'blur' }
+            { required: true, message: '请选择物流中心类型', trigger: 'blur' }
+          ],
+          zipCode: [
+            { pattern: /^[0-9]{6}$/, message: '请输入正确的邮编', trigger: 'blur' }
           ]
         }
       }
@@ -253,6 +256,7 @@ export default {
               .then(res => {
                 console.log(res)
                 this.$message.success("更新成功")
+                this.$store.dispatch("tagsView/delView", this.$route);
                 this.$router.go(-1)
               })
               .catch(err => {

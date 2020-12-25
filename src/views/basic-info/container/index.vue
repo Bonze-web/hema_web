@@ -65,34 +65,36 @@
           <el-button style="margin: 18px 10px" type="primary" size="mini" >新建</el-button>
         </router-link>
 
-        <el-button style="margin: 18px 10px" size="mini" >打印</el-button>
+        <el-button style="margin: 18px 10px" size="mini" @click="printingBtn" >打印</el-button>
       </el-row>
 
 
       <el-table :data="listData" @selection-change="handleSelectionChange"  style="width: 100%; text-align: center" :row-style="{ height: '16px', padding: '-4px' }" >
-
-        <!-- <el-table-column  type="selection"  style="height: 20px"></el-table-column> -->
-
-        <el-table-column prop="code" label="条码" style="height: 20px">
+        <el-table-column prop="barcode" label="条码" style="height: 20px">
           <template slot-scope="scope">
-            <router-link style="color: #409eff" :to="{ path: '/basicinfo/container/edit' }" >
-              <span>{{ scope.row.code }}</span>
+            <router-link style="color: #409eff" :to="{ path: '/basicinfo/container/edit', query:{ id: scope.row.id} }" >
+              <span>{{ scope.row.barcode }}</span>
             </router-link>
           </template>
         </el-table-column>
 
-        <el-table-column prop="code" label="容器类型" style="height: 20px">
+        <el-table-column prop="containerTypeId" label="容器类型" style="height: 20px">
           <template slot-scope="scope">
-            <router-link style="color: #409eff" :to="{ path: '/basicinfo/container-type' }" >
-              <span>{{ scope.row.code }}</span>
+            <router-link style="color: #409eff" :to="{ path: '/basicinfo/containertype/edit', query:{ status: 'read', id: scope.row.containerTypeId} }">
+              <span>{{ scope.row.containerTypeId }}</span>
             </router-link>
           </template>
         </el-table-column>
-
-        <el-table-column prop="name" label="当前位置"></el-table-column>
-        <el-table-column prop="length" label="目标位置"></el-table-column>
-        <el-table-column prop="width" label="使用对象"></el-table-column>
-        <el-table-column prop="height" label="状态"></el-table-column>
+  
+        <!--   当前位置 positionCode   目标位置 toPositionCode -->
+        <el-table-column prop="barcode" label="当前位置"></el-table-column>
+        <el-table-column prop="barcode" label="目标位置"></el-table-column>
+        <el-table-column prop="useId" label="使用对象"></el-table-column>
+        <el-table-column prop="status" label="状态">
+          <template slot-scope="scope">
+            {{ scope.row.status | dcStatus }}
+          </template>
+        </el-table-column>
 
       </el-table>
 
@@ -146,29 +148,29 @@ export default {
         }
       });
     },
-    deleteWmsBintype: function(id, version) {
-      // 删除
-      // const _this = this;
-      this.$confirm('此操作将删除货位，是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        // BasicService.deleteWmsBintype(id, version)
-        // .then(res => {
-        //   this.$message.success("删除成功")
-        //   _this.quertOcntainer()
-        // })
-        // .catch(err => {
-        //   this.$message.error("删除失败" + err.message)
-        // })
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消'
-        })        
-      })
-    },
+    // deleteWmsBintype: function(id, version) {
+    //   // 删除
+    //   // const _this = this;
+    //   this.$confirm('此操作将删除货位，是否继续?', '提示', {
+    //     confirmButtonText: '确定',
+    //     cancelButtonText: '取消',
+    //     type: 'warning'
+    //   }).then(() => {
+    //     // BasicService.deleteWmsBintype(id, version)
+    //     // .then(res => {
+    //     //   this.$message.success("删除成功")
+    //     //   _this.quertOcntainer()
+    //     // })
+    //     // .catch(err => {
+    //     //   this.$message.error("删除失败" + err.message)
+    //     // })
+    //   }).catch(() => {
+    //     this.$message({
+    //       type: 'info',
+    //       message: '已取消'
+    //     })        
+    //   })
+    // },
     clearInput: function() {
       this.form = {
         barCodeLikes: '',
@@ -185,23 +187,23 @@ export default {
 
       const _this = this;
 
-      console.log(this.form.useStatusEquals.toUpperCase())
-
       const data = {
+        page: this.page,
+        pageSize: this.pageSize,
         barCodeLikes: this.form.barCodeLikes,
         useStatusEquals: this.form.useStatusEquals.toUpperCase(),
         positionCodeOrNameEquals: this.form.positionCodeOrNameEquals,
         parentBarcodeLikes: this.form.parentBarcodeLikes,
         containerTypeCodeEquals: this.form.containerTypeCodeEquals,
-        useNameOrCodeLikes: this.form.useNameOrCodeLikes,
-        page: this.page,
-        pageSize: this.pageSize
+        useNameOrCodeLikes: this.form.useNameOrCodeLikes
       };
 
       BasicService.quertOcntainer(data).then((res) => {
         const records = res.records;
 
         this.totalCount = res.totalCount;
+
+        console.log(records)
 
         _this.listData = records;
       }).catch(err => {
@@ -230,11 +232,14 @@ export default {
       .catch(err => {
         this.$message.error("获取容器类型失败" + err.message)
       })
+    },
+    printingBtn() {
+      this.$message.error("打印功能还未开通")
     }
   },
   created() {
-    // this.quertOcntainer();
-    // this.getContainerType() // 获容器类型
+    this.quertOcntainer();
+    this.getContainerType() // 获容器类型
   },
   beforeRouteEnter(to, from, next) {
     next(vm => {
@@ -242,13 +247,23 @@ export default {
       vm.quertOcntainer(0);
     })
   },
-  filters: {}
+  filters: {
+    dcStatus(status) {
+      switch (status) {
+        case 'ON':
+          return "已使用"
+        case 'OFF':
+          return "未使用"
+        default:
+          return '未知';
+      }
+    }
+  }
 };
 </script>
 
 <style lang="scss" scoped>
 @import "src/styles/mixin.scss";
-
 .table-index .el-table .cell{
   padding: 7px 0;
 }
