@@ -130,25 +130,25 @@
 
                             <el-table :data="dataList.sonList" style="width: 100%; text-align: center" :row-style="{ height: '16px', padding: '-4px' }" >
 
-                            <el-table-column prop="code" label="条码" style="height: 20px">
+                            <el-table-column prop="a" label="条码" style="height: 20px">
                               <template slot-scope="scope">
                                 <!-- <router-link style="color: #409eff" :to="{ path: '/basicinfo/container/edit' }" > -->
-                                  <span>条码{{ scope.row.code }}</span>
+                                  <span>条码{{ scope.row.a }}</span>
                                 <!-- </router-link> -->
                               </template>
                             </el-table-column>
 
-                            <el-table-column prop="code" label="容器类型" style="height: 20px">
+                            <el-table-column prop="b" label="容器类型" style="height: 20px">
                               <template slot-scope="scope">
                                 <!-- <router-link style="color: #409eff" :to="{ path: '/basicinfo/container-type' }" > -->
-                                  <span>容器类型{{ scope.row.code }}</span>
+                                  <span>容器类型{{ scope.row.b }}</span>
                                 <!-- </router-link> -->
                               </template>
                             </el-table-column>
 
-                            <el-table-column prop="height" label="状态">
+                            <el-table-column prop="c" label="状态">
                               <template slot-scope="scope">
-                                {{ scope.row.status | dcStatus }}
+                                {{ scope.row.c }}
                               </template>
                             </el-table-column>
 
@@ -158,7 +158,35 @@
                         </el-tab-pane>
 
                         <el-tab-pane label="操作日志" name="active">
-                          1111
+                          <el-table :data="dataList.sonList" style="width: 100%; text-align: center" :row-style="{ height: '16px', padding: '-4px' }" >
+
+                            <el-table-column prop="a" label="操作时间" style="height: 20px">
+                              <template slot-scope="scope">
+                                  <span>条码{{ scope.row.a }}</span>
+                              </template>
+                            </el-table-column>
+
+                            <el-table-column prop="b" label="操作类型" style="height: 20px">
+                              <template slot-scope="scope">
+                                <!-- <router-link style="color: #409eff" :to="{ path: '/basicinfo/container-type' }" > -->
+                                  <span>容器类型{{ scope.row.b }}</span>
+                                <!-- </router-link> -->
+                              </template>
+                            </el-table-column>
+
+                            <el-table-column prop="c" label="事件">
+                              <template slot-scope="scope">
+                                {{ scope.row.c }}
+                              </template>
+                            </el-table-column>
+
+                            <el-table-column prop="d" label="修改">
+                              <template slot-scope="scope">
+                                {{ scope.row.d }}
+                              </template>
+                            </el-table-column>
+
+                          </el-table>
                         </el-tab-pane>
                     </el-tabs>
                 </template>
@@ -196,7 +224,8 @@ export default {
         BasicService.ocntainerOcntainer(id)
         .then((res) => {
           let state = '';
-          this.dataList = res;
+
+          const arr = [];          
 
           if (res.status === 'ON') {
             state = '已使用'
@@ -205,6 +234,23 @@ export default {
           } else {
             state = '未知'
           }
+
+          for (let i = 0; i < 5; i++) {
+            const obj = {
+              a: '模拟数据A' + i,
+              b: '模拟数据B' + i,
+              c: '模拟数据C' + i,
+              d: '模拟数据D' + i
+            }
+
+            arr.push(obj)
+          }
+
+          this.dataList = res;
+          this.dataList.sonList = arr;
+
+          console.log(this.dataList.sonList)
+
           this.state = state
         })
         .catch((err) => {

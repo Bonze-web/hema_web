@@ -146,7 +146,7 @@ export default {
             { required: true, message: '请输入容积率', trigger: 'blur' },
             { pattern: /^100$|^(\d|[1-9]\d)(\.\d+)*$/, message: '请输入1-100之间的数字', trigger: 'change' }
           ]
-        },
+        }
       }
     },
     computed: {
