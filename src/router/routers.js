@@ -740,7 +740,7 @@ const WarehousingPackage = {
   alwaysShow: true,
   meta: {
     title: '入库管理',
-    icon: 'warehousing'
+    icon: 'wrhing'
   },
   children: [
     {
@@ -788,7 +788,42 @@ const WarehousingPackage = {
       }
     }]
     }
-  ]
+  ]}
+  /*
+ * 单据管理包
+ */
+const BillManagement = {
+  path: '/wrhmanagement',
+  component: Layout,
+  name: 'WrhManagement',
+  alwaysShow: true,
+  meta: {
+    title: '库内管理',
+    icon: 'bill'
+  },
+  children: [
+    {
+    path: "lossbill",
+    name: "LossBill",
+    component: AModule,
+    meta: {
+      title: '损耗单',
+      icon: 'table',
+      permission: PermIds.PRODUCT_SUPPLIER
+    },
+    children: [{
+      path: "",
+      name: "LossBillView",
+      component: () =>
+        import('@/views/wrh-management/loss-bill/index'),
+      hidden: true,
+      meta: {
+        title: '损耗单',
+        icon: 'table',
+        permission: PermIds.PRODUCT_SUPPLIER_VIEW
+      }
+    }]
+  }]
 }
 
 /**
@@ -800,6 +835,7 @@ export const asyncRouterMap = [
   StorageInfoPackage,
   ReportModule,
   WarehousingPackage,
+  BillManagement,
   {
     path: '*',
     redirect: '/sys',

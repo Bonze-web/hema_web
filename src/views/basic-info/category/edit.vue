@@ -55,7 +55,7 @@
                                                 <el-option label="一级" value="one"></el-option>
                                                 <el-option label="二级" value="two"></el-option>
                                                 <el-option label="三级" value="three"></el-option>
-                                                <el-option label="四级" value="four "></el-option>
+                                                <el-option label="四级" value="four"></el-option>
                                             </el-select>
                                         </el-form-item>
                                     </el-col>
