@@ -87,8 +87,8 @@
         </el-table-column>
   
         <!--   当前位置 positionCode   目标位置 toPositionCode -->
-        <el-table-column prop="barcode" label="当前位置"></el-table-column>
-        <el-table-column prop="barcode" label="目标位置"></el-table-column>
+        <el-table-column prop="positionCode" label="当前位置"></el-table-column>
+        <el-table-column prop="toPositionCode" label="目标位置"></el-table-column>
         <el-table-column prop="useId" label="使用对象"></el-table-column>
         <el-table-column prop="status" label="状态">
           <template slot-scope="scope">

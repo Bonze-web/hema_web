@@ -80,7 +80,7 @@
 
 
       <el-table :data="listData" @selection-change="handleSelectionChange"  style="width: 100%; text-align: center" :row-style="{ height: '16px', padding: '-4px' }" >
-        <el-table-column prop="barcode" label="条码" style="height: 20px">
+        <el-table-column prop="barcode" label="单号" style="height: 20px">
           <template slot-scope="scope">
             <router-link style="color: #409eff" :to="{ path: '/basicinfo/container/edit', query:{ id: scope.row.id} }" >
               <span>{{ scope.row.barcode }}</span>
@@ -88,23 +88,21 @@
           </template>
         </el-table-column>
 
-        <el-table-column prop="containerTypeId" label="容器类型" style="height: 20px">
-          <template slot-scope="scope">
-            <router-link style="color: #409eff" :to="{ path: '/basicinfo/containertype/edit', query:{ status: 'read', id: scope.row.containerTypeId} }">
-              <span>{{ scope.row.containerTypeId }}</span>
-            </router-link>
-          </template>
+        <el-table-column prop="containerTypeId" label="订单类型" style="height: 20px">
+          <template slot-scope="scope">{{ scope.row.containerTypeId }}</template>
         </el-table-column>
   
-        <!--   当前位置 positionCode   目标位置 toPositionCode -->
-        <el-table-column prop="barcode" label="当前位置"></el-table-column>
-        <el-table-column prop="barcode" label="目标位置"></el-table-column>
-        <el-table-column prop="useId" label="使用对象"></el-table-column>
-        <el-table-column prop="status" label="状态">
-          <template slot-scope="scope">
-            {{ scope.row.status | dcStatus }}
-          </template>
+        <el-table-column prop="barcode" label="供应商"></el-table-column>
+        <el-table-column prop="barcode" label="入库仓"></el-table-column>
+        <el-table-column prop="useId" label="物流方式"></el-table-column>
+        <el-table-column prop="status" label="接受日期"></el-table-column>
+
+        <el-table-column prop="status" label="到货日期">
+          <div>{{ value1 ? value1 : "&lt;空&gt;" }}</div>
         </el-table-column>
+        <el-table-column prop="status" label="到效日期"></el-table-column>
+        <el-table-column prop="status" label="来源单号"></el-table-column>
+        <el-table-column prop="status" label="状态"></el-table-column>
 
       </el-table>
 

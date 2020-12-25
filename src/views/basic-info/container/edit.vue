@@ -132,17 +132,13 @@
 
                             <el-table-column prop="a" label="条码" style="height: 20px">
                               <template slot-scope="scope">
-                                <!-- <router-link style="color: #409eff" :to="{ path: '/basicinfo/container/edit' }" > -->
-                                  <span>条码{{ scope.row.a }}</span>
-                                <!-- </router-link> -->
+                                <span>条码{{ scope.row.a }}</span>
                               </template>
                             </el-table-column>
 
                             <el-table-column prop="b" label="容器类型" style="height: 20px">
                               <template slot-scope="scope">
-                                <!-- <router-link style="color: #409eff" :to="{ path: '/basicinfo/container-type' }" > -->
-                                  <span>容器类型{{ scope.row.b }}</span>
-                                <!-- </router-link> -->
+                                <span>容器类型{{ scope.row.b }}</span>
                               </template>
                             </el-table-column>
 
@@ -225,8 +221,6 @@ export default {
         .then((res) => {
           let state = '';
 
-          const arr = [];          
-
           if (res.status === 'ON') {
             state = '已使用'
           } else if (res.status === 'OFF') {
@@ -235,19 +229,7 @@ export default {
             state = '未知'
           }
 
-          for (let i = 0; i < 5; i++) {
-            const obj = {
-              a: '模拟数据A' + i,
-              b: '模拟数据B' + i,
-              c: '模拟数据C' + i,
-              d: '模拟数据D' + i
-            }
-
-            arr.push(obj)
-          }
-
           this.dataList = res;
-          this.dataList.sonList = arr;
 
           console.log(this.dataList.sonList)
 

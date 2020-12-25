@@ -787,6 +787,30 @@ const WarehousingPackage = {
         // permission: PermIds.PRODUCT_SUPPLIER_CREATE
       }
     }]
+    },
+    {
+      path: "register",
+      name: "Pegister",
+      component: AModule,
+      meta: {
+        title: '到货登记',
+        icon: 'table'
+        // permission: PermIds.PRODUCT_SUPPLIER
+      },
+      children: [
+        {
+          path: "",
+          name: "RegisterView",
+          component: () =>
+            import('@/views/warehousing/register/index'),
+          hidden: true,
+          meta: {
+            title: '到货登记',
+            icon: 'table'
+            // permission: PermIds.PRODUCT_SUPPLIER_VIEW
+          }
+        }
+      ]
     }
   ]
 }
