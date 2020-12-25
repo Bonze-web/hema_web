@@ -853,7 +853,7 @@ const BillManagement = {
         import('@/views/wrh-management/loss-bill/edit'),
       hidden: true,
       meta: {
-        title: '损耗单',
+        title: '查看损耗单',
         icon: 'table',
         permission: PermIds.PRODUCT_SUPPLIER_VIEW
       }
@@ -864,7 +864,18 @@ const BillManagement = {
         import('@/views/wrh-management/loss-bill/add'),
       hidden: true,
       meta: {
-        title: '损耗单',
+        title: '新建损耗单',
+        icon: 'table',
+        permission: PermIds.PRODUCT_SUPPLIER_VIEW
+      }
+    }, {
+      path: "batchadd",
+      name: "BatchAdd",
+      component: () =>
+        import('@/views/wrh-management/loss-bill/batch-add'),
+      hidden: true,
+      meta: {
+        title: '批量增加商品',
         icon: 'table',
         permission: PermIds.PRODUCT_SUPPLIER_VIEW
       }
