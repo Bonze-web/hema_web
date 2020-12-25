@@ -27,7 +27,7 @@
             </div>
             <div>
                 <el-button @click="back">返回</el-button>
-                <el-button type="primary" @click="editCategory">编辑</el-button>
+                <el-button type="primary" @click="editCategory" v-if="hasPermission(PermIds.WMS_WAREHOUSE_UPDATE)">编辑</el-button>
             </div>
         </div>
         <div style="height:20px" />
@@ -84,7 +84,7 @@
                             </el-col>
                             <el-col :span="6" class="info-box">
                                 <div>物流中心:</div>
-                                <div>{{ warehouseInfo.dcId }}</div>
+                                <div>{{ warehouseInfo.dcName }}</div>
                             </el-col>
                             <!-- <el-col :span="6" class="info-box">
                                 <div>货主:</div>
@@ -109,12 +109,14 @@
 </template>
 
 <script>
-// import { mapGetters } from "vuex";
 import StorageService from "@/api/service/StorageService";
+import PermIds from "@/api/permissionIds";
+import { mapGetters } from "vuex";
 
 export default {
   data() {
       return {
+        PermIds: PermIds,
         parentList: [], // 父级类别列表
         level: "one", // 新建类别级别
         status: '', // 页面状态
@@ -150,6 +152,7 @@ export default {
       }
     },
     computed: {
+      ...mapGetters(["hasPermission"])
     },
     methods: {
       back: function() {
@@ -271,6 +274,14 @@ export default {
         this.form = Object.assign(this.form, this.categoryInfo)
         console.log(this.form)
 
+        StorageService.getDcQuery()
+        .then(res => {
+          this.records = res.records;
+          console.log(this.records)
+        }).catch((err) => {
+            this.$message.error("获取物流中心失败" + err.message)
+        })
+
         // if (this.level !== "one") {
         //   this.getParentCategory()
         // }
@@ -305,14 +316,6 @@ export default {
     },
     created() {
       this.getQueryStatus()
-
-      StorageService.getDcQuery()
-        .then(res => {
-          this.records = res.records;
-          console.log(this.records)
-        }).catch((err) => {
-            this.$message.error("获取物流中心失败" + err.message)
-        })
     },
     filters: {
       categoryLevel(level) {

@@ -773,6 +773,160 @@ const ReportModule = {
     }
   }]
 }
+
+/**
+ * 入库管理
+ */
+const WarehousingPackage = {
+  path: '/warehousing',
+  component: Layout,
+  name: 'Warehousing',
+  alwaysShow: true,
+  meta: {
+    title: '入库管理',
+    icon: 'wrhing'
+  },
+  children: [
+    {
+    path: "oeder",
+    name: "Oeder",
+    component: AModule,
+    meta: {
+      title: '入库订单',
+      icon: 'table'
+      // permission: PermIds.PRODUCT_SUPPLIER
+    },
+    children: [
+      {
+      path: "",
+      name: "OrderView",
+      component: () =>
+        import('@/views/warehousing/order/index'),
+      hidden: true,
+      meta: {
+        title: '入库订单列表',
+        icon: 'table'
+        // permission: PermIds.PRODUCT_SUPPLIER_VIEW
+      }
+    }, {
+      path: "edit",
+      name: "入库订单详情",
+      component: () =>
+        import('@/views/basic-info/suppliers/edit'),
+      hidden: true,
+      meta: {
+        title: '查看供应商',
+        icon: 'table'
+        // permission: PermIds.PRODUCT_SUPPLIER_VIEW
+      }
+    }, {
+      path: "add",
+      name: "SuppliersAdd",
+      component: () =>
+        import('@/views/basic-info/suppliers/add'),
+      hidden: true,
+      meta: {
+        title: '新建供应商',
+        icon: 'table'
+        // permission: PermIds.PRODUCT_SUPPLIER_CREATE
+      }
+    }]
+    },
+    {
+      path: "register",
+      name: "Pegister",
+      component: AModule,
+      meta: {
+        title: '到货登记',
+        icon: 'table'
+        // permission: PermIds.PRODUCT_SUPPLIER
+      },
+      children: [
+        {
+          path: "",
+          name: "RegisterView",
+          component: () =>
+            import('@/views/warehousing/register/index'),
+          hidden: true,
+          meta: {
+            title: '到货登记',
+            icon: 'table'
+            // permission: PermIds.PRODUCT_SUPPLIER_VIEW
+          }
+        }
+      ]
+    }
+  ]}
+  /*
+ * 单据管理包
+ */
+const BillManagement = {
+  path: '/wrhmanagement',
+  component: Layout,
+  name: 'WrhManagement',
+  alwaysShow: true,
+  meta: {
+    title: '库内管理',
+    icon: 'bill'
+  },
+  children: [
+    {
+    path: "lossbill",
+    name: "LossBill",
+    component: AModule,
+    meta: {
+      title: '损耗单',
+      icon: 'table',
+      permission: PermIds.PRODUCT_SUPPLIER
+    },
+    children: [{
+      path: "",
+      name: "LossBillView",
+      component: () =>
+        import('@/views/wrh-management/loss-bill/index'),
+      hidden: true,
+      meta: {
+        title: '损耗单',
+        icon: 'table',
+        permission: PermIds.PRODUCT_SUPPLIER_VIEW
+      }
+    }, {
+      path: "edit",
+      name: "LossBillEdit",
+      component: () =>
+        import('@/views/wrh-management/loss-bill/edit'),
+      hidden: true,
+      meta: {
+        title: '查看损耗单',
+        icon: 'table',
+        permission: PermIds.PRODUCT_SUPPLIER_VIEW
+      }
+    }, {
+      path: "add",
+      name: "LossBillAdd",
+      component: () =>
+        import('@/views/wrh-management/loss-bill/add'),
+      hidden: true,
+      meta: {
+        title: '新建损耗单',
+        icon: 'table',
+        permission: PermIds.PRODUCT_SUPPLIER_VIEW
+      }
+    }, {
+      path: "batchadd",
+      name: "BatchAdd",
+      component: () =>
+        import('@/views/wrh-management/loss-bill/batch-add'),
+      hidden: true,
+      meta: {
+        title: '批量增加商品',
+        icon: 'table',
+        permission: PermIds.PRODUCT_SUPPLIER_VIEW
+      }
+    }]
+  }]
+}
+
 /**
  * 动态路由
  */
@@ -781,9 +935,11 @@ export const asyncRouterMap = [
   BasicInfoPackage,
   StorageInfoPackage,
   ReportModule,
+  WarehousingPackage,
+  BillManagement,
   {
     path: '*',
-    redirect: '/sys',
+    redirect: '/dashboard',
     hidden: true
   }
 ]

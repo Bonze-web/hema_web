@@ -132,19 +132,23 @@
 
                             <el-table-column prop="a" label="条码" style="height: 20px">
                               <template slot-scope="scope">
-                                <span>条码{{ scope.row.barcode }}</span>
+                                <!-- <router-link style="color: #409eff" :to="{ path: '/basicinfo/container/edit' }" > -->
+                                  <span>条码{{ scope.row.a }}</span>
+                                <!-- </router-link> -->
                               </template>
                             </el-table-column>
 
                             <el-table-column prop="b" label="容器类型" style="height: 20px">
                               <template slot-scope="scope">
-                                <span>容器类型{{ scope.row.containerTypeName }}</span>
+                                <!-- <router-link style="color: #409eff" :to="{ path: '/basicinfo/container-type' }" > -->
+                                  <span>容器类型{{ scope.row.b }}</span>
+                                <!-- </router-link> -->
                               </template>
                             </el-table-column>
 
                             <el-table-column prop="c" label="状态">
                               <template slot-scope="scope">
-                                {{ scope.row.status | dcStatus }}
+                                {{ scope.row.c }}
                               </template>
                             </el-table-column>
 
@@ -155,9 +159,8 @@
 
                         <el-tab-pane label="操作日志" name="active">
                           <el-table :data="dataList.sonList" style="width: 100%; text-align: center" :row-style="{ height: '16px', padding: '-4px' }" >
-                            操作日志
 
-                            <!-- <el-table-column prop="a" label="操作时间" style="height: 20px">
+                            <el-table-column prop="a" label="操作时间" style="height: 20px">
                               <template slot-scope="scope">
                                   <span>条码{{ scope.row.a }}</span>
                               </template>
@@ -165,7 +168,9 @@
 
                             <el-table-column prop="b" label="操作类型" style="height: 20px">
                               <template slot-scope="scope">
+                                <!-- <router-link style="color: #409eff" :to="{ path: '/basicinfo/container-type' }" > -->
                                   <span>容器类型{{ scope.row.b }}</span>
+                                <!-- </router-link> -->
                               </template>
                             </el-table-column>
 
@@ -179,7 +184,7 @@
                               <template slot-scope="scope">
                                 {{ scope.row.d }}
                               </template>
-                            </el-table-column> -->
+                            </el-table-column>
 
                           </el-table>
                         </el-tab-pane>
@@ -220,6 +225,8 @@ export default {
         .then((res) => {
           let state = '';
 
+          const arr = [];          
+
           if (res.status === 'ON') {
             state = '已使用'
           } else if (res.status === 'OFF') {
@@ -228,7 +235,19 @@ export default {
             state = '未知'
           }
 
+          for (let i = 0; i < 5; i++) {
+            const obj = {
+              a: '模拟数据A' + i,
+              b: '模拟数据B' + i,
+              c: '模拟数据C' + i,
+              d: '模拟数据D' + i
+            }
+
+            arr.push(obj)
+          }
+
           this.dataList = res;
+          this.dataList.sonList = arr;
 
           console.log(this.dataList.sonList)
 
