@@ -11,32 +11,31 @@
         </div>
         <div class="head" v-if="status === 'read'">
             <div class="head-title">
-                <div style="margin:8px">{{ '[' + warehouseInfo.code + ']' + warehouseInfo.name }}</div>
+                <div style="margin:8px">{{ '[' + categoryInfo.code + ']' + categoryInfo.name }}</div>
                 <!-- <template>
                     <el-switch
-                        v-model="warehouseInfo.status"
+                        v-model="categoryInfo.status"
                         @change="statusChange"
                         active-color="#13ce66"
                         inactive-color="#eee">
                     </el-switch>
                 </template> -->
                 <template>
-                  <el-button type="text" @click="statusChange" v-if="warehouseInfo.status">禁用</el-button>
-                  <el-button type="text" @click="statusChange" v-if="!warehouseInfo.status">启用</el-button>
+                  <el-button type="text" @click="statusChange" v-if="categoryInfo.status">禁用</el-button>
+                  <el-button type="text" @click="statusChange" v-if="!categoryInfo.status">启用</el-button>
                 </template>
             </div>
             <div>
                 <el-button @click="back">返回</el-button>
-                <el-button type="primary" @click="editCategory" v-if="hasPermission(PermIds.WMS_WAREHOUSE_UPDATE)">编辑</el-button>
+                <el-button type="primary" @click="editCategory" v-if="hasPermission(PermIds.PRODUCT_CATEGORY_UPDATE)">编辑</el-button>
             </div>
         </div>
         <div style="height:20px" />
-
         <div class="info-content" v-if="status === 'create' || status === 'edit'">
             <div>
                 <template>
                     <el-tabs v-model="tabActiveName" @tab-click="tabClick">
-                        <el-tab-pane label="仓库" name="category">
+                        <el-tab-pane label="商品类别" name="category">
                             <div class="info-title">基本信息</div>
                             <el-form :model="form" :rules="createRules" ref="form" label-width="100px" class="demo-ruleForm">
                                 <el-row :gutter="20">
@@ -51,23 +50,34 @@
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
-                                        <el-form-item label="物流中心" prop="dcId">
-                                            <el-select v-model="form.dcId" placeholder="请选择物流中心" @change="levelChange">
-                                                <el-option v-for="(item, index) in records" :key="index" :label="item.name" :value="item.id"></el-option>
+                                        <el-form-item label="级别" prop="level">
+                                            <el-select v-model="form.level" placeholder="请选择级别" @change="levelChange">
+                                                <el-option label="一级" value="one"></el-option>
+                                                <el-option label="二级" value="two"></el-option>
+                                                <el-option label="三级" value="three"></el-option>
+                                                <el-option label="四级" value="four "></el-option>
+                                            </el-select>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="6" class="info-box" v-if="level !== 'one'">
+                                        <el-form-item label="上级类别">
+                                            <el-select v-model="form.parentId">
+                                                <el-option v-for="item in parentList" :key="item.value" :label="item.name" :value="item.id"></el-option>
                                             </el-select>
                                         </el-form-item>
                                     </el-col>
                                 </el-row>
-                                <el-form-item label="备注" prop="remark">
+                                <el-form-item label="备注">
                                     <textarea v-model="form.remark"></textarea>
                                 </el-form-item>
                             </el-form>
                         </el-tab-pane>
+                        <!-- <el-tab-pane label="配送中心范围" name="range">配置管理</el-tab-pane> -->
+                        <el-tab-pane label="操作日志" name="log">角色管理</el-tab-pane>
                     </el-tabs>
                 </template>
             </div>
         </div>
-
         <div class="info-content" v-if="status === 'read'">
             <div>
                 <template>
@@ -76,27 +86,27 @@
                             <div class="info-title">基本信息</div>
                             <el-col :span="6" class="info-box">
                                 <div>代码:</div>
-                                <div>{{ warehouseInfo.code }}</div>
+                                <div>{{ categoryInfo.code }}</div>
                             </el-col>
                             <el-col :span="6" class="info-box">
                                 <div>名称:</div>
-                                <div>{{ warehouseInfo.name }}</div>
+                                <div>{{ categoryInfo.name }}</div>
                             </el-col>
                             <el-col :span="6" class="info-box">
-                                <div>物流中心:</div>
-                                <div>{{ warehouseInfo.dcName }}</div>
+                                <div>级别:</div>
+                                <div>{{ categoryInfo.level | categoryLevel }}</div>
                             </el-col>
                             <!-- <el-col :span="6" class="info-box">
                                 <div>货主:</div>
                                 <div></div>
                             </el-col> -->
-                            <!-- <el-col :span="6" class="info-box">
+                            <el-col :span="6" class="info-box">
                                 <div>上级类别:</div>
-                                <div>{{ warehouseInfo.parentName ? warehouseInfo.parentName : "&lt;空&gt;" }}</div>
-                            </el-col> -->
+                                <div>{{ categoryInfo.parentName ? categoryInfo.parentName : "&lt;空&gt;" }}</div>
+                            </el-col>
                             <el-col class="info-box">
-                                <div>备注:</div>
-                                <div>{{ warehouseInfo.remark ? warehouseInfo.remark : "&lt;空&gt;" }}</div>
+                                <div style="width:32px">备注:</div>
+                                <div>{{ categoryInfo.remark ? categoryInfo.remark : "&lt;空&gt;" }}</div>
                             </el-col>
                         </el-tab-pane>
                         <!-- <el-tab-pane label="配送中心范围" name="range">配置管理</el-tab-pane>
@@ -109,46 +119,41 @@
 </template>
 
 <script>
-import StorageService from "@/api/service/StorageService";
 import PermIds from "@/api/permissionIds";
 import { mapGetters } from "vuex";
+import BasicService from "@/api/service/BasicService";
 
 export default {
   data() {
       return {
-        PermIds: PermIds,
         parentList: [], // 父级类别列表
         level: "one", // 新建类别级别
         status: '', // 页面状态
         id: '', // 商品类别ID
         tabActiveName: 'category', // tab栏名称
         form: {
+          id: '',
           code: '',
           name: '',
-          dcId: '',
+          level: 'one',
+          parentId: '',
           remark: ''
         },
+        PermIds: PermIds,
         page: 0,
         pageSize: 10,
-        warehouseInfo: {}, // 仓库信息
+        categoryInfo: {}, // 供应商信息
         createRules: {
           code: [
-            { required: true, message: '请输入类别代码', trigger: 'blur' },
-            { required: true, max: 16, message: '请输入1到16位字符', trigger: 'change' }
+            { required: true, message: '请输入类别代码', trigger: 'blur' }
           ],
           name: [
-            { required: true, message: '请输入类别名称', trigger: 'blur' },
-            { required: true, max: 40, message: '请输入1到4位字符', trigger: 'change' }
+            { required: true, message: '请输入类别名称', trigger: 'blur' }
           ],
           level: [
             { required: true, message: '请选择类别级别', trigger: 'blur' }
-          ],
-          remark: [
-            { required: true, message: '请输入备注', trigger: 'blur' },
-            { required: true, max: 200, message: '最多输入200位', trigger: 'change' }
           ]
-        },
-        records: []
+        }
       }
     },
     computed: {
@@ -160,68 +165,62 @@ export default {
         this.$router.go(-1)
       },
       statusChange: function() {
-        // 修改仓库状态
-        const _this = this;
-        this.$confirm('此操作将改变仓库状态，是否继续?', '提示', {
+        // 修改供应商状态
+        const _this = this
+        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          if (_this.warehouseInfo.status) {
-            // 禁用
-            StorageService.closeWarehouse(_this.warehouseInfo.id, _this.warehouseInfo.version)
-            .then((res) => {
-              _this.$message.success("禁止用成功")
-              _this.getCategory(_this.id)
-            })
-            .catch((err) => {
-              _this.$message.error("禁用失败" + err.message)
-              _this.getCategory(_this.id)
-            })
-          } else {
-            // 启用
-            StorageService.openWarehouse(_this.warehouseInfo.id, _this.warehouseInfo.version)
-            .then((res) => {
-              _this.$message.success("启用成功")
-              _this.getCategory(_this.id)
-            })
-            .catch((err) => {
-              _this.$message.error("启用失败" + err.message)
-              _this.getCategory(_this.id)
-            })
-          }
+          if (_this.categoryInfo.status) {
+          BasicService.closeCategory(_this.categoryInfo.id, _this.categoryInfo.version)
+          .then((res) => {
+            _this.$message.success("禁用成功")
+            _this.getCategory(_this.id)
+          })
+          .catch((err) => {
+            _this.$message.error("禁用失败" + err.message)
+            _this.getCategory(_this.id)
+          })
+        } else {
+          BasicService.openCategory(_this.categoryInfo.id, _this.categoryInfo.version)
+          .then((res) => {
+            _this.$message.success("启用成功")
+            _this.getCategory(_this.id)
+          })
+          .catch((err) => {
+            _this.$message.error("启用失败" + err.message)
+            _this.getCategory(_this.id)
+          })
+        }
         }).catch(() => {
           this.$message({
             type: 'info',
-            message: '已取消'
+            message: '已取消删除'
           })        
         })
       },
       getQueryStatus: function() {
         this.status = this.$route.query.status
-
         if (this.status === 'read') {
-          this.id = this.$route.query.id;
-
+          this.id = this.$route.query.id
           this.getCategory(this.id)
         }
       },
       getCategory: function(id) {
-        StorageService.warehouseDetails(id)
+        // 获取商品类别详情
+        BasicService.getCategoryDatail(id)
         .then((res) => {
-          console.log(res)
-          this.warehouseInfo = res;
-          // 根据状态修改仓库开启switch
-          if (this.warehouseInfo.status === "OFF") {
-            this.warehouseInfo.status = true
+          this.categoryInfo = res
+          // 根据状态修改供应商开启switch
+          if (this.categoryInfo.status === "enabled") {
+            this.categoryInfo.status = true
           } else {
-            this.warehouseInfo.status = false
+            this.categoryInfo.status = false
           }
-
-          this.form = this.warehouseInfo;
-          // if (res.level !== "one") {
-          //   this.level = res.level
-          // }
+          if (res.level !== "one") {
+            this.level = res.level
+          }
         })
         .catch((err) => {
           this.$message.error("获取详情失败" + err.message)
@@ -230,17 +229,17 @@ export default {
       tabClick: function() {  
       },
       createCategory: function() {
-        // 创建新的仓位
+        // 创建新的类别
         this.$refs.form.validate(valid => {
           if (valid) {
-            if (!this.form.dcId) {
-              this.$message.error("请选择一个配送中心")
+            if (this.level !== 'one' && !this.form.parentId) {
+              this.$message.error("请选择一个父级类别")
               return
             }
-
             if (this.status === 'create') {
-              StorageService.createWarehouse(this.form)
+              BasicService.createCategory(this.form)
               .then(res => {
+                console.log(res)
                 this.$message.success("创建成功")
                 this.$store.dispatch("tagsView/delView", this.$route);
                 this.$router.go(-1)
@@ -250,15 +249,14 @@ export default {
               })
             } else {
               if (this.form.status) {
-                this.form.status = "NO"
+                this.form.status = "enabled"
               } else {
-                this.form.status = "OFF"
+                this.form.status = "disabled"
               }
-              StorageService.updateWarehouse(this.form)
+              BasicService.updateCategory(this.form)
               .then(res => {
                 console.log(res)
                 this.$message.success("更新成功")
-
                 this.$store.dispatch("tagsView/delView", this.$route);
                 this.$router.go(-1)
               })
@@ -266,6 +264,8 @@ export default {
                 this.$message.error("更新失败" + err.message)
               })
             }
+          } else {
+            console.log(2)
           }
         })
       },
@@ -273,50 +273,46 @@ export default {
         this.status = "edit"
         this.form = Object.assign(this.form, this.categoryInfo)
         console.log(this.form)
-
-        StorageService.getDcQuery()
-        .then(res => {
-          this.records = res.records;
-          console.log(this.records)
-        }).catch((err) => {
-            this.$message.error("获取物流中心失败" + err.message)
-        })
-
-        // if (this.level !== "one") {
-        //   this.getParentCategory()
-        // }
+        if (this.level !== "one") {
+          this.getParentCategory()
+        }
       },
       levelChange() {
         this.level = this.form.level
-        console.log(this.form)
-        // if (this.form.level === "one") {
-        //   return
-        // }
-        // this.form.parentId = ""
-        // this.getParentCategory()
+        if (this.form.level === "one") {
+          return
+        }
+        this.form.parentId = ""
+        this.getParentCategory()
+      },
+      getParentCategory() {
+        const data = {
+          page: this.page,
+          pageSize: 0,
+          lowerLevelEquals: this.form.level
+        }
+        BasicService.getCateGoryQuery(data)
+        .then((res) => {
+          this.parentList = res.records
+          for (const item in res.records) {
+            // 处理供应商数据
+            this.parentList[item].name = '[' + this.parentList[item].code + ']' + this.parentList[item].name
+          }
+        })
+        .catch((err) => {
+            this.$message.error("加载父级列表失败，请刷新页面重新尝试" + err.message)
+        })
       }
-      // getParentCategory() {
-      //   const data = {
-      //     page: this.page,
-      //     pageSize: 0,
-      //     lowerLevelEquals: this.form.level
-      //   }
-      //   BasicService.getCateGoryQuery(data)
-      //   .then((res) => {
-      //     this.parentList = res.records
-      //     for (const item in res.records) {
-      //       // 处理供应商数据
-      //       this.parentList[item].name = '[' + this.parentList[item].code + ']' + this.parentList[item].name
-      //     }
-      //   })
-      //   .catch((err) => {
-      //       this.$message.error("加载父级列表失败，请刷新页面重新尝试" + err)
-      //   })
-      // }
     },
     created() {
       this.getQueryStatus()
     },
+    // beforeRouteEnter(to, from, next) {
+    //   next(vm => {
+    //     // 通过 `vm` 访问组件实例
+    //     vm.getQueryStatus();
+    //   })
+    // },
     filters: {
       categoryLevel(level) {
         switch (level) {
