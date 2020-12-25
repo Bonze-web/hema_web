@@ -86,7 +86,7 @@
 
 
         <!-- 展示 -->
-        <div class="info-content table-index">
+        <div class="info-content table-index _table-index">
             <div>
                 <template>
                     <el-tabs v-model="tabActiveName">
@@ -313,5 +313,8 @@ export default {
 .table-index {
   @import "src/styles/mixin.scss";
   @include elTable;
+}
+._table-index .el-table .cell{
+  padding: 7px 0;
 }
 </style>

@@ -33,8 +33,7 @@
     <div style="background: #fff">
       <el-row>
         <router-link :to="{ path: '/storageinfo/warehouse/add', query:{ status: 'create'} }" >
-          <el-button style="margin: 18px 10px" type="primary" size="mini"
-            >新建</el-button
+          <el-button style="margin: 18px 10px" type="primary" size="mini" v-if="hasPermission(PermIds.WMS_WAREHOUSE_CREATE)" >新建</el-button
           >
         </router-link>
       </el-row>
@@ -101,10 +100,13 @@
 
 <script>
 import StorageService from "@/api/service/StorageService";
+import PermIds from "@/api/permissionIds";
+import { mapGetters } from "vuex";
 
 export default {
   data() {
     return {
+      PermIds: PermIds,
       suppliersId: "",
       page: 1,
       pageSize: 10,
@@ -117,7 +119,9 @@ export default {
       multipleSelection: [] // 选择的列表
     };
   },
-  computed: {},
+  computed: {
+    ...mapGetters(["hasPermission"])
+  },
   methods: {
     onSubmit: function() {
       const _this = this;

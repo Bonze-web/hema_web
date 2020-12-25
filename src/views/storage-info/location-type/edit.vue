@@ -18,7 +18,7 @@
             </div>
             <div>
                 <el-button @click="back">返回</el-button>
-                <el-button type="primary" @click="editCategory">编辑</el-button>
+                <el-button type="primary" @click="editCategory" v-if="hasPermission(PermIds.WMS_BINTYPE_UPDATE)">编辑</el-button>
             </div>
         </div>
         <div style="height:20px" />
@@ -149,12 +149,14 @@
 </template>
 
 <script>
-// import { mapGetters } from "vuex";
 import StorageService from "@/api/service/StorageService";
+import PermIds from "@/api/permissionIds";
+import { mapGetters } from "vuex";
 
 export default {
   data() {
       return {
+        PermIds: PermIds,
         tabActiveName: 'category', // tab栏名称
         active: 'ccc',
         status: '', // 页面状态
@@ -213,6 +215,7 @@ export default {
       }
     },
     computed: {
+      ...mapGetters(["hasPermission"])
     },
     methods: {
       back: function() {

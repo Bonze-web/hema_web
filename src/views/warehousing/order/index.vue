@@ -3,12 +3,28 @@
     <div class="select-head">
       <el-form ref="form" style="display: flex;flex-wrap:wrap;" :model="form" label-width="90px" label-position="right" >
 
-        <el-form-item label="条码：">
-          <el-input type="text" placeholder="请输入条码" v-model="form.barCodeLikes" class="input-width" ></el-input>
+        <el-form-item label="单号：">
+          <el-input type="text" placeholder="请输入单号" v-model="form.barCodeLikes" class="input-width" ></el-input>
+        </el-form-item>
+
+        <el-form-item label="来源单号：">
+          <el-input type="text" placeholder="请输入来源单号" v-model="form.barCodeLikes" class="input-width" ></el-input>
+        </el-form-item>
+
+        <el-form-item label="供应商：">
+          <el-input type="text" placeholder="请输入供应商" v-model="form.barCodeLikes" class="input-width" ></el-input>
+        </el-form-item>
+
+        <el-form-item label="入库仓库：">
+          <el-input type="text" placeholder="请输入入库仓库" v-model="form.barCodeLikes" class="input-width" ></el-input>
+        </el-form-item>
+
+        <el-form-item label="商品：">
+          <el-input type="text" placeholder="请输入商品" v-model="form.barCodeLikes" class="input-width" ></el-input>
         </el-form-item>
 
         <el-form-item label="状态：">
-          <el-select v-model="form.useStatusEquals" placeholder="请选择状态">
+          <el-select v-model="form.useStatusEquals" placeholder="请选择状态" class="input-width" >
             <el-option label="全部" value=""></el-option>
             <el-option value="idle" label="空闲"></el-option>
             <el-option value="locked" label="已锁定"></el-option>
@@ -32,22 +48,16 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="当前位置：">
-          <el-input type="text" placeholder="请输入当前位置：" v-model="form.positionCodeOrNameEquals" class="input-width" ></el-input>
+        <el-form-item label="到效日期：">
+          <el-date-picker v-model="value1" type="datetimerange" format="yyyy-MM-dd" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" ></el-date-picker>
         </el-form-item>
 
-        <el-form-item label="父容器：">
-          <el-input type="text" placeholder="请输入父容器：" v-model="form.parentBarcodeLikes" class="input-width" ></el-input>
+        <el-form-item label="接收日期：">
+          <el-date-picker v-model="value1" type="datetimerange" format="yyyy-MM-dd" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" ></el-date-picker>
         </el-form-item>
 
-        <el-form-item label="容器类型：">
-          <el-select v-model="form.containerTypeCodeEquals" placeholder="请选择容器类型：">
-            <el-option v-for="(item, index) in containerType" :key="index" :label="item.name" :value="item.id"></el-option>
-          </el-select>
-        </el-form-item>
-
-        <el-form-item label="使用对象：">
-          <el-input type="text" placeholder="请输入使用对象：" v-model="form.useNameOrCodeLikes" class="input-width" ></el-input>
+        <el-form-item label="到货日期：">
+          <el-date-picker v-model="value1" type="datetimerange" format="yyyy-MM-dd" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" ></el-date-picker>
         </el-form-item>
 
         <el-form-item>
@@ -62,7 +72,7 @@
     <div style="background: #fff;">
       <el-row>
         <router-link :to="{ path: '/basicinfo/container/add' }" >
-          <el-button style="margin: 18px 10px" type="primary" size="mini" v-if="hasPermission(PermIds.WMS_CONTAINER_CREATE)">新建</el-button>
+          <el-button style="margin: 18px 10px" type="primary" size="mini" >新建</el-button>
         </router-link>
 
         <el-button style="margin: 18px 10px" size="mini" @click="printingBtn" >打印</el-button>
@@ -114,13 +124,11 @@
 
 <script>
 import BasicService from "@/api/service/BasicService";
-import PermIds from "@/api/permissionIds";
-import { mapGetters } from "vuex";
 
 export default {
   data() {
     return {
-      PermIds: PermIds,
+      value1: '',
       listData: [], // 列表数据
       containerType: [], // 容器类型
       form: {
@@ -136,9 +144,7 @@ export default {
       totalCount: 0
     };
   },
-  computed: {
-    ...mapGetters(["hasPermission"])
-  },
+  computed: {},
   methods: {
     handleSelectionChange(val) {
       console.log(val)
