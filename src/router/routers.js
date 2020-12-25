@@ -444,6 +444,50 @@ const BasicInfoPackage = {
           permission: PermIds.WMS_CONTAINER_CREATE
         }
       }] 
+    }, {
+      path: "product",
+      name: "Product",
+      component: AModule,
+      meta: {
+        title: '商品',
+        icon: 'table',
+        permission: PermIds.PRODUCT_PRODUCT
+      },
+      children: [
+        {
+        path: "",
+        name: "productView",
+        component: () =>
+          import('@/views/basic-info/product/index'),
+        hidden: true,
+        meta: {
+          title: '商品',
+          icon: 'table',
+          permission: PermIds.PRODUCT_PRODUCT
+        }
+      }, {
+        path: "edit",
+        name: "productEdit",
+        component: () =>
+          import('@/views/basic-info/product/edit'),
+        hidden: true,
+        meta: {
+          title: '查看商品',
+          icon: 'table',
+          permission: PermIds.PRODUCT_PRODUCT_VIEW
+        }
+      }, {
+        path: "add",
+        name: "productAdd",
+        component: () =>
+          import('@/views/basic-info/product/add'),
+        hidden: true,
+        meta: {
+          title: '新建商品',
+          icon: 'table',
+          permission: PermIds.PRODUCT_PRODUCT_CREATE
+        }
+      }] 
     }
   ]
 }
