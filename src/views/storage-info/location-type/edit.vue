@@ -63,7 +63,7 @@
 
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="宽度(cm)" prop="widht">
-                                            <el-input v-model="form.widht"></el-input>
+                                            <el-input v-model="form.width"></el-input>
                                         </el-form-item>
                                     </el-col>
 
