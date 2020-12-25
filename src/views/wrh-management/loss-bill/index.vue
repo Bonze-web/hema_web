@@ -3,16 +3,16 @@
       <div class="select-head">
             <el-form ref="form" style="display:flex;flex-wrap:wrap" :model="form" label-width="80px" label-position="right">
                 <el-form-item label="单号">
-                    <el-input type='text' placeholder="请输入类别编号/名称" v-model="form.billNumber" class="input-width"></el-input>
+                    <el-input type='text' placeholder="请输入类别编号/名称" v-model="form.billNumLikes" class="input-width"></el-input>
                 </el-form-item>
                 <el-form-item label="仓库">
-                    <el-input type='text' placeholder="请输入上级类别编号/名称" v-model="form.wrhCodeOrName" class="input-width"></el-input>
+                    <el-input type='text' placeholder="请输入上级类别编号/名称" v-model="form.wareCodeOrNameLikes" class="input-width"></el-input>
                 </el-form-item>
                 <el-form-item label="报损员">
-                    <el-input type='text' placeholder="请输入上级类别编号/名称" v-model="form.decerCodeOrName" class="input-width"></el-input>
+                    <el-input type='text' placeholder="请输入上级类别编号/名称" v-model="form.decerNameLikes" class="input-width"></el-input>
                 </el-form-item>
                 <el-form-item label="状态">
-                    <el-select v-model="form.status" placeholder="请选择状态">
+                    <el-select v-model="form.statusEquals" placeholder="请选择状态">
                       <!-- <el-option label="已批准" value="APPROVED"></el-option> -->
                       <el-option label="已保存" value="SAVED"></el-option>
                       <el-option label="已审核" value="AUDITED"></el-option>
@@ -25,7 +25,7 @@
                     <el-input type='text' placeholder="请输入上级类别编号/名称" v-model="form.binCode" class="input-width"></el-input>
                 </el-form-item>
                 <el-form-item label="容器">
-                    <el-input type='text' placeholder="请输入上级类别编号/名称" v-model="form.containerBarcode" class="input-width"></el-input>
+                    <el-input type='text' placeholder="请输入上级类别编号/名称" v-model="form.containerCodeOrNameLikes" class="input-width"></el-input>
                 </el-form-item>
                 <el-form-item label="创建时间">
                     <el-date-picker
@@ -71,16 +71,24 @@
                         </router-link>
                     </template>
                 </el-table-column>
-                <el-table-column prop="code" label="损耗类型"></el-table-column>
-                <el-table-column prop="code" label="仓位">
+                <el-table-column prop="billType" label="损耗类型"></el-table-column>
+                <el-table-column prop="wrhCode" label="仓库">
                   <template slot-scope="scope">
-                    {{ '[' + scope.row.code + ']' + scope.row.name }}
+                    {{ '[' + scope.row.wrhCode + ']' + scope.row.wrhName }}
                   </template>
                 </el-table-column>
-                <el-table-column prop="code" label="报损员"></el-table-column>
-                <el-table-column prop="code" label="创建时间"></el-table-column>
-                <el-table-column prop="code" label="状态"></el-table-column>
-                <el-table-column prop="code" label="来源单号"></el-table-column>
+                <el-table-column prop="decerCode" label="报损员">
+                  <template slot-scope="scope">
+                    {{ '[' + scope.row.decerCode + ']' + scope.row.decerName }}
+                  </template>
+                </el-table-column>
+                <el-table-column prop="createTime" label="创建时间"></el-table-column>
+                <el-table-column prop="status" label="状态">
+                  <template slot-scope="scope">
+                    {{ scope.row.status | billStatus }}
+                  </template>
+                </el-table-column>
+                <el-table-column prop="srcBillNumber" label="来源单号"></el-table-column>
             </el-table>
         </div>
 
@@ -113,10 +121,10 @@ export default {
         table: false,
         billList: [],
         form: {
-          billNumber: '', // 单据号
-          wrhCodeOrName: '',
-          decerCodeOrName: '', // 报损员
-          status: '',
+          billNumLikes: '', // 单据号
+          wareCodeOrNameLikes: '',
+          decerNameLikes: '', // 报损员
+          statusEquals: '',
           productCodeOrname: '', // 商品
           containerBarcode: '', // 容器
           binCode: '', // 货位
@@ -138,8 +146,8 @@ export default {
     },
     onSelect: function() {
      if (this.form.beginAndEndDate.length > 0) {
-        this.form.beginDate = this.form.beginAndEndDate[0]
-        this.form.endDate = this.form.beginAndEndDate[1]
+        this.form.beginTime = this.form.beginAndEndDate[0]
+        this.form.endTime = this.form.beginAndEndDate[1]
       }
       this.getBillList()
     },
@@ -148,9 +156,9 @@ export default {
           billNumber: '', // 单据号
           wrhCodeOrName: '',
           decerCodeOrName: '', // 报损员
-          status: '',
+          statusEquals: '',
           productCodeOrname: '', // 商品
-          containerBarcode: '', // 容器
+          containerCodeOrNameLikes: '', // 容器
           binCode: '', // 货位
           beginAndEndDate: [],
           srcBillNumber: '' // 来源单号
@@ -185,7 +193,25 @@ export default {
   created() {
     this.getAlllossType()
   },
+  beforeRouteEnter(to, from, next) {
+      next(vm => {
+        // 通过 `vm` 访问组件实例
+        vm.getAlllossType();
+      })
+    },
   filters: {
+    billStatus(status) {
+      switch (status) {
+        case "SAVED":
+          return "已保存"
+        case "APPROVED":
+          return "已批准"
+        case "AUDITED":
+          return "已审核"
+        default:
+          return "未知"
+      }
+    }
   }
 };
 </script>

@@ -86,10 +86,10 @@ export default {
   SYS_OPTIONS_UPDATE: "sys:options:update",
   SYS_OPTIONS_VIEW: "sys:options:view",
 
-/**
+  /**
    * 系统组件-上传文件
    */
-  // public static final String SYS_DFS_UPLOAD = "sys:dfs:upload";
+  // SYS_DFS_UPLOAD: "sys:dfs:upload",
   // SYS_OPTIONS_UPDATE: "sys:options:update",
   /**
    * 物流中心模块
@@ -213,6 +213,33 @@ export default {
   PRODUCT_SUPPLIER_VIEW: "product:supplier:view",
   PRODUCT_SUPPLIER_MODLIFY: "product:supplier:modlify",
 
+  /**
+   * 商品供应商关系明细模块
+   */
+  PRODUCT_VENDOR: "product:vendor",
+  PRODUCT_VENDOR_VIEW: "product:vendor:view",
+  PRODUCT_VENDOR_CREATE: "product:vendor:create",
+  PRODUCT_VENDOR_UPDATE: "product:vendor:update",
+  PRODUCT_VENDOR_REMOVE: "product:vendor:remove",
+  PRODUCT_VENDOR_SET_RECEIVE_DEFAULT: "product:vendor:set_receive_default",
+  PRODUCT_VENDOR_SET_RETURN_DEFAULT: "product:vendor:cancel_return_default",
+
+  /**
+   * 商品业务模块
+   */
+  PRODUCT_BUSINESS: "product:business",
+  PRODUCT_BUSINESS_VIEW: "product:business:view",
+  PRODUCT_BUSINESS_CREATE: "product:business:create",
+  PRODUCT_BUSINESS_UPDATE: "product:business:update",
+  PRODUCT_BUSINESS_REMOVE: "product:business:remove",
+  /**
+   * 物流中心商品规格明细模块
+   */
+  PRODUCT_DC_QPC: "product:dc_qpc",
+  PRODUCT_DC_QPC_VIEW: "product:dc_qpc:view",
+  PRODUCT_DC_QPC_CREATE: "product:dc_qpc:create",
+  PRODUCT_DC_QPC_UPDATE: "product:dc_qpc:update",
+  PRODUCT_DC_QPC_REMOVE: "product:dc_qpc:remove",
   /**
    * 资料模块
    */

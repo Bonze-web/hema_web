@@ -9,5 +9,11 @@ export default {
      */
     getBillList(data) {
         return request.get('', {params: data})
+    },
+    /**
+     * 搜索报损人
+     */
+    getDeccer(data) {
+        return request.get('', {params: data})
     }
 }
