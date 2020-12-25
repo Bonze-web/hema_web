@@ -84,7 +84,7 @@
                             </el-col>
                             <el-col :span="6" class="info-box">
                                 <div>物流中心:</div>
-                                <div>{{ warehouseInfo.dcId }}</div>
+                                <div>{{ warehouseInfo.dcName }}</div>
                             </el-col>
                             <!-- <el-col :span="6" class="info-box">
                                 <div>货主:</div>
@@ -274,6 +274,14 @@ export default {
         this.form = Object.assign(this.form, this.categoryInfo)
         console.log(this.form)
 
+        StorageService.getDcQuery()
+        .then(res => {
+          this.records = res.records;
+          console.log(this.records)
+        }).catch((err) => {
+            this.$message.error("获取物流中心失败" + err.message)
+        })
+
         // if (this.level !== "one") {
         //   this.getParentCategory()
         // }
@@ -308,14 +316,6 @@ export default {
     },
     created() {
       this.getQueryStatus()
-
-      StorageService.getDcQuery()
-        .then(res => {
-          this.records = res.records;
-          console.log(this.records)
-        }).catch((err) => {
-            this.$message.error("获取物流中心失败" + err.message)
-        })
     },
     filters: {
       categoryLevel(level) {

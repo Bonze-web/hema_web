@@ -22,7 +22,7 @@ const getters = {
   permissions: state =>
     state.user.user ? state.user.user.permissions : [],
 
-  // hasPermission: (state) => (permId) => state.user.hasPermission,
+  hasPermission: (state) => (permId) => state.user.hasPermission,
 
   // hasAllPermissions: (state, getters) => (perms) => state.user.hasAllPermissions,
 
