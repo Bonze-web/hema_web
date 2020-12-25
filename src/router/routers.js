@@ -768,7 +768,7 @@ const WarehousingPackage = {
       path: "edit",
       name: "入库订单详情",
       component: () =>
-        import('@/views/basic-info/suppliers/edit'),
+        import('@/views/warehousing/order/edit'),
       hidden: true,
       meta: {
         title: '查看供应商',
@@ -779,7 +779,7 @@ const WarehousingPackage = {
       path: "add",
       name: "SuppliersAdd",
       component: () =>
-        import('@/views/basic-info/suppliers/add'),
+        import('@/views/warehousing/order/add'),
       hidden: true,
       meta: {
         title: '新建供应商',
