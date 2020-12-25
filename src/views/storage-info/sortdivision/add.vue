@@ -362,9 +362,9 @@ export default {
     },
     watch: {
       myval(newVal, oldVal) {
-        for(let i = 0; i < newVal.length; i++) {
-          if(newVal[i].code) {
-            this.storedContent = storedContentArr[newVal[i]];
+        for (let i = 0; i < newVal.length; i++) {
+          if (newVal[i].code) {
+            this.storedContent = this.storedContentArr[newVal[i]];
           }
         }
       }
@@ -377,7 +377,6 @@ export default {
         this.storedContentChangeDr();
       },
       searchDataRightChange() {
-
         console.log(this._data.myval)
 
         // this.myVal = [];
