@@ -3,12 +3,28 @@
     <div class="select-head">
       <el-form ref="form" style="display: flex;flex-wrap:wrap;" :model="form" label-width="90px" label-position="right" >
 
-        <el-form-item label="条码：">
-          <el-input type="text" placeholder="请输入条码" v-model="form.barCodeLikes" class="input-width" ></el-input>
+        <el-form-item label="单号：">
+          <el-input type="text" placeholder="请输入单号" v-model="form.barCodeLikes" class="input-width" ></el-input>
+        </el-form-item>
+
+        <el-form-item label="来源单号：">
+          <el-input type="text" placeholder="请输入来源单号" v-model="form.barCodeLikes" class="input-width" ></el-input>
+        </el-form-item>
+
+        <el-form-item label="供应商：">
+          <el-input type="text" placeholder="请输入供应商" v-model="form.barCodeLikes" class="input-width" ></el-input>
+        </el-form-item>
+
+        <el-form-item label="入库仓库：">
+          <el-input type="text" placeholder="请输入入库仓库" v-model="form.barCodeLikes" class="input-width" ></el-input>
+        </el-form-item>
+
+        <el-form-item label="商品：">
+          <el-input type="text" placeholder="请输入商品" v-model="form.barCodeLikes" class="input-width" ></el-input>
         </el-form-item>
 
         <el-form-item label="状态：">
-          <el-select v-model="form.useStatusEquals" placeholder="请选择状态">
+          <el-select v-model="form.useStatusEquals" placeholder="请选择状态" class="input-width" >
             <el-option label="全部" value=""></el-option>
             <el-option value="idle" label="空闲"></el-option>
             <el-option value="locked" label="已锁定"></el-option>
@@ -23,7 +39,7 @@
             <el-option value="shifting" label="移库中"></el-option>
             <el-option value="aborted" label="已作废"></el-option>
             <el-option value="stacontainermovelocked" label="移库锁定"></el-option>
-            <el-option value="USING" label="已使用"></el-option>
+            <el-option value="useing" label="已使用"></el-option>
             <el-option value="pickuping" label="拣货中"></el-option>
             <el-option value="handovering" label="交接中"></el-option>
             <el-option value="shiping" label="装车中"></el-option>
@@ -32,22 +48,16 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="当前位置：">
-          <el-input type="text" placeholder="请输入当前位置：" v-model="form.positionCodeOrNameEquals" class="input-width" ></el-input>
+        <el-form-item label="到效日期：">
+          <el-date-picker v-model="value1" type="datetimerange" format="yyyy-MM-dd" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" ></el-date-picker>
         </el-form-item>
 
-        <el-form-item label="父容器：">
-          <el-input type="text" placeholder="请输入父容器：" v-model="form.parentBarcodeLikes" class="input-width" ></el-input>
+        <el-form-item label="接收日期：">
+          <el-date-picker v-model="value1" type="datetimerange" format="yyyy-MM-dd" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" ></el-date-picker>
         </el-form-item>
 
-        <el-form-item label="容器类型：">
-          <el-select v-model="form.containerTypeCodeEquals" placeholder="请选择容器类型：">
-            <el-option v-for="(item, index) in containerType" :key="index" :label="item.name" :value="item.id"></el-option>
-          </el-select>
-        </el-form-item>
-
-        <el-form-item label="使用对象：">
-          <el-input type="text" placeholder="请输入使用对象：" v-model="form.useNameOrCodeLikes" class="input-width" ></el-input>
+        <el-form-item label="到货日期：">
+          <el-date-picker v-model="value1" type="datetimerange" format="yyyy-MM-dd" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" ></el-date-picker>
         </el-form-item>
 
         <el-form-item>
@@ -60,17 +70,17 @@
     <div style="height: 20px" />
 
     <div style="background: #fff;">
-      <el-row>
+      <!-- <el-row>
         <router-link :to="{ path: '/basicinfo/container/add' }" >
-          <el-button style="margin: 18px 10px" type="primary" size="mini" v-if="hasPermission(PermIds.WMS_CONTAINER_CREATE)">新建</el-button>
+          <el-button style="margin: 18px 10px" type="primary" size="mini" >新建</el-button>
         </router-link>
 
         <el-button style="margin: 18px 10px" size="mini" @click="printingBtn" >打印</el-button>
-      </el-row>
+      </el-row> -->
 
 
       <el-table :data="listData" @selection-change="handleSelectionChange"  style="width: 100%; text-align: center" :row-style="{ height: '16px', padding: '-4px' }" >
-        <el-table-column prop="barcode" label="条码" style="height: 20px">
+        <el-table-column prop="barcode" label="单号" style="height: 20px">
           <template slot-scope="scope">
             <router-link style="color: #409eff" :to="{ path: '/basicinfo/container/edit', query:{ id: scope.row.id} }" >
               <span>{{ scope.row.barcode }}</span>
@@ -78,22 +88,21 @@
           </template>
         </el-table-column>
 
-        <el-table-column prop="containerTypeId" label="容器类型" style="height: 20px">
-          <template slot-scope="scope">
-            <router-link style="color: #409eff" :to="{ path: '/basicinfo/containertype/edit', query:{ status: 'read', id: scope.row.containerTypeId} }">
-              <span>{{ scope.row.containerTypeId }}</span>
-            </router-link>
-          </template>
+        <el-table-column prop="containerTypeId" label="订单类型" style="height: 20px">
+          <template slot-scope="scope">{{ scope.row.containerTypeId }}</template>
         </el-table-column>
   
-        <el-table-column prop="positionCode" label="当前位置"></el-table-column>
-        <el-table-column prop="toPositionCode" label="目标位置"></el-table-column>
-        <el-table-column prop="useId" label="使用对象"></el-table-column>
-        <el-table-column prop="useStatus" label="状态">
-          <template slot-scope="scope">
-            {{ scope.row.useStatus | dcStatus }}
-          </template>
+        <el-table-column prop="barcode" label="供应商"></el-table-column>
+        <el-table-column prop="barcode" label="入库仓"></el-table-column>
+        <el-table-column prop="useId" label="物流方式"></el-table-column>
+        <el-table-column prop="status" label="接受日期"></el-table-column>
+
+        <el-table-column prop="status" label="到货日期">
+          <div>{{ value1 ? value1 : "&lt;空&gt;" }}</div>
         </el-table-column>
+        <el-table-column prop="status" label="到效日期"></el-table-column>
+        <el-table-column prop="status" label="来源单号"></el-table-column>
+        <el-table-column prop="status" label="状态"></el-table-column>
 
       </el-table>
 
@@ -113,13 +122,11 @@
 
 <script>
 import BasicService from "@/api/service/BasicService";
-import PermIds from "@/api/permissionIds";
-import { mapGetters } from "vuex";
 
 export default {
   data() {
     return {
-      PermIds: PermIds,
+      value1: '',
       listData: [], // 列表数据
       containerType: [], // 容器类型
       form: {
@@ -135,9 +142,7 @@ export default {
       totalCount: 0
     };
   },
-  computed: {
-    ...mapGetters(["hasPermission"])
-  },
+  computed: {},
   methods: {
     handleSelectionChange(val) {
       console.log(val)
@@ -252,48 +257,12 @@ export default {
     })
   },
   filters: {
-    dcStatus(useStatus) {
-      const useStatu = useStatus.toLowerCase();
-
-      switch (useStatu) {
-        case 'idle':
-          return "空闲"
-        case 'locked':
-          return "已锁定"
-        case 'receiving':
-          return "收货中"
-        case 'rtnwrhreceiving':
-          return "好退退仓收货中"
-        case 'rtnvendorreceiving':
-          return "返厂退仓收货中"
-        case 'moving':
-          return "平移中"
-        case 'allocating':
-          return "分播中"
-        case 'putawaying':
-          return "上架中"
-        case 'rtnputawaying':
-          return "退仓上架中"
-        case 'mergering':
-          return "拆并中"
-        case 'shifting':
-          return "移库中"
-        case 'aborted':
-          return "已作废"
-        case 'stacontainermovelocked':
-          return "移库锁定"
-        case 'USING':
+    dcStatus(status) {
+      switch (status) {
+        case 'ON':
           return "已使用"
-        case 'pickuping':
-          return "拣货中"
-        case 'handovering':
-          return "交接中"
-        case 'shiping':
-          return "装车中"
-        case 'shiped':
-          return "已装车"
-        case 'instore':
-          return "在门店"
+        case 'OFF':
+          return "未使用"
         default:
           return '未知';
       }

@@ -2,10 +2,8 @@
     <div>
         <div class="head">
             <div class="head-title">
-                <div style="margin:8px">{{ dataList.barcode  }}</div>
-                <!-- <template> -->
-                  <div style="margin:11px 0 5px 0; font-size: 12px; color: #999">{{ state }}</div>
-                <!-- </template> -->
+                <div style="margin:8px">入库订单{{ dataList.barcode  }}</div>
+                <div style="margin:11px 0 5px 0; font-size: 12px; color: #999">状态{{ state }}</div>
             </div>
             <div>
                 <el-button @click="back">返回</el-button>
@@ -13,7 +11,6 @@
             </div>
         </div>
         <div style="height:20px" />
-
 
         <!-- 编辑 -->
         <!-- <div class="info-content" v-if="status === 'create' || status === 'edit'">
@@ -90,37 +87,55 @@
             <div>
                 <template>
                     <el-tabs v-model="tabActiveName">
-                        <el-tab-pane label="容器详情" name="category">
-                            <div class="info-title">基本信息</div>
+                        <el-tab-pane label="入库订单" name="category">
+                            <div class="info-title">摘要</div>
                             <el-col :span="6" class="info-box">
-                                <div>条码:</div>
-                                <div>{{ dataList.barcode }}</div>
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>容器类型:</div>
-                                <!-- <router-link style="color: #409eff" :to="{ path: '/basicinfo/container/edit' }" > -->
-                                  {{ '[' + dataList.useStatus + ']' + dataList.containerTypeName }}
-                                <!-- </router-link> -->
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>所属对象:</div>
-                                <div>{{ dataList.storageNumber }}</div>
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>父容器:</div>
+                                <div>订单类型:</div>
                                 <div>{{ dataList.parentId ? dataList.parentId : "&lt;空&gt;" }}</div>
                             </el-col>
-
                             <el-col :span="6" class="info-box">
-                                <div>当前位置:</div>
-                                <div>{{ dataList.positionCode }}</div>
+                                <div>供应商:</div>
+                                <div>供应商 {{ '[' + dataList.useStatus + ']' + dataList.containerTypeName }}</div>
+                            </el-col>
+                            <el-col :span="6" class="info-box">
+                                <div>物流方式:</div>
+                                <div>一步越库{{ dataList.storageNumber }}</div>
+                            </el-col>
+                            <el-col :span="6" class="info-box">
+                                <div>仓:</div>
+                                <div>[01]正常仓</div>
                             </el-col>
 
                             <el-col :span="6" class="info-box">
-                                <div>目标位置:</div>
+                                <div>收效日期:</div>
+                                <div>{{ dataList.positionCode }}2019-12-31</div>
+                            </el-col>
+
+                            <el-col :span="6" class="info-box">
+                                <div>到货日期:</div>
                                 <div>{{ dataList.toPositionCode ? dataList.toPositionCode : "&lt;空&gt;" }}</div>
                             </el-col>
-                            <br>
+
+                            <el-col :span="6" class="info-box">
+                                <div>送达日期:</div>
+                                <div>{{ dataList.toPositionCode ? dataList.toPositionCode : "&lt;空&gt;" }}</div>
+                            </el-col>
+
+                            <el-col :span="6" class="info-box">
+                                <div>来源单:</div>
+                                <div>P202011111111</div>
+                            </el-col>
+
+                            <el-col :span="6" class="info-box">
+                                <div>来源方式:</div>
+                                <div>手工创建</div>
+                            </el-col>
+
+                            <el-col class="info-box">
+                                <div>备注:</div>
+                                <div>备注备注备注备注备注备注备注备注备注备注备注{{ "&lt;空&gt;" }}</div>
+                            </el-col>
+
 
                             <el-col>
                                 <div  class="info-title title">子容器</div>
@@ -130,21 +145,69 @@
 
                             <el-table :data="dataList.sonList" style="width: 100%; text-align: center" :row-style="{ height: '16px', padding: '-4px' }" >
 
-                            <el-table-column prop="a" label="条码" style="height: 20px">
+                            <el-table-column prop="a" label="行" style="height: 20px">
                               <template slot-scope="scope">
-                                <span>条码{{ scope.row.barcode }}</span>
+                                  <span>行{{ scope.row.a }}</span>
                               </template>
                             </el-table-column>
 
-                            <el-table-column prop="b" label="容器类型" style="height: 20px">
+                            <el-table-column prop="b" label="商品/商品规格" style="height: 20px">
                               <template slot-scope="scope">
-                                <span>容器类型{{ scope.row.containerTypeName }}</span>
+                                  <span>商品/商品规格{{ scope.row.b }}</span>
                               </template>
                             </el-table-column>
 
-                            <el-table-column prop="c" label="状态">
+                            <el-table-column prop="b" label="规格/计量单位" style="height: 20px">
                               <template slot-scope="scope">
-                                {{ scope.row.status | dcStatus }}
+                                  <span>规格/计量单位{{ scope.row.b }}</span>
+                              </template>
+                            </el-table-column>
+
+                            <el-table-column prop="b" label="单价" style="height: 20px">
+                              <template slot-scope="scope">
+                                  <span>单价{{ scope.row.b }}</span>
+                              </template>
+                            </el-table-column>
+
+                            <el-table-column prop="b" label="件数" style="height: 20px">
+                              <template slot-scope="scope">
+                                  <span>件数{{ scope.row.b }}</span>
+                              </template>
+                            </el-table-column>
+
+                            <el-table-column prop="b" label="数量" style="height: 20px">
+                              <template slot-scope="scope">
+                                  <span>数量{{ scope.row.b }}</span>
+                              </template>
+                            </el-table-column>
+
+                            <el-table-column prop="b" label="收货件数" style="height: 20px">
+                              <template slot-scope="scope">
+                                  <span>收货件数{{ scope.row.b }}</span>
+                              </template>
+                            </el-table-column>
+
+                            <el-table-column prop="b" label="收货数量" style="height: 20px">
+                              <template slot-scope="scope">
+                                  <span>收货数量{{ scope.row.b }}</span>
+                              </template>
+                            </el-table-column>
+
+                            <el-table-column prop="b" label="拒收件数" style="height: 20px">
+                              <template slot-scope="scope">
+                                  <span>拒收件数{{ scope.row.b }}</span>
+                              </template>
+                            </el-table-column>
+
+                            <el-table-column prop="b" label="拒收数量" style="height: 20px">
+                              <template slot-scope="scope">
+                                  <span>拒收数量{{ scope.row.b }}</span>
+                              </template>
+                            </el-table-column>
+
+                            <el-table-column prop="b" label="供应商" style="height: 20px">
+                              <template slot-scope="scope">
+                                  <span>供应商{{ scope.row.b }}</span>
                               </template>
                             </el-table-column>
 
@@ -153,11 +216,10 @@
 
                         </el-tab-pane>
 
-                        <el-tab-pane label="操作日志" name="active">
+                        <!-- <el-tab-pane label="操作日志" name="active">
                           <el-table :data="dataList.sonList" style="width: 100%; text-align: center" :row-style="{ height: '16px', padding: '-4px' }" >
-                            操作日志
 
-                            <!-- <el-table-column prop="a" label="操作时间" style="height: 20px">
+                            <el-table-column prop="a" label="操作时间" style="height: 20px">
                               <template slot-scope="scope">
                                   <span>条码{{ scope.row.a }}</span>
                               </template>
@@ -166,7 +228,6 @@
                             <el-table-column prop="b" label="操作类型" style="height: 20px">
                               <template slot-scope="scope">
                                   <span>容器类型{{ scope.row.b }}</span>
-                              </template>
                             </el-table-column>
 
                             <el-table-column prop="c" label="事件">
@@ -179,10 +240,10 @@
                               <template slot-scope="scope">
                                 {{ scope.row.d }}
                               </template>
-                            </el-table-column> -->
+                            </el-table-column>
 
                           </el-table>
-                        </el-tab-pane>
+                        </el-tab-pane> -->
                     </el-tabs>
                 </template>
             </div>
@@ -191,7 +252,7 @@
 </template>
 
 <script>
-import BasicService from "@/api/service/BasicService";
+// import BasicService from "@/api/service/BasicService";
 
 export default {
   data() {
@@ -200,6 +261,9 @@ export default {
         tabActiveName: 'category', // tab栏名称
         active: 'ccc',
         status: '', // 页面状态
+        form: {
+          remark: 'pppppppppppppppppppppppp'
+        },
         id: '', // 货位类别ID
         dataList: {} // 详情数据
       }
@@ -211,39 +275,12 @@ export default {
         this.$store.dispatch("tagsView/delView", this.$route);
         this.$router.go(-1)
       },
-      getQueryStatus: function() {
-        this.id = this.$route.query.id;
-        this.ocntainerOcntainer(this.id) // 获取详情
-      },
-      ocntainerOcntainer: function(id) {
-        BasicService.ocntainerOcntainer(id)
-        .then((res) => {
-          let state = '';
-
-          if (res.status === 'ON') {
-            state = '已使用'
-          } else if (res.status === 'OFF') {
-            state = '未使用'
-          } else {
-            state = '未知'
-          }
-
-          this.dataList = res;
-
-          console.log(this.dataList.sonList)
-
-          this.state = state
-        })
-        .catch((err) => {
-          this.$message.error("获取详情失败" + err.message)
-        })
-      },
       printingBtn() {
         this.$message.error("打印功能还未开通")
       }
     },
     created() {
-      this.getQueryStatus()
+      // this.getQueryStatus()
     },
     filters: {
       dcStatus(status) {

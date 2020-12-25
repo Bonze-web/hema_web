@@ -55,7 +55,7 @@ export default {
      * 获取物流中心
      */
     getDcQuery() {
-        return request.get('/sys/dc/query?page=1&pageSize=20')
+        return request.get('/sys/dc/query?page=1&pageSize=20&statusEquals=ON')
     },
     
     getWmsBintypeQuery(opt) {

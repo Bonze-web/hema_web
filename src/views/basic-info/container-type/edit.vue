@@ -87,8 +87,8 @@
                                         <el-form-item label="是否随车">
                                             <!-- <el-input v-model="form.shipflage"></el-input> -->
                                             <el-select v-model="form.shipflage" placeholder="请选择是否随车">
-                                              <el-option label="是" value="true"></el-option>
-                                              <el-option label="否" value="false"></el-option>
+                                              <el-option label="是" :value="true"></el-option>
+                                              <el-option label="否" :value="false"></el-option>
                                             </el-select>
                                         </el-form-item>
                                     </el-col>
@@ -96,8 +96,8 @@
                                         <el-form-item label="是否为附件">
                                             <!-- <el-input v-model="form.attachment"></el-input> -->
                                             <el-select v-model="form.attachment" placeholder="请选择是否为附件">
-                                              <el-option label="是" value="true"></el-option>
-                                              <el-option label="否" value="false"></el-option>
+                                              <el-option label="是" :value="true"></el-option>
+                                              <el-option label="否" :value="false"></el-option>
                                             </el-select>
                                         </el-form-item>
                                     </el-col>

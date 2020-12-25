@@ -33,13 +33,13 @@
     <div style="background: #fff">
       <el-row>
         <router-link :to="{ path: '/storageinfo/warehouse/add', query:{ status: 'create'} }" >
-          <el-button style="margin: 18px 10px" type="primary" size="mini"
-            >新建</el-button
+          <el-button style="margin: 18px 10px" type="primary" size="mini" v-if="hasPermission(PermIds.WMS_WAREHOUSE_CREATE)" >新建</el-button
           >
         </router-link>
       </el-row>
 
       <el-table :data="listData" style="width: 100%; text-align: center" :row-style="{ height: '16px'}">
+
         <el-table-column prop="code" label="代码" style="height: 20px">
           <template slot-scope="scope">
             <router-link style="color: #409eff" :to="{ path: '/storageinfo/warehouse/edit', query: { status: 'read', id: scope.row.id }, }" >
@@ -51,7 +51,7 @@
 
         <el-table-column prop="level" label="物流中心">
           <template slot-scope="scope">
-            {{ scope.row.dcId }}
+            [{{ scope.row.code }}] {{ scope.row.dcName }}
             <!-- {{ scope.row.dcId | categoryLevel }} -->
           </template>
         </el-table-column>
@@ -101,10 +101,13 @@
 
 <script>
 import StorageService from "@/api/service/StorageService";
+import PermIds from "@/api/permissionIds";
+import { mapGetters } from "vuex";
 
 export default {
   data() {
     return {
+      PermIds: PermIds,
       suppliersId: "",
       page: 1,
       pageSize: 10,
@@ -117,7 +120,9 @@ export default {
       multipleSelection: [] // 选择的列表
     };
   },
-  computed: {},
+  computed: {
+    ...mapGetters(["hasPermission"])
+  },
   methods: {
     onSubmit: function() {
       const _this = this;

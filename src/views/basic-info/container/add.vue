@@ -163,3 +163,9 @@ export default {
     margin: 12px 0;
 }
 </style>
+<style lang="scss">
+.table-index {
+  @import "src/styles/mixin.scss";
+  @include elTable;
+}
+</style>
