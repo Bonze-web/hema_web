@@ -822,6 +822,28 @@ const BillManagement = {
         icon: 'table',
         permission: PermIds.PRODUCT_SUPPLIER_VIEW
       }
+    }, {
+      path: "edit",
+      name: "LossBillEdit",
+      component: () =>
+        import('@/views/wrh-management/loss-bill/edit'),
+      hidden: true,
+      meta: {
+        title: '损耗单',
+        icon: 'table',
+        permission: PermIds.PRODUCT_SUPPLIER_VIEW
+      }
+    }, {
+      path: "add",
+      name: "LossBillAdd",
+      component: () =>
+        import('@/views/wrh-management/loss-bill/add'),
+      hidden: true,
+      meta: {
+        title: '损耗单',
+        icon: 'table',
+        permission: PermIds.PRODUCT_SUPPLIER_VIEW
+      }
     }]
   }]
 }
@@ -838,7 +860,7 @@ export const asyncRouterMap = [
   BillManagement,
   {
     path: '*',
-    redirect: '/sys',
+    redirect: '/dashboard',
     hidden: true
   }
 ]

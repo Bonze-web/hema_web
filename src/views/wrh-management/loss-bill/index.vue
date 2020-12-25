@@ -49,7 +49,7 @@
         <div style="background:#fff;">
           <div class="btn">
             <el-row>
-              <router-link :to="{ path: '/basicinfo/category/add', query:{ status: 'create'} }">
+              <router-link :to="{ path: '/wrhmanagement/lossbill/add', query:{ status: 'create'} }">
                   <!-- <span v-if="child.meta&&child.meta.title" :title="child.meta.title">{{child.meta.title}}</span> -->
                   <el-button type="primary" size="mini" v-if="hasPermission(PermIds.PRODUCT_CATEGORY_CREATE)">新建</el-button>
               </router-link>
@@ -62,8 +62,9 @@
                 :data="lossBill"
                 style="width: 100%;text-align:center"
                 :row-style="{height: '16px',padding: '-4px'}"
+                :default-sort = "{prop: 'billNumber'}"
             >
-                <el-table-column prop="code" label="单号">
+                <el-table-column sortable prop="billNumber" label="单号">
                     <template slot-scope="scope">
                         <router-link style="color:#409EFF" :to="{ path: '/wrhmanagement/lossbill/edit', query:{ status: 'read', id: scope.row.id} }">
                             <span>{{ scope.row.billNumber }}</span>
