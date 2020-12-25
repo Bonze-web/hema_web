@@ -23,7 +23,7 @@
             <el-option value="shifting" label="移库中"></el-option>
             <el-option value="aborted" label="已作废"></el-option>
             <el-option value="stacontainermovelocked" label="移库锁定"></el-option>
-            <el-option value="useing" label="已使用"></el-option>
+            <el-option value="USING" label="已使用"></el-option>
             <el-option value="pickuping" label="拣货中"></el-option>
             <el-option value="handovering" label="交接中"></el-option>
             <el-option value="shiping" label="装车中"></el-option>
@@ -86,13 +86,12 @@
           </template>
         </el-table-column>
   
-        <!--   当前位置 positionCode   目标位置 toPositionCode -->
         <el-table-column prop="positionCode" label="当前位置"></el-table-column>
         <el-table-column prop="toPositionCode" label="目标位置"></el-table-column>
         <el-table-column prop="useId" label="使用对象"></el-table-column>
-        <el-table-column prop="status" label="状态">
+        <el-table-column prop="useStatus" label="状态">
           <template slot-scope="scope">
-            {{ scope.row.status | dcStatus }}
+            {{ scope.row.useStatus | dcStatus }}
           </template>
         </el-table-column>
 
@@ -253,12 +252,48 @@ export default {
     })
   },
   filters: {
-    dcStatus(status) {
-      switch (status) {
-        case 'ON':
+    dcStatus(useStatus) {
+      const useStatu = useStatus.toLowerCase();
+
+      switch (useStatu) {
+        case 'idle':
+          return "空闲"
+        case 'locked':
+          return "已锁定"
+        case 'receiving':
+          return "收货中"
+        case 'rtnwrhreceiving':
+          return "好退退仓收货中"
+        case 'rtnvendorreceiving':
+          return "返厂退仓收货中"
+        case 'moving':
+          return "平移中"
+        case 'allocating':
+          return "分播中"
+        case 'putawaying':
+          return "上架中"
+        case 'rtnputawaying':
+          return "退仓上架中"
+        case 'mergering':
+          return "拆并中"
+        case 'shifting':
+          return "移库中"
+        case 'aborted':
+          return "已作废"
+        case 'stacontainermovelocked':
+          return "移库锁定"
+        case 'USING':
           return "已使用"
-        case 'OFF':
-          return "未使用"
+        case 'pickuping':
+          return "拣货中"
+        case 'handovering':
+          return "交接中"
+        case 'shiping':
+          return "装车中"
+        case 'shiped':
+          return "已装车"
+        case 'instore':
+          return "在门店"
         default:
           return '未知';
       }
