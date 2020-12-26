@@ -135,7 +135,7 @@
         </el-tabs>
       </div>
     </div>
-    <div class="info-content table-index" v-show="status === 'read'">
+    <div class="info-content" v-show="status === 'read'">
       <div>
         <template>
           <el-tabs v-model="tabActiveName" @tab-click="tabClick">
@@ -414,20 +414,20 @@
                 </el-table-column>
                 <el-table-column prop="defaultReceive" label="首选收货" style="height: 20px">
                   <template slot-scope="scope">
-                    <div v-show="(scope.row.isEdit && scope.row.defaultReceive) || workingOrg.type !== 'GROUP'">
+                    <div v-show="(scope.row.isEdit || scope.row.defaultReceive) || workingOrg.type !== 'GROUP'">
                       <span>{{ scope.row.defaultReceive | filterBoolean}}</span>
                     </div>
-                    <div v-show="!((scope.row.isEdit && scope.row.defaultReceive) || workingOrg.type !== 'GROUP')">
+                    <div v-show="!((scope.row.isEdit || scope.row.defaultReceive) || workingOrg.type !== 'GROUP')">
                       <el-button type="text" :disabled="!scope.row.id" @click="setReceiveDefault(scope.row)">设为首选</el-button>
                     </div>
                   </template>
                 </el-table-column>
                 <el-table-column prop="defaultReturn" label="首选退货">
                   <template slot-scope="scope">
-                    <div v-show="(scope.row.isEdit && scope.row.defaultReturn) || workingOrg.type !== 'GROUP'">
+                    <div v-show="(scope.row.isEdit || scope.row.defaultReturn) || workingOrg.type !== 'GROUP'">
                       <span>{{ scope.row.defaultReturn | filterBoolean}}</span>
                     </div>
-                    <div v-show="!((scope.row.isEdit && scope.row.defaultReturn) || workingOrg.type !== 'GROUP')">
+                    <div v-show="!((scope.row.isEdit || scope.row.defaultReturn) || workingOrg.type !== 'GROUP')">
                       <el-button type="text" :disabled="!scope.row.id" @click="setReturnDefault(scope.row)">设为首选</el-button>
                     </div>
                   </template>
@@ -1108,6 +1108,7 @@ export default {
         // 保质期
         postData = {
           ...postData,
+          putawayBin: this.businessForm.putawayBin,
           deliveryControlDays: this.shelfLifeForm.deliveryControlDays,
           receiveControlDays: this.shelfLifeForm.receiveControlDays,
           returnControlDays: this.shelfLifeForm.returnControlDays,
@@ -1466,9 +1467,9 @@ export default {
     // 供应商相关处理
     addVendor() {
       const vendor = {
-        defaultReceive: true,
+        defaultReceive: false,
         defaultReceivePrice: 0,
-        defaultReturn: true,
+        defaultReturn: false,
         defaultReturnPrice: 0,
         productId: this.id,
         vendorCode: "",
@@ -1710,7 +1711,9 @@ export default {
   .el-icon-circle-plus-outline {
     font-size: 14px;
   }
-  .el-table .cell {
+  .el-table tr,
+  .el-table th {
+    height: 32px !important;
     // line-height: 32px !important;
   }
 }

@@ -27,7 +27,7 @@
       <el-row>
         <!-- <router-link :to="{ path: '/basicinfo/product/add', query:{ status: 'create'} }">
           <el-button style="margin:18px 10px" type="primary" size="mini">新建</el-button>
-        </router-link> -->
+        </router-link>-->
         <el-button style="margin:18px 10px" size="mini" v-if="hasPermission(PermIds.PRODUCT_PRODUCT_ENABLE) && workingOrg.type=== 'GROUP'" @click="batchChangeStatus('ON')">启用</el-button>
         <el-button style="margin:18px 10px" size="mini" v-if="hasPermission(PermIds.PRODUCT_PRODUCT_DISABLE) && workingOrg.type === 'GROUP'" @click="batchChangeStatus('OFF')">禁用</el-button>
       </el-row>
@@ -256,8 +256,10 @@ export default {
 .product-index {
   @import "src/styles/mixin.scss";
   @include elTable;
-  .el-table .cell {
-    line-height: 32px !important;
+  .el-table tr,
+  .el-table th {
+    height: 32px !important;
+    // line-height: 32px !important;
   }
 }
 </style>
