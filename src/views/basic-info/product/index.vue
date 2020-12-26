@@ -33,16 +33,19 @@
       </el-row>
       <el-table :data="productList" style="width: 100%;text-align:center" @selection-change="allSelectionChange">
         <el-table-column type="selection" width="55"></el-table-column>
-        <el-table-column prop="code" label="代码">
+        <el-table-column prop="code" label="代码" width="200">
           <template slot-scope="scope">
             <router-link style="color:#409EFF" :to="{ path: '/basicinfo/product/edit', query:{ status: 'read', id: scope.row.id} }">
               <span>{{ scope.row.code }}</span>
             </router-link>
           </template>
         </el-table-column>
-        <el-table-column prop="name" label="名称"></el-table-column>
-        <el-table-column prop="spec" label="规格"></el-table-column>
-        <el-table-column prop="categoryName" label="类别"></el-table-column>
+        <el-table-column prop="name" label="名称" width="180"></el-table-column>
+        <el-table-column prop="spec" label="规格" width="120"></el-table-column>
+        <el-table-column prop="categoryName" label="类别" width="200">
+          <template slot-scope="scope">{{scope.row | filterCategory }}</template>
+
+        </el-table-column>
         <el-table-column prop="status" label="状态">
           <template slot-scope="scope">{{ scope.row.status | filterStatus }}</template>
         </el-table-column>
@@ -237,6 +240,14 @@ export default {
           return "禁用";
         default:
           return "未知";
+      }
+    },
+
+    filterCategory(val) {
+      if (val.categoryCode && val.categoryName) {
+        return "[" + val.categoryCode + "]" + val.categoryName
+      } else {
+        return ""
       }
     }
   }
