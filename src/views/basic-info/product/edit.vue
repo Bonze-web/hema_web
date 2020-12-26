@@ -1222,6 +1222,12 @@ export default {
       } else if (val.munit.length > 32) {
         this.$message.error("计量单位的长度不能超过32位");
         return false;
+      } else if (!val.paq) {
+        this.$message.error("请填写包装件数！");
+        return false;
+      } else if (!(Number(val.paq) >= 0)) {
+        this.$message.error("包装件数为数字且不能小于0！");
+        return false;
       } else if (!val.length) {
         this.$message.error("请填写商品包装的长！");
         return false;
