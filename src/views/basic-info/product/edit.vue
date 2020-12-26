@@ -724,7 +724,9 @@ export default {
       },
       isEditShelfLife: false,
       businessDialogVisible: false,
-      businessInfo: {},
+      businessInfo: {
+        putawayBin: "STORAGEBIN"
+      },
       businessForm: {
         id: "",
         dcId: "",
