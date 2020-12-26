@@ -1225,20 +1225,20 @@ export default {
       } else if (!val.length) {
         this.$message.error("请填写商品包装的长！");
         return false;
-      } else if (Number(val.length) < 0) {
-        this.$message.error("商品包装的长不能小于0！");
+      } else if (!(Number(val.length) >= 0)) {
+        this.$message.error("商品包装的长为数字且不能小于0！");
         return false;
       } else if (!val.width) {
         this.$message.error("请填写商品包装的宽！");
         return false;
-      } else if (Number(val.width) < 0) {
-        this.$message.error("商品包装的宽不能小于0！");
+      } else if (!(Number(val.width) >= 0)) {
+        this.$message.error("商品包装的宽为数字且不能小于0！");
         return false;
       } else if (!val.height) {
         this.$message.error("请填写商品包装的高！");
         return false;
-      } else if (Number(val.height) < 0) {
-        this.$message.error("商品包装的高不能小于0！");
+      } else if (!(Number(val.height) >= 0)) {
+        this.$message.error("商品包装的高为数字且不能小于0！");
         return false;
       } else if (this.workingOrg.type === "DC" && !val.plateAdvice) {
         this.$message.error("请填写装盘建议！");
