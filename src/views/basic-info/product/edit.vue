@@ -1051,14 +1051,15 @@ export default {
     },
     tabClick() {},
     onSelected(val) {
-      this.form.defaultVendorCode = val.code;
-      this.form.defaultVendorId = val.id;
-      this.form.defaultVendorName = val.name;
+      console.log(val)
+      this.form.defaultVendorCode = val.code ? val.code : "";
+      this.form.defaultVendorId = val.id ? val.id : "";
+      this.form.defaultVendorName = val.name ? val.name : "";
     },
     onProductCategorySelected(val) {
-      this.form.categoryCode = val.code;
-      this.form.categoryId = val.id;
-      this.form.categoryName = val.name;
+      this.form.categoryCode = val.code ? val.code : "";
+      this.form.categoryId = val.id ? val.id : "";
+      this.form.categoryName = val.name ? val.name : "";
     },
     // 保质期处理
     clickEditShelfLife() {
@@ -1564,9 +1565,9 @@ export default {
         });
     },
     onVendorSelected(val) {
-      this.vendorList[val.index].vendorCode = val.code;
-      this.vendorList[val.index].vendorId = val.id;
-      this.vendorList[val.index].vendorName = val.name;
+      this.vendorList[val.index].vendorCode = val.code ? val.code : "";
+      this.vendorList[val.index].vendorId = val.id ? val.id : "";
+      this.vendorList[val.index].vendorName = val.name ? val.name : "";
     },
     // 分页相关处理
     handleCurrentChange: function(e) {

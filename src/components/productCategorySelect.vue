@@ -93,7 +93,8 @@ export default {
     },
     handleChange() {
       this.$emit("update:categoryValue", this.value);
-      const selectedObj = this.getSelectedObj();
+      var selectedObj = this.getSelectedObj();
+      selectedObj = !selectedObj ? {} : selectedObj;
       this.$emit("onselected", selectedObj);
     },
     getSelectedObj() {
