@@ -1434,7 +1434,7 @@ export default {
                 this.$message.error("删除失败" + err.message);
               });
           } else {
-            this.specList.splice(index, 1);
+            this.barcodeList.splice(index, 1);
           }
         })
         .catch(() => {
