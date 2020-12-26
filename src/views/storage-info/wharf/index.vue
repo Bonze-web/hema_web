@@ -1,5 +1,5 @@
 <template>
-    <div class="table-index">        
+    <div class="table-index _table-index">        
         <div class="select-head">
             <el-form ref="form" style="display:flex" :model="form" label-width="60px" label-position="right">
                 <el-form-item label="码头">
@@ -332,23 +332,26 @@ export default {
       }
       return str;
     }
+  },
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      vm.getSuppliersList();
+    })
   }
 };
 </script>
 
 <style lang="scss" scoped>
-// @import "src/styles/mixin.scss";
-// /deep/ .el-table .cell{
-//       line-height: 32px !important;
-// }
-.table-index .el-table .cell {
-  padding:  7px 0;
-}
+@import "src/styles/mixin.scss";
 </style>
+
 <style lang="scss">
 .table-index{
 @import "src/styles/mixin.scss";
 @include elTable;
 }
 
+._table-index .el-table .cell{
+  padding:  7px 0 !important;
+}
 </style>

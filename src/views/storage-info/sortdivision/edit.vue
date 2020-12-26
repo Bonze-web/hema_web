@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="head" v-if="status === 'create' || status === 'edit'">
-            <div style="margin-top:8px" v-if="status === 'create'">新建拣货分区</div>
+            <div style="margin-top:8px" v-if="status === 'create'">编辑拣货分区</div>
             <div style="margin-top:8px" v-else>编辑</div>
             <div>
                 <el-button @click="back">取消</el-button>
@@ -12,10 +12,6 @@
         <div class="head" v-if="status === 'read'">
             <div class="head-title">
                 <div style="margin:8px">{{ '[' + suppliersInfo.code + ']' + suppliersInfo.name }}</div>
-                <template>
-                  <el-button type="text" @click="statusChange" v-if="suppliersInfo.status">禁用</el-button>
-                  <el-button type="text" @click="statusChange" v-if="!suppliersInfo.status">启用</el-button>
-                </template>
             </div>
             <div>
                 <el-button @click="back">返回</el-button>
@@ -27,40 +23,28 @@
             <div>
                 <template>
                     <el-tabs v-model="tabActiveName">
-                        <el-tab-pane label="码头" name="suppliers">
+                        <el-tab-pane label="拣货分区" name="suppliers">
                             <div class="info-title">基本信息</div>
                              <el-form :model="form" :rules="createRules" ref="form" label-width="100px" class="demo-ruleForm">
                                 <el-row :gutter="20">
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="代码" prop="code">
-                                            <el-input v-model="form.code" maxlength="16"></el-input>
+                                            <el-input v-model="form.code" maxlength="32"></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="名称" prop="name">
-                                            <el-input v-model="form.name" maxlength="40"></el-input>
+                                            <el-input v-model="form.name" maxlength="32"></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="货位范围" prop="binScope">
-                                            <el-input v-model="form.binScope" maxlength="40"></el-input>
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col :span="6" class="info-box">
-                                        <el-form-item label="配送中心" prop="dcId">
-                                            <el-select v-model="form.dcId" placeholder="请择配送中心" @change="levelChange">
-                                                <el-option v-for="(ele,idx) in materials" :key="idx" :label="ele.name" :value="ele.id"></el-option>
-                                            </el-select>
+                                            <el-input v-model="form.binScope" maxlength="64"></el-input>
                                         </el-form-item>
                                     </el-col>
                                 </el-row>
-                                <el-form-item label="备注">
-                                    <textarea v-model="form.remark" maxlength="200" @change="levelChange"></textarea>
-                                </el-form-item>
                             </el-form>
                         </el-tab-pane>
-                        <!-- <el-tab-pane label="配送中心范围" name="range">配置管理</el-tab-pane>
-                        <el-tab-pane label="操作日志" name="log">角色管理</el-tab-pane> -->
                     </el-tabs>
                 </template>
             </div>
@@ -69,7 +53,7 @@
             <div>
                 <template>
                     <el-tabs v-model="tabActiveName">
-                        <el-tab-pane label="码头" name="suppliers">
+                        <el-tab-pane label="存储分区" name="suppliers">
                             <div class="info-title">基本信息</div>
                             <el-col :span="6" class="info-box">
                                 <div>代码:</div>
@@ -83,19 +67,140 @@
                                 <div>货位范围:</div>
                                 <div>{{ suppliersInfo.binScope }}</div>
                             </el-col>
+                        </el-tab-pane>
+                        <el-tab-pane label="操作日志" name="suppliers1">
+                            <div class="info-title">基本信息</div>
                             <el-col :span="6" class="info-box">
-                                <div>配送中心:</div>
-                                <div>{{ suppliersInfo.dcId }}</div>
+                                <div>代码:</div>
+                                <div>{{ suppliersInfo.code }}</div>
                             </el-col>
-                            <el-col class="info-box">
-                                <div>备注:</div>
-                                <div>{{ suppliersInfo.remark ? suppliersInfo.remark : "&lt;空&gt;" }}</div>
+                            <el-col :span="6" class="info-box">
+                                <div>名称:</div>
+                                <div>{{ suppliersInfo.name }}</div>
+                            </el-col>
+                            <el-col :span="6" class="info-box">
+                                <div>货位范围:</div>
+                                <div>{{ suppliersInfo.binScope }}</div>
                             </el-col>
                         </el-tab-pane>
                     </el-tabs>
+                   
                 </template>
             </div>
         </div>
+        
+        <!-- 下面是添加存储分区的顺序页面 -->
+        <div style="height:20px;background:#fff" />
+        <div style="background:#fff" class="table-index">
+          <el-row>
+             <el-button style="margin:18px 10px" type="primary" size="mini" @click="establish = true"><span class="iconfont iconplus-fill" style="font-size:12px;"></span> 新建</el-button>
+          </el-row>
+          <el-table
+              :data="storageList"
+              style="width: 100%;text-align:center"
+          >
+            <el-table-column prop="name" label="存储分区">
+                <template slot-scope="scope">
+                     <span style="color:#409EFF">{{ scope.row.name }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column prop="orderNumber" label="顺序">
+                <template slot-scope="scope">
+                    {{ scope.row.orderNumber}}
+                </template>
+            </el-table-column>
+            <el-table-column label="操作" width="200">
+                <template slot-scope="scope">
+                  <el-button
+                    size="mini"
+                    type="text"
+                    @click="
+                     dialogFormVisible = true
+                    "
+                    class="setting-up-procedure"
+                    >调序</el-button
+                  >
+                  <el-button
+                    size="mini"
+                    type="text"
+                    @click="
+                      statusChange(scope.row.status, scope.row.id, scope.row.version)
+                    "
+                    >删除</el-button
+                  >
+                </template>
+            </el-table-column>
+          </el-table>
+          <el-pagination
+              style="float:right"
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page="1"
+              :page-sizes="[10, 20, 30, 50]"
+              :page-size="pageSize"
+              layout="total, sizes, prev, pager, next, jumper"
+              :total="totalCount">
+          </el-pagination>
+        </div>
+
+        <!-- 添加存储分区 -->
+         <el-dialog title="添加存储分区" :visible.sync="establish">
+            <div style="text-align: center">
+              <el-transfer
+                style="text-align: left; display: inline-block; height : 400px;"
+                v-model="value"
+                filterable
+                :left-default-checked="[2, 3]"
+                :right-default-checked="[1]"
+                :render-content="renderFunc"
+                :titles="['存储分区', '存储分区']"
+                :format="{
+                  noChecked: '${total}',
+                  hasChecked: '${checked}/${total}'
+                }"
+                @change="handleChange"
+                :data="data">
+                <el-pagination
+                :small="true"
+                slot="left-footer"
+                layout="prev, pager, next"
+                :total="1000">
+                </el-pagination>
+                <el-pagination
+                :small="true"
+                slot="right-footer"
+                layout="prev, pager, next"
+                :total="1000">
+                </el-pagination>
+                <!-- <el-button class="transfer-footer" slot="left-footer" size="small">操作</el-button> -->
+                <!-- <el-button class="transfer-footer" slot="right-footer" size="small">操作</el-button> -->
+              </el-transfer>
+            </div>
+            <div slot="footer" class="dialog-footer">
+              <el-button @click="establish = fasle;">取 消</el-button>
+              <el-button type="primary" @click="establish = fasle;">确 定</el-button>
+            </div>
+        </el-dialog>
+        <el-dialog title="存储方案调序" :visible.sync="dialogFormVisible">
+          <el-form :model="form">
+            <el-form-item label="存储方案:" :label-width="formLabelWidth">
+              {{'[' + numberPop.code + ']' + numberPop.name}}
+            </el-form-item>
+            <el-form-item label="存储方案数量:" :label-width="formLabelWidth">
+              {{numberPop.totality}}
+            </el-form-item>
+            <el-form-item label="当前序号:" :label-width="formLabelWidth">
+              {{numberPop.curNum}}
+            </el-form-item>
+            <el-form-item label="调整序号:" :label-width="formLabelWidth">
+               <el-input-number size="mini" v-model="numberPop.afterNum" :max="numberPop.totality" :min="1"></el-input-number>
+            </el-form-item>
+          </el-form>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="dialogFormVisible = fasle;">取 消</el-button>
+            <el-button type="primary" @click="Cancellation">确 定</el-button>
+          </div>
+        </el-dialog>
     </div>
 </template>
 
@@ -106,13 +211,43 @@ import SortdivisionService from "@/api/service/SortdivisionService";
 export default {
   data() {
       return {
+        dialogFormVisible: false,
+        establish: false,
+        // 弹出页面的存储
+        popShow: false,
+        popstorgeList: [],
+        popstorge: {
+          checkedOne: false,
+          checkedTwo: false,
+          pageSize: 10,
+          totalCount: 0,
+          searchOne: "",
+          searchTwo: ""
+        },
+        // 存储分区页面的展示 开始
+        storageList: [
+          {
+            code: "999",
+            name: "天心区域",
+            orderNumber: 1,
+            storageId: "111"
+          }
+        ],
+        // 调序的弹出框
+        numberPop: {
+          code: "999",
+          name: "天心区域",
+          orderNumber: 0,
+          storageId: "111",
+          totality: 2,
+          curNum: 1,
+          afterNum: 1
+        },
+        // 存储分区页面的展示 结束
         status: '', // 页面状态
         id: '', 
-        tabActiveName: 'suppliers', // tab栏名称
-        dcId: '',
         materials: [],
         form: {
-          dcId: '',
           code: '',
           name: '',
           remark: '',
@@ -124,13 +259,10 @@ export default {
             { required: true, message: '请输入代码', trigger: 'blur' }
           ],
           name: [
-            { required: true, message: '请输入码头名称', trigger: 'blur' }
+            { required: true, message: '请输入拣货分区名称', trigger: 'blur' }
           ],
           binScope: [
             { required: true, message: '请填写货位范围', trigger: 'blur' }
-          ],
-          dcId: [
-            { required: true, message: '请填写配送中心', trigger: 'blur' }
           ]
         }
       }
@@ -139,8 +271,12 @@ export default {
 
     },
     methods: {
+      // 计数区域的修改
+      Cancellation(idx) {
+        this.numberPop.curNum = this.numberPop.afterNum;
+        this.dialogFormVisible = false;
+      },
       levelChange() {
-        this.dc_id = this.form.dcId
         console.log(this.form)
       },
       back: function() {
@@ -201,13 +337,13 @@ export default {
           this.$message.error("获取详情失败" + err)
         })
       },
-      // 创建码头
+      // 创建拣货分区
       createSuppliers: function() {
-        // 创建新的码头的按钮
+        // 创建新的拣货分区的按钮
         this.$refs.form.validate(valid => {
           if (valid) {
             if (this.status === 'create') {
-              // 创建新的码头的按钮
+              // 创建新的拣货分区的按钮
               const reg = /^([1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[,]+[1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[-]+[1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[(]+[1-9]+\/[1-9]+[)]+)$/;
               console.log();
               if (!reg.test(this.form.binScope)) {
@@ -254,6 +390,13 @@ export default {
         console.log(this.status);
         this.form = Object.assign(this.form, this.suppliersInfo)
         console.log(this.form, this.suppliersInfo)
+      },
+      // 弹出界面的方法
+      handleSizeChange() {
+
+      },
+      handleCurrentChange() {
+        
       }
     },
     created() {
@@ -276,6 +419,50 @@ export default {
 
 <style lang="scss" scoped>
 @import "src/styles/mixin.scss";
+.pop-up-pag {
+  position: absolute;
+  left: 50%;
+  margin-top: -300px;
+  transform: translateX(-50%);
+  background-color: skyblue;
+  width: 800px;
+  // height: 600px;
+  display: flex;
+  justify-content: space-between;
+  .right-popstorge,
+  .left-popstorge {
+    .count-tatle{
+      padding: 10px;
+      font-size: 12px;
+    }
+    .center-pag {
+      padding: 0 10px;
+    }
+    .list-pop-ui {
+      margin: 0;
+      li {
+        display: flex;
+        align-items: center;
+        padding: 20px;
+        .content-checked-one {
+          font-size: 12px;
+        }
+      }
+    }
+    border: #E4E7ED solid 1px;
+    width: 350px;
+    height: 600px;
+  }
+  .right-popstorge {
+    margin-left: 20px;
+  }
+  .left-popstorge {
+    margin-right: 20px;
+  }
+  ul {
+    list-style: none;
+  }
+}
 .head{
     background: #fff;
     padding: 15px 12px;
@@ -301,5 +488,15 @@ export default {
 }
 .info-title{
     margin: 12px 0;
+}
+// 弹出框
+/deep/ .el-transfer-panel {
+  height : 100% !important;
+}
+</style>
+<style lang="scss">
+.table-index{
+@import "src/styles/mixin.scss";
+@include elTable;
 }
 </style>
