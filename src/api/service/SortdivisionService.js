@@ -21,14 +21,14 @@ export default {
   getSuppliersDetail(id) {
     // return request.get('/wms/storagearea/getDetail?id=' + id)
     // return request.get('/wms/storagearea/getDetail?id=' + id)
-    return request.get('/wms/storagearea/getDetail?id=' + id)
+    return request.get('/wms/pickarea/getDetail?id=' + id)
   },
   /**
    * 创建新的码头的按钮
    */
   createSuppliers(postData) {
     // return request.post('/wms/storagearea/create', param)
-    return request.post('/wms/storagearea/create', postData)
+    return request.post('/wms/pickarea/create', postData)
   },
   /**
    * 启用状态
@@ -55,13 +55,6 @@ export default {
   /**
    * 去调取物流中心的接口,让用户来选物流中心
    */
-  getdcdata() {
-    var postData = {
-      page: 0,
-      pageSize: 0
-    }
-    return request.get('/sys/dc/query', postData);
-  },
   deleteData(id, version) {
     return request.put('/wms/pickarea/delete?id=' + id + '&version=' + version);
   },
