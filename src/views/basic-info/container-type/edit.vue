@@ -216,7 +216,9 @@
                                 <div style="width:32px">备注:</div>
                                 <div>{{ containerTypeInfo.remark ? containerTypeInfo.remark : "&lt;空&gt;" }}</div>
                             </el-col>
-                            <div class="info-title">规格信息</div>
+                            <el-col>
+                              <div class="info-title">规格信息</div>
+                            </el-col>
                             <el-col :span="6" class="info-box">
                                 <div>内长(cm):</div>
                                 <div>{{ containerTypeInfo.inlength }}</div>
@@ -425,11 +427,11 @@ export default {
         .then((res) => {
           this.containerTypeInfo = res
           // 根据状态修改
-          if (this.containerTypeInfo.shipflage) {
-            this.containerTypeInfo.shipflage = "true"
-          } else {
-            this.containerTypeInfo.shipflage = "false"
-          }
+          // if (this.containerTypeInfo.shipflage) {
+          //   this.containerTypeInfo.shipflage = "true"
+          // } else {
+          //   this.containerTypeInfo.shipflage = "false"
+          // }
           if (this.containerTypeInfo.status === "ON") {
             this.containerTypeInfo.status = true
           } else {

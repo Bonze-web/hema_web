@@ -171,7 +171,7 @@ export default {
       }
       BillTypeService.getQueryType(data)
       .then((res) => {
-        this.billList = res.records
+        this.billList = res
       })
       .catch((err) => {
         this.$message.error('获取损耗类别失败' + err.message)
