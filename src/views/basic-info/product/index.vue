@@ -3,10 +3,10 @@
     <div class="select-head">
       <el-form ref="form" style="display:flex" :model="form" label-width="80px" label-position="right">
         <el-form-item label="商品">
-          <el-input type="text" placeholder="请输入代码/名称" v-model="form.codeOrNameOrBarcodeLike" class="input-width"></el-input>
+          <el-input type="text" placeholder="请输入代码/名称/条码" v-model="form.codeOrNameOrBarcodeLike" class="input-width"></el-input>
         </el-form-item>
         <el-form-item label="类别">
-          <el-input type="text" placeholder="请输入代码/名称" v-model="form.categoryCodeOrNameLike" class="input-width"></el-input>
+          <el-input type="text" placeholder="请输入类别代码/名称" v-model="form.categoryCodeOrNameLike" class="input-width"></el-input>
         </el-form-item>
         <el-form-item label="状态">
           <el-select v-model="form.statusEquals" placeholder="请选择状态">
