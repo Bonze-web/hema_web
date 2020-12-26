@@ -8,7 +8,7 @@
         <hamburger class="hamburger-container" :toggleClick="toggleSideBar" :isActive="sidebar.opened"></hamburger>
         <breadcrumb></breadcrumb>
         <div class="navbar-right-container">
-          <el-dropdown class="org-container" trigger="click" @command="handleChangeOrg" v-if="user.orgId !== 0 && user.orgId !== '0'">
+          <el-dropdown class="org-container" trigger="click" @command="handleChangeOrg" v-if="user && user.orgId !== 0 && user.orgId !== '0'">
             <span class="el-dropdown-link">
               切换登录组织
               <i class="el-icon-arrow-down el-icon--right"></i>

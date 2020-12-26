@@ -777,10 +777,10 @@ const ReportModule = {
 /**
  * 入库管理
  */
-const WarehousingPackage = {
-  path: '/warehousing',
+const warehousingAdm = {
+  path: '/warehousing-adm',
   component: Layout,
-  name: 'Warehousing',
+  name: 'warehousingAdm',
   alwaysShow: true,
   meta: {
     title: '入库管理',
@@ -801,7 +801,7 @@ const WarehousingPackage = {
       path: "",
       name: "OrderView",
       component: () =>
-        import('@/views/warehousing/order/index'),
+        import('@/views/warehousing-adm/order/index'),
       hidden: true,
       meta: {
         title: '入库订单列表',
@@ -812,7 +812,7 @@ const WarehousingPackage = {
       path: "edit",
       name: "入库订单详情",
       component: () =>
-        import('@/views/warehousing/order/edit'),
+        import('@/views/warehousing-adm/order/edit'),
       hidden: true,
       meta: {
         title: '查看供应商',
@@ -823,7 +823,7 @@ const WarehousingPackage = {
       path: "add",
       name: "SuppliersAdd",
       component: () =>
-        import('@/views/warehousing/order/add'),
+        import('@/views/warehousing-adm/order/add'),
       hidden: true,
       meta: {
         title: '新建供应商',
@@ -846,7 +846,7 @@ const WarehousingPackage = {
           path: "",
           name: "RegisterView",
           component: () =>
-            import('@/views/warehousing/register/index'),
+            import('@/views/warehousing-adm/register/index'),
           hidden: true,
           meta: {
             title: '到货登记',
@@ -935,7 +935,7 @@ export const asyncRouterMap = [
   BasicInfoPackage,
   StorageInfoPackage,
   ReportModule,
-  WarehousingPackage,
+  warehousingAdm,
   BillManagement,
   {
     path: '*',

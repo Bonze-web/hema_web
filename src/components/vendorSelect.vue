@@ -93,7 +93,8 @@ export default {
     },
     handleChange() {
       this.$emit("update:vendorValue", this.value);
-      const selectedObj = this.getSelectedObj();
+      var selectedObj = this.getSelectedObj();
+      selectedObj = !selectedObj ? {} : selectedObj;
       if (this.index || this.index === 0) {
         selectedObj.index = this.index;
       }

@@ -33,21 +33,21 @@
         </el-form-item>
 
         <el-form-item label="当前位置：">
-          <el-input type="text" placeholder="请输入当前位置：" v-model="form.positionCodeOrNameEquals" class="input-width" ></el-input>
+          <el-input type="text" placeholder="请输入当前位置" v-model="form.positionCodeOrNameEquals" class="input-width" ></el-input>
         </el-form-item>
 
         <el-form-item label="父容器：">
-          <el-input type="text" placeholder="请输入父容器：" v-model="form.parentBarcodeLikes" class="input-width" ></el-input>
+          <el-input type="text" placeholder="请输入父容器" v-model="form.parentBarcodeLikes" class="input-width" ></el-input>
         </el-form-item>
 
         <el-form-item label="容器类型：">
-          <el-select v-model="form.containerTypeCodeEquals" placeholder="请选择容器类型：">
+          <el-select v-model="form.containerTypeCodeEquals" placeholder="请选择容器类型">
             <el-option v-for="(item, index) in containerType" :key="index" :label="item.name" :value="item.id"></el-option>
           </el-select>
         </el-form-item>
 
         <el-form-item label="使用对象：">
-          <el-input type="text" placeholder="请输入使用对象：" v-model="form.useNameOrCodeLikes" class="input-width" ></el-input>
+          <el-input type="text" placeholder="请输入使用对象" v-model="form.useNameOrCodeLikes" class="input-width" ></el-input>
         </el-form-item>
 
         <el-form-item>
@@ -78,10 +78,10 @@
           </template>
         </el-table-column>
 
-        <el-table-column prop="containerTypeId" label="容器类型" style="height: 20px">
+        <el-table-column prop="useStatus" label="容器类型" style="height: 20px">
           <template slot-scope="scope">
             <router-link style="color: #409eff" :to="{ path: '/basicinfo/containertype/edit', query:{ status: 'read', id: scope.row.containerTypeId} }">
-              <span>{{ scope.row.containerTypeId }}</span>
+              <span>{{ '[' + scope.row.containerTypeId + ']' + scope.row.containerTypeName }}</span>
             </router-link>
           </template>
         </el-table-column>

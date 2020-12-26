@@ -10,16 +10,16 @@
       </div>
       <div>
         <el-table
-          :data="billListData"
+          :data="billList"
           style="width: 100%;text-align:center"
         >
-          <el-table-column prop="name" label="名称"></el-table-column>
-          <el-table-column prop="status" label="说明"></el-table-column>
+          <el-table-column prop="typeName" label="名称"></el-table-column>
+          <el-table-column prop="remark" label="说明"></el-table-column>
           <el-table-column
             label="操作">
             <template slot-scope="scope">
               <el-button size="mini" type="text" @click="removeType(scope.row.id, scope.row.version)">删除</el-button>
-              <el-button size="mini" type="text" @click="editType">编辑</el-button>
+              <el-button size="mini" type="text" @click="editType(scope.row.id)">编辑</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -28,8 +28,8 @@
     <div>
       <el-dialog title="新建" :visible.sync="dialogFormVisible" append-to-body>
         <el-form :model="form" :rules="createRules" ref="form">
-          <el-form-item label="损耗类型" label-width="120px" prop="billName">
-            <el-input v-model="form.billName" maxlength="32" placeholder="请输入单据类型的名称" autocomplete="off"></el-input>
+          <el-form-item label="损耗类型" label-width="120px" prop="typeName">
+            <el-input v-model="form.typeName" maxlength="32" placeholder="请输入单据类型的名称" autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item label="说明"  label-width="120px">
             <textarea v-model="form.remark" maxlength="200" autocomplete="off"></textarea>
@@ -44,8 +44,8 @@
     <div>
       <el-dialog title="编辑" :visible.sync="dialogFormEdit" append-to-body>
         <el-form :model="editForm" :rules="createRules" ref="editForm">
-          <el-form-item label="损耗类型" label-width="120px" prop="billName">
-            <el-input v-model="editForm.billName" maxlength="32" placeholder="请输入单据类型的名称" autocomplete="off"></el-input>
+          <el-form-item label="损耗类型" label-width="120px" prop="typeName">
+            <el-input v-model="editForm.typeName" maxlength="32" placeholder="请输入单据类型的名称" autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item label="说明"  label-width="120px">
             <textarea v-model="editForm.remark" maxlength="200" autocomplete="off"></textarea>
@@ -70,18 +70,18 @@ export default {
       dialogFormEdit: false,
       dialogFormVisible: false,
       form: {
-        lossType: this.lossType,
+        billType: this.lossType,
         remark: '',
-        billName: ''
+        typeName: ''
       },
       editForm: {
         id: '',
         remark: '',
-        billName: '',
+        typeName: '',
         version: ''
       },
       createRules: {
-        billName: [
+        typeName: [
           { required: true, message: '请输入单据类型的名称', trigger: 'blur'}
         ]
       }
@@ -101,13 +101,14 @@ export default {
       this.$emit('goBack')
     },
     editType(id) {
-      BillTypeService.getTypeDatail(id)
+      BillTypeService.TypeDetail(id)
       .then((res) => {
+        console.log(res)
         this.editForm = res
         this.dialogFormEdit = true
       })
       .catch((err) => {
-        this.$message.error('编辑失败' + err.message)
+        this.$message.error('获取失败' + err.message)
       })
     },
     cancelEditType() {
@@ -115,7 +116,7 @@ export default {
       this.editForm = {
         id: '',
         remark: '',
-        billName: '',
+        typeName: '',
         version: ''
       }
     },
@@ -124,6 +125,7 @@ export default {
       .then((res) => {
         this.$message.success('编辑成功')
         this.$emit('getAlllossType')
+        this.dialogFormEdit = false
       })
       .catch((err) => {
         this.$message.error('编辑失败' + err.message)
@@ -137,7 +139,7 @@ export default {
         }).then(() => {
           BillTypeService.removeType(id, version)
           .then((res) => {
-            this.message.success('删除成功')
+            this.$message.success('删除成功')
             this.$emit('getAlllossType')
           })
           .catch((err) => {
@@ -175,6 +177,9 @@ export default {
     }
   },
   watch: {
+    billList(newV, oldV) {
+      console.log(newV, oldV)
+    }
   }
 };
 </script>

@@ -3,9 +3,10 @@
     <div class="select-head">
       <h3>请扫描订单号码</h3>
       <div class="text-wrap">
+ 
           <div class="item">
             <span>入库订单：</span>
-            <el-input autofocus type="text" placeholder="请输入入库订单"></el-input>
+            <el-input ref="focusinput" v-model="form.code"  type="text" placeholder="请输入入库订单"></el-input>
           </div>
           <div class="item">
             <span>司机联系方式：</span>
@@ -15,6 +16,7 @@
             <span>车辆号码：</span>
             <el-input type="text" placeholder="请输入车辆号码"></el-input>
           </div>
+
           <div class="item son-cls">
             <span>状态：</span>
             <div>状态</div>
@@ -40,29 +42,13 @@
 </template>
 
 <script>
-// import BasicService from "@/api/service/BasicService";
+// import WarehousingAdmServers from "@/api/service/WarehousingAdmServers";
 
 export default {
   data() {
     return {
       time: '',
-      value1: '',
-      listData: [], // 列表数据
-      containerType: [], // 容器类型
-      createRules: {
-          num: [
-            { required: true, message: '请输入容器数量', trigger: 'blur' },
-            { pattern: /^\d{1,6}(\.\d+)?$/, message: '请输入1-6之间的数字', trigger: 'change' }
-          ],
-          prefix: [
-            { required: true, message: '请输入前缀', trigger: 'blur' },
-            { required: true, max: 4, message: '请输入1-4为之间的数字', trigger: 'change' }
-          ],
-          startCode: [
-            { required: true, message: '请输入起始条码段', trigger: 'blur' },
-            { required: true, max: 12, message: '请输入1-12位之间的数字', trigger: 'change' }
-          ]
-        }
+      objData: {} // 列表数据
     };
   },
   computed: {
@@ -70,14 +56,16 @@ export default {
   },
   methods: {
     onSubmit: function() {
-      const _this = this;
-      this.page = 1;
+      // const _this = this;
+      // this.page = 1;
 
-      this.$refs.form.validate((result) => {
-        if (result) {
-          _this.quertOcntainer();
-        }
-      });
+      // this.$refs.form.validate((result) => {
+      //   if (result) {
+      //     _this.quertOcntainer();
+      //   }
+      // });
+        // _this.$message.error("禁用失败")
+        // _this.$message.success("入库单YX000000001到货登记成功")
     },
     getDateTime: function() {
       const data = new Date();
@@ -103,24 +91,15 @@ export default {
         this.getDateTime()
     }, 1000)
   },
+  mounted() {
+    this.$refs.focusinput.focus()
+  }
 //   beforeRouteEnter(to, from, next) {
 //     next(vm => {
 //       // 通过 `vm` 访问组件实例
 //       vm.quertOcntainer(0);
 //     })
 //   },
-  filters: {
-    dcStatus(status) {
-      switch (status) {
-        case 'ON':
-          return "已使用"
-        case 'OFF':
-          return "未使用"
-        default:
-          return '未知';
-      }
-    }
-  }
 };
 </script>
 
