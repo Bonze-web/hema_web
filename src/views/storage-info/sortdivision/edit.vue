@@ -305,7 +305,7 @@ export default {
         console.log(this.leftSelect);
         if (this.storageList.length > 0) { 
           this.storageList.push(...this.leftSelect)
-          let newobj = {}; 
+          const newobj = {}; 
           this.storageList = this.storageList.reduce((preVal, curVal) => {
             newobj[curVal.id] ? '' : newobj[curVal.id] = preVal.push(curVal); 
             return preVal 
