@@ -5,10 +5,28 @@ import request from '@/utils/request'
  */
 export default {
     /**
-     * 请求列表
+     * 请求损耗单列表
      */
     getBillList(data) {
-        return request.get('', {params: data})
+        return request.get('/wms/decinvbill/query', {params: data})
+    },
+    /**
+     * 新建损耗单
+     */
+    createLossBill(postData) {
+        return request.post('/wms/decinvbill/create', postData)
+    },
+    /**
+     * 修改损耗单
+     */
+    updateLossBill(postData) {
+        return request.post('/wms/decinvbill/update', postData)
+    },
+    /**
+     * 请求损耗单详情
+     */
+    getLossBillDetail(id) {
+        return request.post('/wms/decinvbill/getDetail?id=' + id)
     },
     /**
      * 搜索报损人

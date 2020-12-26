@@ -28,5 +28,11 @@ export default {
    */
   updateType(postData) {
       return request.post('/wms/preType/update', postData)
+  },
+  /**
+   * 详情
+   */
+  TypeDetail(id) {
+    return request.get('/wms/preType/getDetail?id=' + id)
   }
 }
