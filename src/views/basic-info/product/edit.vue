@@ -455,7 +455,7 @@
                   <template slot-scope="scope">
                     <el-button type="text" v-if="scope.row.id && !scope.row.isEdit && hasPermission(PermIds.PRODUCT_VENDOR_UPDATE) && workingOrg.type === 'GROUP'" @click="handleEditVendor(scope.$index,scope.row)">编辑</el-button>
                     <el-button type="text" v-else-if="(hasPermission(PermIds.PRODUCT_VENDOR_CREATE) || hasPermission(PermIds.PRODUCT_VENDOR_UPDATE)) && workingOrg.type === 'GROUP'" @click="handleSaveVendor(scope.row)">保存</el-button>
-                    <el-button type="text" v-if="hasPermission(PermIds.PRODUCT_VENDOR_REMOVE) && workingOrg.type === 'GROUP'" @click="handleEditVendor(scope.$index,scope.row)">删除</el-button>
+                    <el-button type="text" v-if="hasPermission(PermIds.PRODUCT_VENDOR_REMOVE) && workingOrg.type === 'GROUP'" @click="handleDeleteVendor(scope.$index,scope.row)">删除</el-button>
                   </template>
                 </el-table-column>
               </el-table>
@@ -1538,7 +1538,7 @@ export default {
       }
     },
     handleDeleteVendor(index, val) {
-      this.$confirm("此操作将改变删除该规格, 是否继续?", "提示", {
+      this.$confirm("此操作将改变删除该供应商, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
@@ -1554,7 +1554,7 @@ export default {
                 this.$message.error("删除失败" + err.message);
               });
           } else {
-            this.specList.splice(index, 1);
+            this.vendorList.splice(index, 1);
           }
         })
         .catch(() => {
