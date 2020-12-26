@@ -19,8 +19,8 @@
                     </el-switch>
         </template>-->
         <template>
-          <el-button type="text" @click="statusChange" v-if="productInfo.status === 'ON'">禁用</el-button>
-          <el-button type="text" @click="statusChange" v-if="productInfo.status  === 'OFF'">启用</el-button>
+          <el-button type="text" @click="statusChange" v-if="productInfo.status === 'ON' && hasPermission(PermIds.PRODUCT_PRODUCT_ENABLE) && workingOrg.type === 'GROUP'">禁用</el-button>
+          <el-button type="text" @click="statusChange" v-if="productInfo.status  === 'OFF' && hasPermission(PermIds.PRODUCT_PRODUCT_DISABLE) && workingOrg.type === 'GROUP'">启用</el-button>
         </template>
       </div>
       <div>
