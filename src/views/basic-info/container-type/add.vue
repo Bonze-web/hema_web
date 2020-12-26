@@ -197,7 +197,7 @@ export default {
             { required: true, message: '请选择所属仓库', trigger: 'blur' }
           ],
           barcodeprefix: [
-            { required: true, message: '请输入联系方式', trigger: 'blur' },
+            { required: true, message: '请输入条码前缀', trigger: 'blur' },
             { required: true, pattern: /^[A-Z0-9]{0,2}$/, message: '请输入最多两位的数字和大写字母的组合', trigger: 'change' }
           ],
           barcodetype: [

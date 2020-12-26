@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import app from './modules/app'
 import user from './modules/user'
 import menu from './modules/menu'
+import bill from './modules/bill'
 import getters from './getters'
 import tagsView from './tagsView'
 
@@ -13,7 +14,8 @@ const store = new Vuex.Store({
     app,
     user,
     menu,
-    tagsView
+    tagsView,
+    bill
   },
   getters
 })

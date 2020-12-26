@@ -19,8 +19,8 @@
                     </el-switch>
         </template>-->
         <template>
-          <el-button type="text" @click="statusChange" v-if="productInfo.status === 'ON'">禁用</el-button>
-          <el-button type="text" @click="statusChange" v-if="productInfo.status  === 'OFF'">启用</el-button>
+          <el-button type="text" @click="statusChange" v-if="productInfo.status === 'ON' && hasPermission(PermIds.PRODUCT_PRODUCT_ENABLE) && workingOrg.type === 'GROUP'">禁用</el-button>
+          <el-button type="text" @click="statusChange" v-if="productInfo.status  === 'OFF' && hasPermission(PermIds.PRODUCT_PRODUCT_DISABLE) && workingOrg.type === 'GROUP'">启用</el-button>
         </template>
       </div>
       <div>
@@ -135,7 +135,7 @@
         </el-tabs>
       </div>
     </div>
-    <div class="info-content table-index" v-show="status === 'read'">
+    <div class="info-content" v-show="status === 'read'">
       <div>
         <template>
           <el-tabs v-model="tabActiveName" @tab-click="tabClick">
@@ -188,7 +188,7 @@
                 </el-col>
                 <el-col :span="24" class="info-box">
                   <div>备注:</div>
-                  <div>{{ productInfo.zipCode ? productInfo.zipCode : "&lt;空&gt;" }}</div>
+                  <div>{{ productInfo.remark ? productInfo.remark : "&lt;空&gt;" }}</div>
                 </el-col>
               </el-row>
               <div class="height20"></div>
@@ -414,20 +414,20 @@
                 </el-table-column>
                 <el-table-column prop="defaultReceive" label="首选收货" style="height: 20px">
                   <template slot-scope="scope">
-                    <div v-show="(scope.row.isEdit && scope.row.defaultReceive) || workingOrg.type !== 'GROUP'">
+                    <div v-show="(scope.row.isEdit || scope.row.defaultReceive) || workingOrg.type !== 'GROUP'">
                       <span>{{ scope.row.defaultReceive | filterBoolean}}</span>
                     </div>
-                    <div v-show="!((scope.row.isEdit && scope.row.defaultReceive) || workingOrg.type !== 'GROUP')">
+                    <div v-show="!((scope.row.isEdit || scope.row.defaultReceive) || workingOrg.type !== 'GROUP')">
                       <el-button type="text" :disabled="!scope.row.id" @click="setReceiveDefault(scope.row)">设为首选</el-button>
                     </div>
                   </template>
                 </el-table-column>
                 <el-table-column prop="defaultReturn" label="首选退货">
                   <template slot-scope="scope">
-                    <div v-show="(scope.row.isEdit && scope.row.defaultReturn) || workingOrg.type !== 'GROUP'">
+                    <div v-show="(scope.row.isEdit || scope.row.defaultReturn) || workingOrg.type !== 'GROUP'">
                       <span>{{ scope.row.defaultReturn | filterBoolean}}</span>
                     </div>
-                    <div v-show="!((scope.row.isEdit && scope.row.defaultReturn) || workingOrg.type !== 'GROUP')">
+                    <div v-show="!((scope.row.isEdit || scope.row.defaultReturn) || workingOrg.type !== 'GROUP')">
                       <el-button type="text" :disabled="!scope.row.id" @click="setReturnDefault(scope.row)">设为首选</el-button>
                     </div>
                   </template>
@@ -455,7 +455,7 @@
                   <template slot-scope="scope">
                     <el-button type="text" v-if="scope.row.id && !scope.row.isEdit && hasPermission(PermIds.PRODUCT_VENDOR_UPDATE) && workingOrg.type === 'GROUP'" @click="handleEditVendor(scope.$index,scope.row)">编辑</el-button>
                     <el-button type="text" v-else-if="(hasPermission(PermIds.PRODUCT_VENDOR_CREATE) || hasPermission(PermIds.PRODUCT_VENDOR_UPDATE)) && workingOrg.type === 'GROUP'" @click="handleSaveVendor(scope.row)">保存</el-button>
-                    <el-button type="text" v-if="hasPermission(PermIds.PRODUCT_VENDOR_REMOVE) && workingOrg.type === 'GROUP'" @click="handleEditVendor(scope.$index,scope.row)">删除</el-button>
+                    <el-button type="text" v-if="hasPermission(PermIds.PRODUCT_VENDOR_REMOVE) && workingOrg.type === 'GROUP'" @click="handleDeleteVendor(scope.$index,scope.row)">删除</el-button>
                   </template>
                 </el-table-column>
               </el-table>
@@ -724,7 +724,9 @@ export default {
       },
       isEditShelfLife: false,
       businessDialogVisible: false,
-      businessInfo: {},
+      businessInfo: {
+        putawayBin: "STORAGEBIN"
+      },
       businessForm: {
         id: "",
         dcId: "",
@@ -733,7 +735,7 @@ export default {
         overReceiveRate: 0,
         processe: true,
         productId: "",
-        putawayBin: "PICKUPBIN",
+        putawayBin: "STORAGEBIN",
         receiveControlDays: 0,
         returnControlDays: 0,
         settleQpcStr: "",
@@ -1022,6 +1024,7 @@ export default {
     },
 
     clickEdit() {
+      this.tabActiveName = "product";
       this.status = "edit";
       this.form = Object.assign(this.form, this.productInfo);
       this.getProductById();
@@ -1051,14 +1054,15 @@ export default {
     },
     tabClick() {},
     onSelected(val) {
-      this.form.defaultVendorCode = val.code;
-      this.form.defaultVendorId = val.id;
-      this.form.defaultVendorName = val.name;
+      console.log(val);
+      this.form.defaultVendorCode = val.code ? val.code : "";
+      this.form.defaultVendorId = val.id ? val.id : "";
+      this.form.defaultVendorName = val.name ? val.name : "";
     },
     onProductCategorySelected(val) {
-      this.form.categoryCode = val.code;
-      this.form.categoryId = val.id;
-      this.form.categoryName = val.name;
+      this.form.categoryCode = val.code ? val.code : "";
+      this.form.categoryId = val.id ? val.id : "";
+      this.form.categoryName = val.name ? val.name : "";
     },
     // 保质期处理
     clickEditShelfLife() {
@@ -1106,6 +1110,7 @@ export default {
         // 保质期
         postData = {
           ...postData,
+          putawayBin: this.businessForm.putawayBin,
           deliveryControlDays: this.shelfLifeForm.deliveryControlDays,
           receiveControlDays: this.shelfLifeForm.receiveControlDays,
           returnControlDays: this.shelfLifeForm.returnControlDays,
@@ -1217,23 +1222,29 @@ export default {
       } else if (val.munit.length > 32) {
         this.$message.error("计量单位的长度不能超过32位");
         return false;
+      } else if (!val.paq) {
+        this.$message.error("请填写包装件数！");
+        return false;
+      } else if (!(Number(val.paq) >= 0)) {
+        this.$message.error("包装件数为数字且不能小于0！");
+        return false;
       } else if (!val.length) {
         this.$message.error("请填写商品包装的长！");
         return false;
-      } else if (Number(val.length) < 0) {
-        this.$message.error("商品包装的长不能小于0！");
+      } else if (!(Number(val.length) >= 0)) {
+        this.$message.error("商品包装的长为数字且不能小于0！");
         return false;
       } else if (!val.width) {
         this.$message.error("请填写商品包装的宽！");
         return false;
-      } else if (Number(val.width) < 0) {
-        this.$message.error("商品包装的宽不能小于0！");
+      } else if (!(Number(val.width) >= 0)) {
+        this.$message.error("商品包装的宽为数字且不能小于0！");
         return false;
       } else if (!val.height) {
         this.$message.error("请填写商品包装的高！");
         return false;
-      } else if (Number(val.height) < 0) {
-        this.$message.error("商品包装的高不能小于0！");
+      } else if (!(Number(val.height) >= 0)) {
+        this.$message.error("商品包装的高为数字且不能小于0！");
         return false;
       } else if (this.workingOrg.type === "DC" && !val.plateAdvice) {
         this.$message.error("请填写装盘建议！");
@@ -1431,7 +1442,7 @@ export default {
                 this.$message.error("删除失败" + err.message);
               });
           } else {
-            this.specList.splice(index, 1);
+            this.barcodeList.splice(index, 1);
           }
         })
         .catch(() => {
@@ -1464,9 +1475,9 @@ export default {
     // 供应商相关处理
     addVendor() {
       const vendor = {
-        defaultReceive: true,
+        defaultReceive: false,
         defaultReceivePrice: 0,
-        defaultReturn: true,
+        defaultReturn: false,
         defaultReturnPrice: 0,
         productId: this.id,
         vendorCode: "",
@@ -1537,7 +1548,7 @@ export default {
       }
     },
     handleDeleteVendor(index, val) {
-      this.$confirm("此操作将改变删除该规格, 是否继续?", "提示", {
+      this.$confirm("此操作将改变删除该供应商, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
@@ -1553,7 +1564,7 @@ export default {
                 this.$message.error("删除失败" + err.message);
               });
           } else {
-            this.specList.splice(index, 1);
+            this.vendorList.splice(index, 1);
           }
         })
         .catch(() => {
@@ -1564,9 +1575,9 @@ export default {
         });
     },
     onVendorSelected(val) {
-      this.vendorList[val.index].vendorCode = val.code;
-      this.vendorList[val.index].vendorId = val.id;
-      this.vendorList[val.index].vendorName = val.name;
+      this.vendorList[val.index].vendorCode = val.code ? val.code : "";
+      this.vendorList[val.index].vendorId = val.id ? val.id : "";
+      this.vendorList[val.index].vendorName = val.name ? val.name : "";
     },
     // 分页相关处理
     handleCurrentChange: function(e) {
@@ -1708,7 +1719,9 @@ export default {
   .el-icon-circle-plus-outline {
     font-size: 14px;
   }
-  .el-table .cell {
+  .el-table tr,
+  .el-table th {
+    height: 32px !important;
     // line-height: 32px !important;
   }
 }

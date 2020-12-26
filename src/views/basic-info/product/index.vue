@@ -3,10 +3,10 @@
     <div class="select-head">
       <el-form ref="form" style="display:flex" :model="form" label-width="80px" label-position="right">
         <el-form-item label="商品">
-          <el-input type="text" placeholder="请输入代码/名称" v-model="form.codeOrNameOrBarcodeLike" class="input-width"></el-input>
+          <el-input type="text" placeholder="请输入代码/名称/条码" v-model="form.codeOrNameOrBarcodeLike" class="input-width"></el-input>
         </el-form-item>
         <el-form-item label="类别">
-          <el-input type="text" placeholder="请输入代码/名称" v-model="form.categoryCodeOrNameLike" class="input-width"></el-input>
+          <el-input type="text" placeholder="请输入类别代码/名称" v-model="form.categoryCodeOrNameLike" class="input-width"></el-input>
         </el-form-item>
         <el-form-item label="状态">
           <el-select v-model="form.statusEquals" placeholder="请选择状态">
@@ -27,22 +27,25 @@
       <el-row>
         <!-- <router-link :to="{ path: '/basicinfo/product/add', query:{ status: 'create'} }">
           <el-button style="margin:18px 10px" type="primary" size="mini">新建</el-button>
-        </router-link> -->
+        </router-link>-->
         <el-button style="margin:18px 10px" size="mini" v-if="hasPermission(PermIds.PRODUCT_PRODUCT_ENABLE) && workingOrg.type=== 'GROUP'" @click="batchChangeStatus('ON')">启用</el-button>
         <el-button style="margin:18px 10px" size="mini" v-if="hasPermission(PermIds.PRODUCT_PRODUCT_DISABLE) && workingOrg.type === 'GROUP'" @click="batchChangeStatus('OFF')">禁用</el-button>
       </el-row>
       <el-table :data="productList" style="width: 100%;text-align:center" @selection-change="allSelectionChange">
         <el-table-column type="selection" width="55"></el-table-column>
-        <el-table-column prop="code" label="代码">
+        <el-table-column prop="code" label="代码" width="200">
           <template slot-scope="scope">
             <router-link style="color:#409EFF" :to="{ path: '/basicinfo/product/edit', query:{ status: 'read', id: scope.row.id} }">
               <span>{{ scope.row.code }}</span>
             </router-link>
           </template>
         </el-table-column>
-        <el-table-column prop="name" label="名称"></el-table-column>
-        <el-table-column prop="spec" label="规格"></el-table-column>
-        <el-table-column prop="categoryName" label="类别"></el-table-column>
+        <el-table-column prop="name" label="名称" width="180"></el-table-column>
+        <el-table-column prop="spec" label="规格" width="120"></el-table-column>
+        <el-table-column prop="categoryName" label="类别" width="200">
+          <template slot-scope="scope">{{scope.row | filterCategory }}</template>
+
+        </el-table-column>
         <el-table-column prop="status" label="状态">
           <template slot-scope="scope">{{ scope.row.status | filterStatus }}</template>
         </el-table-column>
@@ -238,6 +241,14 @@ export default {
         default:
           return "未知";
       }
+    },
+
+    filterCategory(val) {
+      if (val.categoryCode && val.categoryName) {
+        return "[" + val.categoryCode + "]" + val.categoryName
+      } else {
+        return ""
+      }
     }
   }
 };
@@ -256,8 +267,10 @@ export default {
 .product-index {
   @import "src/styles/mixin.scss";
   @include elTable;
-  .el-table .cell {
-    line-height: 32px !important;
+  .el-table tr,
+  .el-table th {
+    height: 32px !important;
+    // line-height: 32px !important;
   }
 }
 </style>
