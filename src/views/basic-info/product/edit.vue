@@ -1022,6 +1022,7 @@ export default {
     },
 
     clickEdit() {
+      this.tabActiveName = "product";
       this.status = "edit";
       this.form = Object.assign(this.form, this.productInfo);
       this.getProductById();
@@ -1051,7 +1052,7 @@ export default {
     },
     tabClick() {},
     onSelected(val) {
-      console.log(val)
+      console.log(val);
       this.form.defaultVendorCode = val.code ? val.code : "";
       this.form.defaultVendorId = val.id ? val.id : "";
       this.form.defaultVendorName = val.name ? val.name : "";
