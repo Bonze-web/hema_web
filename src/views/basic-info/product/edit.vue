@@ -188,7 +188,7 @@
                 </el-col>
                 <el-col :span="24" class="info-box">
                   <div>备注:</div>
-                  <div>{{ productInfo.zipCode ? productInfo.zipCode : "&lt;空&gt;" }}</div>
+                  <div>{{ productInfo.remark ? productInfo.remark : "&lt;空&gt;" }}</div>
                 </el-col>
               </el-row>
               <div class="height20"></div>
