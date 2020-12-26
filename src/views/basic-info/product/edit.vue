@@ -733,7 +733,7 @@ export default {
         overReceiveRate: 0,
         processe: true,
         productId: "",
-        putawayBin: "PICKUPBIN",
+        putawayBin: "STORAGEBIN",
         receiveControlDays: 0,
         returnControlDays: 0,
         settleQpcStr: "",
