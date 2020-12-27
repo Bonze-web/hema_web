@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="head" v-if="status === 'create'">
-            <div style="margin-top:8px" v-if="status === 'create'">新建损耗单</div>
+            <div style="margin-top:8px" v-if="status === 'create'">新建溢余单</div>
             <div style="margin-top:8px" v-else>编辑</div>
             <div>
                 <el-button @click="back">取消</el-button>
@@ -18,8 +18,8 @@
                                 <div class="info-title">基本信息</div>
                                 <el-row :gutter="20">
                                     <el-col :span="6" class="info-box">
-                                        <el-form-item label="损耗类型" prop="billTypeId">
-                                          <el-select v-model="form.billTypeId" placeholder="请选择损耗类型">
+                                        <el-form-item label="溢余类型" prop="billTypeId">
+                                          <el-select v-model="form.billTypeId" placeholder="请选择溢余类型">
                                             <el-option v-for="item in billTypeList" :key="item.id" :label="item.typeName" :value="item.id"></el-option>
                                           </el-select>
                                         </el-form-item>
@@ -50,8 +50,9 @@
                                 <div class="info-title">
                                     <div>
                                         商品
-                                    <!-- <router-link @click="batchAddProduct" style="color:#409EFF" :to="{ path: '/wrhmanagement/lossbill/batchAdd' }"> -->
+                                    <!-- <router-link @click="batchAddProduct" style="color:#409EFF" :to="{ path: '/wrhmanagement/overflowbill/batchAdd' }"> -->
                                         <el-button size="mini" type="text" @click="batchAddProduct">批量添加</el-button>
+                                        <el-button size="mini" type="text" @click="AddProduct">单个添加</el-button>
                                     <!-- </router-link> -->
                                     </div>
                                     <div class="list-count">
@@ -86,17 +87,17 @@
                                         <el-table-column width="100" prop="billType" label="单价"></el-table-column>
                                         <el-table-column width="100" prop="batch" label="批次"></el-table-column>
                                         <el-table-column width="100" prop="qty" label="可用库存数量"></el-table-column>
-                                        <el-table-column width="100" prop="qtystr" label="损耗件数">
+                                        <el-table-column width="100" prop="qtystr" label="溢余件数">
                                           <template slot-scope="scope">
                                             <el-input type="number" max="100" @input="calcProduct" size="mini" v-model="scope.row.qtystr"></el-input>
                                           </template>
                                         </el-table-column>
-                                        <el-table-column width="100" prop="qty" label="损耗数量">
+                                        <el-table-column width="100" prop="qty" label="溢余数量">
                                           <template slot-scope="scope">
                                             <el-input type="number" max="100" @input="calcProduct" size="mini" v-model="scope.row.qty"></el-input>
                                           </template>
                                         </el-table-column>
-                                        <el-table-column width="100" prop="amount" label="损耗金额">
+                                        <el-table-column width="100" prop="amount" label="溢余金额">
                                           <template slot-scope="scope">
                                             {{ scope.row.qtystr + scope.row.qty }}
                                           </template>
@@ -111,6 +112,26 @@
                 </template>
             </div>
         </div>
+
+
+        <!-- 单个新增商品 -->
+        <el-dialog title="收货地址" :visible.sync="dialogFormVisible">
+          <el-form :model="form">
+            <el-form-item label="活动名称" label-width="120px">
+              <el-input v-model="form.name" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="活动区域" label-width="120px">
+              <el-select v-model="form.region" placeholder="请选择活动区域">
+                <el-option label="区域一" value="shanghai"></el-option>
+                <el-option label="区域二" value="beijing"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-form>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="dialogFormVisible = false">取 消</el-button>
+            <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+          </div>
+        </el-dialog>
     </div>
 </template>
 
@@ -134,13 +155,13 @@ export default {
         form: {
           id: '',
           code: '',
-          billType: '', // 损耗单据类型
+          billType: '', // 溢余单据类型
           wrhId: '',
           decerName: '',
           decerId: '', // 报损员
           remark: '',
           version: '',
-          billTypeId: '', // 损耗类型
+          billTypeId: '', // 溢余类型
           expireDate: '', // 到效期
           isTest: false, // 是否现场测试
           // realTotalAmount: '', // 实际总金额
@@ -152,7 +173,7 @@ export default {
           srcBillNumber: '', // 来源单号
           srcBillType: '', // 来源单据类型
           status: 'SAVED', // 状态
-          stockList: [], // 损耗集合
+          stockList: [], // 溢余集合
           totalAmount: '', // 总金额
           totalProductCount: '', // 总品相数
           totalQtystr: '', // 总件数（1+1）
@@ -161,7 +182,7 @@ export default {
         },
         createRules: {
           billTypeId: [
-            { required: true, message: '请选择损耗单类型', trigger: 'blur'}
+            { required: true, message: '请选择溢余单类型', trigger: 'blur'}
           ],
           wrhId: [
             { required: true, message: '请选择所属仓库', trigger: 'blur'}
@@ -171,7 +192,7 @@ export default {
           ]
         },
         productList: [{billType: 1}, {}], // 报损商品列表
-        billTypeList: [] // 损耗类型
+        billTypeList: [] // 溢余类型
       }
     },
     computed: {
@@ -179,12 +200,15 @@ export default {
     },
     methods: {
       ...mapActions(["deleteSelection"]),
+      AddProduct: function() {
+        
+      },
       batchAddProduct: function() {
         if (!this.form.wrhId) {
           this.$message.error('请选择仓库')
           return
         }
-        this.$router.push({path: '/wrhmanagement/lossbill/batchAdd', query: {id: this.form.wrhId}})
+        this.$router.push({path: '/wrhmanagement/overflowbill/batchAdd', query: {id: this.form.wrhId}})
       },
       handleSelect: function(e) {
         console.log(e)
@@ -208,7 +232,7 @@ export default {
         }
         _this.$refs.form.validate(valid => {
           if (valid) {
-            BillService.createLossBill(this.form)
+            BillService.createOverflowBill(this.form)
             .then((res) => {
               _this.$message.success('创建成功')
               _this.$store.dispatch("tagsView/delView", _this.$route);
@@ -253,7 +277,7 @@ export default {
             this.billTypeList = res
         })
         .catch((err) => {
-            this.$message.error('获取损耗类别失败' + err.message)
+            this.$message.error('获取溢余类别失败' + err.message)
         })
       },
       getWrhList: function() {

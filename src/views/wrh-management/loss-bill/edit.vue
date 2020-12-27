@@ -25,7 +25,7 @@
             </div>
         </div>
         <div style="height:20px" />
-        <div class="info-content" v-if="status === 'read'">
+        <div class="info-content" v-if="status === 'read' || status === 'check'">
             <div>
                 <template>
                     <el-tabs v-model="tabActiveName" @tab-click="tabClick">
@@ -64,30 +64,35 @@
                                         :data="productList"
                                         style="width: 100%;text-align:center"
                                     >
-                                        <el-table-column width="55" prop="billNumber" label="行">
+                                        <el-table-column width="55" prop="line" label="行">
                                           <template slot-scope="scope">
                                             {{ scope.$index + 1 }}
                                           </template>
                                         </el-table-column>
-                                        <el-table-column width="100" prop="billNumber" label="商品/商品规格"></el-table-column>
-                                        <el-table-column width="100" prop="billType" label="规格/计量单位"></el-table-column>
-                                        <el-table-column width="100" prop="billType" label="货位"></el-table-column>
-                                        <el-table-column width="100" prop="billType" label="容器"></el-table-column>
-                                        <el-table-column width="100" prop="billType" label="生产日期"></el-table-column>
-                                        <el-table-column width="100" prop="billType" label="到效日期"></el-table-column>
-                                        <el-table-column width="100" prop="billType" label="批号"></el-table-column>
-                                        <el-table-column width="100" prop="billType" label="批次"></el-table-column>
-                                        <el-table-column width="100" prop="billType" label="损耗件数"></el-table-column>
-                                        <el-table-column width="100" prop="billType" label="损耗数量"></el-table-column>
-                                        <el-table-column width="100" prop="billType" label="实际件数"></el-table-column>
-                                        <el-table-column width="100" prop="billType" label="书记数量">
-                                          <template slot-scope="scope">
-                                            {{ scope.$index + 1 }}
-                                          </template>
+                                        <el-table-column width="100" prop="productName" label="商品/商品规格"></el-table-column>
+                                        <el-table-column width="100" prop="munit" label="规格/计量单位"></el-table-column>
+                                        <el-table-column width="100" prop="binCode" label="货位"></el-table-column>
+                                        <el-table-column width="100" prop="containerBarcode" label="容器"></el-table-column>
+                                        <el-table-column width="100" prop="productionDate" label="生产日期"></el-table-column>
+                                        <el-table-column width="100" prop="validDate" label="到效日期"></el-table-column>
+                                        <el-table-column width="100" prop="productionBatch" label="批号"></el-table-column>
+                                        <el-table-column width="100" prop="batch" label="批次"></el-table-column>
+                                        <el-table-column width="100" prop="qtystr" label="损耗件数"></el-table-column>
+                                        <el-table-column width="100" prop="qty" label="损耗数量"></el-table-column>
+                                        <el-table-column width="100" prop="realQtystr" label="实际件数" v-if="status === 'check'">
+                                          <!-- <template slot-scope="scope">
+                                            <el-input type="number" max="100" @input="calcProduct" size="mini" v-model="scope.row.qtystr"></el-input>
+                                          </template> -->
                                         </el-table-column>
-                                        <el-table-column width="100" prop="billType" label="单价"></el-table-column>
-                                        <el-table-column width="100" prop="billType" label="损耗金额"></el-table-column>
-                                        <el-table-column width="100" prop="billType" label="备注"></el-table-column>
+                                        <el-table-column width="100" prop="realQty" label="实际数量" v-if="status === 'check'">
+                                          <!-- <template slot-scope="scope">
+                                            <el-input type="number" max="100" @input="calcProduct" size="mini" v-model="scope.row.qtystr"></el-input>
+                                          </template> -->
+                                        </el-table-column>
+                                        <el-table-column width="100" prop="price" label="单价"></el-table-column>
+                                        <el-table-column width="100" prop="amount" label="损耗金额"></el-table-column>
+                                        <el-table-column width="100" prop="realAmount" label="实际损耗金额"></el-table-column>
+                                        <el-table-column width="100" prop="remark" label="备注"></el-table-column>
                                     </el-table>
                         </el-tab-pane>
                         <!-- <el-tab-pane label="配送中心范围" name="range">配置管理</el-tab-pane> -->
@@ -165,7 +170,7 @@
                                         :data="productList"
                                         style="width: 100%;text-align:center"
                                     >
-                                        <el-table-column fixed prop="billNumber" label="操作">
+                                        <el-table-column prop="billNumber" label="操作">
                                           <template slot-scope="scope">
                                             <el-button type="text" @click="deleteProduct(scope.$index)">删除</el-button>
                                           </template>
@@ -175,32 +180,40 @@
                                             {{ scope.$index + 1 }}
                                           </template>
                                         </el-table-column>
-                                        <el-table-column width="100" prop="billNumber" label="商品"></el-table-column>
-                                        <el-table-column width="100" prop="billType" label="货位"></el-table-column>
-                                        <el-table-column width="100" prop="billType" label="货位用途"></el-table-column>
-                                        <el-table-column width="100" prop="billType" label="容器"></el-table-column>
-                                        <el-table-column width="100" prop="billType" label="供应商"></el-table-column>
-                                        <el-table-column width="100" prop="billType" label="批号"></el-table-column>
-                                        <el-table-column width="100" prop="billType" label="生产日期"></el-table-column>
-                                        <el-table-column width="100" prop="billType" label="到效日期"></el-table-column>
-                                        <el-table-column width="100" prop="billType" label="规格/计量单位"></el-table-column>
+                                        <el-table-column width="100" prop="productName" label="商品"></el-table-column>
+                                        <el-table-column width="100" prop="binCode" label="货位"></el-table-column>
+                                        <el-table-column width="100" prop="productCode" label="货位用途"></el-table-column>
+                                        <el-table-column width="100" prop="containerBarcode" label="容器"></el-table-column>
+                                        <el-table-column width="100" prop="vendorName" label="供应商"></el-table-column>
+                                        <el-table-column width="100" prop="productionBatch" label="批号"></el-table-column>
+                                        <el-table-column width="100" prop="productionDate" label="生产日期"></el-table-column>
+                                        <el-table-column width="100" prop="validDate" label="到效日期"></el-table-column>
+                                        <el-table-column width="100" prop="qpcStr" label="规格/计量单位"></el-table-column>
                                         <el-table-column width="100" prop="billType" label="单价"></el-table-column>
-                                        <el-table-column width="100" prop="billType" label="批次"></el-table-column>
-                                        <el-table-column width="100" prop="billType" label="可用库存数量"></el-table-column>
-                                        <el-table-column width="100" prop="billType" label="损耗件数">
+                                        <el-table-column width="100" prop="batch" label="批次"></el-table-column>
+                                        <el-table-column width="100" prop="qty" label="可用库存数量"></el-table-column>
+                                        <!-- <el-table-column width="100" prop="qtystr" label="损耗件数">
                                           <template slot-scope="scope">
-                                            {{ scope.$index + 1 }}
+                                            <el-input type="number" max="100" @input="calcProduct" size="mini" v-model="scope.row.qtystr"></el-input>
                                           </template>
+                                        </el-table-column> -->
+                                        <el-table-column width="100" prop="qty" label="损耗数量">
+                                          <!-- <template slot-scope="scope">
+                                            <el-input type="number" max="100" @input="calcProduct" size="mini" v-model="scope.row.qty"></el-input>
+                                          </template> -->
                                         </el-table-column>
-                                        <el-table-column width="100" prop="billType" label="损耗数量">
+                                        <!-- <el-table-column width="100" prop="amount" label="损耗金额">
                                           <template slot-scope="scope">
-                                            {{ scope.$index + 1 }}
+                                            {{ scope.row.qtystr + scope.row.qty }}
                                           </template>
+                                        </el-table-column> -->
+                                        <el-table-column width="100" prop="remark" label="备注">
+                                          <!-- <template slot-scope="scope">
+                                            <textarea v-model="scope.row.remark"></textarea>
+                                          </template> -->
                                         </el-table-column>
-                                        <el-table-column width="100" prop="billType" label="损耗金额"></el-table-column>
-                                        <el-table-column width="100" prop="billType" label="备注"></el-table-column>
                                     </el-table>
-                            </el-form>      
+                            </el-form>     
                 </template>
             </div>
         </div>
@@ -280,10 +293,11 @@ export default {
       ...mapActions(["deleteSelection", "addSelection"]),
       close: function() {
         this.productList = this.$store.state.bill.multipleSelection
-        this.calcProduct(this.$store.state.bill.multipleSelection)
+        // this.calcProduct(this.$store.state.bill.multipleSelection)
         this.status = 'read'
       },
       subCheck: function() {
+        this.status = 'check'
       },
       batchAddProduct: function() {
         if (!this.form.wrhId) {
@@ -372,8 +386,8 @@ export default {
       },
       calcProduct: function(productList) {
         productList.forEach(item => {
-          this.form.totalAmount += item.amount
-          this.form.totalAmount += item.amount
+          this.form.realTotalAmount += item.amount
+          this.form.realTotalQtystr += item.qtystr + item.qty
           this.form.totalAmount += item.amount
           this.form.totalAmount += item.amount
           this.form.totalAmount += item.amount
