@@ -182,7 +182,7 @@
                         :page-sizes="[10, 20, 30, 50]"
                         :page-size="mySelfPageSize"
                         layout="prev, pager, next"
-                        :total="1000">
+                        :total="storedContentTotalCount">
                       </el-pagination>
                     </div>
                   </div>

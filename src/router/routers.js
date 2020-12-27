@@ -681,6 +681,47 @@ const StorageInfoPackage = {
       }] 
   },
   {
+    path: "cargosequence",
+    name: "Cargosequence",
+    component: AModule,
+    meta: {
+      title: '拣货顺序',
+      icon: 'table'
+    },
+    children: [{
+      path: "",
+      name: "CargosequenceView",
+      component: () =>
+        import('@/views/storage-info/cargosequence/index'),
+        hidden: true,
+      meta: {
+        title: '拣货顺序',
+        icon: 'table'
+      }
+    }, {
+      path: "edit",
+      name: "CargosequenceEdit",
+      component: () =>
+        import('@/views/storage-info/cargosequence/edit'),
+        hidden: true,
+        meta: {
+          title: '编辑拣货分区',
+          icon: 'table'
+        }
+      },
+      {
+        path: "add",
+        name: "CargosequenceAdd",
+        component: () =>
+          import('@/views/storage-info/cargosequence/add'),
+        hidden: true,
+        meta: {
+          title: '新建拣货分区',
+          icon: 'table'
+        }
+      }] 
+  },
+  {
     path: "storpartition",
     name: "Storpartition",
     component: AModule,
