@@ -965,6 +965,60 @@ const BillManagement = {
         permission: PermIds.PRODUCT_SUPPLIER_VIEW
       }
     }]
+  }, {
+    path: "overflowbill",
+    name: "OverflowBill",
+    component: AModule,
+    meta: {
+      title: '溢余单',
+      icon: 'table',
+      permission: PermIds.PRODUCT_SUPPLIER
+    },
+    children: [{
+      path: "",
+      name: "OverflowView",
+      component: () =>
+        import('@/views/wrh-management/overflow-bill/index'),
+      hidden: true,
+      meta: {
+        title: '溢余单',
+        icon: 'table',
+        permission: PermIds.PRODUCT_SUPPLIER_VIEW
+      }
+    }, {
+      path: "edit",
+      name: "LossBillEdit",
+      component: () =>
+        import('@/views/wrh-management/overflow-bill/edit'),
+      hidden: true,
+      meta: {
+        title: '查看溢余单',
+        icon: 'table',
+        permission: PermIds.PRODUCT_SUPPLIER_VIEW
+      }
+    }, {
+      path: "add",
+      name: "LossBillAdd",
+      component: () =>
+        import('@/views/wrh-management/overflow-bill/add'),
+      hidden: true,
+      meta: {
+        title: '新建溢余单',
+        icon: 'table',
+        permission: PermIds.PRODUCT_SUPPLIER_VIEW
+      }
+    }, {
+      path: "batchadd",
+      name: "BatchAdd",
+      component: () =>
+        import('@/views/wrh-management/loss-bill/batch-add'),
+      hidden: true,
+      meta: {
+        title: '批量增加商品',
+        icon: 'table',
+        permission: PermIds.PRODUCT_SUPPLIER_VIEW
+      }
+    }]
   }]
 }
 
