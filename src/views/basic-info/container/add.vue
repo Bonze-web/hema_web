@@ -77,8 +77,9 @@ export default {
             // { required: true, max: 16, message: '最多输入16位', trigger: 'change' }
           ],
           num: [
-            { required: true, message: '请输入容器数量', trigger: 'blur' },
-            { required: true, max: 6, message: '请输入1-6之间的数字', trigger: 'change' }
+            // { required: true, message: '请输入容器数量', trigger: 'blur' },
+            { required: true, pattern: /^\d{1,6}(\.\d+)?$/, message: '请输入1-6位数字', trigger: 'change' }
+            // { required: true, max: 6, message: '请输入1-6之间的数字', trigger: 'change' }
           ],
           prefix: [
             { required: true, message: '请输入前缀', trigger: 'blur' },
@@ -86,7 +87,7 @@ export default {
           ],
           startCode: [
             { required: true, message: '请输入起始条码段', trigger: 'blur' },
-            { required: true, max: 12, message: '请输入1-12位之间的数字', trigger: 'change' }
+            { pattern: /^\d{1,12}(\.\d+)?$/, message: '请输入1-12位之间的数字', trigger: 'change' }
           ]
         },
         containerType: []
