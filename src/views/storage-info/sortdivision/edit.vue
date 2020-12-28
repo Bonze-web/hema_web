@@ -42,6 +42,22 @@
                                             <el-input v-model="form.binScope" maxlength="64"></el-input>
                                         </el-form-item>
                                     </el-col>
+                                    <el-col :span="6" class="info-box">
+                                        <el-form-item label="存储类型" prop="stockType">
+                                          <el-select v-model="form.stockType" placeholder="请选择存储类型">
+                                            <el-option label="CASE" value="CASE"></el-option>
+                                            <el-option label="SPLIT" value="SPLIT"></el-option>
+                                          </el-select>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="6" class="info-box">
+                                        <el-form-item label="上架规则" prop="putawayRule">
+                                          <el-select v-model="form.putawayRule" placeholder="请选择上架规则">
+                                            <el-option label="TT" value="TT"></el-option>
+                                            <el-option label="STACK " value="STACK"></el-option>
+                                          </el-select>
+                                        </el-form-item>
+                                    </el-col>
                                 </el-row>
                             </el-form>
                         </el-tab-pane>
@@ -66,6 +82,14 @@
                             <el-col :span="6" class="info-box">
                                 <div>货位范围:</div>
                                 <div>{{ suppliersInfo.binScope }}</div>
+                            </el-col>
+                            <el-col :span="6" class="info-box">
+                                <div>存储类型:</div>
+                                <div>{{ suppliersInfo.stockType }}</div>
+                            </el-col>
+                            <el-col :span="6" class="info-box">
+                                <div>上架规则:</div>
+                                <div>{{ suppliersInfo.putawayRule }}</div>
                             </el-col>
                         </el-tab-pane>
                     <el-tab-pane label="操作日志" name="operational">
@@ -262,6 +286,8 @@ export default {
           code: '',
           name: '',
           binScope: '',
+          stockType: "",
+          putawayRule: "",
           storageList: [
             {
               name: "rrr",
@@ -279,7 +305,14 @@ export default {
             { required: true, message: '请输入拣货分区名称', trigger: 'blur' }
           ],
           binScope: [
-            { required: true, message: '请填写货位范围', trigger: 'blur' }
+            { required: true, message: '请填写货位范围', trigger: 'blur' },
+            { required: true, pattern: /^([1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[,]+[1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[-]+[1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[(]+[1-9]+\/[1-9]+[)]+)$/, message: '请填写货位范围', trigger: 'blur' }
+          ],
+          stockType: [
+            { required: true, message: '请填写存储类型', trigger: 'blur' }
+          ],
+          putawayRule: [
+            { required: true, message: '请填写上架规则', trigger: 'blur' }
           ]
         }
       }
@@ -309,10 +342,16 @@ export default {
           this.storageList = this.storageList.reduce((preVal, curVal) => {
             newobj[curVal.id] ? '' : newobj[curVal.id] = preVal.push(curVal); 
             return preVal 
-          }, [])
+          }, []);
+          this.updateStorageList();
         } else {
+          console.log(this.storageList);
           this.leftSelect.forEach((ele, idx) => {
-            this.storageList.push({id: ele.id, storageId: ele.id, name: ele.name, orderNumber: lenthRecodes + idx + 1, code: ele.code, version: ele.version});
+            const storeObj = ele;
+            storeObj.storageId = ele.id;
+            storeObj.orderNumber = lenthRecodes + idx + 1;
+            this.storageList.push(storeObj);
+            // this.storageList.push({id: ele.id, storageId: ele.id, name: ele.name, orderNumber: lenthRecodes + idx + 1, code: ele.code, version: ele.version});
           })
         }
         this.$refs.multipleTable.clearSelection();
@@ -359,7 +398,10 @@ export default {
       updateStorageList() {
         const objCurTt = [];
         this.storageList.forEach((ele, idx) => {
-          objCurTt.push({storageId: ele.id, name: ele.name, orderNumber: idx + 1, code: ele.code});
+          const storeObj = ele;
+          storeObj.orderNumber = idx + 1;
+          objCurTt.push(storeObj);
+          // objCurTt.push({storageId: ele.id, name: ele.name, orderNumber: idx + 1, code: ele.code});
         })
         this.storageList = objCurTt;
       },
@@ -405,7 +447,8 @@ export default {
         // 如果是只读的模式,就要调取后台的数据,将数据渲染到页面上
         SortdivisionService.getSuppliersDetail(id)
         .then((res) => {
-          this.suppliersInfo = res.data;
+          console.log(res);
+          this.suppliersInfo = res;
           this.storageListRead = this.suppliersInfo.storageList;
         })
         .catch((err) => {
@@ -419,11 +462,11 @@ export default {
           if (valid) {
             if (this.status === 'create') {
               // 创建新的拣货分区的按钮
-              const reg = /^([1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[,]+[1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[-]+[1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[(]+[1-9]+\/[1-9]+[)]+)$/;
-              if (!reg.test(this.form.binScope)) {
-                this.$message.error("满足格式10、10(1/2)、10-20，多个以逗号隔开");
-                return false;
-              }
+              // const reg = /^([1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[,]+[1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[-]+[1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[(]+[1-9]+\/[1-9]+[)]+)$/;
+              // if (!reg.test(this.form.binScope)) {
+              //   this.$message.error("满足格式10、10(1/2)、10-20，多个以逗号隔开");
+              //   return false;
+              // }
               this.form.storageList = this.storageList;
               SortdivisionService.createSuppliers(this.form)
               .then(res => {
