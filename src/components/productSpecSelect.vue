@@ -40,37 +40,40 @@ export default {
       };
       request.hideLoadingOnce();
       this.hasQuery = true;
-      if (this.workingOrg.type === "GROUP") {
-        ProductService.queryProductQpc(1, 0, opts)
-          .then(res => {
-            this.resultList = res.records;
-            this.loading = false;
-            this.hasQuery = false;
-          })
-          .catch(err => {
-            this.$message.error(err.message);
-          });
-      } else if (this.workingOrg.type === "DC") {
-        ProductService.queryDcProductQpc(1, 0, opts)
-          .then(res => {
-            this.resultList = res.records;
-            this.loading = false;
-            this.hasQuery = false;
-          })
-          .catch(err => {
-            this.$message.error(err.message);
-          });
-      } else {
-        ProductService.queryProductQpc(1, 0, opts)
-          .then(res => {
-            this.resultList = res.records;
-            this.loading = false;
-            this.hasQuery = false;
-          })
-          .catch(err => {
-            this.$message.error(err.message);
-          });
-      }
+      ProductService.queryProductQpc(1, 0, opts)
+        .then(res => {
+          this.resultList = res.records;
+          // if (
+          //   res.records &&
+          //   res.records.length <= 5 &&
+          //   res.records.length > 0
+          // ) {
+          //   if (this.status === "prev") {
+          //     if (this.page === 1) {
+          //       this.disabledPrev = true;
+          //     }
+          //     if (this.disabledNext === true) {
+          //       this.disabledNext = false;
+          //     }
+          //   } else if (this.status === "next") {
+          //     if (this.page > 1 && this.disabledPrev === true) {
+          //       this.disabledPrev = false;
+          //     }
+          //   }
+          //   if (res.records.length < 5) {
+          //     this.disabledNext = true;
+          //   }
+          // } else if (this.status === "next") {
+          //   this.disabledNext = true;
+          // } else {
+          //   this.disabledNext = true;
+          // }
+          this.loading = false;
+          this.hasQuery = false;
+        })
+        .catch(err => {
+          this.$message.error(err.message);
+        });
     },
     remoteMethod(query) {
       this.loading = true;
