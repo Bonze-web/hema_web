@@ -44,7 +44,6 @@
         <el-table-column prop="spec" label="规格" width="120"></el-table-column>
         <el-table-column prop="categoryName" label="类别" width="200">
           <template slot-scope="scope">{{scope.row | filterCategory }}</template>
-
         </el-table-column>
         <el-table-column prop="status" label="状态">
           <template slot-scope="scope">{{ scope.row.status | filterStatus }}</template>
@@ -102,6 +101,17 @@ export default {
       this.multipleSelection.forEach(ele => {
         ids.push(ele.id);
       });
+      if (ids.length === 0) {
+        var message = "请选择需要启用的商品";
+        if (type === "OFF") {
+          message = "请选择需要禁用的商品";
+        }
+        this.$message({
+          type: "info",
+          message: message
+        });
+        return;
+      }
       this.$confirm("此操作将改变商品状态, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -245,9 +255,9 @@ export default {
 
     filterCategory(val) {
       if (val.categoryCode && val.categoryName) {
-        return "[" + val.categoryCode + "]" + val.categoryName
+        return "[" + val.categoryCode + "]" + val.categoryName;
       } else {
-        return ""
+        return "";
       }
     }
   }

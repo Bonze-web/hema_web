@@ -38,7 +38,8 @@
               <el-row :gutter="20">
                 <el-col :span="6" class="info-box">
                   <el-form-item label="代码" prop="code">
-                    <el-input v-model="form.code"></el-input>
+                    <span>{{form.code}}</span>
+                    <!-- <el-input v-model="form.code"></el-input> -->
                   </el-form-item>
                 </el-col>
                 <el-col :span="6" class="info-box">
@@ -385,9 +386,10 @@
                 <el-table-column prop="qpcStr" label="规格">
                   <template slot-scope="scope">
                     <span v-if="scope.row.id && !scope.row.isEdit">{{ scope.row.qpcStr }}</span>
-                    <el-select v-else v-model="scope.row.qpcStr" placeholder="请选择">
+                    <product-spec-select v-else :specValue.sync="scope.row.qpcStr" :productId="id"></product-spec-select>
+                    <!-- <el-select v-else v-model="scope.row.qpcStr" placeholder="请选择">
                       <el-option v-for="item in specList" :key="item.id" :label="item.qpcStr" :value="item.qpcStr"></el-option>
-                    </el-select>
+                    </el-select>-->
                   </template>
                 </el-table-column>
                 <el-table-column label="操作">
@@ -512,9 +514,7 @@
             </el-col>
             <el-col :span="6" class="info-box" v-if="businessForm.settleUnit === 'WEIGHT'">
               <el-form-item label="标准规格" prop="settleQpcStr">
-                <el-select v-model="businessForm.settleQpcStr" placeholder="请选择">
-                  <el-option v-for="item in specList" :key="item.id" :label="item.qpcStr" :value="item.qpcStr"></el-option>
-                </el-select>
+                <product-spec-select :specValue.sync="businessForm.settleQpcStr" :productId="id"></product-spec-select>
               </el-form-item>
             </el-col>
             <el-col :span="6" class="info-box" v-if="businessForm.settleUnit === 'WEIGHT'">
@@ -544,11 +544,13 @@ import { mapGetters } from "vuex";
 import PermIds from "@/api/permissionIds";
 import vendorSelect from "@/components/vendorSelect.vue";
 import productCategorySelect from "@/components/productCategorySelect.vue";
+import productSpecSelect from "@/components/productSpecSelect.vue";
 import systemLog from "@/components/systemLog.vue";
 
 export default {
   data() {
     return {
+      id: "",
       PermIds: PermIds,
       status: "create",
       productInfo: {},
@@ -1656,7 +1658,8 @@ export default {
   components: {
     vendorSelect,
     productCategorySelect,
-    systemLog
+    systemLog,
+    productSpecSelect
   }
 };
 </script>
