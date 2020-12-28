@@ -19,7 +19,7 @@
             </div>
             <div>
                 <el-button @click="back">返回</el-button>
-                <el-button type="primary" @click="editSupplier">编辑</el-button>
+                <el-button type="primary" v-if="hasPermission(PermIds.PRODUCT_PRODUCT_ENABLE) && workingOrg.type=== 'GROUP'" @click="editSupplier">编辑</el-button>
             </div>
         </div>
         <div style="height:20px" />
@@ -96,7 +96,7 @@
 <script>
 // import { mapGetters } from "vuex";
 import WharfService from "@/api/service/WharfService";
-
+import { mapGetters } from "vuex";
 export default {
   data() {
       return {
@@ -127,7 +127,7 @@ export default {
       }
     },
     computed: {
-
+       ...mapGetters(["hasPermission", "workingOrg"])
     },
     methods: {
       levelChange() {
@@ -189,7 +189,7 @@ export default {
           // }
         })
         .catch((err) => {
-          this.$message.error("获取详情失败" + err)
+          this.$message.error("获取详情失败" + err.message)
         })
       },
       // 创建码头
@@ -210,7 +210,7 @@ export default {
               .catch(err => {
                 if (err === "") {
                   this.$message.success("创建成功");
-                  this.$store.dispatch("tagsView/delView", this.$route);
+  
                   this.$router.go(-1)
                 } else {
                   this.$message.error("创建失败" + err)
@@ -254,9 +254,6 @@ export default {
     },
     created() {
       this.getQueryStatus()
-    },
-    filters: {
-    
     }
 };
 </script>

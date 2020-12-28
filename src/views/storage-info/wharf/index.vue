@@ -28,7 +28,7 @@
           <el-row>
             <router-link :to="{ path: '/storageinfo/wharf/add', query:{ status: 'create'} }">
             <!-- <span v-if="child.meta&&child.meta.title" :title="child.meta.title">{{child.meta.title}}</span> -->
-            <el-button style="margin:18px 10px" type="primary" size="mini">新建</el-button>
+            <el-button style="margin:18px 10px" type="primary" size="mini" v-if="hasPermission(PermIds.PRODUCT_PRODUCT_ENABLE) && workingOrg.type=== 'GROUP'" >新建</el-button>
             </router-link>
           </el-row>
             <el-table
@@ -108,7 +108,7 @@
 <script>
 // 引入公共模块
 import WharfService from "@/api/service/WharfService";
-// import { mapGetters } from "vuex";
+import { mapGetters } from "vuex";
 
 export default {
   data() {
@@ -128,6 +128,7 @@ export default {
       }
   },
   computed: {
+       ...mapGetters(["hasPermission", "workingOrg"])
   },
   methods: {
     // 搜索功能
