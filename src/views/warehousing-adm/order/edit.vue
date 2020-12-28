@@ -2,8 +2,8 @@
     <div>
         <div class="head">
             <div class="head-title">
-                <div style="margin:8px">入库订单{{ dataList.barcode  }}</div>
-                <div style="margin:11px 0 5px 0; font-size: 12px; color: #999">{{ status | setStatus }}</div>
+                <div style="margin:8px">入库订单{{ dataList.billNumber  }}</div>
+                <div style="margin:11px 0 5px 0; font-size: 12px; color: #999">{{ dataList.status | setStatus }}</div>
             </div>
             <div>
                 <el-button @click="back">返回</el-button>
@@ -90,8 +90,8 @@
                         <el-tab-pane label="入库订单" name="category">
                             <div class="info-title">基本信息</div>
                             <el-col :span="6" class="info-box">
-                                <div>订单类型:</div>
-                                <div>{{ dataList.srcWay ? dataList.srcWay : "&lt;空&gt;" }}</div>
+                                <div>订单来源类型:</div>
+                                <div>{{ dataList.srcWay | setSrcWay }}</div>
                             </el-col>
                             <el-col :span="6" class="info-box">
                                 <div>供应商:</div>
@@ -127,8 +127,8 @@
                             </el-col>
 
                             <el-col :span="6" class="info-box">
-                                <div>来源方式:</div>
-                                <div>{{ srcWay | setSrcWay }}</div>
+                                <div>收货方式:</div>
+                                <div>{{ dataList.type | setType }}</div>
                             </el-col>
 
                             <el-col class="info-box">
@@ -140,34 +140,28 @@
                             <el-col>
                                 <div  class="info-title title">子容器</div>
                             </el-col>
-                            <el-input type="text" placeholder="请输入商品编号" class="input-width" ></el-input>
-                            <el-button type="primary" v-model="search" size="mini" @click="onSubmit" >立即搜索</el-button>
+                            <el-input type="text" v-model="iptVal" placeholder="请输入商品编号" class="input-width" ></el-input>
+                            <el-button type="primary" size="mini" @click="onSubmit" >立即搜索</el-button>
 
                             <div style="height:20px" />
 
-                            <el-table :data="dataList.orderBillItems" style="width: 100%; text-align: center" :row-style="{ height: '16px', padding: '-4px' }" >
-
+                            <el-table :data="orderBillItems" style="width: 100%; text-align: center" :row-style="{ height: '16px', padding: '-4px' }" >
                               <el-table-column type="index" label="序号"></el-table-column>
-
                               <el-table-column prop="billNumber" label="商品编码" style="height: 20px"></el-table-column>
-
                               <el-table-column prop="productName" label="商品名称" style="height: 20px"></el-table-column>
-
                               <el-table-column prop="munit" label="单位" style="height: 20px"></el-table-column>
-
                               <el-table-column prop="spec" label="规格" style="height: 20px"></el-table-column>
-
                               <el-table-column prop="qtystr" label="应收件数" style="height: 20px"></el-table-column>
-
                               <el-table-column prop="qty" label="应收数量" style="height: 20px"></el-table-column>
-
                               <el-table-column prop="receivedQtystr" label="实收件数" style="height: 20px"></el-table-column>
-
                               <el-table-column prop="receivedQty" label="实收数量" style="height: 20px"></el-table-column>
-
                               <el-table-column prop="rejectQtystr" label="拒收件数" style="height: 20px"></el-table-column>
-
                               <el-table-column prop="rejectQty" label="拒收数量" style="height: 20px"></el-table-column>
+                              <el-table-column prop="rejectReason" label="拒收原因" style="height: 20px">
+                                <template slot-scope="scope">
+                                  {{ scope.endReceiveTime ? scope.endReceiveTime : "&lt;空&gt;" }}
+                                </template>
+                              </el-table-column>
 
                             </el-table>
                         </el-tab-pane>
@@ -213,15 +207,11 @@ import WarehousingAdmServers from "@/api/service/WarehousingAdmServers";
 export default {
   data() {
       return {
-        srcWay: 'MANUAL',
-        status: 'INITIAL', // 页面状态
         tabActiveName: 'category', // tab栏名称
         id: '', // 货位类别ID
-        search: '', // 搜索
-        dataList: {
-          orderBillItems: [
-          ]
-        } // 详情数据
+        iptVal: '', // 搜索
+        dataList: {}, // 详情数据
+        orderBillItems: []
       }
     },
     computed: {
@@ -232,15 +222,13 @@ export default {
         this.$router.go(-1)
       },
       onSubmit() {
-        if (this.search === '') return;
-
-        // WarehousingAdmServers.getByIdOrderBill(this.search)
-        // .then(res => {
-        //   console.log(res)
-        // })
-        // .catch(err => {
-        //   this.$message.error("查询失败")
-        // });
+        if (this.iptVal === '') {
+          this.orderBillItems = this.dataList.orderBillItems
+        } else {
+          this.orderBillItems = this.dataList.orderBillItems.filter((item) => {
+            return item.billNumber.indexOf(this.iptVal) !== -1
+          })
+        }
       },
       getByIdOrderBill() {
         this.id = this.$route.query.id;
@@ -248,6 +236,8 @@ export default {
         WarehousingAdmServers.getByIdOrderBill(this.id)
         .then(res => {
           console.log(res)
+          this.dataList = res;
+          this.orderBillItems = res.orderBillItems;
         })
         .catch(err => {
           this.$message.error("查询失败" + err.message)
@@ -258,7 +248,7 @@ export default {
       }
     },
     created() {
-      // this.getByIdOrderBill()
+      this.getByIdOrderBill()
     },
     filters: {
       setSrcWay(srcWay) {
@@ -274,7 +264,6 @@ export default {
         }
       },
       setStatus(status) {
-        // 状态。INITIAL:初始，ARRIVED:已到货登记，QUALITY:已质检，RECEIVING:进行中，FINISHED:已完成，ABORTED:已取消
         switch (status) {
           case 'INITIAL':
             return "初始"
@@ -291,7 +280,17 @@ export default {
           default:
             return '未知';
         }
+      },
+      setType(type) {
+      switch (type) {
+        case 'NOTTRUST':
+          return "清点收货"
+        case 'TRUST':
+          return "信任收货"
+        default:
+          return '未知';
       }
+    }
     }
 };
 </script>

@@ -1,10 +1,10 @@
 <template>
   <div class="table-index _table-index">
     <div class="select-head">
-      <el-form ref="form" style="display: flex;flex-wrap:wrap;" :model="form" label-width="90px" label-position="right" >
+      <el-form ref="form" style="display: flex;flex-wrap:wrap;" :model="form" label-width="180px" label-position="right" >
 
-        <el-form-item label="单号：">
-          <el-input type="text" placeholder="请输入单号" v-model="form.billNumberLike" class="input-width" ></el-input>
+        <el-form-item label="入库订单单号或外部单号：">
+          <el-input type="text" placeholder="请输入入库订单单号或外部单号" v-model="form.billNumberLike" class="input-width" ></el-input>
         </el-form-item>
 
         <el-form-item label="来源单号：">
@@ -15,32 +15,39 @@
           <el-input type="text" placeholder="请输入供应商" v-model="form.vendorCodeEqualsOrNameLike" class="input-width" ></el-input>
         </el-form-item>
 
-        <el-form-item label="入库仓库：">
-          <el-input type="text" placeholder="请输入库仓库" v-model="form.wrhCodeEqualsOrNameLike" class="input-width" ></el-input>
+        <el-form-item label="入库订单来源：">
+          <el-input type="text" placeholder="请输入库订单来源" v-model="form.srcBillNumberLike" class="input-width" ></el-input>
         </el-form-item>
 
-        <el-form-item label="商品：">
-          <el-input type="text" placeholder="请输入商品" v-model="form.productCodeEqualsOrNameLike" class="input-width" ></el-input>
-        </el-form-item>
-
-        <el-form-item label="状态：">
-          <el-select v-model="form.statusEquals" placeholder="请选择状态" class="input-width" >
-            <el-option value="MANUAL" label="手工"></el-option>
-            <el-option value="API" label="接口导入"></el-option>
-            <el-option value="EXCEL" label="文件导入"></el-option>
+        <el-form-item label="收货方式：">
+          <el-select v-model="form.type" placeholder="请选择状态" class="input-width" >
+            <el-option value="NOTTRUST" label="清点收货"></el-option>
+            <el-option value="TRUST" label="信任收货"></el-option>
           </el-select>
         </el-form-item>
 
-        <el-form-item label="到效日期：">
-          <el-date-picker class="input-width" v-model="toEffect" type="datetimerange" format="yyyy-MM-dd" value-format="yyyy-MM-dd" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期" ></el-date-picker>
+        <el-form-item label="商品：">
+          <el-input type="text" placeholder="请输入商品" v-model="form.productCodeOrNameLike" class="input-width" ></el-input>
         </el-form-item>
 
-        <el-form-item label="接收日期：">
-          <el-date-picker class="input-width" v-model="receivingGoods" type="datetimerange" format="yyyy-MM-dd" value-format="yyyy-MM-dd" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期" ></el-date-picker>
+        <el-form-item label="创建日期：">
+          <el-date-picker class="input-width" v-model="createTime" type="datetimerange" format="yyyy-MM-dd" value-format="yyyy-MM-dd HH:mm:ss" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期" ></el-date-picker>
         </el-form-item>
 
         <el-form-item label="到货日期：">
-          <el-date-picker class="input-width" v-model="arrival" type="datetimerange" format="yyyy-MM-dd" value-format="yyyy-MM-dd" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期" ></el-date-picker>
+          <el-date-picker class="input-width" v-model="arrival" type="datetimerange" format="yyyy-MM-dd" value-format="yyyy-MM-dd HH:mm:ss" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期" ></el-date-picker>
+        </el-form-item>
+
+        <el-form-item label="状态：">
+          <el-select v-model="form.status" placeholder="请选择状态" class="input-width" >
+            <el-option value="" label="全部"></el-option>
+            <el-option value="INITIAL" label="初始"></el-option>
+            <el-option value="ARRIVED" label="已到货登记"></el-option>
+            <el-option value="QUALITY" label="已质检"></el-option>
+            <el-option value="RECEIVING" label="进行中"></el-option>
+            <el-option value="FINISHED" label="已完成"></el-option>
+            <el-option value="ABORTED" label="已取消"></el-option>
+          </el-select>
         </el-form-item>
 
         <el-form-item>
@@ -53,17 +60,68 @@
     <div style="height: 20px" />
 
     <div style="background: #fff;">
-      <!-- <el-row>
-        <router-link :to="{ path: '/basicinfo/container/add' }" >
+      <el-row>
+        <!-- <router-link :to="{ path: '/basicinfo/container/add' }" >
           <el-button style="margin: 18px 10px" type="primary" size="mini" >新建</el-button>
-        </router-link>
+        </router-link> -->
 
         <el-button style="margin: 18px 10px" size="mini" @click="printingBtn" >打印</el-button>
-      </el-row> -->
+      </el-row>
 
 
-      <el-table :data="listData" style="width: 100%; text-align: center" :row-style="{ height: '16px', padding: '-4px' }" >
+      <el-table :data="listData" style="width: 100%; text-align: center" @selection-change="handleSelectionChange" :row-style="{ height: '16px', padding: '-4px' }" >
+        <el-table-column type="selection" width="55"></el-table-column>
+        <!-- <el-table-column type="index" label="序号"></el-table-column> -->
+
         <el-table-column prop="billNumber" label="单号" style="height: 20px">
+          <template slot-scope="scope">
+            <router-link style="color: #409eff" :to="{ path: '/warehousing-adm/oeder/edit', query:{ id: scope.row.id } }" >
+              <span>{{ scope.row.billNumber }}</span>
+            </router-link>
+          </template>
+        </el-table-column>
+
+        <el-table-column prop="srcBillNumber" label="外部单号"></el-table-column>
+
+        <el-table-column prop="srcApi" label="通知订单类型" style="height: 20px">
+          <template slot-scope="scope">{{ scope.row.srcApi | setSrcApi }}</template>
+        </el-table-column>
+
+        <el-table-column prop="type" label="收货方式">
+          <template slot-scope="scope">
+            {{ scope.row.type | setType }}
+          </template>
+        </el-table-column>
+
+        <el-table-column prop="endReceiveTime" label="通知日期">
+          <template slot-scope="scope">
+            {{ scope.row.endReceiveTime ? scope.row.endReceiveTime : "&lt;空&gt;" }}
+          </template>
+        </el-table-column>
+
+        <el-table-column prop="expireDate" label="失效日期">
+          <template slot-scope="scope">
+            {{ scope.row.expireDate ? scope.row.expireDate : "&lt;空&gt;" }}
+          </template>
+        </el-table-column>
+
+        <el-table-column prop="vendorName" label="供应商"></el-table-column>
+
+        <el-table-column prop="status" label="状态">
+          <template slot-scope="scope">
+            {{ scope.row.status | setScope }}
+          </template>
+        </el-table-column>
+
+
+        <el-table-column label="操作">
+          <template slot-scope="scope">
+            <el-button v-if="scope.row.status === 'RECEIVING'" size="mini" type="text" @click="putFinish(scope.row.billNumber, scope.row.version)">收货完成</el-button>
+            <div v-else>--</div>
+          </template>
+        </el-table-column>
+
+        <!-- <el-table-column prop="billNumber" label="单号" style="height: 20px">
           <template slot-scope="scope">
             <router-link style="color: #409eff" :to="{ path: '/warehousing-adm/oeder/edit', query:{ id: scope.row.billNumber } }" >
               <span>{{ scope.row.billNumber }}</span>
@@ -79,13 +137,13 @@
 
         <el-table-column prop="wrhName" label="入库仓"></el-table-column>
         <el-table-column prop="isLogisticMode" label="物流方式"></el-table-column>
-        <el-table-column prop="inputTime" label="接收日期"></el-table-column>
 
         <el-table-column prop="endReceiveTime" label="到货日期">
           <template slot-scope="scope">
             {{ scope.row.endReceiveTime ? scope.row.endReceiveTime : "&lt;空&gt;" }}
           </template>
         </el-table-column>
+
         <el-table-column prop="expireDate" label="到效日期"></el-table-column>
         <el-table-column prop="srcBillNumber" label="来源单号"></el-table-column>
         <el-table-column prop="status" label="状态">
@@ -93,6 +151,12 @@
             {{ scope.row.status | setScope }}
           </template>
         </el-table-column>
+
+        <el-table-column label="操作">
+          <template slot-scope="scope">
+            <el-button size="mini" type="text" @click="deleteWmsBintype(scope.row.id, scope.row.version)">打印</el-button>
+          </template>
+        </el-table-column> -->
 
       </el-table>
 
@@ -124,22 +188,21 @@ export default {
         srcBillNumberLike: '', //  来源单号
         vendorCodeEqualsOrNameLike: '', // 供应商代码等于或者名称类似于
         wrhCodeEqualsOrNameLike: '', // 入库仓库
-        productCodeEqualsOrNameLike: '', // 商品代码等于或者名称类似于
-        statusEquals: '' // 状态等于
+        type: '', // 收货方式
+        productCodeOrNameLike: '', // 商品代码等于或者名称类似于
+        status: '' // 状态等于
       },
-      toEffect: '', // 到效日期
       arrival: '', // 到货日期
-      receivingGoods: '', // 收货日期
+      createTime: '', // 创建日期
       page: 1,
       pageSize: 10,
-      totalCount: 0
+      totalCount: 0,
+      downList: ''
     };
   },
   computed: {},
   methods: {
     onSubmit: function() {
-      console.log(this.value1)
-
       const _this = this;
       this.page = 1;
 
@@ -155,13 +218,45 @@ export default {
         srcBillNumberLike: '', //  来源单号
         vendorCodeEqualsOrNameLike: '', // 供应商代码等于或者名称类似于
         wrhCodeEqualsOrNameLike: '', // 入库仓库
-        productCodeEqualsOrNameLike: '', // 商品代码等于或者名称类似于
-        statusEquals: '' // 状态等于
+        productCodeOrNameLike: '', // 商品代码等于或者名称类似于
+        status: '' // 状态等于
       };
 
       this.toEffect = ''; // 到效日期
       this.arrival = ''; // 到货日期
       this.receivingGoods = ''; // 收货日期
+    },
+    putFinish(billNumber, version) {
+      // console.log(billNumber, version)
+      // 确认收货
+      const _this = this;
+      this.$confirm('是否确认收货?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        const obj = {
+          billNumber,
+          version
+        }
+        WarehousingAdmServers.finishOrderBill(obj)
+        .then(res => {
+          this.$message.success("收货成功")
+          _this.queryOrderBill()
+        })
+        .catch(err => {
+          this.$message.error("收货失败" + err.message)
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消'
+        })        
+      })
+    },
+    handleSelectionChange(val) {
+      this.downList = val;
+      console.log(val)
     },
     queryOrderBill: function() {
       const _this = this;
@@ -173,43 +268,19 @@ export default {
         srcBillNumberLike: this.form.srcBillNumberLike, //  来源单号
         vendorCodeEqualsOrNameLike: this.form.vendorCodeEqualsOrNameLike, // 供应商代码等于或者名称类似于
         wrhCodeEqualsOrNameLike: this.form.wrhCodeEqualsOrNameLike, // 入库仓库
-        productCodeEqualsOrNameLike: this.form.productCodeEqualsOrNameLike, // 商品代码等于或者名称类似于
-        statusEquals: this.form.statusEquals, // 状态等于
-        expireDateGte: this.toEffect[0], // 到效日期
-        expireDateLte: this.toEffect[1], // 到效日期
+        type: this.form.type, // 收货方式
+        productCodeOrNameLike: this.form.productCodeOrNameLike, // 商品代码等于或者名称类似于
+        statusEquals: this.form.status ? this.form.status : null, // 状态等于
         arrivalDateGte: this.arrival[0], // 到货日期小于等于
         arrivalDateLte: this.arrival[1], // 到货日期小于等于
-        beginReceiveTimeGte: this.receivingGoods[0], // 接收日期大于等于
-        beginReceiveTimeLte: this.receivingGoods[1] // 接收日期小于等于
+        beginReceiveTimeGte: this.createTime[0], // 创建日期大于等于
+        beginReceiveTimeLte: this.createTime[1] // 创建日期小于等于
       };
 
-      const arr = [];
-
-      for (let i = 0; i < 5; i++) {
-        arr.push({
-            billNumber: i + '2020',
-            srcWay: i + '类型',
-            vendorName: i + '33',
-            wrhName: i + '333',
-            isLogisticMode: i + '33',
-            inputTime: i + '2020-10-10',
-            endReceiveTime: i + '2020-10-1',
-            expireDate: i + '2020-10-1',
-            srcBillNumber: i + '333',
-            status: 'EXCEL'
-        })
-      }
-
-      _this.listData = arr
-
       WarehousingAdmServers.queryOrderBill(data).then((res) => {
-        // const records = res.records;
-
-        // this.totalCount = res.totalCount;
-
-        console.log(res)
-
-        // _this.listData = records;
+        const records = res.records;
+        this.totalCount = res.totalCount;
+        _this.listData = records;
       }).catch(err => {
         this.$message.error("数据请求失败" + err.message)
       });
@@ -229,6 +300,40 @@ export default {
   },
   created() {
     this.queryOrderBill();
+    // WarehousingAdmServers.createTestOrderBill({
+    //         description: '1',
+    //         arrivalDate: '2020-11-11',
+    //         beginReceiveTime: '2020-11-15',
+    //         dcId: '000001',
+    //         endReceiveTime: '2020-12-11',
+    //         expireDate: '2020-12-11',
+    //         inputTime: '2020-12-11',
+    //         isLogisticMode: '越库',
+    //         isTest: '1',
+    //         remark: '111',
+    //         srcApi: '来源',
+    //         status: 'MANUAL',
+    //         totalAmount: '11111',
+    //         totalPdtCount: '1',
+    //         totalQty: '1',
+    //         totalQtystr: '1',
+    //         totalReceivedAmount: '1',
+    //         totalReceivedPdtCount: '1',
+    //         totalReceivedQty: '1',
+    //         totalReceivedQtystr: '1',
+    //         totalReceivedVolume: '1',
+    //         totalReceivedWeight: '1',
+    //         totalVolume: '1',
+    //         totalWeight: '1',
+    //         trustType: 'TRUST',
+    //         uploadTime: '2020-11-11',
+    //         vendorCode: '111',
+    //         vendorId: '1111',
+    //         vendorName: '名称',
+    //         wrhCode: '仓库代码',
+    //         wrhId: '2002',
+    //         wrhName: '13号仓库'
+    // })
   },
   beforeRouteEnter(to, from, next) {
     next(vm => {
@@ -239,12 +344,38 @@ export default {
   filters: {
     setScope(status) {
       switch (status) {
-        case 'MANUAL':
-          return "手工"
-        case 'API':
-          return "接口导入"
-        case 'EXCEL ':
-          return "文件导入"
+        case 'INITIAL':
+          return "初始"
+        case 'ARRIVED':
+          return "已到货登记"
+        case 'QUALITY ':
+          return "已质检"
+        case 'RECEIVING':
+          return "进行中"
+        case 'INISHED':
+          return "已完成"
+        case 'ABORTED ':
+          return "已取消"
+        default:
+          return '未知';
+      }
+    },
+    setType(type) {
+      switch (type) {
+        case 'NOTTRUST':
+          return "清点收货"
+        case 'TRUST':
+          return "信任收货"
+        default:
+          return '未知';
+      }
+    },
+    setSrcApi(arcApi) {
+      switch (arcApi) {
+        case 'VENDOR':
+          return "供应商采购"
+        case 'PROCESS':
+          return "加工中心"
         default:
           return '未知';
       }
@@ -255,14 +386,19 @@ export default {
 
 <style lang="scss" scoped>
 @import "src/styles/mixin.scss";
+// .table-index .el-table .cell{
+//   padding-left: 0;
+//   margin: 10px
+// }
 </style>
+
 <style lang="scss">
 .table-index {
   @import "src/styles/mixin.scss";
   @include elTable;
 }
 
-._table-index .el-table .cell{
-  padding: 7px 0;
-}
+// ._table-index .el-table .cell{
+//   padding: 7px 0;
+// }
 </style>

@@ -5,12 +5,6 @@ import request from '@/utils/request'
 
 export default {
     /**
-     * 到货登记
-     */
-    arriveoRderBill(postData) {
-        return request.put('/wms/orderBill/arrive', postData)
-    },
-    /**
      * id查询订单详情
      */
     getByIdOrderBill(id) {
@@ -23,10 +17,22 @@ export default {
         return request.get('/wms/orderBill/getByBillNumber?billNumber=' + billNumber)
     },
     /**
+     * 入库订单接收完成
+     */
+    finishOrderBill(postData) {
+        return request.put('/wms/orderBill/finish', postData)
+    },
+     /**
      * 到货登记完成
      */
     arriveOrderBill(data) {
         return request.put('/wms/orderBill/arrive', data)
+    },
+    /**
+     * 测试新建接口
+     */
+    createTestOrderBill(postData) {
+        return request.post('/wms/orderBill/createTest' + postData)
     },
     /**
      * 分页查询订单接口

@@ -199,7 +199,8 @@ export default {
         positionCodeOrNameEquals: this.form.positionCodeOrNameEquals,
         parentBarcodeLikes: this.form.parentBarcodeLikes,
         containerTypeCodeEquals: this.form.containerTypeCodeEquals,
-        useNameOrCodeLikes: this.form.useNameOrCodeLikes
+        useNameOrCodeLikes: this.form.useNameOrCodeLikes,
+        searchCount: true
       };
 
       BasicService.quertOcntainer(data).then((res) => {
