@@ -233,7 +233,7 @@ export default {
                 this.$router.go(-1)
               })
               .catch(err => {
-                this.$message.error("更新失败" + err);
+                this.$message.error("更新失败" + err.message);
               })
             }
           } else {

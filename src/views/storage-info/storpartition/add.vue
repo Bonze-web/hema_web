@@ -100,7 +100,8 @@ export default {
             { required: true, message: '请输入码头名称', trigger: 'blur' }
           ],
           binScope: [
-            { required: true, message: '请填写货位范围', trigger: 'blur' }
+            { required: true, message: '请填写货位范围', trigger: 'blur' },
+            { required: true, pattern: /^([1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[,]+[1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[-]+[1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[(]+[1-9]+\/[1-9]+[)]+)$/, message: '请填写货位范围', trigger: 'blur' }
           ]
         }
       }
@@ -176,11 +177,11 @@ export default {
           if (valid) {
             if (this.status === 'create') {
               // 创建验证货位范围
-              const reg = /^([1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[,]+[1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[-]+[1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[(]+[1-9]+\/[1-9]+[)]+)$/;
-              if (!reg.test(this.form.binScope)) {
-                this.$message.error("满足格式10、10(1/2)、10-20，多个以逗号隔开");
-                return false;
-              }
+              // const reg = /^([1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[,]+[1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[-]+[1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[(]+[1-9]+\/[1-9]+[)]+)$/;
+              // if (!reg.test(this.form.binScope)) {
+              //   this.$message.error("满足格式10、10(1/2)、10-20，多个以逗号隔开");
+              //   return false;
+              // }
               StorpartitionService.createSuppliers(this.form)
               .then(res => {
                 // console.log(res);
