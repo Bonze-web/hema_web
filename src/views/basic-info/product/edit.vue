@@ -385,9 +385,10 @@
                 <el-table-column prop="qpcStr" label="规格">
                   <template slot-scope="scope">
                     <span v-if="scope.row.id && !scope.row.isEdit">{{ scope.row.qpcStr }}</span>
-                    <el-select v-else v-model="scope.row.qpcStr" placeholder="请选择">
+                    <product-spec-select v-else :specValue.sync="scope.row.qpcStr" :productId="id"></product-spec-select>
+                    <!-- <el-select v-else v-model="scope.row.qpcStr" placeholder="请选择">
                       <el-option v-for="item in specList" :key="item.id" :label="item.qpcStr" :value="item.qpcStr"></el-option>
-                    </el-select>
+                    </el-select> -->
                   </template>
                 </el-table-column>
                 <el-table-column label="操作">
@@ -544,11 +545,13 @@ import { mapGetters } from "vuex";
 import PermIds from "@/api/permissionIds";
 import vendorSelect from "@/components/vendorSelect.vue";
 import productCategorySelect from "@/components/productCategorySelect.vue";
+import productSpecSelect from "@/components/productSpecSelect.vue";
 import systemLog from "@/components/systemLog.vue";
 
 export default {
   data() {
     return {
+      id: "",
       PermIds: PermIds,
       status: "create",
       productInfo: {},
@@ -1656,7 +1659,8 @@ export default {
   components: {
     vendorSelect,
     productCategorySelect,
-    systemLog
+    systemLog,
+    productSpecSelect
   }
 };
 </script>
