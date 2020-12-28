@@ -220,11 +220,11 @@ export default {
               WharfService.updateSupplier(this.form)
               .then(res => {
                 console.log(res)
-                this.$message.success("更新成功")
+                this.$message.success("更新成功");
+                this.$store.dispatch("tagsView/delView", this.$route);
                 this.$router.go(-1)
               })
               .catch(err => {
-                console.log(err);
                 this.$message.error("更新失败" + err.message)
               })
             }

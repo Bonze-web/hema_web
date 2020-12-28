@@ -23,7 +23,7 @@
             <div>
                 <template>
                     <el-tabs v-model="tabActiveName">
-                        <el-tab-pane label="码头" name="suppliers">
+                        <el-tab-pane label="存储分区" name="suppliers">
                             <div class="info-title">基本信息</div>
                              <el-form :model="form" :rules="createRules" ref="form" label-width="100px" class="demo-ruleForm">
                                 <el-row :gutter="20">
