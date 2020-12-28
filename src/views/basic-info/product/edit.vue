@@ -1127,6 +1127,7 @@ export default {
       } else {
         postData = {
           ...postData,
+          shelfLifeType: this.businessForm.shelfLifeType,
           processe: this.businessForm.processe,
           putawayBin: this.businessForm.putawayBin,
           settleUnit: this.businessForm.settleUnit,
