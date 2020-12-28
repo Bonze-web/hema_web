@@ -31,12 +31,12 @@
                 </template>
                 <div>
                   <div class="content-operation" v-for="(item, index) in ele.store" :key="index">
-                      <span class="el-icon-sort" style="display:flex;align-items: center;"><span style="padding-left:15px;" @click.stop="schemeOrStore('store', item)">{{'[' + item.code + ']' + item.name}}</span></span> 
+                      <span class="el-icon-sort" style="display:flex;align-items: center;"><span style="padding-left:15px;" @click.stop="schemeOrStore('store', item, ele)">{{'[' + item.code + ']' + item.name}}</span></span> 
                       <div class="operation-button">
                          <el-button
                             size="mini"
                             type="text"
-                            @click.stop="editStoreChange(item)"
+                            @click.stop="editStoreChange(item, ele)"
                             >编辑</el-button
                           >
                           <el-button
@@ -347,9 +347,10 @@ export default {
         establish: false,
         storeMesAll: {},
         dialogFormVisible: false,
-        changeActive: "store",
+        changeActive: "scheme",
         tabActiveName: "suppliers",
         codeEqOrNameLike: "",
+        storeArmy: {},
         // 新建方案
         newProjectsList: {
           code: "",
@@ -423,22 +424,35 @@ export default {
       }
       CargosequenceService.searchData(searchData)
       .then((res) => {
-        this.getAllScheme = res.data;
+        this.getAllScheme = res.records;
         this.getAllGrpByPickId(this.getAllScheme);
       }).catch((err) => {
-        this.$message.error("搜索失败" + err.message)
+        this.$message.error("请求失败" + err.message)
+      })
+   },
+   getAllPickOrder() {
+     CargosequenceService.getAllPickOrder()
+      .then((res) => {
+        console.log(res);
+      }).catch((err) => {
+        this.$message.error("请求失败" + err.message)
       })
    },
    // 获取指定方案顺序下的门店组
    getAllGrpByPickId(schemeArr) {
-       schemeArr.forEach((ele, idx) => {
-        CargosequenceService.getAllGrpByPickId(ele.id)
-        .then((res) => {
-          this.storeAllSchemeAll.push({schemeList: ele, store: res.data});
-        }).catch((err) => {
-          this.$message.error("请求所有的方案失败" + err.message)
+     // schemeArr是所有方案的信息
+     console.log(schemeArr);
+        if (schemeArr.length <= 0) return false;
+        schemeArr.forEach((ele, idx) => {
+          CargosequenceService.getAllGrpByPickId(ele.pickOrderId)
+          .then((res) => {
+            // 这里是所有的门店组的信息
+            console.log(res);
+            this.storeAllSchemeAll.push({schemeList: ele, store: res.data});
+          }).catch((err) => {
+            this.$message.error("请求所有的方案失败" + err.message)
+          })
         })
-      })
    },
    // 获取门店组下面所有的所有的门店
    getAllStoreByGrpId(id) {
@@ -497,11 +511,10 @@ export default {
         this.$message.error("创建失败" + err.message)
       })
    },
-   async editStoreChange(obj) {
+    editStoreChange(obj, schemeOpt) {
     this.editStore = true;
-    const getByIdMes = await CargosequenceService.getById(obj.id);
     this.editStoreInfo = obj;
-    this.editStoreInfo.getByIdMes = '[' + getByIdMes.code + ']' + getByIdMes.name;
+    this.editStoreInfo.getByIdMes = '[' + schemeOpt.code + ']' + schemeOpt.name;
    },
    submitEditStoreChange() {
      this.editStore = false;
@@ -512,8 +525,11 @@ export default {
         this.$message.error("失败" + err.message)
       })
    },
-   schemeOrStore(item, obj) {
+   schemeOrStore(item, obj, schemeOpt) {
      this.changeActive = item;
+     // 存储方案的字段
+     this.editProjectsInfo = schemeOpt;
+     this.storeArmy = obj;
      if (item === 'scheme') {
         this.getById(obj.id);
         this.headerScheme = "[" + obj.code + "]" + obj.name;
@@ -522,12 +538,8 @@ export default {
         this.headerStore = "[" + obj.code + "]" + obj.name;
      }
    },
-   async sequencingProgramme(obj) {
+    sequencingProgramme(obj) {
       this.dialogFormVisible = true;
-      // 获取拣货方案的信息
-      const getByIdMes = await CargosequenceService.getById(obj.id);
-      // 获取拣货门店组的信息
-      const getGrpByIdMes = await CargosequenceService.getGrpById(obj.id);
       this.storeMesAll = {
         adjustOrder: obj.idx,
         grpId: obj.grpId,
@@ -539,8 +551,8 @@ export default {
         storeName: obj.storeName,
         storeOrder: obj.storeOrder,
         version: obj.version,
-        getByIdMesName: '[' + getByIdMes.code + ']' + getByIdMes.name,
-        getGrpByIdMesName: '[' + getGrpByIdMes.code + ']' + getGrpByIdMes.name,
+        getByIdMesName: '[' + this.editProjectsInfo.code + ']' + this.editProjectsInfo.name,
+        getGrpByIdMesName: '[' + this.storeArmy.code + ']' + this.storeArmy.name,
         mylength: this.storeOption.length,
         curIdx: obj.idx
       }
@@ -622,7 +634,7 @@ export default {
     }
   },
   created() {
-    this.searchScheme();
+    this.getAllPickOrder();
   },
   filters: {
   

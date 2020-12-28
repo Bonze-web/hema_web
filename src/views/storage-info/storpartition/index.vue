@@ -136,7 +136,7 @@ export default {
             _this.getSuppliersList();
           })
           .catch((err) => {
-            _this.$message.error("禁用失败" + err)
+            _this.$message.error("禁用失败" + err.message)
             _this.getSuppliersList();
           })
         } else {
@@ -147,7 +147,7 @@ export default {
             _this.getSuppliersList();
           })
           .catch((err) => {
-            _this.$message.error("启用失败" + err)
+            _this.$message.error("启用失败" + err.message)
             _this.getSuppliersList();
           })
         }

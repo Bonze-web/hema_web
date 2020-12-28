@@ -23,7 +23,7 @@
             <div>
                 <template>
                     <el-tabs v-model="tabActiveName">
-                        <el-tab-pane label="码头" name="suppliers">
+                        <el-tab-pane label="存储分区" name="suppliers">
                             <div class="info-title">基本信息</div>
                              <el-form :model="form" :rules="createRules" ref="form" label-width="100px" class="demo-ruleForm">
                                 <el-row :gutter="20">
@@ -100,7 +100,8 @@ export default {
             { required: true, message: '请输入码头名称', trigger: 'blur' }
           ],
           binScope: [
-            { required: true, message: '请填写货位范围', trigger: 'blur' }
+            { required: true, message: '请填写货位范围', trigger: 'blur' },
+            { required: true, pattern: /^([1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[,]+[1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[-]+[1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[(]+[1-9]+\/[1-9]+[)]+)$/, message: '请填写货位范围', trigger: 'blur' }
           ]
         }
       }
@@ -125,7 +126,7 @@ export default {
             this.getSuppliers(this.id)    
           })
           .catch((err) => {
-            this.$message.error("禁用失败" + err)
+            this.$message.error("禁用失败" + err.message)
             this.getSuppliers(this.id)
           })
         } else {
@@ -134,7 +135,7 @@ export default {
               this.getSuppliers(this.id)
             })
             .catch((err) => {
-              this.$message.error("启用失败" + err)
+              this.$message.error("启用失败" + err.message)
               this.getSuppliers(this.id)
             })
         }
@@ -167,7 +168,7 @@ export default {
           }
         })
         .catch((err) => {
-          this.$message.error("获取详情失败" + err)
+          this.$message.error("获取详情失败" + err.message)
         })
       },
       // 创建拣货分区
@@ -176,11 +177,11 @@ export default {
           if (valid) {
             if (this.status === 'create') {
               // 创建验证货位范围
-              const reg = /^([1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[,]+[1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[-]+[1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[(]+[1-9]+\/[1-9]+[)]+)$/;
-              if (!reg.test(this.form.binScope)) {
-                this.$message.error("满足格式10、10(1/2)、10-20，多个以逗号隔开");
-                return false;
-              }
+              // const reg = /^([1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[,]+[1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[-]+[1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[(]+[1-9]+\/[1-9]+[)]+)$/;
+              // if (!reg.test(this.form.binScope)) {
+              //   this.$message.error("满足格式10、10(1/2)、10-20，多个以逗号隔开");
+              //   return false;
+              // }
               StorpartitionService.createSuppliers(this.form)
               .then(res => {
                 // console.log(res);

@@ -42,6 +42,22 @@
                                             <el-input v-model="form.binScope" maxlength="64"></el-input>
                                         </el-form-item>
                                     </el-col>
+                                    <el-col :span="6" class="info-box">
+                                        <el-form-item label="存储类型" prop="stockType">
+                                          <el-select v-model="form.stockType" placeholder="请选择存储类型">
+                                            <el-option label="CASE" value="CASE"></el-option>
+                                            <el-option label="SPLIT" value="SPLIT"></el-option>
+                                          </el-select>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="6" class="info-box">
+                                        <el-form-item label="上架规则" prop="putawayRule">
+                                          <el-select v-model="form.putawayRule" placeholder="请选择上架规则">
+                                            <el-option label="TT" value="TT"></el-option>
+                                            <el-option label="STACK " value="STACK"></el-option>
+                                          </el-select>
+                                        </el-form-item>
+                                    </el-col>
                                 </el-row>
                             </el-form>
                         </el-tab-pane>
@@ -155,7 +171,7 @@
                         :page-sizes="[10, 20, 30, 50]"
                         :page-size="mySelfPageSize"
                         layout="prev, pager, next"
-                        :total="1000">
+                        :total="storedContentTotalCount">
                       </el-pagination>
                     </div>
                   </div>
@@ -236,6 +252,8 @@ export default {
           code: '',
           name: '',
           binScope: '',
+          stockType: "",
+          putawayRule: "",
           storageList: [
             {
               name: "rrr",
@@ -253,7 +271,14 @@ export default {
             { required: true, message: '请输入拣货分区名称', trigger: 'blur' }
           ],
           binScope: [
-            { required: true, message: '请填写货位范围', trigger: 'blur' }
+            { required: true, message: '请填写货位范围', trigger: 'blur' },
+            { required: true, pattern: /^([1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[,]+[1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[-]+[1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[(]+[1-9]+\/[1-9]+[)]+)$/, message: '请填写货位范围', trigger: 'blur' }
+          ],
+          stockType: [
+            { required: true, message: '请填写存储类型', trigger: 'blur' }
+          ],
+          putawayRule: [
+            { required: true, message: '请填写上架规则', trigger: 'blur' }
           ]
         }
       }
@@ -344,7 +369,7 @@ export default {
             this.getSuppliers(this.id)    
           })
           .catch((err) => {
-            this.$message.error("禁用失败" + err)
+            this.$message.error("禁用失败" + err.message)
             this.getSuppliers(this.id)
           })
         } else {
@@ -353,7 +378,7 @@ export default {
               this.getSuppliers(this.id)
             })
             .catch((err) => {
-              this.$message.error("启用失败" + err)
+              this.$message.error("启用失败" + err.message)
               this.getSuppliers(this.id)
             })
         }
@@ -383,7 +408,7 @@ export default {
           }
         })
         .catch((err) => {
-          this.$message.error("获取详情失败" + err)
+          this.$message.error("获取详情失败" + err.message)
         })
       },
       // 创建拣货分区
@@ -393,11 +418,11 @@ export default {
           if (valid) {
             if (this.status === 'create') {
               // 创建新的拣货分区的按钮
-              const reg = /^([1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[,]+[1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[-]+[1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[(]+[1-9]+\/[1-9]+[)]+)$/;
-              if (!reg.test(this.form.binScope)) {
-                this.$message.error("满足格式10、10(1/2)、10-20，多个以逗号隔开");
-                return false;
-              }
+              // const reg = /^([1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[,]+[1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[-]+[1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[(]+[1-9]+\/[1-9]+[)]+)$/;
+              // if (!reg.test(this.form.binScope)) {
+              //   this.$message.error("满足格式10、10(1/2)、10-20，多个以逗号隔开");
+              //   return false;
+              // }
               this.form.storageList = this.storageList;
               SortdivisionService.createSuppliers(this.form)
               .then(res => {
@@ -422,7 +447,7 @@ export default {
                 this.$router.go(-1)
               })
               .catch(err => {
-                this.$message.error("更新失败" + err)
+                this.$message.error("更新失败" + err.message)
               })
             }
           } else {
@@ -563,7 +588,7 @@ export default {
   }
   .shuttle {
     width: 100%;
-    height: 510px;
+    height: 530px;
     display: flex;
     justify-content: space-between;
     border: 1px solid #eee;

@@ -33,7 +33,17 @@
                 <el-table-column prop="name" label="名称"></el-table-column>
                 <el-table-column prop="binScope" label="货位范围">
                     <template slot-scope="scope">
-                        {{ scope.row.binScope}}
+                        {{ scope.row.binScope }}
+                    </template>
+                </el-table-column>
+                <el-table-column prop="stockType" label="存储类型">
+                    <template slot-scope="scope">
+                        {{ scope.row.stockType }}
+                    </template>
+                </el-table-column>
+                <el-table-column prop="putawayRule" label="上架规则">
+                    <template slot-scope="scope">
+                        {{ scope.row.putawayRule }}
                     </template>
                 </el-table-column>
                 <el-table-column
@@ -86,11 +96,11 @@ export default {
       // 调用删除的接口,然后分页查询的接口重新渲染页面
       SortdivisionService.deleteData(id, version)
       .then((res) => {
-        _this.$message.error("删除成功")
+        _this.$message.success("删除成功")
         _this.getSuppliersList();
       }).catch((err) => {
         if (err === "") {
-          _this.$message.error("删除成功")
+          _this.$message.success("删除成功")
         } else {
           _this.$message.error("删除失败" + err.message)
         }
@@ -170,19 +180,19 @@ export default {
           _this.totalCount = res.totalCount;
           for (var i = 0; i < res.records.length; i++) {
             // 数组循环后,将过去到的值,全部放在suppliersData这个数组中,我要模拟数据也要使用这个数组
-            const obj = {
-              // 码头的id
-              id: res.records[i].id,
-              // 代码
-              code: res.records[i].code,
-              name: res.records[i].name,
-              version: res.records[i].version,
-              status: res.records[i].status,
-              orgId: res.records[i].orgId,
-              binScope: res.records[i].binScope
-            }
+            // const obj = {
+            //   // 码头的id
+            //   id: res.records[i].id,
+            //   // 代码
+            //   code: res.records[i].code,
+            //   name: res.records[i].name,
+            //   version: res.records[i].version,
+            //   status: res.records[i].status,
+            //   orgId: res.records[i].orgId,
+            //   binScope: res.records[i].binScope
+            // }
             // 获取数据后,存到自己的数组里面
-            _this.suppliersData.push(obj);
+            _this.suppliersData.push(res.records[i]);
             // 将数组反向
           }
         })
@@ -197,6 +207,11 @@ export default {
         this.page = 1
         this.getSuppliersList()
       }
+  },
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+     vm.getSuppliersList();
+    })
   },
   created() {
     this.getSuppliersList();
