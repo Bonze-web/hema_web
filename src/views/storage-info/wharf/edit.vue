@@ -19,7 +19,7 @@
             </div>
             <div>
                 <el-button @click="back">返回</el-button>
-                <el-button type="primary" @click="editSupplier">编辑</el-button>
+                <el-button type="primary" v-if="hasPermission(PermIds.PRODUCT_PRODUCT_ENABLE) && workingOrg.type=== 'GROUP'" @click="editSupplier">编辑</el-button>
             </div>
         </div>
         <div style="height:20px" />
@@ -94,12 +94,13 @@
 </template>
 
 <script>
-// import { mapGetters } from "vuex";
+import { mapGetters } from "vuex";
 import WharfService from "@/api/service/WharfService";
-
+import PermIds from "@/api/permissionIds";
 export default {
   data() {
       return {
+        PermIds: PermIds,
         status: '', // 页面状态
         id: '', 
         tabActiveName: 'suppliers', // tab栏名称
@@ -127,7 +128,7 @@ export default {
       }
     },
     computed: {
-
+       ...mapGetters(["hasPermission", "workingOrg"])
     },
     methods: {
       levelChange() {

@@ -108,11 +108,13 @@
 <script>
 // 引入公共模块
 import WharfService from "@/api/service/WharfService";
+import PermIds from "@/api/permissionIds";
 import { mapGetters } from "vuex";
 
 export default {
   data() {
       return {
+        PermIds: PermIds,
         suppliersId: '',
         page: 1,
         pageSize: 10,
