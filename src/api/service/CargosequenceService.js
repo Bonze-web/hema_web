@@ -8,27 +8,54 @@ export default {
   * @param {int} pageSize
   * @param {int} page
   */
-  // 一开始我就要请求的接口
-  // 分页的接口请求
-  getSuppliersList(postData) {
-    // return request.post('/wms/storagearea/query', param)
-    // return request.get('/wms/storagearea/query', param)
-    return request.get('/wms/pickarea/query', {params: postData})
+  requestNewProjectsList(postData) {
+    return request.post('/wms/pickOrder/create', postData)
   },
-  /**
-   * 获取详情
-   */
-  getSuppliersDetail(id) {
-    // return request.get('/wms/storagearea/getDetail?id=' + id)
-    // return request.get('/wms/storagearea/getDetail?id=' + id)
-    return request.get('/wms/pickarea/getDetail?id=' + id)
+  searchData(postData) {
+    return request.post('/wms/pickOrder/query', postData)
   },
-  /**
-   * 创建新的码头的按钮
-   */
   createSuppliers(postData) {
-    // return request.post('/wms/storagearea/create', param)
     return request.post('/wms/pickarea/create', postData)
+  },
+  getAllPickOrder() {
+    return request.get('/wms/pickOrder/getAllPickOrder');
+  },
+  getAllGrpByPickId(id) {
+    return request.get('/wms/pickOrder/getAllGrpByPickId?id=' + id);
+  },
+  getAllStoreByGrpId(id) {
+    return request.get('/wms/pickOrder/getAllStoreByGrpId?id=' + id);
+  },
+  getById(id) {
+    return request.get('/wms/pickOrder/getById?id=' + id);
+  },
+  getGrpById(id) {
+    return request.get('/wms/pickOrder/getGrpById?id=' + id);
+  },
+  getItemById(id) {
+    return request.get('/wms/pickOrder/getItemById?id=' + id);
+  },
+  deleteItem(id, version) {
+    return request.delete('/wms/pickOrder/deleteItem?id=' + id + "&version" + version);
+  },
+  // 修改调序
+  postAdjustOrder(postData) {
+    return request.post('/wms/pickOrder/adjustOrder', postData)
+  },
+  createGrp(postData) {
+    return request.post('/wms/pickOrder/createGrp', postData)
+  },
+  updateScheme(postData) {
+    return request.post('/wms/pickOrder/update', postData)
+  },
+  updateGrpScheme(postData) {
+    return request.post('/wms/pickOrder/updateGrp', postData)
+  },
+  queryItem(postData) {
+    return request.post('/wms/pickOrder/queryItem', postData)
+  },
+  addGrpItems(postData) {
+    return request.post('/wms/pickOrder/addGrpItems', postData)
   },
   /**
    * 启用状态

@@ -2,7 +2,7 @@
     <div>
         <div class="head" v-if="status === 'create' || status === 'edit'">
             <div style="margin-top:8px" v-if="status === 'create'">新建拣货分区</div>
-            <div style="margin-top:8px" v-else>编辑</div>
+            <div style="margin-top:8px" v-else>编辑拣货分区</div>
             <div>
                 <el-button @click="back">取消</el-button>
                 <el-button type="primary" @click="createSuppliers">确认</el-button>
@@ -22,7 +22,7 @@
         <div class="info-content" v-if="status === 'create' || status === 'edit'">
             <div>
                 <template>
-                    <el-tabs v-model="tabActiveName">
+                    <el-tabs value="suppliers">
                         <el-tab-pane label="拣货分区" name="suppliers">
                             <div class="info-title">基本信息</div>
                              <el-form :model="form" :rules="createRules" ref="form" label-width="100px" class="demo-ruleForm">
@@ -68,17 +68,44 @@
                                 <div>{{ suppliersInfo.binScope }}</div>
                             </el-col>
                         </el-tab-pane>
+                    <el-tab-pane label="操作日志" name="operational">
+                          <system-log :modular="'PICKAREA'"></system-log>
+                    </el-tab-pane>
                     </el-tabs>
                 </template>
             </div>
         </div>
-        <!-- 下面是添加存储分区的顺序页面 -->
         <div style="height:20px;background:#fff" />
-        <div style="background:#fff" class="table-index">
+        <div style="background:#fff" class="table-index" v-if="status === 'read' && tabActiveName === 'suppliers'">
           <el-row>
-             <el-button style="margin:18px 10px" type="primary" size="mini" @click="clickstoredContentChange"><span class="iconfont iconplus-fill" style="font-size:12px;"></span> 新建</el-button>
+              <div style="padding:15px">
+                对应存储分区
+              </div>
           </el-row>
           <el-table
+              :data="storageListRead"
+              style="width: 100%;text-align:center"
+          >
+            <el-table-column prop="name" label="存储分区">
+                <template slot-scope="scope">
+                    <span style="color:#409EFF">{{ scope.row.name }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column prop="orderNumber" label="顺序">
+                <template slot-scope="scope">
+                    {{ scope.row.orderNumber}}
+                </template>
+            </el-table-column>
+          </el-table>
+        </div>
+        <!-- 下面是添加存储分区的顺序页面 -->
+        <div style="height:20px;background:#fff" />
+        <div style="background:#fff" class="table-index" v-if="status === 'create' || status === 'edit'">
+          <el-row>
+            <el-button style="margin:18px 10px" type="primary" size="mini" @click="clickstoredContentChange"><span class="iconfont iconplus-fill" style="font-size:12px;"></span> 新建</el-button>
+          </el-row>
+          <el-table
+              lable="存储"
               :data="storageList"
               style="width: 100%;text-align:center"
           >
@@ -166,7 +193,6 @@
               <el-button type="primary" @click="leftHandleComfirm">确 定</el-button>
             </div>
         </el-dialog>
-
         <el-dialog title="存储方案调序" :visible.sync="dialogFormVisible">
           <el-form :model="form">
             <el-form-item label="存储方案:" >
@@ -191,13 +217,12 @@
 </template>
 
 <script>
-// import { mapGetters } from "vuex";
 import SortdivisionService from "@/api/service/SortdivisionService";
-
+import systemLog from "@/components/systemLog.vue"
 export default {
   data() {
       return {
-        operationalData: [],
+        storageListRead: [],
         tabActiveName: "suppliers",
         time: false,
         dialogFormVisible: false,
@@ -216,6 +241,7 @@ export default {
         },
         status: '', // 页面状态
         id: '', 
+        materials: [],
         // 弹出来的存储选项 start
         leftSelect: [],
         leftSelected: [],
@@ -258,9 +284,6 @@ export default {
         }
       }
     },
-    computed: {
-
-    },
     methods: {
       getRowKeys(row) {
         return row.id
@@ -278,11 +301,20 @@ export default {
       },
       leftHandleComfirm() {
         this.establish = false;
-        this.storageList = [];
-        this.leftSelect.forEach((ele, idx) => {
-          this.storageList.push({storageId: ele.id, name: ele.name, orderNumber: idx + 1, code: ele.code});
-        })
-        console.log(this.storageList);
+        const lenthRecodes = this.storageList.length;
+        console.log(this.leftSelect);
+        if (this.storageList.length > 0) { 
+          this.storageList.push(...this.leftSelect)
+          const newobj = {}; 
+          this.storageList = this.storageList.reduce((preVal, curVal) => {
+            newobj[curVal.id] ? '' : newobj[curVal.id] = preVal.push(curVal); 
+            return preVal 
+          }, [])
+        } else {
+          this.leftSelect.forEach((ele, idx) => {
+            this.storageList.push({id: ele.id, storageId: ele.id, name: ele.name, orderNumber: lenthRecodes + idx + 1, code: ele.code, version: ele.version});
+          })
+        }
         this.$refs.multipleTable.clearSelection();
       },
       storedContentChange() {
@@ -298,7 +330,7 @@ export default {
           this.storedContent = res.records;
           this.storedContentTotalCount = res.totalCount;
         }).catch((err) => {
-          this.$message.error("获取存储信息失败" + err.message)
+          this.$message.error("获取存储信息失败" + err)
         })
       },
       // 通过后台获取存储分区的内容 end
@@ -373,17 +405,11 @@ export default {
         // 如果是只读的模式,就要调取后台的数据,将数据渲染到页面上
         SortdivisionService.getSuppliersDetail(id)
         .then((res) => {
-          this.suppliersInfo = res
-          // 根据状态修改供应商开启switch
-          // 首先是根据数据去修改名字后面的两个按钮
-          if (this.suppliersInfo.status === "OPEN") {
-            this.suppliersInfo.status = true
-          } else {
-            this.suppliersInfo.status = false
-          }
+          this.suppliersInfo = res.data;
+          this.storageListRead = this.suppliersInfo.storageList;
         })
         .catch((err) => {
-          this.$message.error("获取详情失败" + err)
+          this.$message.error("获取详情失败" + err.message)
         })
       },
       // 创建拣货分区
@@ -405,16 +431,11 @@ export default {
                 this.$router.go(-1)
               })
               .catch(err => {
-                this.$message.error("创建失败" + err.message)
+                this.$message.error("创建失败" + err)
               })
             } else {
-              console.log(this.form, this.form.status);
               // 因为提交的时候,需要传递状态值,所以先转换一下,这里是编辑
-              if (this.form.status) {
-                this.form.status = "OPEN"
-              } else {
-                this.form.status = "CLOSED"
-              }
+              this.form.storageList = this.storageList;
               SortdivisionService.updateSupplier(this.form)
               .then(res => {
                 console.log(res)
@@ -422,7 +443,7 @@ export default {
                 this.$router.go(-1)
               })
               .catch(err => {
-                this.$message.error("更新失败" + err)
+                this.$message.error("更新失败" + err.message)
               })
             }
           } else {
@@ -435,6 +456,7 @@ export default {
         this.status = "edit"
         // 这个form肯定就是编辑页面的数据,suppliersInfo是前一个页面传递过来的数据
         // 传递的是form是用户填写的数据
+        this.storageList = this.storageListRead;
         this.form = Object.assign(this.form, this.suppliersInfo)
       },
       // 弹出界面的方法
@@ -464,8 +486,8 @@ export default {
     created() {
       this.getQueryStatus();
     },
-    filters: {
-    
+    components: {
+      "system-log": systemLog
     }
 };
 </script>

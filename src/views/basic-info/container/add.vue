@@ -72,17 +72,17 @@ export default {
           startCode: ''
         },
         createRules: {
-          // containerTypeId: [
-          //   { required: true, message: '请输入容器类型', trigger: 'blur' },
-          //   { required: true, max: 16, message: '最多输入16位', trigger: 'change' }
-          // ],
+          containerTypeId: [
+            { required: true, message: '请选择容器类型', trigger: 'blur' }
+            // { required: true, max: 16, message: '最多输入16位', trigger: 'change' }
+          ],
           num: [
             { required: true, message: '请输入容器数量', trigger: 'blur' },
-            { pattern: /^\d{1,6}(\.\d+)?$/, message: '请输入1-6之间的数字', trigger: 'change' }
+            { required: true, max: 6, message: '请输入1-6之间的数字', trigger: 'change' }
           ],
           prefix: [
             { required: true, message: '请输入前缀', trigger: 'blur' },
-            { required: true, max: 4, message: '请输入1-4为之间的数字', trigger: 'change' }
+            { required: true, max: 4, message: '请输入1-4位前缀', trigger: 'change' }
           ],
           startCode: [
             { required: true, message: '请输入起始条码段', trigger: 'blur' },

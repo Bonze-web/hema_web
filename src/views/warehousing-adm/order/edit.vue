@@ -3,11 +3,11 @@
         <div class="head">
             <div class="head-title">
                 <div style="margin:8px">入库订单{{ dataList.barcode  }}</div>
-                <div style="margin:11px 0 5px 0; font-size: 12px; color: #999">状态{{ state }}</div>
+                <div style="margin:11px 0 5px 0; font-size: 12px; color: #999">{{ status | setStatus }}</div>
             </div>
             <div>
                 <el-button @click="back">返回</el-button>
-                <el-button type="primary"  @click="printingBtn">打印</el-button>
+                <!-- <el-button type="primary"  @click="printingBtn">打印</el-button> -->
             </div>
         </div>
         <div style="height:20px" />
@@ -88,132 +88,88 @@
                 <template>
                     <el-tabs v-model="tabActiveName">
                         <el-tab-pane label="入库订单" name="category">
-                            <div class="info-title">摘要</div>
+                            <div class="info-title">基本信息</div>
                             <el-col :span="6" class="info-box">
                                 <div>订单类型:</div>
-                                <div>{{ dataList.parentId ? dataList.parentId : "&lt;空&gt;" }}</div>
+                                <div>{{ dataList.srcWay ? dataList.srcWay : "&lt;空&gt;" }}</div>
                             </el-col>
                             <el-col :span="6" class="info-box">
                                 <div>供应商:</div>
-                                <div>供应商 {{ '[' + dataList.useStatus + ']' + dataList.containerTypeName }}</div>
+                                <div>{{ '[' + dataList.vendorId + ']' + dataList.vendorName }}</div>
                             </el-col>
                             <el-col :span="6" class="info-box">
                                 <div>物流方式:</div>
-                                <div>一步越库{{ dataList.storageNumber }}</div>
+                                <div>{{ dataList.isLogisticMode }}</div>
                             </el-col>
                             <el-col :span="6" class="info-box">
-                                <div>仓:</div>
-                                <div>[01]正常仓</div>
+                                <div>入库仓库:</div>
+                                <div>{{ '[' + dataList.wrhId + ']' + dataList.wrhName }}</div>
                             </el-col>
 
                             <el-col :span="6" class="info-box">
-                                <div>收效日期:</div>
-                                <div>{{ dataList.positionCode }}2019-12-31</div>
+                                <div>到效日期:</div>
+                                <div>{{ dataList.expireDate }}</div>
                             </el-col>
 
                             <el-col :span="6" class="info-box">
                                 <div>到货日期:</div>
-                                <div>{{ dataList.toPositionCode ? dataList.toPositionCode : "&lt;空&gt;" }}</div>
+                                <div>{{ dataList.inputTime ? dataList.inputTime : "&lt;空&gt;" }}</div>
                             </el-col>
 
                             <el-col :span="6" class="info-box">
                                 <div>送达日期:</div>
-                                <div>{{ dataList.toPositionCode ? dataList.toPositionCode : "&lt;空&gt;" }}</div>
+                                <div>{{ dataList.endReceiveTime ? dataList.endReceiveTime : "&lt;空&gt;" }}</div>
                             </el-col>
 
                             <el-col :span="6" class="info-box">
-                                <div>来源单:</div>
-                                <div>P202011111111</div>
+                                <div>来源单号:</div>
+                                <div>{{dataList.srcBillNumber}}</div>
                             </el-col>
 
                             <el-col :span="6" class="info-box">
                                 <div>来源方式:</div>
-                                <div>手工创建</div>
+                                <div>{{ srcWay | setSrcWay }}</div>
                             </el-col>
 
                             <el-col class="info-box">
                                 <div>备注:</div>
-                                <div>备注备注备注备注备注备注备注备注备注备注备注{{ "&lt;空&gt;" }}</div>
+                                <div>{{ dataList.remark ? dataList.remark : "&lt;空&gt;" }}</div>
                             </el-col>
 
 
                             <el-col>
                                 <div  class="info-title title">子容器</div>
                             </el-col>
+                            <el-input type="text" placeholder="请输入商品编号" class="input-width" ></el-input>
+                            <el-button type="primary" v-model="search" size="mini" @click="onSubmit" >立即搜索</el-button>
 
                             <div style="height:20px" />
 
-                            <el-table :data="dataList.sonList" style="width: 100%; text-align: center" :row-style="{ height: '16px', padding: '-4px' }" >
+                            <el-table :data="dataList.orderBillItems" style="width: 100%; text-align: center" :row-style="{ height: '16px', padding: '-4px' }" >
 
-                            <el-table-column prop="a" label="行" style="height: 20px">
-                              <template slot-scope="scope">
-                                  <span>行{{ scope.row.a }}</span>
-                              </template>
-                            </el-table-column>
+                              <el-table-column type="index" label="序号"></el-table-column>
 
-                            <el-table-column prop="b" label="商品/商品规格" style="height: 20px">
-                              <template slot-scope="scope">
-                                  <span>商品/商品规格{{ scope.row.b }}</span>
-                              </template>
-                            </el-table-column>
+                              <el-table-column prop="billNumber" label="商品编码" style="height: 20px"></el-table-column>
 
-                            <el-table-column prop="b" label="规格/计量单位" style="height: 20px">
-                              <template slot-scope="scope">
-                                  <span>规格/计量单位{{ scope.row.b }}</span>
-                              </template>
-                            </el-table-column>
+                              <el-table-column prop="productName" label="商品名称" style="height: 20px"></el-table-column>
 
-                            <el-table-column prop="b" label="单价" style="height: 20px">
-                              <template slot-scope="scope">
-                                  <span>单价{{ scope.row.b }}</span>
-                              </template>
-                            </el-table-column>
+                              <el-table-column prop="munit" label="单位" style="height: 20px"></el-table-column>
 
-                            <el-table-column prop="b" label="件数" style="height: 20px">
-                              <template slot-scope="scope">
-                                  <span>件数{{ scope.row.b }}</span>
-                              </template>
-                            </el-table-column>
+                              <el-table-column prop="spec" label="规格" style="height: 20px"></el-table-column>
 
-                            <el-table-column prop="b" label="数量" style="height: 20px">
-                              <template slot-scope="scope">
-                                  <span>数量{{ scope.row.b }}</span>
-                              </template>
-                            </el-table-column>
+                              <el-table-column prop="qtystr" label="应收件数" style="height: 20px"></el-table-column>
 
-                            <el-table-column prop="b" label="收货件数" style="height: 20px">
-                              <template slot-scope="scope">
-                                  <span>收货件数{{ scope.row.b }}</span>
-                              </template>
-                            </el-table-column>
+                              <el-table-column prop="qty" label="应收数量" style="height: 20px"></el-table-column>
 
-                            <el-table-column prop="b" label="收货数量" style="height: 20px">
-                              <template slot-scope="scope">
-                                  <span>收货数量{{ scope.row.b }}</span>
-                              </template>
-                            </el-table-column>
+                              <el-table-column prop="receivedQtystr" label="实收件数" style="height: 20px"></el-table-column>
 
-                            <el-table-column prop="b" label="拒收件数" style="height: 20px">
-                              <template slot-scope="scope">
-                                  <span>拒收件数{{ scope.row.b }}</span>
-                              </template>
-                            </el-table-column>
+                              <el-table-column prop="receivedQty" label="实收数量" style="height: 20px"></el-table-column>
 
-                            <el-table-column prop="b" label="拒收数量" style="height: 20px">
-                              <template slot-scope="scope">
-                                  <span>拒收数量{{ scope.row.b }}</span>
-                              </template>
-                            </el-table-column>
+                              <el-table-column prop="rejectQtystr" label="拒收件数" style="height: 20px"></el-table-column>
 
-                            <el-table-column prop="b" label="供应商" style="height: 20px">
-                              <template slot-scope="scope">
-                                  <span>供应商{{ scope.row.b }}</span>
-                              </template>
-                            </el-table-column>
+                              <el-table-column prop="rejectQty" label="拒收数量" style="height: 20px"></el-table-column>
 
-                          </el-table>
-
-
+                            </el-table>
                         </el-tab-pane>
 
                         <!-- <el-tab-pane label="操作日志" name="active">
@@ -252,20 +208,20 @@
 </template>
 
 <script>
-// import BasicService from "@/api/service/BasicService";
+import WarehousingAdmServers from "@/api/service/WarehousingAdmServers";
 
 export default {
   data() {
       return {
-        state: '', // 状态
+        srcWay: 'MANUAL',
+        status: 'INITIAL', // 页面状态
         tabActiveName: 'category', // tab栏名称
-        active: 'ccc',
-        status: '', // 页面状态
-        form: {
-          remark: 'pppppppppppppppppppppppp'
-        },
         id: '', // 货位类别ID
-        dataList: {} // 详情数据
+        search: '', // 搜索
+        dataList: {
+          orderBillItems: [
+          ]
+        } // 详情数据
       }
     },
     computed: {
@@ -275,20 +231,63 @@ export default {
         this.$store.dispatch("tagsView/delView", this.$route);
         this.$router.go(-1)
       },
+      onSubmit() {
+        if (this.search === '') return;
+
+        // WarehousingAdmServers.getByIdOrderBill(this.search)
+        // .then(res => {
+        //   console.log(res)
+        // })
+        // .catch(err => {
+        //   this.$message.error("查询失败")
+        // });
+      },
+      getByIdOrderBill() {
+        this.id = this.$route.query.id;
+
+        WarehousingAdmServers.getByIdOrderBill(this.id)
+        .then(res => {
+          console.log(res)
+        })
+        .catch(err => {
+          this.$message.error("查询失败" + err.message)
+        });
+      },
       printingBtn() {
         this.$message.error("打印功能还未开通")
       }
     },
     created() {
-      // this.getQueryStatus()
+      // this.getByIdOrderBill()
     },
     filters: {
-      dcStatus(status) {
+      setSrcWay(srcWay) {
+        switch (srcWay) {
+          case 'MANUAL':
+            return "手工"
+          case 'API':
+            return "接口导入"
+          case 'EXCEL ':
+            return "文件导入"
+          default:
+            return '未知';
+        }
+      },
+      setStatus(status) {
+        // 状态。INITIAL:初始，ARRIVED:已到货登记，QUALITY:已质检，RECEIVING:进行中，FINISHED:已完成，ABORTED:已取消
         switch (status) {
-          case 'ON':
-            return "已使用"
-          case 'OFF':
-            return "未使用"
+          case 'INITIAL':
+            return "初始"
+          case 'ARRIVED':
+            return "已到货登记"
+          case 'QUALITY ':
+            return "已质检"
+          case 'RECEIVING':
+            return "进行中"
+          case 'FINISHED':
+            return "已完成"
+          case 'ABORTED':
+            return "已取消"
           default:
             return '未知';
         }

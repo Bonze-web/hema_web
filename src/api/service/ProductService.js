@@ -329,5 +329,11 @@ export default {
    */
   updateDcProductQpc(postData) {
     return request.post('/product/dc/qpc/update', postData);
+  },
+  /**
+   * 查找商品库存
+   */
+  getAllStock(data) {
+    return request.get('/api/stock/query', {params: data})
   }
 }

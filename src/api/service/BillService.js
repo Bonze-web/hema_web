@@ -29,6 +29,30 @@ export default {
         return request.post('/wms/decinvbill/getDetail?id=' + id)
     },
     /**
+     * 请求溢余单列表
+     */
+    getOverflowBillList(data) {
+        return request.get('/wms/incinv/query', {params: data})
+    },
+    /**
+     * 新建溢余单
+     */
+    createOverflowBill(postData) {
+        return request.post('/wms/incinv/create', postData)
+    },
+    /**
+     * 修改溢余单
+     */
+    updateOverflowBill(postData) {
+        return request.post('/wms/incinv/update', postData)
+    },
+    /**
+     * 请求溢余单详情
+     */
+    getOverflowBillDetail(id) {
+        return request.post('/wms/incinv/getDetail?id=' + id)
+    },
+    /**
      * 搜索报损人
      */
     getDeccer(data) {

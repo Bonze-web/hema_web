@@ -1,5 +1,5 @@
 <template>
-    <div class="table-index">        
+    <div class="table-index _table-index">        
         <div class="select-head">
             <el-form ref="form" style="display:flex" :model="form" label-width="80px" label-position="right">
                 <el-form-item label="储存分区">
@@ -261,5 +261,8 @@ export default {
 .table-index{
 @import "src/styles/mixin.scss";
 @include elTable;
+}
+._table-index .el-table .cell{
+  padding:  7px 0 !important;
 }
 </style>

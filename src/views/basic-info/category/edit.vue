@@ -109,8 +109,10 @@
                                 <div>{{ categoryInfo.remark ? categoryInfo.remark : "&lt;空&gt;" }}</div>
                             </el-col>
                         </el-tab-pane>
-                        <!-- <el-tab-pane label="配送中心范围" name="range">配置管理</el-tab-pane>
-                        <el-tab-pane label="操作日志" name="log">角色管理</el-tab-pane> -->
+                        <!-- <el-tab-pane label="配送中心范围" name="range">配置管理</el-tab-pane> -->
+                        <!-- <el-tab-pane label="操作日志" name="log">
+                          <system-log modular="LOSSTYPE"></system-log>
+                        </el-tab-pane> -->
                     </el-tabs>
                 </template>
             </div>
