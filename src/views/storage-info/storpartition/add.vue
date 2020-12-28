@@ -126,7 +126,7 @@ export default {
             this.getSuppliers(this.id)    
           })
           .catch((err) => {
-            this.$message.error("禁用失败" + err)
+            this.$message.error("禁用失败" + err.message)
             this.getSuppliers(this.id)
           })
         } else {
@@ -135,7 +135,7 @@ export default {
               this.getSuppliers(this.id)
             })
             .catch((err) => {
-              this.$message.error("启用失败" + err)
+              this.$message.error("启用失败" + err.message)
               this.getSuppliers(this.id)
             })
         }
@@ -168,7 +168,7 @@ export default {
           }
         })
         .catch((err) => {
-          this.$message.error("获取详情失败" + err)
+          this.$message.error("获取详情失败" + err.message)
         })
       },
       // 创建拣货分区
