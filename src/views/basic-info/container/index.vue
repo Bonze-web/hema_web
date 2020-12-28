@@ -42,7 +42,7 @@
 
         <el-form-item label="容器类型：">
           <el-select v-model="form.containerTypeCodeEquals" placeholder="请选择容器类型">
-            <el-option v-for="(item, index) in containerType" :key="index" :label="item.name" :value="item.id"></el-option>
+            <el-option v-for="(item, index) in containerType" :key="index" :label="item.name" :value="item.code"></el-option>
           </el-select>
         </el-form-item>
 
