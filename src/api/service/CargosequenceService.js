@@ -20,8 +20,8 @@ export default {
   getAllPickOrder() {
     return request.get('/wms/pickOrder/getAllPickOrder');
   },
-  getAllGrpByPickId(id) {
-    return request.get('/wms/pickOrder/getAllGrpByPickId?id=' + id);
+  getAllGrpByPickId(pickOrderId) {
+    return request.get('/wms/pickOrder/getAllGrpByPickId?pickOrderId=' + pickOrderId);
   },
   getAllStoreByGrpId(id) {
     return request.get('/wms/pickOrder/getAllStoreByGrpId?id=' + id);

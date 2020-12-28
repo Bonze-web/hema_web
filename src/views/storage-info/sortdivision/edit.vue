@@ -585,7 +585,7 @@ export default {
   }
   .shuttle {
     width: 100%;
-    height: 510px;
+    height: 530px;
     display: flex;
     justify-content: space-between;
     border: 1px solid #eee;

@@ -206,7 +206,7 @@ export default {
                 this.$router.go(-1)
               })
               .catch(err => {
-                this.$message.error("创建失败" + err)
+                this.$message.error("创建失败" + err.message)
               })
             } else {
               console.log(this.form, this.form.status);
@@ -225,7 +225,7 @@ export default {
               })
               .catch(err => {
                 console.log(err);
-                this.$message.error("更新失败" + err)
+                this.$message.error("更新失败" + err.message)
               })
             }
           } else {
