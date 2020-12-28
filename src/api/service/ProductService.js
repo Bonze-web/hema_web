@@ -334,6 +334,6 @@ export default {
    * 查找商品库存
    */
   getAllStock(data) {
-    return request.get('/api/stock/query', {params: data})
+    return request.get('/stock/query', {params: data})
   }
 }
