@@ -4,7 +4,7 @@
         <div class="">
             <el-form ref="form" style="display:flex;flex-wrap:wrap" :model="form" label-width="80px" label-position="right">
                 <el-form-item label="商品">
-                    <el-input type='text' placeholder="请输入商品编号/名称" v-model="form.productId" class="input-width"></el-input>
+                    <el-input type='text' placeholder="请输入商品编号/名称" v-model="form.productNameOrCode" class="input-width"></el-input>
                 </el-form-item>
                 <el-form-item label="货位">
                     <el-input type='text' placeholder="请输入货位编号" v-model="form.binCode" class="input-width"></el-input>
@@ -63,10 +63,11 @@ export default {
       return {
         PermIds: PermIds,
         form: {
-            productId: '',
+            productNameOrCode: '',
             binCode: '',
             containerBarcode: '',
-            statusEquals: 'ON'
+            statusIn: 'NORMAL',
+            searchCount: true
         },
         page: 1,
         pageSize: 10,
@@ -90,10 +91,11 @@ export default {
     },
     clearInput: function() {
       this.form = {
-        productId: '',
+        productNameOrCode: '',
         binCode: '',
         containerBarcode: '',
-        statusEquals: 'ON'
+        statusIn: 'NORMAL',
+        searchCount: true
       }
       this.onSelect()
     },
@@ -116,11 +118,13 @@ export default {
       this.multipleSelection = val;
     },
     onSelect: function() {
-      if (this.form.productId || this.form.binCode || this.form.containerBarcode) {
+      if (this.form.productNameOrCode || this.form.binCode || this.form.containerBarcode) {
         console.log(1)
+        this.form.page = this.page
+        this.form.pageSize = this.pageSize
         ProductService.getAllStock(this.form)
         .then((result) => {
-          
+          this.productList = result.records
         }).catch((err) => {
           this.$message.error('获取商品列表失败' + err.message)
         });
