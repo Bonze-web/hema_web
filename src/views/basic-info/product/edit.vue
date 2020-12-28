@@ -388,7 +388,7 @@
                     <product-spec-select v-else :specValue.sync="scope.row.qpcStr" :productId="id"></product-spec-select>
                     <!-- <el-select v-else v-model="scope.row.qpcStr" placeholder="请选择">
                       <el-option v-for="item in specList" :key="item.id" :label="item.qpcStr" :value="item.qpcStr"></el-option>
-                    </el-select> -->
+                    </el-select>-->
                   </template>
                 </el-table-column>
                 <el-table-column label="操作">
@@ -513,9 +513,7 @@
             </el-col>
             <el-col :span="6" class="info-box" v-if="businessForm.settleUnit === 'WEIGHT'">
               <el-form-item label="标准规格" prop="settleQpcStr">
-                <el-select v-model="businessForm.settleQpcStr" placeholder="请选择">
-                  <el-option v-for="item in specList" :key="item.id" :label="item.qpcStr" :value="item.qpcStr"></el-option>
-                </el-select>
+                <product-spec-select :specValue.sync="businessForm.settleQpcStr" :productId="id"></product-spec-select>
               </el-form-item>
             </el-col>
             <el-col :span="6" class="info-box" v-if="businessForm.settleUnit === 'WEIGHT'">
