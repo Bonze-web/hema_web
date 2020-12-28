@@ -347,8 +347,12 @@
                 </el-table-column>
                 <el-table-column prop="defaultQpcStr" label="默认规格">
                   <template slot-scope="scope">
-                    <el-button type="text" v-if="scope.row.id && !scope.row.isEdit && workingOrg.type === 'GROUP'" @click="setDefaultProductQpc(scope.row)">设为默认</el-button>
-                    <span v-else>{{ scope.row.defaultQpcStr | filterBoolean}}</span>
+                    <div v-show="(scope.row.isEdit || scope.row.defaultQpcStr) || workingOrg.type !== 'GROUP'">
+                      <span>{{ scope.row.defaultQpcStr | filterBoolean}}</span>
+                    </div>
+                    <div v-show="!((scope.row.isEdit || scope.row.defaultQpcStr) || workingOrg.type !== 'GROUP')">
+                      <el-button type="text" :disabled="!scope.row.id" @click="setDefaultProductQpc(scope.row)">设为默认</el-button>
+                    </div>
                   </template>
                 </el-table-column>
                 <el-table-column prop="plateAdvice" label="装盘建议" v-if="workingOrg.type !== 'GROUP'">
@@ -963,6 +967,7 @@ export default {
       ProductService.setDefaultProductQpc(val.id)
         .then(res => {
           self.$message.success("设置成功");
+          self.getProductSpec();
         })
         .catch(err => {
           this.$message.error("查询失败" + err.message);
@@ -1459,6 +1464,7 @@ export default {
       ProductService.setReceiveDefault(val.id)
         .then(res => {
           self.$message.success("设置首选收货成功");
+          self.getProductVendor();
         })
         .catch(err => {
           this.$message.error("设置失败" + err.message);
@@ -1469,6 +1475,7 @@ export default {
       ProductService.setReturnDefault(val.id)
         .then(res => {
           self.$message.success("设置首选退货成功");
+          self.getProductVendor();
         })
         .catch(err => {
           this.$message.error("设置失败" + err.message);
