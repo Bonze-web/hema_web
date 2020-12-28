@@ -38,7 +38,8 @@
               <el-row :gutter="20">
                 <el-col :span="6" class="info-box">
                   <el-form-item label="代码" prop="code">
-                    <el-input v-model="form.code"></el-input>
+                    <span>{{form.code}}</span>
+                    <!-- <el-input v-model="form.code"></el-input> -->
                   </el-form-item>
                 </el-col>
                 <el-col :span="6" class="info-box">
