@@ -2,7 +2,7 @@
     <div class="table-index _table-index">        
         <div class="select-head">
             <el-form ref="form" style="display:flex" :model="form" label-width="80px" label-position="right">
-                <el-form-item label="储存分区">
+                <el-form-item label="存储分区">
                     <!-- 输入码头的id,方便后面的查找,查找和一开始获取数据的接口是同一个 -->
                     <el-input type='text' placeholder="请输入代码/名称" v-model="form.nameOrCode" class="input-width"></el-input>
                 </el-form-item>
@@ -197,8 +197,7 @@ export default {
       },
       // 向后台请求数据,这里是查询功能和一开始就调取数据列表
       getSuppliersList: function(reset) {
-        // 请求码头的数据
-        const _this = this;    
+        // 请求码头的数据   
         // 将当前组件的实例记录起来，这些都是我在data中自己写的数据
         const data = {
           codeOrNameEquals: this.form.nameOrCode || null,
@@ -209,9 +208,10 @@ export default {
         // 获取数据,然后将自己组件中的数据发送到后台
         StorpartitionService.getSuppliersList(data)
         .then((res) => {
+          console.log(res);
           // 初始化自己定义的数据
-          _this.suppliersData = [];
-          _this.totalCount = res.totalCount;
+          this.suppliersData = [];
+          this.totalCount = res.totalCount;
             for (var i = 0; i < res.records.length; i++) {
             // 数组循环后,将过去到的值,全部放在suppliersData这个数组中,我要模拟数据也要使用这个数组
             const obj = {
@@ -226,13 +226,14 @@ export default {
               binScope: res.records[i].binScope
             }
             // 获取数据后,存到自己的数组里面
-            _this.suppliersData.push(obj);
+            this.suppliersData.push(obj);
             // 将数组反向
           }
         })
       },
       // 这里是修改当前值的地方
       handleCurrentChange: function(e) {
+        console.log(e);
         this.page = Number(e)
         this.getSuppliersList()
       },

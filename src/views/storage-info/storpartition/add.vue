@@ -6,7 +6,7 @@
             <div>
                 <el-button @click="back">取消</el-button>
                 <el-button type="primary" @click="createSuppliers">确认</el-button>
-                <!-- <el-button type="primary" v-if="status === 'create'">确认并创建</el-button> -->
+                <el-button type="primary" v-if="status === 'create'" @click="createConfirm">确认并创建</el-button>
             </div>
         </div>
         <div class="head" v-if="status === 'read'">
@@ -101,7 +101,7 @@ export default {
           ],
           binScope: [
             { required: true, message: '请填写货位范围', trigger: 'blur' },
-            { required: true, pattern: /^([1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[,]+[1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[-]+[1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[(]+[1-9]+\/[1-9]+[)]+)$/, message: '满足格式10、10(1/2)、10-20，多个以逗号隔开', trigger: 'blur' }
+            { required: true, pattern: /^([1-9a-zA-Z]{1,64}[,]{0,1}){0,64}$|^(([1-9a-zA-Z]+[-]+[1-9a-zA-Z]+){0,64}[1-9a-zA-Z]{0,64}([(]+[1-9]+\/[1-9]+[)]+)?[,]?[1-9a-zA-Z]{0,64}[,]?){0,64}$/, message: '请填写货位范围', trigger: 'blur' }          
           ]
         }
       }
@@ -110,6 +110,22 @@ export default {
 
     },
     methods: {
+      createConfirm() {
+          StorpartitionService.createSuppliers(this.form)
+              .then(res => {
+                this.$message.success("创建成功")
+                this.form = {
+                  code: '',
+                  name: '',
+                  binScope: ''
+                }
+              })
+              .catch(err => {
+                if (err && err.code !== 200) {
+                  this.$message.error("创建失败" + err.message)
+                }
+              })
+      },
       back: function() {
         this.$store.dispatch("tagsView/delView", this.$route);
         this.$router.go(-1);
