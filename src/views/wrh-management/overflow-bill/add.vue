@@ -50,15 +50,14 @@
                                 <div class="info-title">
                                     <div>
                                         商品
-                                    <!-- <router-link @click="batchAddProduct" style="color:#409EFF" :to="{ path: '/wrhmanagement/overflowbill/batchAdd' }"> -->
+                                    <!-- <router-link @click="batchAddProduct" style="color:#409EFF" :to="{ path: '/wrhmanagement/lossbill/batchAdd' }"> -->
                                         <el-button size="mini" type="text" @click="batchAddProduct">批量添加</el-button>
-                                        <el-button size="mini" type="text" @click="AddProduct">单个添加</el-button>
                                     <!-- </router-link> -->
                                     </div>
                                     <div class="list-count">
                                         <div>总数:{{ form.totalQtystr ? form.totalQtystr : 0 }},</div>
-                                        <div>总品相数:{{ form.totalQtystr ? form.totalQtystr : 0 }},</div>
-                                        <div>总金额:{{ form.totalQtystr ? form.totalQtystr : 0 }}</div>
+                                        <div>总品相数:{{ form.totalProductCount ? form.totalProductCount : 0 }},</div>
+                                        <div>总金额:{{ form.totalAmount ? form.totalAmount : 0 }}</div>
                                     </div>
                                 </div>
                                     <el-table
@@ -77,29 +76,29 @@
                                         </el-table-column>
                                         <el-table-column width="100" prop="productName" label="商品"></el-table-column>
                                         <el-table-column width="100" prop="binCode" label="货位"></el-table-column>
-                                        <el-table-column width="100" prop="productCode" label="货位用途"></el-table-column>
+                                        <el-table-column width="100" prop="binUsage" label="货位用途"></el-table-column>
                                         <el-table-column width="100" prop="containerBarcode" label="容器"></el-table-column>
                                         <el-table-column width="100" prop="vendorName" label="供应商"></el-table-column>
                                         <el-table-column width="100" prop="productionBatch" label="批号"></el-table-column>
                                         <el-table-column width="100" prop="productionDate" label="生产日期"></el-table-column>
                                         <el-table-column width="100" prop="validDate" label="到效日期"></el-table-column>
-                                        <el-table-column width="100" prop="qpcStr" label="规格/计量单位"></el-table-column>
-                                        <el-table-column width="100" prop="billType" label="单价"></el-table-column>
+                                        <el-table-column width="100" prop="qpcstr" label="规格/计量单位"></el-table-column>
+                                        <el-table-column width="100" prop="price" label="单价"></el-table-column>
                                         <el-table-column width="100" prop="batch" label="批次"></el-table-column>
                                         <el-table-column width="100" prop="qty" label="可用库存数量"></el-table-column>
-                                        <el-table-column width="100" prop="qtystr" label="溢余件数">
+                                        <el-table-column width="100" prop="consumeQtystr" label="溢余件数">
                                           <template slot-scope="scope">
-                                            <el-input type="number" max="100" @input="calcProduct" size="mini" v-model="scope.row.qtystr"></el-input>
+                                            <el-input type="number" max="100" @change="calcProduct" size="mini" v-model="scope.row.consumeQtystr"></el-input>
                                           </template>
                                         </el-table-column>
-                                        <el-table-column width="100" prop="qty" label="溢余数量">
+                                        <el-table-column width="100" prop="consumeQty" label="溢余数量">
                                           <template slot-scope="scope">
-                                            <el-input type="number" max="100" @input="calcProduct" size="mini" v-model="scope.row.qty"></el-input>
+                                            <el-input type="number" max="100" @change="calcProduct" size="mini" v-model="scope.row.consumeQty"></el-input>
                                           </template>
                                         </el-table-column>
                                         <el-table-column width="100" prop="amount" label="溢余金额">
                                           <template slot-scope="scope">
-                                            {{ scope.row.qtystr + scope.row.qty }}
+                                            {{ (Number(scope.row.consumeQtystr) + Number(scope.row.consumeQty)) * scope.row.price ? (Number(scope.row.consumeQtystr) + Number(scope.row.consumeQty)) * scope.row.price : 0 }}
                                           </template>
                                         </el-table-column>
                                         <el-table-column width="100" prop="remark" label="备注">
@@ -112,26 +111,6 @@
                 </template>
             </div>
         </div>
-
-
-        <!-- 单个新增商品 -->
-        <el-dialog title="收货地址" :visible.sync="dialogFormVisible">
-          <el-form :model="form">
-            <el-form-item label="活动名称" label-width="120px">
-              <el-input v-model="form.name" autocomplete="off"></el-input>
-            </el-form-item>
-            <el-form-item label="活动区域" label-width="120px">
-              <el-select v-model="form.region" placeholder="请选择活动区域">
-                <el-option label="区域一" value="shanghai"></el-option>
-                <el-option label="区域二" value="beijing"></el-option>
-              </el-select>
-            </el-form-item>
-          </el-form>
-          <div slot="footer" class="dialog-footer">
-            <el-button @click="dialogFormVisible = false">取 消</el-button>
-            <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
-          </div>
-        </el-dialog>
     </div>
 </template>
 
@@ -191,7 +170,7 @@ export default {
             { required: true, message: '请选择报损人', trigger: 'blur'}
           ]
         },
-        productList: [{billType: 1}, {}], // 报损商品列表
+        productList: [], // 报损商品列表
         billTypeList: [] // 溢余类型
       }
     },
@@ -200,9 +179,6 @@ export default {
     },
     methods: {
       ...mapActions(["deleteSelection"]),
-      AddProduct: function() {
-        
-      },
       batchAddProduct: function() {
         if (!this.form.wrhId) {
           this.$message.error('请选择仓库')
@@ -216,6 +192,9 @@ export default {
       },
       deleteProduct: function(index) {
         this.deleteSelection(index)
+        const arr = Array.from(new Set(this.productList))
+        this.form.totalProductCount = arr.length
+        this.calcProduct()
       },
       createBill: function(reset) {
         const _this = this
@@ -228,7 +207,15 @@ export default {
           _this.$message.error('请至少添加一个商品')
           return
         } else {
-          this.form.stockList = this.productList
+          this.productList.forEach((item) => {
+            this.form.stockList.push({
+              consumeAmount: item.consumeAmount,
+              lineNum: item.lineNum,
+              consumeQty: item.consumeQty,
+              consumeQtystr: item.consumeQtystr,
+              stockId: item.id
+            })
+          })
         }
         _this.$refs.form.validate(valid => {
           if (valid) {
@@ -270,7 +257,7 @@ export default {
       getAllBillType: function() {
           // 加载单据类型
         const data = {
-          type: 'DECINV'
+          type: 'INCINV'
         }
         BillTypeService.getQueryType(data)
         .then((res) => {
@@ -295,12 +282,27 @@ export default {
         })
       },
       calcProduct: function(productList) {
-        productList.forEach(item => {
-          this.form.realTotalAmount += item.amount
-          this.form.realTotalQtystr += item.qtystr + item.qty
-          this.form.totalAmount += item.amount
-          this.form.totalAmount += item.amount
-          this.form.totalAmount += item.amount
+        this.form.totalAmount = ''
+        this.form.totalQtystr = ''
+        let consumeQtystr = ''
+        let consumeQty = ''
+        this.productList.forEach(item => {
+          item.lineNum = this.productList.indexOf(item) + 1
+          item.consumeAmount = Number(item.consumeQtystr) * item.price + Number(item.consumeQty) * item.price 
+          this.form.realTotalAmount += item.consumeAmount
+          consumeQtystr = Number(consumeQtystr) + Number(item.consumeQtystr)
+          consumeQty = Number(consumeQty) + Number(item.consumeQty)
+          if (consumeQty + consumeQtystr > item.qty) {
+            this.$message.error('请输入符合库存的数据')
+            consumeQtystr = 0
+            consumeQty = 0
+            item.consumeQtystr = 0
+            item.consumeQty = 0
+          }
+          console.log(consumeQty)
+          this.form.totalQtystr = consumeQtystr + '+' + consumeQty
+          this.form.totalAmount = Number(this.form.totalAmount) + Number(item.consumeAmount)
+          console.log(item)
         });
       },
       getUsers: function() {
@@ -324,13 +326,21 @@ export default {
       this.getWrhList()
       this.getUsers()
       this.productList = this.$store.state.bill.multipleSelection
-      console.log(this.$store.state.bill.multipleSelection)
-      this.calcProduct(this.$store.state.bill.multipleSelection)
+      for (const item in this.productList) {
+        this.productList[item].consumeAmount = 0
+        this.productList[item].lineNum = 0
+        this.productList[item].consumeQty = 0
+        this.productList[item].consumeQtystr = 0
+        this.productList[item].stockId = this.productList[item].id
+      }
+      this.calcProduct(this.productList)
     },
     beforeRouteEnter(to, from, next) {
       next(vm => {
         // 通过 `vm` 访问组件实例
-        vm.productList = vm.$store.state.bill.multipleSelection
+        vm.productList = vm.$store.state.bill.multipleSelection.concat(vm.productList)
+        const arr = Array.from(new Set(vm.productList))
+        vm.form.totalProductCount = arr.length
       })
     },
     filters: {
@@ -339,7 +349,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "src/styles/mixin.scss";
+// @import "src/styles/mixin.scss";
 .head{
     background: #fff;
     padding: 15px 12px;
