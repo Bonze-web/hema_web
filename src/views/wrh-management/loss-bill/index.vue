@@ -51,7 +51,7 @@
             <el-row>
               <router-link :to="{ path: '/wrhmanagement/lossbill/add', query:{ status: 'create'} }">
                   <!-- <span v-if="child.meta&&child.meta.title" :title="child.meta.title">{{child.meta.title}}</span> -->
-                  <el-button type="primary" size="mini" v-if="hasPermission(PermIds.PRODUCT_CATEGORY_CREATE)">新建</el-button>
+                  <el-button type="primary" size="mini" @click="createBill" v-if="hasPermission(PermIds.PRODUCT_CATEGORY_CREATE)">新建</el-button>
               </router-link>
             </el-row>
             <el-row style="margin-left:12px">
@@ -112,7 +112,7 @@ import billType from '../../../components/billType.vue';
 import BillTypeService from '@/api/service/BillTypeService'
 import BillService from "@/api/service/BillService";
 import PermIds from "@/api/permissionIds";
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   data() {
@@ -141,6 +141,10 @@ export default {
     ...mapGetters(["hasPermission"])
   },
   methods: {
+    ...mapActions(["clearSelection"]),
+    createBill: function() {
+      this.clearSelection()
+    },
     goBack: function() {
       this.table = false
     },

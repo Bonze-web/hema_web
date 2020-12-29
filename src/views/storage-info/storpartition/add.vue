@@ -110,11 +110,9 @@ export default {
 
     },
     methods: {
-      levelChange() {
-        console.log(this.form)
-      },
       back: function() {
-        this.$router.go(-1)
+        this.$store.dispatch("tagsView/delView", this.$route);
+        this.$router.go(-1);
       },
       statusChange: function() {
         // 这个地方是已经点击了之后传过来的值,本来是打开的,点击之后已经成了false传递到这里,所以应该执行关闭键
@@ -187,7 +185,7 @@ export default {
                 // console.log(res);
                
                 this.$message.success("创建成功")
-                 this.$store.dispatch("tagsView/delView", this.$route);
+                this.$store.dispatch("tagsView/delView", this.$route);
                 this.$router.go(-1)
               })
               .catch(err => {

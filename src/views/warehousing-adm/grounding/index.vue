@@ -59,9 +59,7 @@
 
         <el-table-column prop="billNumber" label="单号" style="height: 20px">
           <template slot-scope="scope">
-            <router-link style="color: #409eff" :to="{ path: '/warehousing-adm/oeder/edit', query:{ id: scope.row.id } }" >
-              <span>{{ scope.row.billNumber }}</span>
-            </router-link>
+            <span>{{ scope.row.billNumber }}</span>
           </template>
         </el-table-column>
 

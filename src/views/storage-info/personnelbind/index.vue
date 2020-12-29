@@ -1,13 +1,18 @@
 <template>
     <div class="table-index _table-index">        
         <div class="select-head">
-            <el-form ref="form" style="display:flex" :model="form" label-width="80px" label-position="right">
-                <el-form-item label="储存分区">
-                    <!-- 输入码头的id,方便后面的查找,查找和一开始获取数据的接口是同一个 -->
-                    <el-input type='text' placeholder="请输入代码/名称" v-model="form.nameOrCode" class="input-width"></el-input>
+            <el-form ref="form" style="display:flex" :model="form" label-width="110px" label-position="right">
+                <el-form-item label="用户">
+                    <el-input type='text' placeholder="请输入代码/名称" v-model="form.usernameLikes" class="input-width"></el-input>
+                </el-form-item>
+                <el-form-item label="主要拣货分区">
+                    <el-input type='text' placeholder="请输入代码/名称" v-model="form.firstCodeOrNameLikes" class="input-width"></el-input>
+                </el-form-item>
+                <el-form-item label="辅助拣货分区">
+                    <el-input type='text' placeholder="请输入代码/名称" v-model="form.secondCodeOrNameLikes" class="input-width"></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" size="mini" @click="onSubmit">立即搜索</el-button>
+                    <el-button type="primary" size="mini" @click="onSubmit">查询</el-button>
                     <el-button size="mini"  @click="clearInput">重置</el-button>
                 </el-form-item>
             </el-form>
@@ -15,9 +20,9 @@
         <div style="height:20px" />
         <div style="background:#fff">
           <el-row>
-            <router-link :to="{ path: '/storageinfo/storpartition/add', query:{ status: 'create'} }">
-            <!-- <span v-if="child.meta&&child.meta.title" :title="child.meta.title">{{child.meta.title}}</span> -->
-            <el-button style="margin:18px 10px" type="primary" size="mini" v-if="hasPermission(PermIds.WMS_STORAGEAREA_CREATE)">新建</el-button>
+            <router-link :to="{ path: '/storageinfo/personnelbind/add', query:{ status: 'create'} }">
+              <!-- <span v-if="child.meta&&child.meta.title" :title="child.meta.title">{{child.meta.title}}</span> -->
+              <el-button style="margin:18px 10px" type="primary" size="mini" v-if="hasPermission(PermIds.WMS_USER_PICKAREA_CREATE)">新建</el-button>
             </router-link>
           </el-row>
             <el-table
@@ -28,23 +33,43 @@
                     type="selection"
                     width="55">
                 </el-table-column> -->
-                <el-table-column prop="code" label="代码">
+                <el-table-column prop="code" label="用户代码">
                     <template slot-scope="scope">
-                        <router-link style="color:#409EFF" :to="{ path: '/storageinfo/storpartition/edit', query:{ status: 'read', id: scope.row.id} }">
-                            <span>{{ scope.row.code }}</span>
-                        </router-link>
+                        <span>{{ scope.row.userId }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="name" label="名称"></el-table-column>
-                <el-table-column prop="binScope" label="货位范围">
+                <el-table-column prop="username" label="用户姓名">
+                  <template slot-scope="scope">
+                        {{ scope.row.username}}
+                    </template>
+                </el-table-column>
+                <el-table-column label="主要拣货分区">
                     <template slot-scope="scope">
-                        {{ scope.row.binScope}}
+                        {{ '[' + scope.row.firstPickareaCode + ']' + scope.row.firstPickareaName}}
+                    </template>
+                </el-table-column>
+                <el-table-column label="主要拣货范围">
+                    <template slot-scope="scope">
+                        {{ scope.row.firstBinscope }}
+                    </template>
+                </el-table-column>
+                <el-table-column label="辅助拣货分区">
+                    <template slot-scope="scope">
+                        {{ '[' + scope.row.secondPickareaCode + ']' + scope.row.secondPickareaName }}
+                    </template>
+                </el-table-column>
+                <el-table-column label="辅助拣货范围">
+                    <template slot-scope="scope">
+                        {{ scope.row.secondBinscope }}
                     </template>
                 </el-table-column>
                 <el-table-column
                 label="操作">
                   <template slot-scope="scope">
-                      <div style="color:#409EFF;cursor:pointer" @click="deleteChange(scope.row.id, scope.row.version)">删除</div>
+                      <!-- <div style="color:#409EFF;cursor:pointer" @click="deleteChange(scope.row.id, scope.row.version)">编辑</div>
+                      <div style="color:#409EFF;cursor:pointer" @click="deleteChange(scope.row.id, scope.row.version)">删除</div> -->
+                    <el-button size="mini" type="text" v-if="hasPermission(PermIds.WMS_USER_PICKAREA_UPDATE)" @click="editChange(scope.row.id)">编辑</el-button>
+                    <el-button size="mini" type="text" v-if="hasPermission(PermIds.WMS_USER_PICKAREA_DELETE)" @click="deleteChange(scope.row.id)">删除</el-button>
                   </template>
                 </el-table-column>
                 <!-- <el-table-column
@@ -73,7 +98,7 @@
 
 <script>
 // 引入公共模块
-import StorpartitionService from "@/api/service/StorpartitionService";
+import PersonnelbindService from "@/api/service/PersonnelbindService";
 import PermIds from "@/api/permissionIds";
 import { mapGetters } from "vuex";
 
@@ -86,8 +111,10 @@ export default {
         pageSize: 10,
         totalCount: 0,
         form: {
-          nameOrCode: '',
-          status: ''
+          usernameLikes: '',
+          firstCodeOrNameLikes: '',
+          secondCodeOrNameLikes: '',
+          searchCount: true
         },
         suppliersData: [],
         multipleSelection: [] // 选择的列表
@@ -97,52 +124,38 @@ export default {
     ...mapGetters(["hasPermission", "workingOrg"])
   },
   methods: {
-    open() {
-        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          });
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });          
-        });
+      editChange(id) {
+        this.$router.push({name: 'PersonnelbindEdit', query: {id: id}});
       },
-    // 删除按钮
-    deleteChange(id, version) {
-      const _this = this;
-      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-             // 调用删除的接口,然后分页查询的接口重新渲染页面
-            StorpartitionService.deleteData(id, version)
-            .then((res) => {
-              _this.$message.success("删除成功")
-              _this.getSuppliersList();
-            }).catch((err) => {
-              if (err === "") {
-                _this.$message.success("删除成功" + err.message)
-              } else {
-                _this.$message.error("删除失败" + err.message)
-              }
-              _this.getSuppliersList();
-            })
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });          
-        });
-    },
-    // 搜索功能
+      // 删除按钮
+      deleteChange(id, version) {
+        const _this = this;
+        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+              // 调用删除的接口,然后分页查询的接口重新渲染页面
+              PersonnelbindService.deleteData(id, version)
+              .then((res) => {
+                _this.$message.success("删除成功")
+                _this.getSuppliersList();
+              }).catch((err) => {
+                if (err === "") {
+                  _this.$message.success("删除成功" + err.message)
+                } else {
+                  _this.$message.error("删除失败" + err.message)
+                }
+                _this.getSuppliersList();
+              })
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消删除'
+            });          
+          });
+      },
+      // 搜索功能
       onSubmit: function() {
         this.page = 1;
         this.$refs.form.validate(result => {
@@ -151,48 +164,12 @@ export default {
           }
         })
       },
-      statusChange: function(status, id, version) {
-      // 修改仓库状态
-      const _this = this;
-      this.$confirm('是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        if (status) {
-          // 禁用
-          StorpartitionService.closeSuppliers(id, version)
-          .then((res) => {
-            _this.$message.success("禁止用成功")
-            _this.getSuppliersList();
-          })
-          .catch((err) => {
-            _this.$message.error("禁用失败" + err.message)
-            _this.getSuppliersList();
-          })
-        } else {
-          // 启用
-          StorpartitionService.openSuppliers(id, version)
-          .then((res) => {
-            _this.$message.success("启用成功")
-            _this.getSuppliersList();
-          })
-          .catch((err) => {
-            _this.$message.error("启用失败" + err.message)
-            _this.getSuppliersList();
-          })
-        }
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消'
-        })        
-      })
-    },
       clearInput: function() {
         this.form = {
-          nameOrCode: '',
-          status: ''
+          usernameLikes: '',
+          firstCodeOrNameLikes: '',
+          secondCodeOrNameLikes: '',
+          searchCount: true
         }
       },
       // 向后台请求数据,这里是查询功能和一开始就调取数据列表
@@ -200,35 +177,18 @@ export default {
         // 请求码头的数据
         const _this = this;    
         // 将当前组件的实例记录起来，这些都是我在data中自己写的数据
-        const data = {
-          codeOrNameEquals: this.form.nameOrCode || null,
-          page: this.page,
-          pageSize: this.pageSize,
-          searchCount: true
-        };
+        this.form.page = this.page;
+        this.form.pageSize = this.pageSize;
         // 获取数据,然后将自己组件中的数据发送到后台
-        StorpartitionService.getSuppliersList(data)
+        PersonnelbindService.getSuppliersList(this.form)
         .then((res) => {
+          console.log(res);
           // 初始化自己定义的数据
-          _this.suppliersData = [];
+          _this.suppliersData = res.records;
           _this.totalCount = res.totalCount;
-            for (var i = 0; i < res.records.length; i++) {
-            // 数组循环后,将过去到的值,全部放在suppliersData这个数组中,我要模拟数据也要使用这个数组
-            const obj = {
-              // 码头的id
-              id: res.records[i].id,
-              // 代码
-              code: res.records[i].code,
-              name: res.records[i].name,
-              version: res.records[i].version,
-              status: res.records[i].status,
-              orgId: res.records[i].orgId,
-              binScope: res.records[i].binScope
-            }
-            // 获取数据后,存到自己的数组里面
-            _this.suppliersData.push(obj);
-            // 将数组反向
-          }
+        })
+        .catch((err) => {
+          if (err) _this.$message.error("获取信息失败" + err.message)
         })
       },
       // 这里是修改当前值的地方
@@ -277,9 +237,7 @@ export default {
   },
   beforeRouteEnter(to, from, next) {
     next(vm => {
-      if (from.path === '/storageinfo/storpartition/add' || from.path === '/storageinfo/storpartition/edit') {
-        vm.getSuppliersList();
-      } 
+      vm.getSuppliersList();
     })
   }
 };

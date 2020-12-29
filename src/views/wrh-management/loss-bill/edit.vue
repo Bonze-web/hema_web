@@ -347,14 +347,15 @@ export default {
         this.$router.push({path: '/wrhmanagement/lossbill/batchAdd', query: {id: this.form.wrhId}})
       },
       handleSelect: function(e) {
-        console.log(e)
         this.form.decerId = e.id
       },
       deleteProduct: function(index) {
         this.deleteSelection(index)
+        this.productList.splice(index, 1)
         const arr = Array.from(new Set(this.productList))
-        this.form.realtotalProductCount = arr.length
-        this.calcProduct()
+        this.form.totalProductCount = arr.length
+        this.productList = arr
+        this.calcProductEdit()
       },
       createBill: function(reset) {
         const _this = this
@@ -465,7 +466,6 @@ export default {
           console.log(realQty)
           this.form.realTotalQtystr = realQtystr + '+' + realQty
           this.form.realTotalAmount = Number(this.form.totalAmount) + Number(item.realAmount)
-          console.log(item)
         });
       },
       calcProductEdit: function(productList) {
@@ -475,12 +475,12 @@ export default {
         let consumeQty = ''
         this.productList.forEach(item => {
           item.lineNum = this.productList.indexOf(item) + 1
-          item.consumeAmount = Number(item.consumeQtystr) * item.price + Number(item.consumeQty) * item.price 
+          item.consumeAmount = Number(item.consumeQtystr) * item.price * Number(item.qpc) + Number(item.consumeQty) * item.price 
           this.form.realTotalAmount += item.consumeAmount
           consumeQtystr = Number(consumeQtystr) + Number(item.consumeQtystr)
           consumeQty = Number(consumeQty) + Number(item.consumeQty)
-          if (consumeQty + consumeQtystr > item.qty) {
-            this.$message.error('请输入符合库存的数据')
+          if (Number(item.consumeQty) + Number(item.consumeQtystr) > Number(item.qty) || Number(item.consumeQty) < 0 || Number(item.consumeQtystr) < 0) {
+            this.$message.error('请输入正确数据')
             consumeQtystr = 0
             consumeQty = 0
             item.consumeQtystr = 0
@@ -515,7 +515,7 @@ export default {
           this.productList = result.stockList
           for (const item in this.productList) {
             this.productList[item].realAmount = result.status === "AUDITED" ? this.productList[item].realAmount : this.productList[item].consumeAmount
-            this.productList[item].lineNum = 0
+            this.productList[item].lineNum = Number(item) + 1
             this.productList[item].realQty = this.productList[item].consumeQty
             this.productList[item].realQtystr = this.productList[item].consumeQtystr
             this.productList[item].stockId = this.productList[item].stockId ? this.productList[item].stockId : this.productList[item].id
@@ -524,6 +524,7 @@ export default {
           this.form.realtotalQtystr = result.realTotalQtystr
           const arr = Array.from(new Set(this.productList))
           this.form.realtotalProductCount = arr.length
+          this.productList = arr
           this.form = Object.assign(this.form, this.billInfo)
         }).catch((err) => {
           this.$message.error('获取详情失败' + err.message)
@@ -545,7 +546,14 @@ export default {
       next(vm => {
         // 通过 `vm` 访问组件实例
         // if ()
+        vm.getBillDetail()
         vm.productList = vm.$store.state.bill.multipleSelection
+        if (from.path === "/wrhmanagement/lossbill") {
+          return
+        }
+        const arr = Array.from(new Set(vm.productList))
+        vm.productList = arr
+        vm.form.totalProductCount = arr.length
       })
     },
     filters: {
@@ -566,7 +574,7 @@ export default {
 <style lang="scss" scoped>
 // @import "src/styles/mixin.scss";
 .status{
-  background: #eee;
+  background: #66ff99;
   border-radius: 8px;
   padding: 4px;
   height: 32px;

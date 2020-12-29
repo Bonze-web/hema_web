@@ -82,7 +82,7 @@
                                         <el-table-column width="100" prop="productionBatch" label="批号"></el-table-column>
                                         <el-table-column width="100" prop="productionDate" label="生产日期"></el-table-column>
                                         <el-table-column width="100" prop="validDate" label="到效日期"></el-table-column>
-                                        <el-table-column width="100" prop="qpcstr" label="规格/计量单位"></el-table-column>
+                                        <el-table-column width="100" prop="qpcStr" label="规格/计量单位"></el-table-column>
                                         <el-table-column width="100" prop="price" label="单价"></el-table-column>
                                         <el-table-column width="100" prop="batch" label="批次"></el-table-column>
                                         <el-table-column width="100" prop="qty" label="可用库存数量"></el-table-column>
@@ -192,14 +192,16 @@ export default {
       },
       deleteProduct: function(index) {
         this.deleteSelection(index)
+        this.productList.splice(index, 1)
         const arr = Array.from(new Set(this.productList))
         this.form.totalProductCount = arr.length
+        this.productList = arr
         this.calcProduct()
       },
       createBill: function(reset) {
         const _this = this
         if (reset) {
-          this.form.status = ""
+          this.form.status = "AUDITED"
         } else {
           this.form.status = "SAVED"
         }
@@ -217,6 +219,10 @@ export default {
             })
           })
         }
+        if (Number(_this.totalAmount)) {
+          _this.$message.error('请输入损耗商品数量')
+          return
+        }
         _this.$refs.form.validate(valid => {
           if (valid) {
             BillService.createLossBill(this.form)
@@ -226,6 +232,10 @@ export default {
               _this.$router.go(-1)
             })
             .catch((err) => {
+              _this.form.stockList = []
+              const arr = Array.from(new Set(this.productList))
+              this.productList = arr
+              this.form.totalProductCount = arr.length
               _this.$message.error('创建失败' + err.message)
             })
           }
@@ -288,14 +298,14 @@ export default {
         let consumeQty = ''
         this.productList.forEach(item => {
           item.lineNum = this.productList.indexOf(item) + 1
-          item.consumeAmount = Number(item.consumeQtystr) * item.price + Number(item.consumeQty) * item.price 
+          item.consumeAmount = Number(item.consumeQtystr) * (item.price * item.qpc) + Number(item.consumeQty) * item.price 
           this.form.realTotalAmount += item.consumeAmount
           consumeQtystr = Number(consumeQtystr) + Number(item.consumeQtystr)
           consumeQty = Number(consumeQty) + Number(item.consumeQty)
-          if (consumeQty + consumeQtystr > item.qty) {
-            this.$message.error('请输入符合库存的数据')
-            consumeQtystr = 0
-            consumeQty = 0
+          if (Number(item.consumeQty) + Number(item.consumeQtystr) > Number(item.qty) || Number(item.consumeQty) < 0 || Number(item.consumeQtystr) < 0) {
+            this.$message.error('请输入正确数据')
+            consumeQtystr = Number(consumeQtystr) - Number(item.consumeQtystr)
+            consumeQty = Number(consumeQty) - Number(item.consumeQty)
             item.consumeQtystr = 0
             item.consumeQty = 0
           }
@@ -328,7 +338,7 @@ export default {
       this.productList = this.$store.state.bill.multipleSelection
       for (const item in this.productList) {
         this.productList[item].consumeAmount = 0
-        this.productList[item].lineNum = 0
+        this.productList[item].lineNum = Number(item) + 1
         this.productList[item].consumeQty = 0
         this.productList[item].consumeQtystr = 0
         this.productList[item].stockId = this.productList[item].id
@@ -338,8 +348,16 @@ export default {
     beforeRouteEnter(to, from, next) {
       next(vm => {
         // 通过 `vm` 访问组件实例
-        vm.productList = vm.$store.state.bill.multipleSelection.concat(vm.productList)
+        vm.productList = vm.$store.state.bill.multipleSelection
         const arr = Array.from(new Set(vm.productList))
+        // for (const item in arr) {
+        //   arr[item].consumeAmount = 0
+        //   arr[item].lineNum = Number(item) + 1
+        //   arr[item].consumeQty = 0
+        //   arr[item].consumeQtystr = 0
+        //   arr[item].stockId = arr[item].id
+        // }
+        vm.productList = arr
         vm.form.totalProductCount = arr.length
       })
     },
