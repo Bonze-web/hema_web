@@ -32,12 +32,12 @@
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
-                                        <el-form-item label="报损人" prop="decerName">
+                                        <el-form-item label="报告人" prop="decerName">
                                             <el-autocomplete
                                                 class="inline-input"
                                                 v-model="form.decerName"
                                                 :fetch-suggestions="querySearch"
-                                                placeholder="请输入报损人"
+                                                placeholder="请输入报告人"
                                                 :trigger-on-focus="false"
                                                 @select="handleSelect"
                                             ></el-autocomplete>
@@ -52,6 +52,7 @@
                                         商品
                                     <!-- <router-link @click="batchAddProduct" style="color:#409EFF" :to="{ path: '/wrhmanagement/lossbill/batchAdd' }"> -->
                                         <el-button size="mini" type="text" @click="batchAddProduct">批量添加</el-button>
+                                        <el-button size="mini" type="text" @click="addProductDialog = true">单个添加</el-button>
                                     <!-- </router-link> -->
                                     </div>
                                     <div class="list-count">
@@ -82,7 +83,7 @@
                                         <el-table-column width="100" prop="productionBatch" label="批号"></el-table-column>
                                         <el-table-column width="100" prop="productionDate" label="生产日期"></el-table-column>
                                         <el-table-column width="100" prop="validDate" label="到效日期"></el-table-column>
-                                        <el-table-column width="100" prop="qpcstr" label="规格/计量单位"></el-table-column>
+                                        <el-table-column width="100" prop="qpcStr" label="规格/计量单位"></el-table-column>
                                         <el-table-column width="100" prop="price" label="单价"></el-table-column>
                                         <el-table-column width="100" prop="batch" label="批次"></el-table-column>
                                         <el-table-column width="100" prop="qty" label="可用库存数量"></el-table-column>
@@ -110,6 +111,90 @@
                             </el-form>      
                 </template>
             </div>
+            <el-dialog title="收货地址" width="600px" :visible.sync="addProductDialog">
+              <div class="product-box">
+                <div class="title-box">商品：</div>
+                <div>
+                  <el-autocomplete
+                    class="inline-input"
+                    v-model="product.productName"
+                    :fetch-suggestions="querySearch"
+                    placeholder="请输入商品"
+                    :trigger-on-focus="false"
+                    @select="handleSelect"
+                ></el-autocomplete>
+                </div>
+              </div>
+              <div class="product-box">
+                <div class="title-box">生产批号：</div>
+                <div>
+                  <el-input v-model="product.productBirthBatch"></el-input> 
+                </div>
+              </div>
+              <div class="product-box">
+                <div class="title-box">生产日期：</div>
+                <div>
+                  <el-date-picker
+                    v-model="product.productBirthDate"
+                    type="datetime"
+                    placeholder="选择日期时间">
+                  </el-date-picker>
+                </div>
+              </div>
+              <div class="product-box">
+                <div class="title-box">到效日期：</div>
+                <div>
+                  <el-date-picker
+                    v-model="product.productValidDate"
+                    type="datetime"
+                    placeholder="选择日期时间">
+                  </el-date-picker>
+                </div>
+              </div>
+              <div class="product-box">
+                <div class="title-box">货位：</div>
+                <div>
+                  <el-autocomplete
+                    class="inline-input"
+                    v-model="product.binCode"
+                    :fetch-suggestions="querySearch"
+                    placeholder="请输入报告人"
+                    :trigger-on-focus="false"
+                    @select="handleSelect"
+                ></el-autocomplete>
+                </div>
+              </div>
+              <div class="product-box">
+                <div class="title-box">容器：</div>
+                <div>
+                  <el-autocomplete
+                    class="inline-input"
+                    v-model="product.containerBarcode"
+                    :fetch-suggestions="querySearch"
+                    placeholder="请输入报告人"
+                    :trigger-on-focus="false"
+                    @select="handleSelect"
+                ></el-autocomplete>
+                </div>
+              </div>
+              <div class="product-box">
+                <div class="title-box">件数：</div>
+                <div>
+                  <el-input v-model="product.consumeQtystr"></el-input>  
+                </div>
+                <div>
+                  <el-input v-model="product.consumeQty"></el-input> 
+                </div>
+              </div>
+              <div class="product-box">
+                <div class="title-box">数量：</div>
+                <div>{{ Number(product.consumeQtystr) + '+' + Number(product.consumeQty) }}</div>
+              </div>
+              <div class="product-box">
+                <div class="title-box">备注：</div>
+                <div><textarea v-model="product.remark"></textarea></div>
+              </div>
+            </el-dialog>
         </div>
     </div>
 </template>
@@ -125,9 +210,23 @@ import { mapGetters, mapActions } from "vuex";
 export default {
   data() {
       return {
-        restaurants: [], // 报损人列表
+        product: {
+          remark: '',
+          productName: '',
+          productUuid: '',
+          productValidDate: '',
+          productBirthDate: '',
+          consumeQtystr: '',
+          consumeQty: '',
+          consumeAmount: '',
+          binCode: '',
+          containerBarcode: '',
+          productBirthBatch: ''
+        },
+        addProductDialog: false,
+        restaurants: [], // 报告人列表
         wrhList: [], // 仓库列表
-        deccerList: [], // 报损人列表
+        deccerList: [], // 报告人列表
         PermIds: PermIds,
         dcList: [], // 中心仓列表
         status: '', // 页面状态
@@ -137,7 +236,7 @@ export default {
           billType: '', // 溢余单据类型
           wrhId: '',
           decerName: '',
-          decerId: '', // 报损员
+          incerId: '', // 报告员
           remark: '',
           version: '',
           billTypeId: '', // 溢余类型
@@ -167,10 +266,10 @@ export default {
             { required: true, message: '请选择所属仓库', trigger: 'blur'}
           ],
           decerName: [
-            { required: true, message: '请选择报损人', trigger: 'blur'}
+            { required: true, message: '请选择报告人', trigger: 'blur'}
           ]
         },
-        productList: [], // 报损商品列表
+        productList: [], // 报告商品列表
         billTypeList: [] // 溢余类型
       }
     },
@@ -188,12 +287,14 @@ export default {
       },
       handleSelect: function(e) {
         console.log(e)
-        this.form.decerId = e.id
+        this.form.incerId = e.id
       },
       deleteProduct: function(index) {
         this.deleteSelection(index)
         const arr = Array.from(new Set(this.productList))
         this.form.totalProductCount = arr.length
+        this.productList = arr
+        this.productList.splice(index, 1)
         this.calcProduct()
       },
       createBill: function(reset) {
@@ -236,7 +337,7 @@ export default {
         this.$router.go(-1)
       },
       querySearch: function(queryString, cb) {
-          // 搜索报损人
+          // 搜索报告人
           const restaurants = this.restaurants;
           const results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
           // 调用 callback 返回建议列表的数据
@@ -282,20 +383,20 @@ export default {
         })
       },
       calcProduct: function(productList) {
-        this.form.totalAmount = ''
-        this.form.totalQtystr = ''
-        let consumeQtystr = ''
-        let consumeQty = ''
+        this.form.totalAmount = 0
+        this.form.totalQtystr = 0
+        let consumeQtystr = 0
+        let consumeQty = 0
         this.productList.forEach(item => {
           item.lineNum = this.productList.indexOf(item) + 1
           item.consumeAmount = Number(item.consumeQtystr) * item.price + Number(item.consumeQty) * item.price 
           this.form.realTotalAmount += item.consumeAmount
           consumeQtystr = Number(consumeQtystr) + Number(item.consumeQtystr)
           consumeQty = Number(consumeQty) + Number(item.consumeQty)
-          if (consumeQty + consumeQtystr > item.qty) {
+          if (Number(item.consumeQty) + Number(item.consumeQtystr) > Number(item.qty)) {
             this.$message.error('请输入符合库存的数据')
-            consumeQtystr = 0
-            consumeQty = 0
+            consumeQtystr = Number(consumeQtystr) - Number(item.consumeQtystr)
+            consumeQty = Number(consumeQty) - Number(item.consumeQty)
             item.consumeQtystr = 0
             item.consumeQty = 0
           }
@@ -326,13 +427,13 @@ export default {
       this.getWrhList()
       this.getUsers()
       this.productList = this.$store.state.bill.multipleSelection
-      for (const item in this.productList) {
-        this.productList[item].consumeAmount = 0
-        this.productList[item].lineNum = 0
-        this.productList[item].consumeQty = 0
-        this.productList[item].consumeQtystr = 0
-        this.productList[item].stockId = this.productList[item].id
-      }
+      // for (const item in this.productList) {
+      //   this.productList[item].consumeAmount = 0
+      //   this.productList[item].lineNum = Number(item) + 1
+      //   this.productList[item].consumeQty = 0
+      //   this.productList[item].consumeQtystr = 0
+      //   this.productList[item].stockId = this.productList[item].id
+      // }
       this.calcProduct(this.productList)
     },
     beforeRouteEnter(to, from, next) {
@@ -340,6 +441,14 @@ export default {
         // 通过 `vm` 访问组件实例
         vm.productList = vm.$store.state.bill.multipleSelection.concat(vm.productList)
         const arr = Array.from(new Set(vm.productList))
+        // for (const item in arr) {
+        //   arr[item].consumeAmount = 0
+        //   arr[item].lineNum = Number(item) + 1
+        //   arr[item].consumeQty = 0
+        //   arr[item].consumeQtystr = 0
+        //   arr[item].stockId = arr[item].id
+        // }
+        vm.productList = arr
         vm.form.totalProductCount = arr.length
       })
     },
@@ -380,5 +489,14 @@ export default {
 }
 .list-count{
     display: flex;
+}
+.product-box{
+  display: flex;
+  // justify-content: left;
+  margin-bottom: 12px;
+}
+.title-box{
+  width: 30%;
+  text-align: right;
 }
 </style>

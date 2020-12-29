@@ -45,8 +45,8 @@
                                 <div>{{ billInfo.wrhName }}</div>
                             </el-col>
                             <el-col :span="6" class="info-box">
-                                <div>报损员:</div>
-                                <div>{{ billInfo.decerName }}</div>
+                                <div>报告员:</div>
+                                <div>{{ billInfo.incerName }}</div>
                             </el-col>
                             <el-col :span="6" class="info-box">
                                 <div>创建时间:</div>
@@ -153,12 +153,12 @@
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
-                                        <el-form-item label="报损人" prop="decerName">
+                                        <el-form-item label="报告人" prop="incerName">
                                             <el-autocomplete
                                                 class="inline-input"
-                                                v-model="form.decerName"
+                                                v-model="form.incerName"
                                                 :fetch-suggestions="querySearch"
-                                                placeholder="请输入报损人"
+                                                placeholder="请输入报告人"
                                                 :trigger-on-focus="false"
                                                 @select="handleSelect"
                                             ></el-autocomplete>
@@ -260,14 +260,14 @@ export default {
         tabActiveName: 'containerType', // tab栏名称
         billInfo: '',
         wrhList: [], // 仓库列表
-        deccerList: [], // 报损人列表
+        deccerList: [], // 报告人列表
         dcList: [], // 中心仓列表
         form: {
           id: '',
           code: '',
           billType: '', // 溢余单据类型
           wrhId: '',
-          decerId: '', // 报损员
+          incerId: '', // 报告员
           remark: '',
           version: '',
           billTypeId: '', // 溢余类型
@@ -297,11 +297,11 @@ export default {
           wrhId: [
             { required: true, message: '请选择所属仓库', trigger: 'blur'}
           ],
-          decerId: [
-            { required: true, message: '请选择报损人', trigger: 'blur'}
+          incerId: [
+            { required: true, message: '请选择报告人', trigger: 'blur'}
           ]
         },
-        productList: [], // 报损商品列表
+        productList: [], // 报告商品列表
         billTypeList: [] // 溢余类型
       }
     },
@@ -348,12 +348,14 @@ export default {
       },
       handleSelect: function(e) {
         console.log(e)
-        this.form.decerId = e.id
+        this.form.incerId = e.id
       },
       deleteProduct: function(index) {
         this.deleteSelection(index)
         const arr = Array.from(new Set(this.productList))
         this.form.realtotalProductCount = arr.length
+        this.productList = arr
+        this.productList.splice(index, 1)
         this.calcProduct()
       },
       createBill: function(reset) {
@@ -412,7 +414,7 @@ export default {
         this.$router.go(-1)
       },
       querySearch: function(queryString, cb) {
-          // 搜索报损人
+          // 搜索报告人
           const restaurants = this.restaurants;
           const results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
           // 调用 callback 返回建议列表的数据
@@ -493,7 +495,7 @@ export default {
         });
       },
       getUsers: function() {
-        MemberService.query(1, 0, {nameLike: this.form.decerName})
+        MemberService.query(1, 0, {nameLike: this.form.incerName})
         .then((res) => {
           res.records.forEach((item) => {
             const obj = {
@@ -546,6 +548,9 @@ export default {
         // 通过 `vm` 访问组件实例
         // if ()
         vm.productList = vm.$store.state.bill.multipleSelection
+        const arr = Array.from(new Set(vm.productList))
+        vm.productList = arr
+        vm.form.totalProductCount = arr.length
       })
     },
     filters: {

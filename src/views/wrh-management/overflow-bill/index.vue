@@ -8,7 +8,7 @@
                 <el-form-item label="仓库">
                     <el-input type='text' placeholder="请输入上级类别编号/名称" v-model="form.wareCodeOrNameLikes" class="input-width"></el-input>
                 </el-form-item>
-                <el-form-item label="报损员">
+                <el-form-item label="报告员">
                     <el-input type='text' placeholder="请输入上级类别编号/名称" v-model="form.decerNameLikes" class="input-width"></el-input>
                 </el-form-item>
                 <el-form-item label="状态">
@@ -77,7 +77,7 @@
                     {{ '[' + scope.row.wrhCode + ']' + scope.row.wrhName }}
                   </template>
                 </el-table-column>
-                <el-table-column prop="decerCode" label="报损员">
+                <el-table-column prop="decerCode" label="报告员">
                   <template slot-scope="scope">
                     {{ scope.row.decerName }}
                   </template>
@@ -123,7 +123,7 @@ export default {
         form: {
           billNumLikes: '', // 单据号
           wareCodeOrNameLikes: '',
-          decerNameLikes: '', // 报损员
+          decerNameLikes: '', // 报告员
           statusEquals: '',
           productCodeOrname: '', // 商品
           containerBarcode: '', // 容器
@@ -155,7 +155,7 @@ export default {
       this.form = {
           billNumber: '', // 单据号
           wrhCodeOrName: '',
-          decerCodeOrName: '', // 报损员
+          decerCodeOrName: '', // 报告员
           statusEquals: '',
           productCodeOrname: '', // 商品
           containerCodeOrNameLikes: '', // 容器
