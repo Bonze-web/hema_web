@@ -64,7 +64,7 @@
                 :row-style="{height: '16px',padding: '-4px'}"
                 :default-sort = "{prop: 'billNumber'}"
             >
-                <el-table-column sortable prop="billNumber" label="单号">
+                <el-table-column  prop="billNumber" label="单号">
                     <template slot-scope="scope">
                         <router-link style="color:#409EFF" :to="{ path: '/wrhmanagement/lossbill/edit', query:{ status: 'read', id: scope.row.id} }">
                             <span>{{ scope.row.billNumber }}</span>

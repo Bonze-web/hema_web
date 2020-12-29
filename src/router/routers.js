@@ -1004,8 +1004,8 @@ const warehousingAdm = {
       component: AModule,
       meta: {
         title: '收货装箱',
-        icon: 'table'
-        // permission: PermIds.PRODUCT_SUPPLIER
+        icon: 'table',
+        permission: PermIds.WMS_RECEIVE_BILL
       },
       children: [
         {
@@ -1016,8 +1016,8 @@ const warehousingAdm = {
           hidden: true,
           meta: {
             title: '收货装箱',
-            icon: 'table'
-            // permission: PermIds.PRODUCT_SUPPLIER_VIEW
+            icon: 'table',
+            permission: PermIds.WMS_RECEIVE_BILL_VIEW
           }
         },
         {
@@ -1028,8 +1028,44 @@ const warehousingAdm = {
           hidden: true,
           meta: {
             title: '装箱详情',
+            icon: 'table',
+            permission: PermIds.WMS_RECEIVE_BILL_VIEW
+          }
+        }
+      ]
+    },
+    {
+      path: "quality",
+      name: "Quality",
+      component: AModule,
+      meta: {
+        title: '质检单',
+        icon: 'table'
+        // permission: PermIds.WMS_QUALITY_INSPECTION_TYPE
+      },
+      children: [
+        {
+          path: "",
+          name: "QualityView",
+          component: () =>
+            import('@/views/warehousing-adm/quality/index'),
+          hidden: true,
+          meta: {
+            title: '质检单',
             icon: 'table'
-            // permission: PermIds.PRODUCT_SUPPLIER_VIEW
+            // permission: PermIds.WMS_QUALITY_INSPECTION_TYPE_VIEW
+          }
+        },
+        {
+          path: "edit",
+          name: "QualityEdit",
+          component: () =>
+            import('@/views/warehousing-adm/quality/edit'),
+          hidden: true,
+          meta: {
+            title: '装箱详情',
+            icon: 'table'
+            // permission: PermIds.WMS_QUALITY_INSPECTION_TYPE_VIEW
           }
         }
       ]

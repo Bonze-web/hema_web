@@ -64,18 +64,63 @@ export default {
     },
 
     /**
-     * 收货装箱单查询
+     * 收货装箱单详情
      */
 
     packingReceiveBill(id) {
         return request.get('/wms/receiveBill/getById?id=' + id)
-    }
+    },
      /**
      * 
      * 
      * 
      * 
      * 收货装箱单结束
+     * 
+     * 
+     * 
+     * 
+     * 
+     * 
+     * 
+     */
+
+    /**
+     * 
+     * 
+     * 
+     * 
+     * 质检单开始
+     * 
+     * 
+     * 
+     * 
+     * 
+     * 
+     * 
+     */
+
+     /**
+     * 质检单查询
+     */
+
+    qualityInspection(postData) {
+        return request.get('/wms/quality-inspection-order', { params: postData })
+    },
+
+    /**
+     * 质检单详情
+     */
+
+    detailsqualityInspection(id) {
+        return request.get('/wms/quality-inspection-order/' + id)
+    }
+     /**
+     * 
+     * 
+     * 
+     * 
+     * 质检单结束
      * 
      * 
      * 
