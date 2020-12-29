@@ -51,7 +51,7 @@
 
         <el-table-column prop="level" label="物流中心">
           <template slot-scope="scope">
-            [{{ scope.row.dcId }}] {{ scope.row.dcName }}
+            [{{ scope.row.code }}] {{ scope.row.dcName }}
           </template>
         </el-table-column>
 

@@ -81,7 +81,7 @@
         <el-table-column prop="useStatus" label="容器类型" style="height: 20px">
           <template slot-scope="scope">
             <router-link style="color: #409eff" :to="{ path: '/basicinfo/containertype/edit', query:{ status: 'read', id: scope.row.containerTypeId} }">
-              <span>{{ '[' + scope.row.containerTypeId + ']' + scope.row.containerTypeName }}</span>
+              <span>{{ '[' + scope.row.containerTypeCode + ']' + scope.row.containerTypeName }}</span>
             </router-link>
           </template>
         </el-table-column>

@@ -277,6 +277,13 @@ export default {
   WMS_WAREHOUSE_MODIFY: "wms:warehouse:modify",
   WMS_WAREHOUSE_DELETE: "wms:warehouse:delete",
 
+   /**
+   * 入库订单模块
+   */
+  WMS_ORDERBILL: "wms:orderbill",
+  WMS_ORDERBILL_VIEW: "wms:orderbill:view",
+  WMS_ORDERBILL_ARRIVE: "wms:orderbill:arrive",
+  WMS_ORDERBILL_FINISH: "wms:orderbill:finish",  
   /**
    * 码头模块
    */

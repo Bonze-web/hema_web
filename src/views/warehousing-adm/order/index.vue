@@ -293,10 +293,10 @@ export default {
       this.pageSize = Number(e);
       this.page = 1;
       this.queryOrderBill(true);
+    },
+    printingBtn() {
+      this.$message.error("打印功能还未开通")
     }
-    // printingBtn() {
-    //   this.$message.error("打印功能还未开通")
-    // }
   },
   created() {
     this.queryOrderBill();

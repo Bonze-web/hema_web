@@ -39,5 +39,49 @@ export default {
      */
     queryOrderBill(postData) {
         return request.post('/wms/orderBill/query', postData)
+    },
+    /**
+     * 
+     * 
+     * 
+     * 
+     * 收货装箱单开始
+     * 
+     * 
+     * 
+     * 
+     * 
+     * 
+     * 
+     */
+
+     /**
+     * 收货装箱单查询
+     */
+
+    packingQuery(postData) {
+        return request.get('/wms/receiveBill/query', { params: postData })
+    },
+
+    /**
+     * 收货装箱单查询
+     */
+
+    packingReceiveBill(id) {
+        return request.get('/wms/receiveBill/getById?id=' + id)
     }
+     /**
+     * 
+     * 
+     * 
+     * 
+     * 收货装箱单结束
+     * 
+     * 
+     * 
+     * 
+     * 
+     * 
+     * 
+     */
 }
