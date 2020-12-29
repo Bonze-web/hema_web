@@ -546,7 +546,11 @@ export default {
       next(vm => {
         // 通过 `vm` 访问组件实例
         // if ()
+        vm.getBillDetail()
         vm.productList = vm.$store.state.bill.multipleSelection
+        if (from.path === "/wrhmanagement/lossbill") {
+          return
+        }
         const arr = Array.from(new Set(vm.productList))
         vm.productList = arr
         vm.form.totalProductCount = arr.length

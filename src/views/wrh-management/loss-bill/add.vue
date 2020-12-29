@@ -227,6 +227,7 @@ export default {
               _this.$router.go(-1)
             })
             .catch((err) => {
+              _this.form.stockList = []
               _this.$message.error('创建失败' + err.message)
             })
           }
