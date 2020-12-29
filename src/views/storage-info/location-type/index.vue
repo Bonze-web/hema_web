@@ -6,9 +6,13 @@
         <el-form-item label="代码：">
           <el-input type="text" placeholder="请输入代码/名称" v-model="form.codeEqualsOrNameLike" class="input-width" ></el-input>
         </el-form-item>
-        <!-- 
-        <el-form-item label="名称：">
-          <el-input type="text" placeholder="请输入名称" v-model="form.name" class="input-width" ></el-input>
+
+        <!-- <el-form-item label="名称：">
+          <el-input type="text" placeholder="请输入名称" v-model="form.codeEqualsOrNameLike" class="input-width" ></el-input>
+        </el-form-item> -->
+
+        <!-- <el-form-item label="长度(cm)：">
+          <el-input type="text" placeholder="请输入长度" v-model="form.codeEqualsOrNameLike" class="input-width" ></el-input>
         </el-form-item> -->
 
 

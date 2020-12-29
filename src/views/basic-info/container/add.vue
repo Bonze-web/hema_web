@@ -98,20 +98,52 @@ export default {
         this.$router.go(-1)
       },
       confirm() {
-       // 创建新的容器
-        this.$refs.form.validate(valid => {
-          if (valid) {
-            BasicService.batchCreateOcntainer(this.form)
-            .then(res => {
-              this.$message.success(`容器创建成功${res.successNum}个,失败${res.failNum}个`)
-              this.$store.dispatch("tagsView/delView", this.$route);
-              this.$router.go(-1)
+        // 创建新的容器
+
+        if (this.form.num > 500) {
+            this.$confirm('输入内容过大，可能会导致创建时间过长，是否确认创建?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              this.$refs.form.validate(valid => {
+                if (valid) {
+                  this.$alert('努力创建中，请耐心等待', '', {
+                    confirmButtonText: '确定'
+                  });
+
+                  BasicService.batchCreateOcntainer(this.form)
+                  .then(res => {
+                    this.$message.success(`容器创建成功${res.successNum}个,失败${res.failNum}个`)
+                    this.$store.dispatch("tagsView/delView", this.$route);
+                    this.$router.go(-1)
+                  })
+                  .catch(err => {
+                    this.$message.error("创建失败" + err.message)
+                  })
+                }
+              })
+            }).catch(() => {
+              this.$message({
+                type: 'info',
+                message: '已取消'
+              })        
             })
-            .catch(err => {
-              this.$message.error("创建失败" + err.message)
-            })
-          }
-        })
+        } else {
+          this.$refs.form.validate(valid => {
+            if (valid) {
+              BasicService.batchCreateOcntainer(this.form)
+              .then(res => {
+                this.$message.success(`容器创建成功${res.successNum}个,失败${res.failNum}个`)
+                this.$store.dispatch("tagsView/delView", this.$route);
+                this.$router.go(-1)
+              })
+              .catch(err => {
+                this.$message.error("创建失败" + err.message)
+              })
+            }
+          })
+        }
       }
     },
     created() {

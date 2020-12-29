@@ -284,6 +284,24 @@ export default {
   WMS_ORDERBILL_VIEW: "wms:orderbill:view",
   WMS_ORDERBILL_ARRIVE: "wms:orderbill:arrive",
   WMS_ORDERBILL_FINISH: "wms:orderbill:finish",  
+
+    /**
+   * 收货装箱单模块
+   */
+  WMS_RECEIVE_BILL: "wms:receive_bill",
+  WMS_RECEIVE_BILL_VIEW: "wms:receive_bill:view",
+  WMS_RECEIVE_BILL_RECEIVE: "wms:receive_bill:receive",
+  WMS_RECEIVE_BILL_FAST_RECEIVE: "wms:receive_bill:fast_receive",
+
+    /**
+   * 质检类型
+   */
+ WMS_QUALITY_INSPECTION_TYPE: "wms:quality-inspection-type",
+ WMS_QUALITY_INSPECTION_TYPE_CREATE: "wms:quality-inspection-type:create",
+ WMS_QUALITY_INSPECTION_TYPE_UPDATE: "wms:quality-inspection-type:update",
+ WMS_QUALITY_INSPECTION_TYPE_VIEW: "wms:quality-inspection-type:view",
+ WMS_QUALITY_INSPECTION_TYPE_MODIFY: "wms:dock:modify",
+
   /**
    * 码头模块
    */
