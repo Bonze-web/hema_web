@@ -67,7 +67,7 @@ export default {
   /**
    * 系统组件-上传文件
    */
-  // SYS_DFS_UPLOAD : "sys:dfs:upload",
+  // SYS_DFS_UPLOAD: "sys:dfs:upload",
 
   /**
    * 系统组件-自定义服务通知模块
@@ -245,11 +245,11 @@ export default {
    */
   WMS: "wms",
 
-  WMS_PICKAREA: "wms:pickarea",
-  WMS_PICKAREA_CREATE: "wms:pickarea:create",
-  WMS_PICKAREA_VIEW: "wms:pickarea_view",
-  WMS_PICKAREA_UPDATE: "wms:pickarea_update",
-  WMS_PICKAREA_DELETE: "wms:pickarea_delete",
+  // WMS_PICKAREA: "wms:pickarea",
+  // WMS_PICKAREA_CREATE: "wms:pickarea:create",
+  // WMS_PICKAREA_VIEW: "wms:pickarea_view",
+  // WMS_PICKAREA_UPDATE: "wms:pickarea_update",
+  // WMS_PICKAREA_DELETE: "wms:pickarea_delete",
 
   /**
    * 容器类型
@@ -304,6 +304,33 @@ export default {
   WMS_STORAGEAREA_VIEW: "wms:storagearea:view",
   WMS_STORAGEAREA_DELETE: "wms:storagearea:delete",
 
+  /**
+   * 拣货分区
+   */
+  WMS_PICKAREA: "wms:pickarea",
+  WMS_PICKAREA_CREATE: "wms:pickarea:create",
+  WMS_PICKAREA_VIEW: "wms:pickarea:view",
+  WMS_PICKAREA_UPDATE: "wms:pickarea:update",
+  WMS_PICKAREA_DELETE: "wms:pickarea:delete",
+
+   /**
+   * 用户拣货分区
+   */
+  WMS_USER_PICKAREA: "wms:user:pickarea",
+  WMS_USER_PICKAREA_CREATE: "wms:user:pickarea:create",
+  WMS_USER_PICKAREA_VIEW: "wms:user:pickarea:view",
+  WMS_USER_PICKAREA_UPDATE: "wms:user:pickarea:update",
+  WMS_USER_PICKAREA_DELETE: "wms:user:pickarea:delete",
+
+   /**
+   * 拣货顺序方案
+   */
+  WMS_PICKORDER: "wms:pickorder",
+  WMS_PICKORDER_CREATE: "wms:pickorder:create",
+  WMS_PICKORDER_UPDATE: "wms:pickorder:update",
+  WMS_PICKORDER_VIEW: "wms:pickorder:view",
+  WMS_PICKORDER_MODIFY: "wms:pickorder:modify",
+  WMS_PICKORDER_DELETE: "wms:pickorder:remove",
   /** ******************************* 微信小程序组件 *******************************************/
 
   /**

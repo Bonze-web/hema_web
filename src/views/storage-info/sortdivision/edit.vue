@@ -406,6 +406,7 @@ export default {
         this.storageList = objCurTt;
       },
       back: function() {
+        this.$store.dispatch("tagsView/delView", this.$route);
         this.$router.go(-1)
       },
       statusChange: function() {
@@ -447,7 +448,6 @@ export default {
         // 如果是只读的模式,就要调取后台的数据,将数据渲染到页面上
         SortdivisionService.getSuppliersDetail(id)
         .then((res) => {
-          console.log(res);
           this.suppliersInfo = res;
           this.storageListRead = this.suppliersInfo.storageList;
         })
@@ -479,6 +479,7 @@ export default {
             } else {
               // 因为提交的时候,需要传递状态值,所以先转换一下,这里是编辑
               this.form.storageList = this.storageList;
+              this.form.storageList.storageId = this.storageList.id;
               SortdivisionService.updateSupplier(this.form)
               .then(res => {
                 console.log(res)

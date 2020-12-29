@@ -645,7 +645,8 @@ const StorageInfoPackage = {
     component: AModule,
     meta: {
       title: '拣货分区',
-      icon: 'table'
+      icon: 'table',
+      permission: PermIds.WMS_PICKAREA
     },
     children: [{
       path: "",
@@ -655,7 +656,8 @@ const StorageInfoPackage = {
         hidden: true,
       meta: {
         title: '拣货分区',
-        icon: 'table'
+        icon: 'table',
+        permission: PermIds.WMS_PICKAREA_VIEW
       }
     }, {
       path: "edit",
@@ -665,7 +667,8 @@ const StorageInfoPackage = {
         hidden: true,
         meta: {
           title: '编辑拣货分区',
-          icon: 'table'
+          icon: 'table',
+         permission: PermIds.WMS_PICKAREA_VIEW
         }
       },
       {
@@ -676,7 +679,53 @@ const StorageInfoPackage = {
         hidden: true,
         meta: {
           title: '新建拣货分区',
-          icon: 'table'
+          icon: 'table',
+          permission: PermIds.WMS_PICKAREA_CREATE
+        }
+      }] 
+  },
+  {
+    path: "personnelbind",
+    name: "Personnelbind",
+    component: AModule,
+    meta: {
+      title: '用户拣货分区绑定',
+      icon: 'table',
+      permission: PermIds.WMS_USER_PICKAREA
+    },
+    children: [{
+      path: "",
+      name: "PersonnelbindView",
+      component: () =>
+        import('@/views/storage-info/personnelbind/index'),
+        hidden: true,
+      meta: {
+        title: '用户拣货分区绑定',
+        icon: 'table',
+        permission: PermIds.WMS_PICKAREA_VIEW
+      }
+    }, {
+      path: "edit",
+      name: "PersonnelbindEdit",
+      component: () =>
+        import('@/views/storage-info/personnelbind/edit'),
+        hidden: true,
+        meta: {
+          title: '编辑用户拣货分区',
+          icon: 'table',
+         permission: PermIds.WMS_PICKAREA_VIEW
+        }
+      },
+      {
+        path: "add",
+        name: "PersonnelbindAdd",
+        component: () =>
+          import('@/views/storage-info/personnelbind/add'),
+        hidden: true,
+        meta: {
+          title: '新建用户拣货分区',
+          icon: 'table',
+          permission: PermIds.WMS_PICKAREA_CREATE
         }
       }] 
   },
@@ -687,6 +736,7 @@ const StorageInfoPackage = {
     meta: {
       title: '拣货顺序',
       icon: 'table'
+      // permission: PermIds.WMS_PICKORDER
     },
     children: [{
       path: "",
@@ -697,6 +747,7 @@ const StorageInfoPackage = {
       meta: {
         title: '拣货顺序',
         icon: 'table'
+        // permission: PermIds.WMS_PICKORDER_VIEW
       }
     }, {
       path: "edit",
@@ -705,8 +756,9 @@ const StorageInfoPackage = {
         import('@/views/storage-info/cargosequence/edit'),
         hidden: true,
         meta: {
-          title: '编辑拣货分区',
+          title: '编辑拣货拣货顺序',
           icon: 'table'
+          // permission: PermIds.WMS_PICKORDER_VIEW
         }
       },
       {
@@ -716,8 +768,9 @@ const StorageInfoPackage = {
           import('@/views/storage-info/cargosequence/add'),
         hidden: true,
         meta: {
-          title: '新建拣货分区',
+          title: '新建拣货顺序',
           icon: 'table'
+          // permission: PermIds.WMS_PICKORDER_CREATE
         }
       }] 
   },
@@ -868,6 +921,51 @@ const warehousingAdm = {
       hidden: true,
       meta: {
         title: '新建供应商',
+        icon: 'table'
+        // permission: PermIds.PRODUCT_SUPPLIER_CREATE
+      }
+    }]
+    },
+    {
+    path: "grounding",
+    name: "Grounding",
+    component: AModule,
+    meta: {
+      title: '上架单',
+      icon: 'table'
+      // permission: PermIds.PRODUCT_SUPPLIER
+    },
+    children: [
+      {
+      path: "",
+      name: "GroundingView",
+      component: () =>
+        import('@/views/warehousing-adm/grounding/index'),
+      hidden: true,
+      meta: {
+        title: '上架单列表',
+        icon: 'table'
+        // permission: PermIds.PRODUCT_SUPPLIER_VIEW
+      }
+    }, {
+      path: "edit",
+      name: "GroundingEdit",
+      component: () =>
+        import('@/views/warehousing-adm/grounding/edit'),
+      hidden: true,
+      meta: {
+        title: '上架单详情',
+        icon: 'table'
+        // permission: PermIds.PRODUCT_SUPPLIER_VIEW
+      }
+    }, {
+      path: "add",
+      name: "GroundingAdd",
+      component: () =>
+        import('@/views/warehousing-adm/grounding/add'),
+      hidden: true,
+      meta: {
+        title: '新建上架单',
         icon: 'table'
         // permission: PermIds.PRODUCT_SUPPLIER_CREATE
       }

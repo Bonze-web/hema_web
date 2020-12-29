@@ -90,23 +90,51 @@ export default {
   computed: {
   },
   methods: {
+    open() {
+        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });          
+        });
+      },
     // 删除按钮
     deleteChange(id, version) {
       const _this = this;
-      // 调用删除的接口,然后分页查询的接口重新渲染页面
-      SortdivisionService.deleteData(id, version)
-      .then((res) => {
-        _this.$message.success("删除成功")
-        _this.getSuppliersList();
-      }).catch((err) => {
-        if (err === "") {
-          _this.$message.success("删除成功")
-        } else {
-          _this.$message.error("删除失败" + err.message)
-        }
-        _this.getSuppliersList();
-      })
-      // 调用删除的接口,然后分页查询的接口重新渲染页面
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          // 调用删除的接口,然后分页查询的接口重新渲染页面
+          SortdivisionService.deleteData(id, version)
+          .then((res) => {
+            _this.$message.success("删除成功")
+            _this.getSuppliersList();
+          }).catch((err) => {
+            if (err === "") {
+              _this.$message.success("删除成功")
+            } else {
+              _this.$message.error("删除失败" + err.message)
+            }
+            _this.getSuppliersList();
+          })
+          // 调用删除的接口,然后分页查询的接口重新渲染页面
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });          
+        });
     },
     // 搜索功能
       onSubmit: function() {

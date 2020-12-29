@@ -1,7 +1,7 @@
 <template>
     <div class="table-index _table-index">   
         <el-container style="height: 500px; border: 1px solid #eee">
-          <el-aside width="300px" style="background-color: #fff;">
+          <el-aside width="300px" style="background-color: #fff;padding: 0 20px;border: 1px #eee solid;">
             <div class="seriation-left-header" style="padding-top:20px;display:flex;align-items: center;">
               <div class="seriation-left-title">拣货顺序方案</div>
               <el-button type="primary" @click.stop="newProjectsChange">新建方案</el-button>
