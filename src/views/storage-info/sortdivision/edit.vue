@@ -448,6 +448,7 @@ export default {
         // 如果是只读的模式,就要调取后台的数据,将数据渲染到页面上
         SortdivisionService.getSuppliersDetail(id)
         .then((res) => {
+          console.log(res);
           this.suppliersInfo = res;
           this.storageListRead = this.suppliersInfo.storageList;
         })

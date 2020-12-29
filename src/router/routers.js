@@ -703,7 +703,7 @@ const StorageInfoPackage = {
       meta: {
         title: '用户拣货分区绑定',
         icon: 'table',
-        permission: PermIds.WMS_PICKAREA_VIEW
+        permission: PermIds.WMS_USER_PICKAREA_VIEW
       }
     }, {
       path: "edit",
@@ -714,7 +714,7 @@ const StorageInfoPackage = {
         meta: {
           title: '编辑用户拣货分区',
           icon: 'table',
-         permission: PermIds.WMS_PICKAREA_VIEW
+          permission: PermIds.WMS_USER_PICKAREA_VIEW
         }
       },
       {
@@ -726,7 +726,7 @@ const StorageInfoPackage = {
         meta: {
           title: '新建用户拣货分区',
           icon: 'table',
-          permission: PermIds.WMS_PICKAREA_CREATE
+          permission: PermIds.WMS_USER_PICKAREA_CREATE
         }
       }] 
   },
