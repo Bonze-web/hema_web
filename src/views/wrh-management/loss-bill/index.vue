@@ -79,7 +79,7 @@
                 </el-table-column>
                 <el-table-column prop="decerCode" label="报损员">
                   <template slot-scope="scope">
-                    {{ '[' + scope.row.decerCode + ']' + scope.row.decerName }}
+                    {{ scope.row.decerName }}
                   </template>
                 </el-table-column>
                 <el-table-column prop="createTime" label="创建时间"></el-table-column>
@@ -183,7 +183,7 @@ export default {
       _this.form.pageSize = 0
       BillService.getBillList(_this.form)
       .then((res) => {
-        _this.billList = res.records
+        _this.lossBill = res.records
       })
       .catch((err) => {
         _this.$message.error('获取单据列表失败' + err.message)
@@ -192,11 +192,13 @@ export default {
   },
   created() {
     this.getAlllossType()
+    this.getBillList()
   },
   beforeRouteEnter(to, from, next) {
       next(vm => {
         // 通过 `vm` 访问组件实例
-        vm.getAlllossType();
+        vm.getBillList();
+        vm.getAlllossType()
       })
     },
   filters: {
@@ -223,6 +225,9 @@ export default {
 .btn{
   display:flex;
   padding:18px 10px
+}
+/deep/ .el-table .cell{
+  height: 24px;
 }
 </style>
 <style lang="scss">

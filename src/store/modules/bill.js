@@ -5,6 +5,10 @@ const state = {
 const mutations = {
     ADD_SELECTION: (state, list) => {
         state.multipleSelection = state.multipleSelection.concat(list)
+        // const arr = state.multipleSelection.map((value) => JSON.stringify(value))
+        // const res = new Map()
+        // arr.filter((item) => !res.has(item) && res.set(item, 1))
+        // state.multipleSelection = arr.map((item) => JSON.parse(item))
     },
     CLEAR_SELECTION: (state, list) => {
         state.multipleSelection = []

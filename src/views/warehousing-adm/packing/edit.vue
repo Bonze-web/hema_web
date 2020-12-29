@@ -2,7 +2,7 @@
     <div>
         <div class="head">
             <div class="head-title">
-                <div style="margin:8px">入库订单{{ dataList.billNumber  }}</div>
+                <div style="margin:8px">{{ '[' + dataList.wrhCode  +']' + dataList.wrhName  }}</div>
                 <div style="margin:11px 0 5px 0; font-size: 12px; color: #999">{{ dataList.status | setStatus }}</div>
             </div>
             <div>
@@ -87,48 +87,35 @@
             <div>
                 <template>
                     <el-tabs v-model="tabActiveName">
-                        <el-tab-pane label="入库订单" name="category">
+                        <el-tab-pane label="收货装箱单" name="category">
                             <div class="info-title">基本信息</div>
-                            <!-- <el-col :span="6" class="info-box">
-                                <div>订单来源类型:</div>
-                                <div>{{ dataList.srcWay | setSrcWay }}</div>
-                            </el-col> -->
                             <el-col :span="6" class="info-box">
                                 <div>供应商:</div>
-                                <div>{{ '[' + dataList.vendorId + ']' + dataList.vendorName }}</div>
+                                <div>{{ '[' + dataList.vendorCode + ']' + dataList.vendorName }}</div>
                             </el-col>
                             <el-col :span="6" class="info-box">
                                 <div>物流方式:</div>
-                                <div>{{ dataList.isLogisticMode }}</div>
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>入库仓库:</div>
-                                <div>{{ '[' + dataList.wrhId + ']' + dataList.wrhName }}</div>
+                                <div>{{ dataList.logisticMode | setLogisticMode }}</div>
                             </el-col>
 
                             <el-col :span="6" class="info-box">
                                 <div>到效日期:</div>
-                                <div>{{ dataList.expireDate }}</div>
-                            </el-col>
-
-                            <el-col :span="6" class="info-box">
-                                <div>到货日期:</div>
-                                <div>{{ dataList.inputTime ? dataList.inputTime : "&lt;空&gt;" }}</div>
+                                <div>{{ dataList.endReceiveTime }}</div>
                             </el-col>
 
                             <el-col :span="6" class="info-box">
                                 <div>送达日期:</div>
-                                <div>{{ dataList.endReceiveTime ? dataList.endReceiveTime : "&lt;空&gt;" }}</div>
+                                <div>{{ dataList.updateTime ? dataList.updateTime : "&lt;空&gt;" }}</div>
                             </el-col>
 
                             <el-col :span="6" class="info-box">
-                                <div>来源单号:</div>
-                                <div>{{dataList.srcBillNumber}}</div>
+                                <div>入库订单单号:</div>
+                                <div>{{dataList.orderBillNumber}}</div>
                             </el-col>
 
                             <el-col :span="6" class="info-box">
                                 <div>收货方式:</div>
-                                <div>{{ dataList.type | setType }}</div>
+                                <div>{{ dataList.method | setMethod }}</div>
                             </el-col>
 
                             <el-col class="info-box">
@@ -250,14 +237,37 @@ export default {
       this.packingReceiveBill()
     },
     filters: {
-      setSrcWay(srcWay) {
-        switch (srcWay) {
+      // 状态。INITIAL:初始，RECEIVED:暂存，PUTAWAY:上架完成
+      setStatus(status) {
+        switch (status) {
+          case 'INITIAL':
+            return "初始"
+          case 'RECEIVED':
+            return "暂存"
+          case 'PUTAWAY ':
+            return "上架完成"
+          default:
+            return '未知';
+        }
+      },
+      // 收货方式，MANUAL：手工单据，RF：手持终端
+      setMethod(method) {
+        switch (method) {
           case 'MANUAL':
-            return "手工"
-          case 'API':
-            return "接口导入"
-          case 'EXCEL ':
-            return "文件导入"
+            return "手工单据"
+          case 'RF':
+            return "手持终端"
+          default:
+            return '未知';
+        }
+      },
+      // 物流模式，UNIFY：统配、CROSS：越库
+      setLogisticMode(logisticMode) {
+        switch (logisticMode) {
+          case 'UNIFY':
+            return "统配"
+          case 'CROSS':
+            return "越库"
           default:
             return '未知';
         }

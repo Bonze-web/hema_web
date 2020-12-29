@@ -12,20 +12,25 @@
         </div>
         <div class="head" v-if="status === 'read'">
             <div class="head-title">
-                <div>{{ billInfo.status }}</div>
-                <div style="margin:8px">{{ '[' + billInfo.code + ']' + billInfo.name }}</div>
+                <div class="status">{{ billInfo.status | billStatus }}</div>
+                <div style="margin:8px">{{ '损耗单：' + billInfo.billNumber }}</div>
             </div>
-            <div>
+            <div v-show="!check">
                 <el-button @click="back" >返回</el-button>
                 <!-- <el-button @click="statusChange" >打印</el-button> -->
                 <!-- <el-button @click="removeLossBill" >删除</el-button> -->
-                <el-button @click="editLossBill" >编辑</el-button>
+                <el-button v-if="form.status !== 'AUDITED'" @click="editLossBill" >编辑</el-button>
+                <el-button type="primary" v-if="form.status !== 'AUDITED'" @click="check = true">审核</el-button>
+                <!-- <el-button type="primary" @click="editContainerType" :disabled="!billInfo.status" v-if="hasPermission(PermIds.WMS_CONTAINER_TYPE_UPDATE)">编辑</el-button> -->
+            </div>
+            <div v-show="check">
+                <el-button @click="closeCheck" >取消</el-button>
                 <el-button type="primary" @click="subCheck">审核</el-button>
                 <!-- <el-button type="primary" @click="editContainerType" :disabled="!billInfo.status" v-if="hasPermission(PermIds.WMS_CONTAINER_TYPE_UPDATE)">编辑</el-button> -->
             </div>
         </div>
         <div style="height:20px" />
-        <div class="info-content" v-if="status === 'read' || status === 'check'">
+        <div class="info-content" v-if="status === 'read'">
             <div>
                 <template>
                     <el-tabs v-model="tabActiveName" @tab-click="tabClick">
@@ -33,23 +38,23 @@
                             <div class="info-title">概要</div>
                             <el-col :span="6" class="info-box">
                                 <div>损耗类型:</div>
-                                <div>{{ billInfo.code }}</div>
+                                <div>{{ billInfo.billTypeName }}</div>
                             </el-col>
                             <el-col :span="6" class="info-box">
                                 <div>仓库:</div>
-                                <div>{{ billInfo.code }}</div>
+                                <div>{{ billInfo.wrhName }}</div>
                             </el-col>
                             <el-col :span="6" class="info-box">
                                 <div>报损员:</div>
-                                <div>{{ billInfo.code }}</div>
+                                <div>{{ billInfo.decerName }}</div>
                             </el-col>
                             <el-col :span="6" class="info-box">
                                 <div>创建时间:</div>
-                                <div>{{ billInfo.code }}</div>
+                                <div>{{ billInfo.createTime }}</div>
                             </el-col>
                             <el-col :span="6" class="info-box">
                                 <div>单据来源:</div>
-                                <div>{{ billInfo.code ? billInfo.code : "&lt;空&gt;" }}</div>
+                                <div>{{ billInfo.srcBillNumber ? billInfo.srcBillNumber : "&lt;空&gt;" }}</div>
                             </el-col>
                             <div>
                               <el-col class="info-box">
@@ -70,34 +75,44 @@
                                           </template>
                                         </el-table-column>
                                         <el-table-column width="100" prop="productName" label="商品/商品规格"></el-table-column>
-                                        <el-table-column width="100" prop="munit" label="规格/计量单位"></el-table-column>
+                                        <el-table-column width="100" prop="qpcStr" label="规格/计量单位"></el-table-column>
                                         <el-table-column width="100" prop="binCode" label="货位"></el-table-column>
                                         <el-table-column width="100" prop="containerBarcode" label="容器"></el-table-column>
                                         <el-table-column width="100" prop="productionDate" label="生产日期"></el-table-column>
                                         <el-table-column width="100" prop="validDate" label="到效日期"></el-table-column>
                                         <el-table-column width="100" prop="productionBatch" label="批号"></el-table-column>
                                         <el-table-column width="100" prop="batch" label="批次"></el-table-column>
-                                        <el-table-column width="100" prop="qtystr" label="损耗件数"></el-table-column>
-                                        <el-table-column width="100" prop="qty" label="损耗数量"></el-table-column>
-                                        <el-table-column width="100" prop="realQtystr" label="实际件数" v-if="status === 'check'">
-                                          <!-- <template slot-scope="scope">
-                                            <el-input type="number" max="100" @input="calcProduct" size="mini" v-model="scope.row.qtystr"></el-input>
-                                          </template> -->
+                                        <el-table-column width="100" prop="consumeQtystr" label="损耗件数"></el-table-column>
+                                        <el-table-column width="100" prop="consumeQty" label="损耗数量"></el-table-column>
+                                        <el-table-column width="100" prop="realQtystr" label="实际件数" v-if="form.status === 'AUDITED'">
+                                          <template slot-scope="scope">
+                                            {{ scope.row.realQtystr }}
+                                          </template>
                                         </el-table-column>
-                                        <el-table-column width="100" prop="realQty" label="实际数量" v-if="status === 'check'">
-                                          <!-- <template slot-scope="scope">
-                                            <el-input type="number" max="100" @input="calcProduct" size="mini" v-model="scope.row.qtystr"></el-input>
-                                          </template> -->
+                                        <el-table-column width="100" prop="realQty" label="实际数量"  v-if="form.status === 'AUDITED'">
+                                          <template slot-scope="scope">
+                                            {{ scope.row.realQty }}
+                                          </template>
+                                        </el-table-column>
+                                        <el-table-column width="100" prop="realQtystr" label="实际件数" v-if="check">
+                                          <template slot-scope="scope">
+                                            <el-input type="number" max="100" @input="calcProduct" size="mini" v-model="scope.row.realQtystr"></el-input>
+                                          </template>
+                                        </el-table-column>
+                                        <el-table-column width="100" prop="realQty" label="实际数量" v-if="check">
+                                          <template slot-scope="scope">
+                                            <el-input type="number" max="100" @input="calcProduct" size="mini" v-model="scope.row.realQty"></el-input>
+                                          </template>
                                         </el-table-column>
                                         <el-table-column width="100" prop="price" label="单价"></el-table-column>
-                                        <el-table-column width="100" prop="amount" label="损耗金额"></el-table-column>
+                                        <el-table-column width="100" prop="consumeAmount" label="损耗金额"></el-table-column>
                                         <el-table-column width="100" prop="realAmount" label="实际损耗金额"></el-table-column>
                                         <el-table-column width="100" prop="remark" label="备注"></el-table-column>
                                     </el-table>
                         </el-tab-pane>
                         <!-- <el-tab-pane label="配送中心范围" name="range">配置管理</el-tab-pane> -->
                         <el-tab-pane label="操作日志" name="log">
-                          <system-log modular="LOSSTYPE"></system-log>
+                          <system-log modular="DECINVBILL"></system-log>
                         </el-tab-pane>
                     </el-tabs>
                 </template>
@@ -124,7 +139,7 @@
                                 <div class="info-title">基本信息</div>
                                 <el-row :gutter="20">
                                     <el-col :span="6" class="info-box">
-                                        <el-form-item label="损耗类型" prop="billType">
+                                        <el-form-item label="损耗类型" prop="billTypeId">
                                           <el-select v-model="form.billTypeId" placeholder="请选择损耗类型">
                                             <el-option v-for="item in billTypeList" :key="item.id" :label="item.typeName" :value="item.id"></el-option>
                                           </el-select>
@@ -138,10 +153,10 @@
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
-                                        <el-form-item label="报损人" prop="decerId">
+                                        <el-form-item label="报损人" prop="decerName">
                                             <el-autocomplete
                                                 class="inline-input"
-                                                v-model="form.decerId"
+                                                v-model="form.decerName"
                                                 :fetch-suggestions="querySearch"
                                                 placeholder="请输入报损人"
                                                 :trigger-on-focus="false"
@@ -162,15 +177,15 @@
                                     </div>
                                     <div class="list-count">
                                         <div>总数:{{ form.totalQtystr ? form.totalQtystr : 0 }},</div>
-                                        <div>总品相数:{{ form.totalQtystr ? form.totalQtystr : 0 }},</div>
-                                        <div>总金额:{{ form.totalQtystr ? form.totalQtystr : 0 }}</div>
+                                        <div>总品相数:{{ form.totalProductCount ? form.totalProductCount : 0 }},</div>
+                                        <div>总金额:{{ form.totalAmount ? form.totalAmount : 0 }}</div>
                                     </div>
                                 </div>
                                     <el-table
                                         :data="productList"
                                         style="width: 100%;text-align:center"
                                     >
-                                        <el-table-column prop="billNumber" label="操作">
+                                        <el-table-column fixed prop="billNumber" label="操作">
                                           <template slot-scope="scope">
                                             <el-button type="text" @click="deleteProduct(scope.$index)">删除</el-button>
                                           </template>
@@ -182,38 +197,42 @@
                                         </el-table-column>
                                         <el-table-column width="100" prop="productName" label="商品"></el-table-column>
                                         <el-table-column width="100" prop="binCode" label="货位"></el-table-column>
-                                        <el-table-column width="100" prop="productCode" label="货位用途"></el-table-column>
+                                        <el-table-column width="100" prop="binUsage" label="货位用途"></el-table-column>
                                         <el-table-column width="100" prop="containerBarcode" label="容器"></el-table-column>
                                         <el-table-column width="100" prop="vendorName" label="供应商"></el-table-column>
                                         <el-table-column width="100" prop="productionBatch" label="批号"></el-table-column>
                                         <el-table-column width="100" prop="productionDate" label="生产日期"></el-table-column>
                                         <el-table-column width="100" prop="validDate" label="到效日期"></el-table-column>
                                         <el-table-column width="100" prop="qpcStr" label="规格/计量单位"></el-table-column>
-                                        <el-table-column width="100" prop="billType" label="单价"></el-table-column>
+                                        <el-table-column width="100" prop="price" label="单价"></el-table-column>
                                         <el-table-column width="100" prop="batch" label="批次"></el-table-column>
-                                        <el-table-column width="100" prop="qty" label="可用库存数量"></el-table-column>
-                                        <!-- <el-table-column width="100" prop="qtystr" label="损耗件数">
+                                        <el-table-column width="100" prop="stockQty" label="可用库存数量">
                                           <template slot-scope="scope">
-                                            <el-input type="number" max="100" @input="calcProduct" size="mini" v-model="scope.row.qtystr"></el-input>
+                                            {{ scope.row.qty ? scope.row.qty : scope.row.stockQty }}
                                           </template>
-                                        </el-table-column> -->
-                                        <el-table-column width="100" prop="qty" label="损耗数量">
-                                          <!-- <template slot-scope="scope">
-                                            <el-input type="number" max="100" @input="calcProduct" size="mini" v-model="scope.row.qty"></el-input>
-                                          </template> -->
                                         </el-table-column>
-                                        <!-- <el-table-column width="100" prop="amount" label="损耗金额">
+                                        <el-table-column width="100" prop="consumeQtystr" label="损耗件数">
                                           <template slot-scope="scope">
-                                            {{ scope.row.qtystr + scope.row.qty }}
+                                            <el-input type="number" max="100" @change="calcProductEdit" size="mini" v-model="scope.row.consumeQtystr"></el-input>
                                           </template>
-                                        </el-table-column> -->
+                                        </el-table-column>
+                                        <el-table-column width="100" prop="consumeQty" label="损耗数量">
+                                          <template slot-scope="scope">
+                                            <el-input type="number" max="100" @change="calcProductEdit" size="mini" v-model="scope.row.consumeQty"></el-input>
+                                          </template>
+                                        </el-table-column>
+                                        <el-table-column width="100" prop="consumeAmount" label="损耗金额">
+                                          <template slot-scope="scope">
+                                            {{ (Number(scope.row.consumeQtystr) + Number(scope.row.consumeQty)) * scope.row.price ? (Number(scope.row.consumeQtystr) + Number(scope.row.consumeQty)) * scope.row.price : 0 }}
+                                          </template>
+                                        </el-table-column>
                                         <el-table-column width="100" prop="remark" label="备注">
-                                          <!-- <template slot-scope="scope">
+                                          <template slot-scope="scope">
                                             <textarea v-model="scope.row.remark"></textarea>
-                                          </template> -->
+                                          </template>
                                         </el-table-column>
                                     </el-table>
-                            </el-form>     
+                            </el-form>      
                 </template>
             </div>
         </div>
@@ -227,12 +246,14 @@ import systemLog from "@/components/systemLog.vue";
 import BillService from "@/api/service/BillService";
 import BillTypeService from "@/api/service/BillTypeService"
 import StorageService from "@/api/service/StorageService"
+import MemberService from "@/api/service/MemberService"
 import PermIds from "@/api/permissionIds";
 import { mapGetters, mapActions } from "vuex";
 
 export default {
   data() {
       return {
+        check: false,
         PermIds: PermIds,
         status: '', // 页面状态
         id: '', // 单据ID
@@ -252,11 +273,11 @@ export default {
           billTypeId: '', // 损耗类型
           expireDate: '', // 到效期
           isTest: false, // 是否现场测试
-          // realTotalAmount: '', // 实际总金额
-          // realTotalProductCount: '', // 实际总品项数
-          // realTotalQtystr: '', // 实际总件数
-          // realTotalVolume: '', // 实际总体积
-          // realTotalWeight: '', // 实际总质量
+          realTotalAmount: '', // 实际总金额
+          realTotalProductCount: '', // 实际总品项数
+          realTotalQtystr: '', // 实际总件数
+          realTotalVolume: '', // 实际总体积
+          realTotalWeight: '', // 实际总质量
           srcBillId: '', // 来源单据
           srcBillNumber: '', // 来源单号
           srcBillType: '', // 来源单据类型
@@ -268,6 +289,7 @@ export default {
           totalVolume: '', // 总体积
           totalWeight: '' // 总质量
         },
+        restaurants: [],
         createRules: {
           billType: [
             { required: true, message: '请选择损耗单类型', trigger: 'blur'}
@@ -290,15 +312,33 @@ export default {
       ...mapGetters(["hasPermission"])
     },
     methods: {
-      ...mapActions(["deleteSelection", "addSelection"]),
       close: function() {
-        this.productList = this.$store.state.bill.multipleSelection
+        this.clearSelection()
+        this.getBillDetail()
         // this.calcProduct(this.$store.state.bill.multipleSelection)
         this.status = 'read'
       },
-      subCheck: function() {
-        this.status = 'check'
+      closeCheck: function() {
+        this.check = false
+        for (const item in this.productList) {
+            this.productList[item].realAmount = this.productList[item].consumeAmount
+            this.productList[item].lineNum = 0
+            this.productList[item].realQty = this.productList[item].qty
+            this.productList[item].realQtystr = this.productList[item].qtystr
+            this.productList[item].stockId = this.productList[item].id
+          }
       },
+      subCheck: function() {
+        this.createBill(true)
+      },
+      getQueryStatus: function() {
+        this.status = this.$route.query.status
+        if (this.status === 'read') {
+          this.id = this.$route.query.id
+          this.getBillDetail(this.id)
+        }
+      },
+      ...mapActions(["deleteSelection", "addSelection", "clearSelection"]),
       batchAddProduct: function() {
         if (!this.form.wrhId) {
           this.$message.error('请选择仓库')
@@ -306,36 +346,66 @@ export default {
         }
         this.$router.push({path: '/wrhmanagement/lossbill/batchAdd', query: {id: this.form.wrhId}})
       },
-      handleSelect: function() {
-        console.log(1)
+      handleSelect: function(e) {
+        console.log(e)
+        this.form.decerId = e.id
       },
       deleteProduct: function(index) {
         this.deleteSelection(index)
+        const arr = Array.from(new Set(this.productList))
+        this.form.realtotalProductCount = arr.length
+        this.calcProduct()
       },
       createBill: function(reset) {
         const _this = this
         if (reset) {
-          this.form.status = ""
+          this.form.status = "AUDITED"
         } else {
-          this.form.status = ""
+          this.form.status = "SAVED"
         }
         if (_this.productList.length <= 0) {
           _this.$message.error('请至少添加一个商品')
           return
+        } else {
+          this.form.stockList = []
+          this.productList.forEach((item) => {
+            this.form.stockList.push({
+              consumeAmount: item.consumeAmount,
+              lineNum: item.lineNum,
+              consumeQty: item.consumeQty,
+              consumeQtystr: item.consumeQtystr,
+              stockId: item.stockId ? item.stockId : item.id,
+              realQty: item.realQty,
+              realQtystr: item.realQtystr,
+              realAmount: item.realAmount
+            })
+          })
         }
-        _this.$refs.form.validate(valid => {
-          if (valid) {
-            BillService.createLossBill()
-            .then((res) => {
-              _this.$message.success('创建成功')
+        if (this.check) {
+          BillService.updateLossBill(this.form)
+          .then((result) => {
+            _this.$message.success('审核成功')
               _this.$store.dispatch("tagsView/delView", _this.$route);
               _this.$router.go(-1)
-            })
-            .catch((err) => {
-              _this.$message.error('创建失败' + err.message)
-            })
-          }
-        })
+          }).catch((err) => {
+            _this.$message.error('审核失败' + err.message)
+          });
+        } else {
+          _this.$refs.form.validate(valid => {
+            if (valid) {
+              BillService.updateLossBill(this.form)
+              .then((res) => {
+                _this.$message.success('更新成功')
+                _this.clearSelection()
+                _this.$store.dispatch("tagsView/delView", _this.$route);
+                _this.$router.go(-1)
+              })
+              .catch((err) => {
+                _this.$message.error('更新失败' + err.message)
+              })
+            }
+          })
+        } 
       },
       back: function() {
         this.$store.dispatch("tagsView/delView", this.$route);
@@ -343,19 +413,15 @@ export default {
       },
       querySearch: function(queryString, cb) {
           // 搜索报损人
-        BillService.getDeccer()
-        .then((res) => {
-          this.deccerList = res.records
-        })
-        .catch((err) => {
-          this.$message.error('搜索报损人失败' + err.message)
-        })
+          const restaurants = this.restaurants;
+          const results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+          // 调用 callback 返回建议列表的数据
+          cb(results);
       },
-      getQueryStatus: function() {
-        this.status = this.$route.query.status
-        if (this.status === 'read') {
-          this.id = this.$route.query.id
-        }
+      createFilter(queryString) {
+        return (restaurant) => {
+          return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+        };
       },
       getAllBillType: function() {
           // 加载单据类型
@@ -385,20 +451,80 @@ export default {
         })
       },
       calcProduct: function(productList) {
-        productList.forEach(item => {
-          this.form.realTotalAmount += item.amount
-          this.form.realTotalQtystr += item.qtystr + item.qty
-          this.form.totalAmount += item.amount
-          this.form.totalAmount += item.amount
-          this.form.totalAmount += item.amount
+        this.form.realTotalAmount = ''
+        this.form.realtotalQtystr = ''
+        let realQtystr = ''
+        let realQty = ''
+        this.productList.forEach(item => {
+          console.log(item)
+          item.lineNum = this.productList.indexOf(item) + 1
+          item.realAmount = Number(item.realQtystr) * item.price + Number(item.realQty) * item.price 
+          this.form.realTotalAmount += item.realAmount
+          realQtystr = Number(realQtystr) + Number(item.realQtystr)
+          realQty = Number(realQty) + Number(item.realQty)
+          console.log(realQty)
+          this.form.realTotalQtystr = realQtystr + '+' + realQty
+          this.form.realTotalAmount = Number(this.form.totalAmount) + Number(item.realAmount)
+          console.log(item)
         });
+      },
+      calcProductEdit: function(productList) {
+        this.form.totalAmount = ''
+        this.form.totalQtystr = ''
+        let consumeQtystr = ''
+        let consumeQty = ''
+        this.productList.forEach(item => {
+          item.lineNum = this.productList.indexOf(item) + 1
+          item.consumeAmount = Number(item.consumeQtystr) * item.price + Number(item.consumeQty) * item.price 
+          this.form.realTotalAmount += item.consumeAmount
+          consumeQtystr = Number(consumeQtystr) + Number(item.consumeQtystr)
+          consumeQty = Number(consumeQty) + Number(item.consumeQty)
+          if (consumeQty + consumeQtystr > item.qty) {
+            this.$message.error('请输入符合库存的数据')
+            consumeQtystr = 0
+            consumeQty = 0
+            item.consumeQtystr = 0
+            item.consumeQty = 0
+          }
+          console.log(consumeQty)
+          this.form.totalQtystr = consumeQtystr + '+' + consumeQty
+          this.form.totalAmount = Number(this.form.totalAmount) + Number(item.consumeAmount)
+          console.log(item)
+        });
+      },
+      getUsers: function() {
+        MemberService.query(1, 0, {nameLike: this.form.decerName})
+        .then((res) => {
+          res.records.forEach((item) => {
+            const obj = {
+              value: item.username,
+              id: item.id
+            }
+            this.restaurants.push(obj)
+          })
+        }).catch((err) => {
+          this.$message.error('获取用户列表失败' + err.message)
+        })
       },
       tabClick: function() {  
       },
-      getBillDetail: function() {
+      getBillDetail: function(id) {
         BillService.getLossBillDetail(this.id)
         .then((result) => {
           this.billInfo = result
+          this.productList = result.stockList
+          for (const item in this.productList) {
+            this.productList[item].realAmount = result.status === "AUDITED" ? this.productList[item].realAmount : this.productList[item].consumeAmount
+            this.productList[item].lineNum = 0
+            this.productList[item].realQty = this.productList[item].consumeQty
+            this.productList[item].realQtystr = this.productList[item].consumeQtystr
+            this.productList[item].stockId = this.productList[item].stockId ? this.productList[item].stockId : this.productList[item].id
+          }
+          this.form.totalAmount = result.totalAmount
+          this.form.realtotalQtystr = result.realTotalQtystr
+          const arr = Array.from(new Set(this.productList))
+          this.form.realtotalProductCount = arr.length
+          this.form = Object.assign(this.form, this.billInfo)
         }).catch((err) => {
           this.$message.error('获取详情失败' + err.message)
         });
@@ -406,11 +532,14 @@ export default {
       editLossBill: function() {
         this.status = 'edit'
         this.getWrhList()
-        this.addSelection(this.multipleSelection)
+        this.addSelection(this.productList)
       }
     },
     created() {
+      this.getUsers()
+      this.getAllBillType()
       this.getQueryStatus()
+      this.getWrhList()
     },
     beforeRouteEnter(to, from, next) {
       next(vm => {
@@ -420,12 +549,29 @@ export default {
       })
     },
     filters: {
+      billStatus(status) {
+        switch (status) {
+          case "SAVED":
+            return "已保存"
+          case "AUDITED":
+            return "已审核"
+          default:
+            return "未知";
+        }
+      }
     }
 };
 </script>
 
 <style lang="scss" scoped>
-@import "src/styles/mixin.scss";
+// @import "src/styles/mixin.scss";
+.status{
+  background: #eee;
+  border-radius: 8px;
+  padding: 4px;
+  height: 32px;
+  line-height: 26px;
+}
 .head{
     background: #fff;
     padding: 15px 12px;

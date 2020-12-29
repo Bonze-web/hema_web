@@ -26,7 +26,7 @@ export default {
      * 请求损耗单详情
      */
     getLossBillDetail(id) {
-        return request.post('/wms/decinvbill/getDetail?id=' + id)
+        return request.get('/wms/decinvbill/getDetail?id=' + id)
     },
     /**
      * 请求溢余单列表

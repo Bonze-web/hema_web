@@ -53,13 +53,17 @@
     <div style="height: 20px" />
 
     <div style="background: #fff;">
-      <!-- <el-row>
-        <router-link :to="{ path: '/basicinfo/container/add' }" >
+      <el-row>
+        <!-- <router-link :to="{ path: '/basicinfo/container/add' }" >
           <el-button style="margin: 18px 10px" type="primary" size="mini" >新建</el-button>
         </router-link>
 
-        <el-button style="margin: 18px 10px" size="mini" @click="printingBtn" >打印</el-button>
-      </el-row> -->
+        <el-button style="margin: 18px 10px" size="mini" @click="printingBtn" >打印</el-button> -->
+
+        <router-link  :to="{ path: '/warehousing-adm/packing/edit', query:{ id: '20202020' } }" >
+          <el-button style="margin: 18px 10px" type="primary" size="mini" >测试跳往详情页面</el-button>
+        </router-link>
+      </el-row>
 
 
       <el-table :data="listData" style="width: 100%; text-align: center" :row-style="{ height: '16px', padding: '-4px' }" >
@@ -76,45 +80,45 @@
 
         <!-- <el-table-column prop="b" label="到货通知单号"></el-table-column> -->
 
-        <el-table-column prop="scope" label="通知订单类型" style="height: 20px">
-          <template slot-scope="scope">{{ scope.row.c }}</template>
+        <el-table-column prop="scope" label="收货类型" style="height: 20px">
+          <template slot-scope="scope">{{ scope.row.type | setType }}</template>
         </el-table-column>
 
         <el-table-column prop="scope" label="容器号">
           <template slot-scope="scope">
-            {{ scope.row.d }}
+            {{ scope.row.containerBarcode }}
           </template>
         </el-table-column>
 
         <el-table-column prop="scope" label="开始收货时间">
           <template slot-scope="scope">
-            {{ scope.row.e ? scope.row.e : "&lt;空&gt;" }}
+            {{ scope.row.beginReceiveTime ? scope.row.beginReceiveTime : "&lt;空&gt;" }}
           </template>
         </el-table-column>
 
         <el-table-column prop="scope" label="收货完成时间">
           <template slot-scope="scope">
-            {{ scope.row.f ? scope.row.f : "&lt;空&gt;" }}
+            {{ scope.row.endReceiveTime ? scope.row.endReceiveTime : "&lt;空&gt;" }}
           </template>
         </el-table-column>
 
         <el-table-column prop="scope" label="上架完成时间">
           <template slot-scope="scope">
-            {{ scope.row.g ? scope.row.g : "&lt;空&gt;" }}
+            {{ scope.row.uploadTime ? scope.row.uploadTime : "&lt;空&gt;" }}
           </template>
         </el-table-column>
 
-        <el-table-column prop="h" label="供应商"></el-table-column>
+        <el-table-column prop="vendorName" label="供应商"></el-table-column>
 
         <el-table-column prop="scope" label="操作人">
           <template slot-scope="scope">
-            {{ scope.row.i }}
+            {{ scope.row.updatorName }}
           </template>
         </el-table-column>
 
         <el-table-column prop="scope" label="状态">
           <template slot-scope="scope">
-            {{ scope.row.j }}
+            {{ scope.row.status | setStatus }}
           </template>
         </el-table-column>
 
@@ -216,24 +220,6 @@ export default {
     packingQuery: function() {
       const _this = this;
 
-      // const data = [];
-      // for (let i = 0; i < 5; i++) {
-      //     data.push({
-      //         a: 'a001',
-      //         b: 'b001',
-      //         c: 'c001',
-      //         d: 'd001',
-      //         e: 'e001',
-      //         f: 'f001',
-      //         g: 'g001',
-      //         h: 'h001',
-      //         i: 'i001',
-      //         j: 'j001'
-      //     })
-      // }
-
-      // _this.listData = data;
-
       const data = {
         page: this.page,
         pageSize: this.pageSize,
@@ -241,11 +227,12 @@ export default {
         orderBillNumberOrSrcNumberEquals: this.form.orderBillNumberOrSrcNumberEquals,
         vendorCodeOrNameEquals: this.form.vendorCodeOrNameEquals,
         containerBarcodeEquals: this.form.containerBarcodeEquals,
-        // creatorNameOrCodeEquals: this.form.creatorNameOrCodeEquals,
+        creatorNameOrCodeEquals: this.form.creatorNameOrCodeEquals,
         orderBillBeginDate: this.warehousingTime[0],
         orderBillEndDate: this.warehousingTime[1],
         receiveBillBeginDate: this.shipmentTime[0],
-        receiveBillEndDate: this.shipmentTime[1]
+        receiveBillEndDate: this.shipmentTime[1],
+        searchCount: true
       };
 
       WarehousingAdmServers.packingQuery(data).then((res) => {
@@ -267,7 +254,6 @@ export default {
       this.packingQuery(true);
     },
     printingBtn() {
-        // /wms/receiveBill/query
       // this.$message.error("打印功能还未开通")
     }
   },
@@ -281,12 +267,28 @@ export default {
     })
   },
   filters: {
-    setSrcApi(arcApi) {
-      switch (arcApi) {
-        case 'VENDOR':
-          return "供应商采购"
-        case 'PROCESS':
-          return "加工中心"
+    setType(type) {
+      switch (type) {
+        case 'FAST':
+          return "快速收货"
+        case 'NORMAL':
+          return "正常收货"
+        case 'TRUST':
+          return "信任收货"
+        default:
+          return '未知';
+      }
+    },
+    setStatus(status) {
+      switch (status) {
+        case 'INITIAL':
+          return "进行中"
+        case 'RECEIVED':
+          return "收货完成"
+        case 'PUTAWAY':
+          return "上架完成"
+        case 'DELETED':
+          return "已删除"
         default:
           return '未知';
       }

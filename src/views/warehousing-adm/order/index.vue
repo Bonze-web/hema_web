@@ -4,7 +4,7 @@
       <el-form ref="form" style="display: flex;flex-wrap:wrap;" :model="form" label-width="180px" label-position="right" >
 
         <el-form-item label="入库订单单号或外部单号：">
-          <el-input type="text" placeholder="请输入入库订单单号或外部单号" v-model="form.billNumberLike" class="input-width" ></el-input>
+          <el-input type="text" placeholder="请输入入库订单单号或外部单号" v-model="form.billNumberOrSrcBillNumberLike" class="input-width" ></el-input>
         </el-form-item>
 
         <el-form-item label="来源单号：">
@@ -15,12 +15,17 @@
           <el-input type="text" placeholder="请输入供应商" v-model="form.vendorCodeEqualsOrNameLike" class="input-width" ></el-input>
         </el-form-item>
 
+
         <el-form-item label="入库订单来源：">
-          <el-input type="text" placeholder="请输入库订单来源" v-model="form.srcBillNumberLike" class="input-width" ></el-input>
+          <el-select v-model="form.srcWayEquals" placeholder="请选择订单来源" class="input-width" >
+            <el-option value="MANUAL" label="手工"></el-option>
+            <el-option value="API" label="接口导入"></el-option>
+            <el-option value="EXCEL" label="文件导入"></el-option>
+          </el-select>
         </el-form-item>
 
         <el-form-item label="收货方式：">
-          <el-select v-model="form.type" placeholder="请选择状态" class="input-width" >
+          <el-select v-model="form.typeEquals" placeholder="请选择状态" class="input-width" >
             <el-option value="NOTTRUST" label="清点收货"></el-option>
             <el-option value="TRUST" label="信任收货"></el-option>
           </el-select>
@@ -81,7 +86,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column prop="srcBillNumber" label="外部单号"></el-table-column>
+        <el-table-column prop="srcBillNumber" label="来源单号"></el-table-column>
 
         <el-table-column prop="srcApi" label="通知订单类型" style="height: 20px">
           <template slot-scope="scope">{{ scope.row.srcApi | setSrcApi }}</template>
@@ -184,11 +189,12 @@ export default {
     return {
       listData: [], // 列表数据
       form: {
-        billNumberLike: '', // 单号
+        billNumberOrSrcBillNumberLike: '', // 单号
         srcBillNumberLike: '', //  来源单号
         vendorCodeEqualsOrNameLike: '', // 供应商代码等于或者名称类似于
         wrhCodeEqualsOrNameLike: '', // 入库仓库
-        type: '', // 收货方式
+        typeEquals: '', // 收货方式
+        srcWayEquals: '', // 订单来源
         productCodeOrNameLike: '', // 商品代码等于或者名称类似于
         status: '' // 状态等于
       },
@@ -214,17 +220,18 @@ export default {
     },
     clearInput: function() {
       this.form = {
-        billNumberLike: '', // 单号
+        billNumberOrSrcBillNumberLike: '', // 单号
         srcBillNumberLike: '', //  来源单号
         vendorCodeEqualsOrNameLike: '', // 供应商代码等于或者名称类似于
         wrhCodeEqualsOrNameLike: '', // 入库仓库
+        typeEquals: '', // 收货方式
+        srcWayEquals: '', // 订单来源
         productCodeOrNameLike: '', // 商品代码等于或者名称类似于
         status: '' // 状态等于
       };
 
-      this.toEffect = ''; // 到效日期
       this.arrival = ''; // 到货日期
-      this.receivingGoods = ''; // 收货日期
+      this.createTime = ''; // 创建日期
     },
     putFinish(billNumber, version) {
       // console.log(billNumber, version)
@@ -264,18 +271,22 @@ export default {
       const data = {
         page: this.page,
         pageSize: this.pageSize,
-        billNumberLike: this.form.billNumberLike, // 单号
+        billNumberOrSrcBillNumberLike: this.form.billNumberOrSrcBillNumberLike, // 单号
         srcBillNumberLike: this.form.srcBillNumberLike, //  来源单号
         vendorCodeEqualsOrNameLike: this.form.vendorCodeEqualsOrNameLike, // 供应商代码等于或者名称类似于
         wrhCodeEqualsOrNameLike: this.form.wrhCodeEqualsOrNameLike, // 入库仓库
-        type: this.form.type, // 收货方式
+        typeEquals: this.form.typeEquals ? this.form.typeEquals : null, // 收货方式
         productCodeOrNameLike: this.form.productCodeOrNameLike, // 商品代码等于或者名称类似于
+        srcWayEquals: this.form.srcWayEquals ? this.form.srcWayEquals : null, // 订单来源
         statusEquals: this.form.status ? this.form.status : null, // 状态等于
         realArrivalDateGte: this.arrival[0], // 到货日期小于等于
         realArrivalDateLte: this.arrival[1], // 到货日期小于等于
         beginReceiveTimeGte: this.createTime[0], // 创建日期大于等于
-        beginReceiveTimeLte: this.createTime[1] // 创建日期小于等于
+        beginReceiveTimeLte: this.createTime[1], // 创建日期小于等于
+        searchCount: true
       };
+
+      console.log(data)
 
       WarehousingAdmServers.queryOrderBill(data).then((res) => {
         const records = res.records;

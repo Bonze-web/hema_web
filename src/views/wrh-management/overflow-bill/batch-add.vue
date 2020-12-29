@@ -4,7 +4,7 @@
         <div class="">
             <el-form ref="form" style="display:flex;flex-wrap:wrap" :model="form" label-width="80px" label-position="right">
                 <el-form-item label="商品">
-                    <el-input type='text' placeholder="请输入商品编号/名称" v-model="form.productId" class="input-width"></el-input>
+                    <el-input type='text' placeholder="请输入商品编号/名称" v-model="form.productNameOrCode" class="input-width"></el-input>
                 </el-form-item>
                 <el-form-item label="货位">
                     <el-input type='text' placeholder="请输入货位编号" v-model="form.binCode" class="input-width"></el-input>
@@ -43,8 +43,18 @@
                 <el-table-column prop="qty" label="数量"></el-table-column>
                 <el-table-column prop="batch" label="批次"></el-table-column>
             </el-table>
+            <el-pagination
+                style="float:right"
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :current-page="1"
+                :page-sizes="[10, 20, 30, 50]"
+                :page-size="pageSize"
+                layout="total, sizes, prev, pager, next, jumper"
+                :total="totalCount">
+            </el-pagination>
         </div>
-        <div style="float:right">
+        <div>
             <el-button size="mini" @click="goBack">取消</el-button>
             <el-button type="primary" size="mini"  @click="batchAddLoss">添加</el-button>
         </div>
@@ -61,17 +71,19 @@ import { mapGetters, mapActions } from "vuex";
 export default {
   data() {
       return {
+        totalCount: 0,
         PermIds: PermIds,
         form: {
-            productId: '',
+            productNameOrCode: '',
             binCode: '',
             containerBarcode: '',
-            statusEquals: 'ON'
+            statusIn: 'NORMAL',
+            searchCount: true
         },
         page: 1,
         pageSize: 10,
         productList: [],
-        multipleSelection: [{}] // 被选中的商品
+        multipleSelection: [] // 被选中的商品
       }
     },
   components: {
@@ -80,7 +92,7 @@ export default {
     ...mapGetters(["hasPermission"])
   },
   methods: {
-    ...mapActions(["addSelection"]),
+    ...mapActions(["addSelection", "clearSelection"]),
     getRowKeys(row) {
       return row.id
     },
@@ -90,10 +102,11 @@ export default {
     },
     clearInput: function() {
       this.form = {
-        productId: '',
+        productNameOrCode: '',
         binCode: '',
         containerBarcode: '',
-        statusEquals: 'ON'
+        statusIn: 'NORMAL',
+        searchCount: true
       }
       this.onSelect()
     },
@@ -106,9 +119,16 @@ export default {
       });
     },
     batchAddLoss: function() {
+      // for (const item in this.multipleSelection) {
+      //   this.multipleSelection[item].consumeAmount = 0
+      //   this.multipleSelection[item].lineNum = 0
+      //   this.multipleSelection[item].consumeQty = 0
+      //   this.multipleSelection[item].consumeQtystr = 0
+      //   this.multipleSelection[item].stockId = this.multipleSelection[item].id
+      // }
       this.addSelection(this.multipleSelection)
       console.log(this.multipleSelection)
-      this.$store.dispatch("tagsView/delView", this.$route);
+      // this.$store.dispatch("tagsView/delView", this.$route);
       this.$router.go(-1)
     },
     handleSelectionChange(val) {
@@ -116,21 +136,43 @@ export default {
       this.multipleSelection = val;
     },
     onSelect: function() {
-      if (this.form.productId || this.form.binCode || this.form.containerBarcode) {
-        console.log(1)
+      if (this.form.productNameOrCode || this.form.binCode || this.form.containerBarcode) {
+        console.log(this.multipleSelection)
+        this.form.page = this.page
+        this.form.pageSize = this.pageSize
         ProductService.getAllStock(this.form)
         .then((result) => {
-          
+          this.productList = result.records
+          this.totalCount = result.totalCount
         }).catch((err) => {
           this.$message.error('获取商品列表失败' + err.message)
         });
       } else {
         this.$message.error('请至少填写一项以进行筛选搜索')
       }
-    }
+    },
+    handleCurrentChange: function(e) {
+        this.page = Number(e)
+        this.onSelect()
+      },
+      handleSizeChange: function(e) {
+        this.pageSize = Number(e)
+        this.page = 1
+        this.onSelect()
+      }
   },
   created() {
+    this.multipleSelection = this.$store.state.bill.multipleSelection
+    this.handleSelectionChange(this.multipleSelection)
+    // this.clearSelection()
+    // this.getRowKeys()
   },
+  // beforeRouteEnter(to, from, next) {
+  //     next(vm => {
+  //       // 通过 `vm` 访问组件实例
+  //       vm.multipleSelection = vm.$store.state.bill.multipleSelection
+  //     })
+  //   },
   filters: {
   }
 };
