@@ -204,6 +204,10 @@ export default {
         } else {
           this.form.status = "SAVED"
         }
+        if (Number(_this.totalAmount) === 0 || !_this.totalAmount) {
+          _this.$message.error('请输入损耗商品数量')
+          return
+        }
         if (_this.productList.length <= 0) {
           _this.$message.error('请至少添加一个商品')
           return
@@ -228,6 +232,9 @@ export default {
             })
             .catch((err) => {
               _this.form.stockList = []
+              const arr = Array.from(new Set(this.productList))
+              this.productList = arr
+              this.form.totalProductCount = arr.length
               _this.$message.error('创建失败' + err.message)
             })
           }
