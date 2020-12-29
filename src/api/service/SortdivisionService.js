@@ -50,7 +50,7 @@ export default {
    */
   updateSupplier(postData) {
     // return request.post('/wms/storagearea/update', param)
-    return request.post('/wms/storagearea/update', postData)
+    return request.post('/wms/pickarea/update', postData)
   },
   /**
    * 去调取物流中心的接口,让用户来选物流中心

@@ -16,7 +16,7 @@
         <div style="background:#fff">
           <el-row>
             <router-link :to="{ path: '/storageinfo/sortdivision/add', query:{ status: 'create'} }">
-              <el-button style="margin:18px 10px" type="primary" size="mini">新建</el-button>
+              <el-button style="margin:18px 10px" type="primary" size="mini" v-if="hasPermission(PermIds.WMS_PICKAREA_CREATE)">新建</el-button>
             </router-link>
           </el-row>
             <el-table
@@ -38,12 +38,12 @@
                 </el-table-column>
                 <el-table-column prop="stockType" label="存储类型">
                     <template slot-scope="scope">
-                        {{ scope.row.stockType }}
+                        {{ scope.row.stockType | stockTypeChange}}
                     </template>
                 </el-table-column>
                 <el-table-column prop="putawayRule" label="上架规则">
                     <template slot-scope="scope">
-                        {{ scope.row.putawayRule }}
+                        {{ scope.row.putawayRule | putawayRuleChange}}
                     </template>
                 </el-table-column>
                 <el-table-column
@@ -71,11 +71,13 @@
 <script>
 // 引入公共模块
 import SortdivisionService from "@/api/service/SortdivisionService";
-// import { mapGetters } from "vuex";
+import PermIds from "@/api/permissionIds";
+import { mapGetters } from "vuex";
 
 export default {
   data() {
       return {
+        PermIds: PermIds,
         suppliersId: '',
         page: 1,
         pageSize: 10,
@@ -88,6 +90,7 @@ export default {
       }
   },
   computed: {
+       ...mapGetters(["hasPermission", "workingOrg"])
   },
   methods: {
     open() {
@@ -245,24 +248,20 @@ export default {
     this.getSuppliersList();
   },
   filters: {
-    sourceType(type) {
+    stockTypeChange(type) {
       switch (type) {
-        case "HAND":
-          return "手动创建"
-        case "IMPORT":
-          return "文件导入"
-        default:
-          return '未知';
+        case "CASE":
+          return "整箱"
+        case "SPLIT":
+          return "拆零"
       }
     },
-    suppliersStatus(status) {
+    putawayRuleChange(status) {
       switch (status) {
-        case true:
-          return "启用"
-        case false:
-          return "禁用"
-        default:
-          return '未知';
+        case "TT":
+          return "TT型"
+        case "STACK":
+          return "地堆"
       }
     },
     purposeChange(val) {
