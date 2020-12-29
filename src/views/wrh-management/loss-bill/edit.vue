@@ -347,14 +347,15 @@ export default {
         this.$router.push({path: '/wrhmanagement/lossbill/batchAdd', query: {id: this.form.wrhId}})
       },
       handleSelect: function(e) {
-        console.log(e)
         this.form.decerId = e.id
       },
       deleteProduct: function(index) {
         this.deleteSelection(index)
+        this.productList.splice(index, 1)
         const arr = Array.from(new Set(this.productList))
-        this.form.realtotalProductCount = arr.length
-        this.calcProduct()
+        this.form.totalProductCount = arr.length
+        this.productList = arr
+        this.calcProductEdit()
       },
       createBill: function(reset) {
         const _this = this
@@ -465,7 +466,6 @@ export default {
           console.log(realQty)
           this.form.realTotalQtystr = realQtystr + '+' + realQty
           this.form.realTotalAmount = Number(this.form.totalAmount) + Number(item.realAmount)
-          console.log(item)
         });
       },
       calcProductEdit: function(productList) {
@@ -515,7 +515,7 @@ export default {
           this.productList = result.stockList
           for (const item in this.productList) {
             this.productList[item].realAmount = result.status === "AUDITED" ? this.productList[item].realAmount : this.productList[item].consumeAmount
-            this.productList[item].lineNum = 0
+            this.productList[item].lineNum = Number(item) + 1
             this.productList[item].realQty = this.productList[item].consumeQty
             this.productList[item].realQtystr = this.productList[item].consumeQtystr
             this.productList[item].stockId = this.productList[item].stockId ? this.productList[item].stockId : this.productList[item].id
@@ -524,6 +524,7 @@ export default {
           this.form.realtotalQtystr = result.realTotalQtystr
           const arr = Array.from(new Set(this.productList))
           this.form.realtotalProductCount = arr.length
+          this.productList = arr
           this.form = Object.assign(this.form, this.billInfo)
         }).catch((err) => {
           this.$message.error('获取详情失败' + err.message)
@@ -546,6 +547,9 @@ export default {
         // 通过 `vm` 访问组件实例
         // if ()
         vm.productList = vm.$store.state.bill.multipleSelection
+        const arr = Array.from(new Set(vm.productList))
+        vm.productList = arr
+        vm.form.totalProductCount = arr.length
       })
     },
     filters: {

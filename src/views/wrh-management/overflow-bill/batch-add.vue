@@ -119,13 +119,13 @@ export default {
       });
     },
     batchAddLoss: function() {
-      // for (const item in this.multipleSelection) {
-      //   this.multipleSelection[item].consumeAmount = 0
-      //   this.multipleSelection[item].lineNum = 0
-      //   this.multipleSelection[item].consumeQty = 0
-      //   this.multipleSelection[item].consumeQtystr = 0
-      //   this.multipleSelection[item].stockId = this.multipleSelection[item].id
-      // }
+      for (const item in this.multipleSelection) {
+        this.multipleSelection[item].consumeAmount = 0
+        this.multipleSelection[item].lineNum = Number(item) + 1
+        this.multipleSelection[item].consumeQty = 0
+        this.multipleSelection[item].consumeQtystr = 0
+        this.multipleSelection[item].stockId = this.multipleSelection[item].id
+      }
       this.addSelection(this.multipleSelection)
       console.log(this.multipleSelection)
       // this.$store.dispatch("tagsView/delView", this.$route);
