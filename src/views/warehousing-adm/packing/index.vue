@@ -72,7 +72,7 @@
 
         <el-table-column prop="scope" label="收货装箱单号" style="height: 20px">
           <template slot-scope="scope">
-            <router-link style="color: #409eff" :to="{ path: '/warehousing-adm/packing/edit', query:{ id: scope.row.a } }" >
+            <router-link style="color: #409eff" :to="{ path: '/warehousing-adm/packing/edit', query:{ id: scope.row.id } }" >
               <span>{{ scope.row.billNumber }}</span>
             </router-link>
           </template>
