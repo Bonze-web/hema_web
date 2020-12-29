@@ -481,8 +481,8 @@ export default {
           this.form.realTotalAmount += item.consumeAmount
           consumeQtystr = Number(consumeQtystr) + Number(item.consumeQtystr)
           consumeQty = Number(consumeQty) + Number(item.consumeQty)
-          if (consumeQty + consumeQtystr > item.qty) {
-            this.$message.error('请输入符合库存的数据')
+          if (Number(item.consumeQty) + Number(item.consumeQtystr) > Number(item.qty) || Number(item.consumeQty) < 0 || Number(item.consumeQtystr) < 0) {
+            this.$message.error('请输入正确的数据')
             consumeQtystr = 0
             consumeQty = 0
             item.consumeQtystr = 0
@@ -571,7 +571,7 @@ export default {
 <style lang="scss" scoped>
 // @import "src/styles/mixin.scss";
 .status{
-  background: #eee;
+  background: #66ff99;
   border-radius: 8px;
   padding: 4px;
   height: 32px;
