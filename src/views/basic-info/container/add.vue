@@ -78,7 +78,7 @@ export default {
           ],
           num: [
             // { required: true, message: '请输入容器数量', trigger: 'blur' },
-            { required: true, pattern: /^\d{1,6}(\.\d+)?$/, message: '请输入1-6位数字', trigger: 'change' }
+            { required: true, pattern: /^\d{1,4}(\.\d+)?$/, message: '请输入1-4位数字', trigger: 'change' }
             // { required: true, max: 6, message: '请输入1-6之间的数字', trigger: 'change' }
           ],
           prefix: [

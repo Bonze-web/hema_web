@@ -537,7 +537,8 @@ const StorageInfoPackage = {
         icon: 'table',
         permission: PermIds.WMS_WAREHOUSE_VIEW
       }
-    }, {
+    }, 
+    {
       path: "add",
       name: "Add",
       component: () =>
@@ -887,8 +888,8 @@ const warehousingAdm = {
     component: AModule,
     meta: {
       title: '入库订单',
-      icon: 'table'
-      // permission: PermIds.PRODUCT_SUPPLIER
+      icon: 'table',
+      permission: PermIds.WMS_ORDERBILL
     },
     children: [
       {
@@ -899,8 +900,8 @@ const warehousingAdm = {
       hidden: true,
       meta: {
         title: '入库订单列表',
-        icon: 'table'
-        // permission: PermIds.PRODUCT_SUPPLIER_VIEW
+        icon: 'table',
+        permission: PermIds.WMS_ORDERBILL_VIEW
       }
     }, {
       path: "edit",
@@ -910,21 +911,23 @@ const warehousingAdm = {
       hidden: true,
       meta: {
         title: '查看供应商',
-        icon: 'table'
-        // permission: PermIds.PRODUCT_SUPPLIER_VIEW
+        icon: 'table',
+        permission: PermIds.WMS_ORDERBILL_VIEW
       }
-    }, {
-      path: "add",
-      name: "SuppliersAdd",
-      component: () =>
-        import('@/views/warehousing-adm/order/add'),
-      hidden: true,
-      meta: {
-        title: '新建供应商',
-        icon: 'table'
-        // permission: PermIds.PRODUCT_SUPPLIER_CREATE
-      }
-    }]
+    }
+    // {
+    //   path: "add",
+    //   name: "SuppliersAdd",
+    //   component: () =>
+    //     import('@/views/warehousing-adm/order/add'),
+    //   hidden: true,
+    //   meta: {
+    //     title: '新建供应商',
+    //     icon: 'table'
+    //     // permission: PermIds.PRODUCT_SUPPLIER_CREATE
+    //   }
+    // }
+  ]
     },
     {
     path: "grounding",
@@ -994,8 +997,45 @@ const warehousingAdm = {
           }
         }
       ]
+    },
+    {
+      path: "packing",
+      name: "Packing",
+      component: AModule,
+      meta: {
+        title: '收货装箱',
+        icon: 'table'
+        // permission: PermIds.PRODUCT_SUPPLIER
+      },
+      children: [
+        {
+          path: "",
+          name: "PackingView",
+          component: () =>
+            import('@/views/warehousing-adm/packing/index'),
+          hidden: true,
+          meta: {
+            title: '收货装箱',
+            icon: 'table'
+            // permission: PermIds.PRODUCT_SUPPLIER_VIEW
+          }
+        },
+        {
+          path: "edit",
+          name: "PackingEdit",
+          component: () =>
+            import('@/views/warehousing-adm/packing/edit'),
+          hidden: true,
+          meta: {
+            title: '装箱详情',
+            icon: 'table'
+            // permission: PermIds.PRODUCT_SUPPLIER_VIEW
+          }
+        }
+      ]
     }
   ]}
+  
   /*
  * 单据管理包
  */

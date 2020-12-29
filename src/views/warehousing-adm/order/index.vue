@@ -271,8 +271,8 @@ export default {
         type: this.form.type, // 收货方式
         productCodeOrNameLike: this.form.productCodeOrNameLike, // 商品代码等于或者名称类似于
         statusEquals: this.form.status ? this.form.status : null, // 状态等于
-        arrivalDateGte: this.arrival[0], // 到货日期小于等于
-        arrivalDateLte: this.arrival[1], // 到货日期小于等于
+        realArrivalDateGte: this.arrival[0], // 到货日期小于等于
+        realArrivalDateLte: this.arrival[1], // 到货日期小于等于
         beginReceiveTimeGte: this.createTime[0], // 创建日期大于等于
         beginReceiveTimeLte: this.createTime[1] // 创建日期小于等于
       };
@@ -293,10 +293,10 @@ export default {
       this.pageSize = Number(e);
       this.page = 1;
       this.queryOrderBill(true);
+    },
+    printingBtn() {
+      this.$message.error("打印功能还未开通")
     }
-    // printingBtn() {
-    //   this.$message.error("打印功能还未开通")
-    // }
   },
   created() {
     this.queryOrderBill();

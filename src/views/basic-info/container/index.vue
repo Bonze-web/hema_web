@@ -42,7 +42,7 @@
 
         <el-form-item label="容器类型：">
           <el-select v-model="form.containerTypeCodeEquals" placeholder="请选择容器类型">
-            <el-option v-for="(item, index) in containerType" :key="index" :label="item.name" :value="item.id"></el-option>
+            <el-option v-for="(item, index) in containerType" :key="index" :label="item.name" :value="item.code"></el-option>
           </el-select>
         </el-form-item>
 
@@ -81,7 +81,7 @@
         <el-table-column prop="useStatus" label="容器类型" style="height: 20px">
           <template slot-scope="scope">
             <router-link style="color: #409eff" :to="{ path: '/basicinfo/containertype/edit', query:{ status: 'read', id: scope.row.containerTypeId} }">
-              <span>{{ '[' + scope.row.containerTypeId + ']' + scope.row.containerTypeName }}</span>
+              <span>{{ '[' + scope.row.containerTypeCode + ']' + scope.row.containerTypeName }}</span>
             </router-link>
           </template>
         </el-table-column>
