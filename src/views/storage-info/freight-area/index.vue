@@ -66,6 +66,7 @@
               编辑
             </el-button>
             <el-button
+              v-if="hasPermission(PermIds.WMS_BIN_DELETE)"
               type="text"
               size="mini"
               @click.stop="() => remove(node, data)">
@@ -210,11 +211,21 @@
 
 
     <!-- 更新货区 -->
-      <el-dialog width="40%" title="修改货位用途" :visible.sync="editFormSpace">
-        <el-form :model="formEditSpace" ref="formArea" :rules="areaRules">
+      <el-dialog width="40%" title="修改" :visible.sync="editFormSpace">
+        <el-form :model="formEditSpace" ref="formArea" :rules="editRules">
 
-          <el-form-item label="货道" :label-width="formLabelWidth" prop="name">
+          <el-form-item v-if="level === 4" label="货道" :label-width="formLabelWidth">
             {{ ShelfName }}
+          </el-form-item>
+
+          <el-form-item v-if="level === 1" label="名称" :label-width="formLabelWidth" prop="name">
+            <el-input v-model="formEditSpace.name" placeholder="请输入名称" ></el-input>
+          </el-form-item>
+
+          <el-form-item label="货位类型" :label-width="formLabelWidth" prop="bintypeId">
+            <el-select v-model="formEditSpace.bintypeId" placeholder="请选择货位类型">
+              <el-option v-for="item in bintypeList" :key="item.id" :label="item.name" :value="item.id"></el-option>
+            </el-select>
           </el-form-item>
   
           <el-form-item label="货位用途" :label-width="formLabelWidth" prop="binusage">
@@ -222,6 +233,11 @@
               <el-option v-for="item in binUsage" :key="item.value" :label="item.name" :value="item.value"></el-option>
             </el-select>
           </el-form-item>
+
+          <el-form-item v-if="level === 1" label="备注" :label-width="formLabelWidth">
+            <el-input v-model="formEditSpace.remark" placeholder="请输入备注" ></el-input>
+          </el-form-item>
+          
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="cancelEdit">取 消</el-button>
@@ -246,14 +262,28 @@ import PermIds from "@/api/permissionIds";
   export default {
     data() {
       return {
+        level: '',
         PermIds: PermIds,
         treeDataId: '', // 保存树结构货位ID以便后期修改时改变页面数据
         ShelfName: '',
         formEditSpace: {
+          name: '',
+          remark: '',
           id: '',
           binusage: '',
           version: '',
           bintypeId: ''
+        },
+        editRules: {
+          name: [
+            { required: true, message: '请输入名称', trigger: 'blur'}
+          ],
+          binusage: [
+            { required: true, message: '请输选择货位用途', trigger: 'blur'}
+          ],
+          bintypeId: [
+            { required: true, message: '请输选择货位类型', trigger: 'blur'}
+          ]
         },
         editFormSpace: false,
         bintypeList: [], // 货位类型
@@ -405,22 +435,60 @@ import PermIds from "@/api/permissionIds";
       this.formEditSpace.version = data.version
       this.formEditSpace.bintypeId = data.bintypeId
       this.formEditSpace.binusage = data.binusage
+      this.formEditSpace.name = data.name
+      this.formEditSpace.remark = data.remark
+      this.level = node.level
       this.treeDataId = node.id
     },
     cancelEdit: function() {
       this.editFormSpace = false
     },
     subEdit: function() {
-      StorageService.updateSpace(this.formEditSpace)
-      .then((res) => {
-        this.$message.success('修改成功')
-        this.editFormSpace = false
-        // this.treeData
-        this.getFreightArea()
-      })
-      .catch((err) => {
-        this.$message.error('修改失败' + err.message)
-      })
+      if (this.level === 1) {
+        StorageService.updateArea(this.formEditSpace)
+        .then((res) => {
+          this.$message.success('修改成功')
+          this.editFormSpace = false
+          // this.treeData
+          this.getFreightArea()
+        })
+        .catch((err) => {
+          this.$message.error('修改失败' + err.message)
+        })
+      } else if (this.level === 2) {
+        StorageService.updateLane(this.formEditSpace)
+        .then((res) => {
+          this.$message.success('修改成功')
+          this.editFormSpace = false
+          // this.treeData
+          this.getFreightArea()
+        })
+        .catch((err) => {
+          this.$message.error('修改失败' + err.message)
+        })
+      } else if (this.level === 3) {
+        StorageService.updateShelf(this.formEditSpace)
+        .then((res) => {
+          this.$message.success('修改成功')
+          this.editFormSpace = false
+          // this.treeData
+          this.getFreightArea()
+        })
+        .catch((err) => {
+          this.$message.error('修改失败' + err.message)
+        })
+      } else if (this.level === 4) {
+        StorageService.updateSpace(this.formEditSpace)
+        .then((res) => {
+          this.$message.success('修改成功')
+          this.editFormSpace = false
+          // this.treeData
+          this.getFreightArea()
+        })
+        .catch((err) => {
+          this.$message.error('修改失败' + err.message)
+        })
+      }
     },
     createCommand: function(command) {
       if (command === "area") {

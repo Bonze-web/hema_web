@@ -108,7 +108,7 @@ export default {
   WMS_BIN_VIEW: "wms:bin:view",
   WMS_BIN_CREATE: "wms:bin:create",
   WMS_BIN_UPDATE: "wms:bin:update",
-  WMS_BIN_REMOVE: "wms:bin:remove",
+  WMS_BIN_DELETE: "wms:bin:delete",
   /**
    * 系统组件-日志查询
    */

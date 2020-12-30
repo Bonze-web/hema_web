@@ -459,13 +459,13 @@ export default {
         this.productList.forEach(item => {
           console.log(item)
           item.lineNum = this.productList.indexOf(item) + 1
-          item.realAmount = Number(item.realQtystr) * item.price + Number(item.realQty) * item.price 
+          item.realAmount = Number(item.realQtystr) * item.price * Number(item.qpc) + Number(item.realQty) * item.price 
           this.form.realTotalAmount += item.realAmount
           realQtystr = Number(realQtystr) + Number(item.realQtystr)
           realQty = Number(realQty) + Number(item.realQty)
           console.log(realQty)
           this.form.realTotalQtystr = realQtystr + '+' + realQty
-          this.form.realTotalAmount = Number(this.form.totalAmount) + Number(item.realAmount)
+          this.form.realTotalAmount = (Number(this.form.totalAmount) + Number(item.realAmount)).toFixed(2)
         });
       },
       calcProductEdit: function(productList) {
@@ -488,7 +488,7 @@ export default {
           }
           console.log(consumeQty)
           this.form.totalQtystr = consumeQtystr + '+' + consumeQty
-          this.form.totalAmount = Number(this.form.totalAmount) + Number(item.consumeAmount)
+          this.form.totalAmount = (Number(this.form.totalAmount) + Number(item.consumeAmount)).toFixed(2)
           console.log(item)
         });
       },

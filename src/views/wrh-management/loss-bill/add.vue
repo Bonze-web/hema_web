@@ -26,7 +26,7 @@
                                     </el-col>
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="仓库" prop="wrhId">
-                                          <el-select v-model="form.wrhId" placeholder="请选择仓库">
+                                          <el-select v-model="form.wrhId" placeholder="请选择仓库" @visible-change="selectWrh">
                                             <el-option v-for="item in wrhList" :key="item.id" :label="'[' + item.code + ']' + item.name" :value="item.id"></el-option>
                                           </el-select>
                                         </el-form-item>
@@ -178,7 +178,20 @@ export default {
       ...mapGetters(["hasPermission"])
     },
     methods: {
-      ...mapActions(["deleteSelection"]),
+      ...mapActions(["deleteSelection", "clearSelection"]),
+      selectWrh: function(e) {
+        if (e && this.form.wrhId) {
+          this.$confirm('更换仓库将会清空商品明细, 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.clearSelection()
+            this.productList = []
+            this.form.wrhId = ''
+          })
+        }
+      },
       batchAddProduct: function() {
         if (!this.form.wrhId) {
           this.$message.error('请选择仓库')
@@ -298,11 +311,11 @@ export default {
         let consumeQty = ''
         this.productList.forEach(item => {
           item.lineNum = this.productList.indexOf(item) + 1
-          item.consumeAmount = Number(item.consumeQtystr) * (item.price) + Number(item.consumeQty) * item.price 
+          item.consumeAmount = Number(item.consumeQtystr) * (item.price) * Number(item.qpc) + Number(item.consumeQty) * item.price 
           this.form.realTotalAmount += item.consumeAmount
           consumeQtystr = Number(consumeQtystr) + Number(item.consumeQtystr)
           consumeQty = Number(consumeQty) + Number(item.consumeQty)
-          if (Number(item.consumeQty) + Number(item.consumeQtystr) > Number(item.qty) || Number(item.consumeQty) < 0 || Number(item.consumeQtystr) < 0) {
+          if (Number(item.consumeQty) * Number(item.qpc) + Number(item.consumeQtystr) > Number(item.qty) || Number(item.consumeQty) < 0 || Number(item.consumeQtystr) < 0) {
             this.$message.error('请输入正确数据')
             consumeQtystr = Number(consumeQtystr) - Number(item.consumeQtystr)
             consumeQty = Number(consumeQty) - Number(item.consumeQty)
@@ -311,7 +324,7 @@ export default {
           }
           console.log(consumeQty)
           this.form.totalQtystr = consumeQtystr + '+' + consumeQty
-          this.form.totalAmount = Number(this.form.totalAmount) + Number(item.consumeAmount)
+          this.form.totalAmount = (Number(this.form.totalAmount) + Number(item.consumeAmount)).toFixed(2)
           console.log(item)
         });
       },

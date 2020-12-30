@@ -26,7 +26,7 @@
                                     </el-col>
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="仓库" prop="wrhId">
-                                          <el-select v-model="form.wrhId" placeholder="请选择仓库">
+                                          <el-select v-model="form.wrhId" placeholder="请选择仓库" @visible-change="selectWrh">
                                             <el-option v-for="item in wrhList" :key="item.id" :label="'[' + item.code + ']' + item.name" :value="item.id"></el-option>
                                           </el-select>
                                         </el-form-item>
@@ -291,6 +291,19 @@ export default {
     },
     methods: {
       ...mapActions(["deleteSelection", "addSelection", "clearSelection"]),
+      selectWrh: function(e) {
+        if (e && this.form.wrhId) {
+          this.$confirm('更换仓库将会清空商品明细, 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.clearSelection()
+            this.productList = []
+            this.form.wrhId = ''
+          })
+        }
+      },
       cancelAdd: function() {
         this.addProductDialog = false
         this.product = {
