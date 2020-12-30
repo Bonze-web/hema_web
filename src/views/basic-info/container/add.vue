@@ -101,7 +101,7 @@ export default {
         // 创建新的容器
 
         if (this.form.num > 500) {
-            this.$confirm('输入内容过大，可能会导致创建时间过长，是否确认创建?', '提示', {
+            this.$confirm('输入的生成数量过大，可能会导致创建时间过长，是否确认创建?', '提示', {
               confirmButtonText: '确定',
               cancelButtonText: '取消',
               type: 'warning'

@@ -83,10 +83,13 @@ export default {
       const _this = this;
       // const data = Object.assign(this.getData, this.objDate)
       const data = this.objDate;
+      data.version = this.getData.version;
+      data.billNumber = this.getData.billNumber;
+      data.dcId = this.getData.dcId
 
       const cart = /(^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领A-Z]{1}[A-Z]{1}[A-Z0-9]{4}[A-Z0-9挂学警港澳]{1}$)/;
         
-      const myreg = /^[1][3,4,5,7,8,9][0-9]{9}$/;
+      const myreg = /^[1]\d{10}$/;
       if (!myreg.test(this.objDate.driverPhone)) {
         this.$message.error("手机号码输入有误")
         return false;

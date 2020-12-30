@@ -148,7 +148,7 @@
 
                             <el-table :data="orderBillItems" style="width: 100%; text-align: center" :row-style="{ height: '16px', padding: '-4px' }" >
                               <el-table-column type="index" label="序号"></el-table-column>
-                              <el-table-column prop="billNumber" label="商品编码" style="height: 20px"></el-table-column>
+                              <el-table-column prop="productCode" label="商品编码" style="height: 20px"></el-table-column>
                               <el-table-column prop="productName" label="商品名称" style="height: 20px"></el-table-column>
                               <el-table-column prop="munit" label="单位" style="height: 20px"></el-table-column>
                               <el-table-column prop="spec" label="规格" style="height: 20px"></el-table-column>

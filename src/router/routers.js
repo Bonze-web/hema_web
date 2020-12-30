@@ -980,8 +980,8 @@ const warehousingAdm = {
       component: AModule,
       meta: {
         title: '到货登记',
-        icon: 'table'
-        // permission: PermIds.PRODUCT_SUPPLIER
+        icon: 'table',
+        permission: PermIds.WMS_ORDERBILL_ARRIVE
       },
       children: [
         {
@@ -992,8 +992,8 @@ const warehousingAdm = {
           hidden: true,
           meta: {
             title: '到货登记',
-            icon: 'table'
-            // permission: PermIds.PRODUCT_SUPPLIER_VIEW
+            icon: 'table',
+            permission: PermIds.WMS_ORDERBILL_ARRIVE
           }
         }
       ]

@@ -121,7 +121,11 @@
 
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button v-if="scope.row.status === 'RECEIVING'" size="mini" type="text" @click="putFinish(scope.row.billNumber, scope.row.version)">收货完成</el-button>
+            <!-- <el-button size="mini" type="text" >
+              <router-link style="color: #409eff" :to="{ path: '/warehousing-adm/oeder/edit', query:{ id: scope.row.id } }" >查看</router-link>
+            </el-button> -->
+            <el-button v-if="scope.row.status === 'RECEIVING'" size="mini" type="text" @click="putFinish(scope.row.billNumber, scope.row.version, scope.row.dcId)">收货完成</el-button>
+            <el-button v-else-if="scope.row.status === 'FINISHED'" size="mini" type="text" @click="printingBtn(scope.row)">打印</el-button>
             <div v-else>--</div>
           </template>
         </el-table-column>
@@ -233,7 +237,7 @@ export default {
       this.arrival = ''; // 到货日期
       this.createTime = ''; // 创建日期
     },
-    putFinish(billNumber, version) {
+    putFinish(billNumber, version, dcId) {
       // console.log(billNumber, version)
       // 确认收货
       const _this = this;
@@ -243,6 +247,7 @@ export default {
         type: 'warning'
       }).then(() => {
         const obj = {
+          dcId,
           billNumber,
           version
         }
@@ -305,7 +310,8 @@ export default {
       this.page = 1;
       this.queryOrderBill(true);
     },
-    printingBtn() {
+    printingBtn(data) {
+      console.log(data)
       this.$message.error("打印功能还未开通")
     }
   },
@@ -354,6 +360,7 @@ export default {
   },
   filters: {
     setScope(status) {
+      // 状态。INITIAL:初始，ARRIVED:已到货登记，QUALITY:已质检，RECEIVING:进行中，FINISHED:已完成，ABORTED:已取消
       switch (status) {
         case 'INITIAL':
           return "初始"
@@ -363,8 +370,8 @@ export default {
           return "已质检"
         case 'RECEIVING':
           return "进行中"
-        case 'INISHED':
-          return "已完成"
+        case 'FINISHED':
+          return "收货完成"
         case 'ABORTED ':
           return "已取消"
         default:
