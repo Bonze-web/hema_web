@@ -60,9 +60,9 @@
 
         <el-button style="margin: 18px 10px" size="mini" @click="printingBtn" >打印</el-button> -->
 
-        <router-link  :to="{ path: '/warehousing-adm/packing/edit', query:{ id: '20202020' } }" >
+        <!-- <router-link  :to="{ path: '/warehousing-adm/packing/edit', query:{ id: '20202020' } }" >
           <el-button style="margin: 18px 10px" type="primary" size="mini" >测试跳往详情页面</el-button>
-        </router-link>
+        </router-link> -->
       </el-row>
 
 
