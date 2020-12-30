@@ -115,7 +115,7 @@
                             </el-form>      
                 </template>
             </div>
-            <el-dialog title="收货地址" width="600px" :visible.sync="addProductDialog">
+            <el-dialog title="单个新增商品" width="600px" :visible.sync="addProductDialog">
 
               <el-form :model="product" :rules="rules" ref="product">
                 <el-form-item label="商品" :label-width="formLabelWidth" prop="productName">
@@ -135,6 +135,7 @@
                   <el-date-picker
                     v-model="product.productBirthDate"
                     type="datetime"
+                    value-format="yyyy-MM-dd HH:mm:ss"
                     placeholder="选择日期时间">
                   </el-date-picker>
                 </el-form-item>
@@ -142,6 +143,7 @@
                   <el-date-picker
                     v-model="product.productValidDate"
                     type="datetime"
+                    value-format="yyyy-MM-dd HH:mm:ss"
                     placeholder="选择日期时间">
                   </el-date-picker>
                 </el-form-item>
@@ -448,7 +450,7 @@ export default {
       createBill: function(reset) {
         const _this = this
         if (reset) {
-          this.form.status = ""
+          this.form.status = "AUDITED"
         } else {
           this.form.status = "SAVED"
         }
@@ -476,6 +478,7 @@ export default {
             })
             .catch((err) => {
               _this.$message.error('创建失败' + err.message)
+              _this.form.stockList = []
             })
           }
         })
@@ -520,7 +523,7 @@ export default {
         const postData = {
           page: 1,
           pageSize: 0,
-          statusEquals: 'ON'
+          statusEquals: 'OFF'
         }
         StorageService.warehouseInit(postData)
         .then((res) => {
