@@ -24,7 +24,7 @@ export default {
     return request.get('/wms/pickOrder/getAllGrpByPickId?pickOrderId=' + pickOrderId);
   },
   getAllStoreByGrpId(id) {
-    return request.get('/wms/pickOrder/getAllStoreByGrpId?id=' + id);
+    return request.get('/wms/pickOrder/getAllStoreByGrpId?grpId=' + id);
   },
   getById(id) {
     return request.get('/wms/pickOrder/getById?id=' + id);
@@ -52,7 +52,7 @@ export default {
     return request.post('/wms/pickOrder/updateGrp', postData)
   },
   queryItem(postData) {
-    return request.post('/wms/pickOrder/queryItem', postData)
+    return request.post('/wms/pickOrder/queryItem', postData);
   },
   addGrpItems(postData) {
     return request.post('/wms/pickOrder/addGrpItems', postData)
