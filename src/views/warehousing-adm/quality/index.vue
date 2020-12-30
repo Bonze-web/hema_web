@@ -41,9 +41,9 @@
 
         <el-button style="margin: 18px 10px" size="mini" @click="printingBtn" >打印</el-button> -->
 
-        <router-link  :to="{ path: '/warehousing-adm/quality/edit', query:{ id: '20202020' } }" >
+        <!-- <router-link  :to="{ path: '/warehousing-adm/quality/edit', query:{ id: '20202020' } }" >
           <el-button style="margin: 18px 10px" type="primary" size="mini" >测试跳往详情页面</el-button>
-        </router-link>
+        </router-link> -->
       </el-row>
 
 
@@ -187,13 +187,13 @@ export default {
 
       const data = {
         page: this.page,
-        pageSize: this.pageSize,
-        billNumberEquals: this.form.billNumberEquals, // 质检单号
-        orderbillIdNumber: this.form.orderbillIdNumber, // 入库单号
-        status: this.form.status, // 质检状态
-        orderTimeStart: this.qualityTime[0], // 质检开始时间
-        orderTimeEnd: this.qualityTime[1], // 质检结束时间
-        searchCount: true
+        pageSize: this.pageSize
+        // billNumberEquals: this.form.billNumberEquals, // 质检单号
+        // orderbillIdNumber: this.form.orderbillIdNumber, // 入库单号
+        // status: this.form.status, // 质检状态
+        // orderTimeStart: this.qualityTime[0], // 质检开始时间
+        // orderTimeEnd: this.qualityTime[1], // 质检结束时间
+        // searchCount: true
       };
 
       WarehousingAdmServers.qualityInspection(data).then((res) => {

@@ -132,7 +132,7 @@
 
                             <div style="height:20px" />
 
-                            <el-table :data="items" style="width: 100%; text-align: center" :row-style="{ height: '16px', padding: '-4px' }" >
+                            <el-table :data="orderBillItems" style="width: 100%; text-align: center" :row-style="{ height: '16px', padding: '-4px' }" >
                               <el-table-column type="index" label="序号"></el-table-column>
 
                               <el-table-column prop="billNumber" label="商品编码" style="height: 20px"></el-table-column>
@@ -148,6 +148,12 @@
 
 
                               <el-table-column prop="validDate" label="到效日期" style="height: 20px"></el-table-column>
+
+                              <el-table-column prop="scope" label="保质天数" style="height: 20px">
+                                <template slot-scope="scope">
+                                  {{ scope.row.shelfLifeDays }}天
+                                </template>
+                              </el-table-column>
 
                             </el-table>
                         </el-tab-pane>
@@ -209,9 +215,9 @@ export default {
       },
       onSubmit() {
         if (this.iptVal === '') {
-          this.orderBillItems = this.dataList.orderBillItems
+          this.orderBillItems = this.dataList.items
         } else {
-          this.orderBillItems = this.dataList.orderBillItems.filter((item) => {
+          this.orderBillItems = this.dataList.items.filter((item) => {
             return item.billNumber.indexOf(this.iptVal) !== -1
           })
         }
@@ -223,7 +229,7 @@ export default {
         .then(res => {
           console.log(res)
           this.dataList = res;
-          this.orderBillItems = res.orderBillItems;
+          this.orderBillItems = res.items;
         })
         .catch(err => {
           this.$message.error("查询失败" + err.message)
@@ -237,14 +243,14 @@ export default {
       this.packingReceiveBill()
     },
     filters: {
-      // 状态。INITIAL:初始，RECEIVED:暂存，PUTAWAY:上架完成
       setStatus(status) {
+        // 状态。INITIAL:初始，RECEIVED:暂存，PUTAWAY:上架完成
         switch (status) {
           case 'INITIAL':
             return "初始"
           case 'RECEIVED':
             return "暂存"
-          case 'PUTAWAY ':
+          case 'PUTAWAY':
             return "上架完成"
           default:
             return '未知';
