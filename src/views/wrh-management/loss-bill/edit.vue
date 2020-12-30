@@ -19,8 +19,8 @@
                 <el-button @click="back" >返回</el-button>
                 <!-- <el-button @click="statusChange" >打印</el-button> -->
                 <!-- <el-button @click="removeLossBill" >删除</el-button> -->
-                <el-button v-if="form.status !== 'AUDITED' &&  hasPermission(PermIds.WMS_DECINVBILL_CREATE)" @click="editLossBill">编辑</el-button>
-                <el-button type="primary" v-if="form.status !== 'AUDITED'" @click="check = true">审核</el-button>
+                <el-button v-if="form.status !== 'AUDITED' && hasPermission(PermIds.WMS_DECINVBILL_CREATE)" @click="editLossBill">编辑</el-button>
+                <el-button type="primary" v-if="form.status !== 'AUDITED' && hasPermission(PermIds.WMS_DECINVBILL_AUDIT)" @click="check = true">审核</el-button>
                 <!-- <el-button type="primary" @click="editContainerType" :disabled="!billInfo.status" v-if="hasPermission(PermIds.WMS_CONTAINER_TYPE_UPDATE)">编辑</el-button> -->
             </div>
             <div v-show="check">
@@ -147,7 +147,7 @@
                                     </el-col>
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="仓库" prop="wrhId">
-                                          <el-select v-model="form.wrhId" placeholder="请选择仓库">
+                                          <el-select v-model="form.wrhId" placeholder="请选择仓库" @visible-change="selectWrh">
                                             <el-option v-for="item in wrhList" :key="item.id" :label="'[' + item.code + ']' + item.name" :value="item.id"></el-option>
                                           </el-select>
                                         </el-form-item>
@@ -317,6 +317,22 @@ export default {
         this.getBillDetail()
         // this.calcProduct(this.$store.state.bill.multipleSelection)
         this.status = 'read'
+      },
+      selectWrh: function(e) {
+        if (e && this.form.wrhId) {
+          this.$confirm('更换仓库将会清空商品明细, 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.clearSelection()
+            this.productList = []
+            this.form.wrhId = ''
+            this.form.totalAmount = 0
+            this.form.totalProductCount = 0
+            this.form.totalQtystr = 0 + '+' + 0
+          })
+        }
       },
       closeCheck: function() {
         this.check = false

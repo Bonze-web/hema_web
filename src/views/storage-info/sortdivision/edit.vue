@@ -53,7 +53,7 @@
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="上架规则" prop="putawayRule">
                                           <el-select v-model="form.putawayRule" placeholder="请选择上架规则">
-                                            <el-option label="T型" value="TT"></el-option>
+                                            <el-option label="T型" value="T"></el-option>
                                             <el-option label="地堆 " value="STACK"></el-option>
                                           </el-select>
                                         </el-form-item>
@@ -309,7 +309,7 @@ export default {
           ],
           binScope: [
             { required: true, message: '请填写货位范围', trigger: 'blur' },
-            { required: true, pattern: /^([1-9a-zA-Z]{1,64}[,]{0,1}){0,64}$|^(([1-9a-zA-Z]+[-]+[1-9a-zA-Z]+){0,64}[1-9a-zA-Z]{0,64}([(]+[1-9]+\/[1-9]+[)]+)?[,]?[1-9a-zA-Z]{0,64}[,]?){0,64}$/, message: '请填写货位范围', trigger: 'blur' }
+            { required: true, pattern: /^(([1-9a-zA-Z]+[-]+[1-9a-zA-Z]+){0,64}[1-9a-zA-Z]{0,64}([(]+[1-9]+\/[1-9]+[)]+)?[,]?[1-9a-zA-Z]{0,64}[,]?){0,64}$/, message: '格式10、10(1/2)、10-20，多个以逗号隔开', trigger: 'blur' }
           ],
           stockType: [
             { required: true, message: '请填写存储类型', trigger: 'blur' }

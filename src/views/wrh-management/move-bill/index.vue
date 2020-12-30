@@ -3,13 +3,13 @@
       <div class="select-head">
             <el-form ref="form" style="display:flex;flex-wrap:wrap" :model="form" label-width="80px" label-position="right">
                 <el-form-item label="单号">
-                    <el-input type='text' placeholder="请输入单号编号" v-model="form.billNumLikes" class="input-width"></el-input>
+                    <el-input type='text' placeholder="请输入类别编号/名称" v-model="form.billNumLikes" class="input-width"></el-input>
                 </el-form-item>
                 <el-form-item label="仓库">
-                    <el-input type='text' placeholder="请输入仓库编号" v-model="form.wareCodeOrNameLikes" class="input-width"></el-input>
+                    <el-input type='text' placeholder="请输入上级类别编号/名称" v-model="form.wareCodeOrNameLikes" class="input-width"></el-input>
                 </el-form-item>
-                <el-form-item label="报损员">
-                    <el-input type='text' placeholder="请输入报损员" v-model="form.decerNameLikes" class="input-width"></el-input>
+                <el-form-item label="报告员">
+                    <el-input type='text' placeholder="请输入上级类别编号/名称" v-model="form.decerNameLikes" class="input-width"></el-input>
                 </el-form-item>
                 <el-form-item label="状态">
                     <el-select v-model="form.statusEquals" placeholder="请选择状态">
@@ -19,13 +19,13 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="商品">
-                    <el-input type='text' placeholder="请输入商品编号/名称" v-model="form.productCodeOrname" class="input-width"></el-input>
+                    <el-input type='text' placeholder="请输入类别编号/名称" v-model="form.productCodeOrname" class="input-width"></el-input>
                 </el-form-item>
                 <el-form-item label="货位">
-                    <el-input type='text' placeholder="请输入货位编号/名称" v-model="form.binCode" class="input-width"></el-input>
+                    <el-input type='text' placeholder="请输入上级类别编号/名称" v-model="form.binCode" class="input-width"></el-input>
                 </el-form-item>
                 <el-form-item label="容器">
-                    <el-input type='text' placeholder="请输入容器编号" v-model="form.containerCodeOrNameLikes" class="input-width"></el-input>
+                    <el-input type='text' placeholder="请输入上级类别编号/名称" v-model="form.containerCodeOrNameLikes" class="input-width"></el-input>
                 </el-form-item>
                 <el-form-item label="创建时间">
                     <el-date-picker
@@ -37,7 +37,7 @@
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="来源单号">
-                    <el-input type='text' placeholder="请输入来源单号" v-model="form.srcBillNumber" class="input-width"></el-input>
+                    <el-input type='text' placeholder="请输入上级类别编号/名称" v-model="form.srcBillNumber" class="input-width"></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" size="mini" @click="onSelect">立即搜索</el-button>
@@ -49,13 +49,13 @@
         <div style="background:#fff;">
           <div class="btn">
             <el-row>
-              <router-link :to="{ path: '/wrhmanagement/lossbill/add', query:{ status: 'create'} }">
+              <router-link :to="{ path: '/wrhmanagement/overflowbill/add', query:{ status: 'create'} }">
                   <!-- <span v-if="child.meta&&child.meta.title" :title="child.meta.title">{{child.meta.title}}</span> -->
-                  <el-button type="primary" size="mini" @click="createBill" v-if="hasPermission(PermIds.WMS_DECINVBILL_CREATE)">新建</el-button>
+                  <el-button type="primary" size="mini" v-if="hasPermission(PermIds.WMS_INCINVBILL_CREATE)">新建</el-button>
               </router-link>
             </el-row>
             <el-row style="margin-left:12px">
-              <el-button type="primary" size="mini" @click="table = true" v-if="hasPermission(PermIds.WMS_PRETYPE)">管理损耗类型</el-button>
+              <el-button type="primary" size="mini" @click="table = true">管理移库类型</el-button>
             </el-row>
           </div>
           <el-table
@@ -64,20 +64,20 @@
                 :row-style="{height: '16px',padding: '-4px'}"
                 :default-sort = "{prop: 'billNumber'}"
             >
-                <el-table-column  prop="billNumber" label="单号">
+                <el-table-column sortable prop="billNumber" label="单号">
                     <template slot-scope="scope">
-                        <router-link style="color:#409EFF" :to="{ path: '/wrhmanagement/lossbill/edit', query:{ status: 'read', id: scope.row.id} }">
+                        <router-link style="color:#409EFF" :to="{ path: '/wrhmanagement/overflowbill/edit', query:{ status: 'read', id: scope.row.id} }">
                             <span>{{ scope.row.billNumber }}</span>
                         </router-link>
                     </template>
                 </el-table-column>
-                <el-table-column prop="billType" label="损耗类型"></el-table-column>
+                <el-table-column prop="billType" label="移库类型"></el-table-column>
                 <el-table-column prop="wrhCode" label="仓库">
                   <template slot-scope="scope">
                     {{ '[' + scope.row.wrhCode + ']' + scope.row.wrhName }}
                   </template>
                 </el-table-column>
-                <el-table-column prop="decerCode" label="报损员">
+                <el-table-column prop="decerCode" label="报告员">
                   <template slot-scope="scope">
                     {{ scope.row.decerName }}
                   </template>
@@ -95,14 +95,14 @@
 
 
 
-  <!-- 管理损耗类型抽屉 -->
+  <!-- 管理移库类型抽屉 -->
         <el-drawer
             :visible.sync="table"
             direction="rtl"
             :with-header="false"
             size="50%"
           >
-            <div class="loss-type-box"><bill-type billTitle="损耗类型" :billList="billList" lossType="DECINV" @getAlllossType="getAlllossType" @goBack="goBack"></bill-type></div>
+            <div class="loss-type-box"><bill-type billTitle="移库类型" :billList="billList" lossType="INCINV" @getAlllossType="getAlllossType" @goBack="goBack"></bill-type></div>
           </el-drawer>
     </div>
 </template>
@@ -112,7 +112,7 @@ import billType from '../../../components/billType.vue';
 import BillTypeService from '@/api/service/BillTypeService'
 import BillService from "@/api/service/BillService";
 import PermIds from "@/api/permissionIds";
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters } from "vuex";
 
 export default {
   data() {
@@ -123,7 +123,7 @@ export default {
         form: {
           billNumLikes: '', // 单据号
           wareCodeOrNameLikes: '',
-          decerNameLikes: '', // 报损员
+          decerNameLikes: '', // 报告员
           statusEquals: '',
           productCodeOrname: '', // 商品
           containerBarcode: '', // 容器
@@ -141,10 +141,6 @@ export default {
     ...mapGetters(["hasPermission"])
   },
   methods: {
-    ...mapActions(["clearSelection"]),
-    createBill: function() {
-      this.clearSelection()
-    },
     goBack: function() {
       this.table = false
     },
@@ -153,13 +149,13 @@ export default {
         this.form.beginTime = this.form.beginAndEndDate[0]
         this.form.endTime = this.form.beginAndEndDate[1]
       }
-      this.getBillList()
+      this.getOverflowBillList()
     },
     clearInput: function() {
       this.form = {
           billNumber: '', // 单据号
           wrhCodeOrName: '',
-          decerCodeOrName: '', // 报损员
+          decerCodeOrName: '', // 报告员
           statusEquals: '',
           productCodeOrname: '', // 商品
           containerCodeOrNameLikes: '', // 容器
@@ -167,25 +163,25 @@ export default {
           beginAndEndDate: [],
           srcBillNumber: '' // 来源单号
         }
-      this.getBillList()
+      this.getOverflowBillList()
     },
     getAlllossType: function() {
       const data = {
-        type: 'DECINV'
+        type: 'INCINV'
       }
       BillTypeService.getQueryType(data)
       .then((res) => {
         this.billList = res
       })
       .catch((err) => {
-        this.$message.error('获取损耗类别失败' + err.message)
+        this.$message.error('获取移库类别失败' + err.message)
       })
     },
-    getBillList: function() {
+    getOverflowBillList: function() {
       const _this = this
       _this.form.page = 1
       _this.form.pageSize = 0
-      BillService.getBillList(_this.form)
+      BillService.getOverflowBillList(_this.form)
       .then((res) => {
         _this.lossBill = res.records
       })
@@ -196,12 +192,12 @@ export default {
   },
   created() {
     this.getAlllossType()
-    this.getBillList()
+    this.getOverflowBillList()
   },
   beforeRouteEnter(to, from, next) {
       next(vm => {
         // 通过 `vm` 访问组件实例
-        vm.getBillList();
+        vm.getOverflowBillList();
         vm.getAlllossType()
       })
     },

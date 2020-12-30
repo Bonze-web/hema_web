@@ -16,7 +16,7 @@
         <div style="background:#fff">
           <el-row>
             <router-link :to="{ path: '/storageinfo/sortdivision/add', query:{ status: 'create'} }">
-              <el-button style="margin:18px 10px" type="primary" size="mini" v-if="hasPermission(PermIds.WMS_PICKAREA_CREATE)">新建</el-button>
+              <el-button style="margin:18px 10px" type="primary" size="mini" v-if="hasPermission(PermIds.WMS_PICKAREA_CREATE) && workingOrg.type === 'DC'">新建</el-button>
             </router-link>
           </el-row>
             <el-table
@@ -258,7 +258,7 @@ export default {
     },
     putawayRuleChange(status) {
       switch (status) {
-        case "TT":
+        case "T":
           return "T型"
         case "STACK":
           return "地堆"

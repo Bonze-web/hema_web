@@ -5,8 +5,8 @@
             <div style="margin-top:8px" v-else>编辑</div>
             <div>
                 <el-button @click="back">取消</el-button>
-                <el-button type="primary" @click="createBill(false)">保存</el-button>
-                <el-button type="primary" @click="createBill(true)" v-if="status === 'create'">保存并审核</el-button>
+                <el-button type="primary" @click="createBill(false)" v-if="hasPermission(PermIds.WMS_INCINVBILL_CREATE)">保存</el-button>
+                <el-button type="primary" @click="createBill(true)" v-if="status === 'create' && hasPermission(PermIds.WMS_INCINVBILL_AUDIT)">保存并审核</el-button>
             </div>
         </div>
         <div style="height:20px" />
@@ -204,6 +204,7 @@ export default {
         selectBin: [],
         selectContainer: [],
         product: {
+          qty: 0,
           remark: '',
           productName: '',
           productUuid: '',
@@ -301,6 +302,9 @@ export default {
             this.clearSelection()
             this.productList = []
             this.form.wrhId = ''
+            this.form.totalAmount = 0
+            this.form.totalProductCount = 0
+            this.form.totalQtystr = 0 + '+' + 0
           })
         }
       },
@@ -537,7 +541,7 @@ export default {
           this.form.realTotalAmount += item.consumeAmount
           consumeQtystr = Number(consumeQtystr) + Number(item.consumeQtystr)
           consumeQty = Number(consumeQty) + Number(item.consumeQty)
-          if (Number(item.consumeQty) + Number(item.consumeQtystr) > Number(item.qty) || Number(item.consumeQty) < 0 || Number(item.consumeQtystr) < 0) {
+          if (Number(item.consumeQty) < 0 || Number(item.consumeQtystr) < 0) {
             this.$message.error('请输入正确的数据')
             consumeQtystr = Number(consumeQtystr) - Number(item.consumeQtystr)
             consumeQty = Number(consumeQty) - Number(item.consumeQty)

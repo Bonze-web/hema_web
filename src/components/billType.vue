@@ -4,7 +4,7 @@
       <div class="loss-title">
         <div>{{ billTitle }}</div>
         <div>
-          <el-button type="primary" @click="createlossType" size="mini">+新建</el-button>
+          <el-button type="primary" @click="createlossType" v-if="hasPermission(PermIds.WMS_PRETYPE_CREATE)" size="mini">+新建</el-button>
           <el-button  @click="goBack" size="mini">返回</el-button>
         </div>
       </div>
@@ -18,8 +18,8 @@
           <el-table-column
             label="操作">
             <template slot-scope="scope">
-              <el-button size="mini" type="text" @click="removeType(scope.row.id, scope.row.version)">删除</el-button>
-              <el-button size="mini" type="text" @click="editType(scope.row.id)">编辑</el-button>
+              <el-button size="mini" type="text" @click="removeType(scope.row.id, scope.row.version)" v-if="hasPermission(PermIds.WMS_PRETYPE_DELETE)">删除</el-button>
+              <el-button size="mini" type="text" @click="editType(scope.row.id)" v-if="hasPermission(PermIds.WMS_PRETYPE_UPDATE)">编辑</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -61,11 +61,14 @@
 </template>
 
 <script>
-import BillTypeService from '@/api/service/BillTypeService'
+import BillTypeService from '@/api/service/BillTypeService';
+import PermIds from "@/api/permissionIds";
+import { mapGetters } from "vuex";
 
 export default {
   data() {
     return {
+      PermIds: PermIds,
       billListData: this.billList, // 单据类型列表
       dialogFormEdit: false,
       dialogFormVisible: false,
@@ -92,6 +95,9 @@ export default {
     hasRemark: String,
     lossType: String,
     billList: Array
+  },
+  computed: {
+    ...mapGetters(["hasPermission"])
   },
   methods: {
     getlossTypeList() {

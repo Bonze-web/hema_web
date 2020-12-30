@@ -5,8 +5,8 @@
             <div style="margin-top:8px" v-else>编辑</div>
             <div>
                 <el-button @click="back">取消</el-button>
-                <el-button type="primary" @click="createBill(false)">保存</el-button>
-                <el-button type="primary" @click="createBill(true)" v-if="status === 'create'">保存并审核</el-button>
+                <el-button type="primary" @click="createBill(false)" v-if="hasPermission(PermIds.WMS_DECINVBILL_CREATE)">保存</el-button>
+                <el-button type="primary" @click="createBill(true)" v-if="status === 'create' && hasPermission(PermIds.WMS_DECINVBILL_AUDIT)">保存并审核</el-button>
             </div>
         </div>
         <div style="height:20px" />
@@ -189,6 +189,9 @@ export default {
             this.clearSelection()
             this.productList = []
             this.form.wrhId = ''
+            this.form.totalAmount = 0
+            this.form.totalProductCount = 0
+            this.form.totalQtystr = 0 + '+' + 0
           })
         }
       },
@@ -206,6 +209,10 @@ export default {
       deleteProduct: function(index) {
         this.deleteSelection(index)
         this.productList.splice(index, 1)
+        // let arr = []
+        // this.productList.forEach(item => {
+        //   arr.push()
+        // })
         const arr = Array.from(new Set(this.productList))
         this.form.totalProductCount = arr.length
         this.productList = arr
