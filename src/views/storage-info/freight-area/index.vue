@@ -61,12 +61,11 @@
             <el-button
               type="text"
               size="mini"
-              v-if="node.level === 4 && hasPermission(PermIds.WMS_BIN_UPDATE)"
+              v-if="hasPermission(PermIds.WMS_BIN_UPDATE)"
               @click.stop="() => edit(node, data)">
               编辑
             </el-button>
             <el-button
-              v-if="hasPermission(PermIds.WMS_BIN_DELETE)"
               type="text"
               size="mini"
               @click.stop="() => remove(node, data)">
@@ -105,16 +104,16 @@
       <el-dialog width="40%" title="新增货道" :visible.sync="dialogFormLane">
         <el-form :model="formLane" :rules="laneRules" ref="formLane">
           <el-form-item label="起始货区" :label-width="formLabelWidth" prop="startZoneCode">
-            <el-input v-model="formLane.startZoneCode"></el-input>
+            <el-input v-model="formLane.startZoneCode" placeholder="请输入起始货区"></el-input>
           </el-form-item>
           <el-form-item label="截止货区" :label-width="formLabelWidth" prop="endZoneCode">
-            <el-input v-model="formLane.endZoneCode"></el-input>
+            <el-input v-model="formLane.endZoneCode" placeholder="请输入截止货区"></el-input>
           </el-form-item>
           <el-form-item label="起始货道" :label-width="formLabelWidth" prop="startPath">
-            <el-input v-model="formLane.startPath"></el-input>
+            <el-input v-model="formLane.startPath" placeholder="请输入起始货道"></el-input>
           </el-form-item>
           <el-form-item label="平均货道数" :label-width="formLabelWidth" prop="size">
-            <el-input v-model="formLane.size"></el-input>
+            <el-input v-model="formLane.size" placeholder="请输入平均货道数"></el-input>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -128,16 +127,16 @@
       <el-dialog width="40%" title="新增货架" :visible.sync="dialogFormShelf">
         <el-form :model="formShelf" :rules="shelfRules" ref="formShelf">
           <el-form-item label="起始货道" :label-width="formLabelWidth" prop="startPathCode">
-            <el-input v-model="formShelf.startPathCode"></el-input>
+            <el-input v-model="formShelf.startPathCode" placeholder="请输入起始货道"></el-input>
           </el-form-item>
           <el-form-item label="截止货道" :label-width="formLabelWidth" prop="endPathCode">
-            <el-input v-model="formShelf.endPathCode"></el-input>
+            <el-input v-model="formShelf.endPathCode" placeholder="请输入截止货道"></el-input>
           </el-form-item>
           <el-form-item label="起始货架" :label-width="formLabelWidth" prop="startShelf">
-            <el-input v-model="formShelf.startShelf"></el-input>
+            <el-input v-model="formShelf.startShelf" placeholder="请输入起始货架"></el-input>
           </el-form-item>
           <el-form-item label="平均货道数" :label-width="formLabelWidth" prop="size">
-            <el-input v-model="formShelf.size"></el-input>
+            <el-input v-model="formShelf.size" placeholder="请输入平均货道数"></el-input>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -153,36 +152,36 @@
           <el-row :gutter="20">
             <el-col :span="12">
               <el-form-item label="货架范围" :label-width="formLabelWidth" prop="startShelfCode">
-                <el-input v-model="formSpace.startShelfCode" autocomplete="off"></el-input>
+                <el-input v-model="formSpace.startShelfCode" placeholder="请输入起始货架" autocomplete="off"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="7">
             <el-form-item label="" prop="endShelfCode">
-              <el-input v-model="formSpace.endShelfCode" autocomplete="off"></el-input>
+              <el-input v-model="formSpace.endShelfCode" placeholder="请输入截止货架" autocomplete="off"></el-input>
             </el-form-item>
             </el-col>
           </el-row>
           <el-row :gutter="20">
             <el-col :span="12">
               <el-form-item label="列码范围" :label-width="formLabelWidth" prop="startRowCode">
-                <el-input v-model="formSpace.startRowCode" autocomplete="off"></el-input>
+                <el-input v-model="formSpace.startRowCode" placeholder="请输入起始列" autocomplete="off"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="7">
             <el-form-item label="" prop="endRowCode">
-              <el-input v-model="formSpace.endRowCode" autocomplete="off"></el-input>
+              <el-input v-model="formSpace.endRowCode" placeholder="请输入截止列" autocomplete="off"></el-input>
             </el-form-item>
             </el-col>
           </el-row>
           <el-row :gutter="20">
             <el-col :span="12">
               <el-form-item label="层码范围" :label-width="formLabelWidth" prop="startFloorCode">
-                <el-input v-model="formSpace.startFloorCode" autocomplete="off"></el-input>
+                <el-input v-model="formSpace.startFloorCode" placeholder="请输入起始层" autocomplete="off"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="7">
             <el-form-item label="" prop="endFloorCode">
-              <el-input v-model="formSpace.endFloorCode" autocomplete="off"></el-input>
+              <el-input v-model="formSpace.endFloorCode" placeholder="请输入截止层" autocomplete="off"></el-input>
             </el-form-item>
             </el-col>
           </el-row>
@@ -200,7 +199,7 @@
           </el-form-item>
           
           <el-form-item label="备注" :label-width="formLabelWidth">
-            <textarea v-model="formSpace.remark"></textarea>
+            <textarea v-model="formSpace.remark"  placeholder="请输入备注"></textarea>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -336,10 +335,10 @@ import PermIds from "@/api/permissionIds";
         },
         shelfRules: {
           startPathCode: [
-            { required: true, pattern: /^[A-Z0-9]{4,4}$/, message: '请输入四位的数字和大写字母的组合', trigger: 'change' }
+            { required: true, pattern: /^[A-Z0-9]{2,2}[0-9]{2,2}$/, message: '请输入四位的数字和大写字母的组合后两位必须是数字', trigger: 'change' }
           ],
           endPathCode: [
-            { required: true, pattern: /^[A-Z0-9]{4,4}$/, message: '请输入四位的数字和大写字母的组合', trigger: 'change' }
+            { required: true, pattern: /^[A-Z0-9]{2,2}[0-9]{2,2}$/, message: '请输入四位的数字和大写字母的组合后两位必须是数字', trigger: 'change' }
           ],
           size: [
             { required: true, pattern: /^([1-9]|[1-9]{2,2}|100)$/, message: '请输入1-100的整数', trigger: 'change' }

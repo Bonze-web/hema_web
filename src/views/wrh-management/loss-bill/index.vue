@@ -3,13 +3,13 @@
       <div class="select-head">
             <el-form ref="form" style="display:flex;flex-wrap:wrap" :model="form" label-width="80px" label-position="right">
                 <el-form-item label="单号">
-                    <el-input type='text' placeholder="请输入类别编号/名称" v-model="form.billNumLikes" class="input-width"></el-input>
+                    <el-input type='text' placeholder="请输入单号编号" v-model="form.billNumLikes" class="input-width"></el-input>
                 </el-form-item>
                 <el-form-item label="仓库">
-                    <el-input type='text' placeholder="请输入上级类别编号/名称" v-model="form.wareCodeOrNameLikes" class="input-width"></el-input>
+                    <el-input type='text' placeholder="请输入仓库编号" v-model="form.wareCodeOrNameLikes" class="input-width"></el-input>
                 </el-form-item>
                 <el-form-item label="报损员">
-                    <el-input type='text' placeholder="请输入上级类别编号/名称" v-model="form.decerNameLikes" class="input-width"></el-input>
+                    <el-input type='text' placeholder="请输入报损员" v-model="form.decerNameLikes" class="input-width"></el-input>
                 </el-form-item>
                 <el-form-item label="状态">
                     <el-select v-model="form.statusEquals" placeholder="请选择状态">
@@ -19,13 +19,13 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="商品">
-                    <el-input type='text' placeholder="请输入类别编号/名称" v-model="form.productCodeOrname" class="input-width"></el-input>
+                    <el-input type='text' placeholder="请输入商品编号/名称" v-model="form.productCodeOrname" class="input-width"></el-input>
                 </el-form-item>
                 <el-form-item label="货位">
-                    <el-input type='text' placeholder="请输入上级类别编号/名称" v-model="form.binCode" class="input-width"></el-input>
+                    <el-input type='text' placeholder="请输入货位编号/名称" v-model="form.binCode" class="input-width"></el-input>
                 </el-form-item>
                 <el-form-item label="容器">
-                    <el-input type='text' placeholder="请输入上级类别编号/名称" v-model="form.containerCodeOrNameLikes" class="input-width"></el-input>
+                    <el-input type='text' placeholder="请输入容器编号" v-model="form.containerCodeOrNameLikes" class="input-width"></el-input>
                 </el-form-item>
                 <el-form-item label="创建时间">
                     <el-date-picker
@@ -37,7 +37,7 @@
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="来源单号">
-                    <el-input type='text' placeholder="请输入上级类别编号/名称" v-model="form.srcBillNumber" class="input-width"></el-input>
+                    <el-input type='text' placeholder="请输入来源单号" v-model="form.srcBillNumber" class="input-width"></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" size="mini" @click="onSelect">立即搜索</el-button>
@@ -51,7 +51,7 @@
             <el-row>
               <router-link :to="{ path: '/wrhmanagement/lossbill/add', query:{ status: 'create'} }">
                   <!-- <span v-if="child.meta&&child.meta.title" :title="child.meta.title">{{child.meta.title}}</span> -->
-                  <el-button type="primary" size="mini" @click="createBill" v-if="hasPermission(PermIds.PRODUCT_CATEGORY_CREATE)">新建</el-button>
+                  <el-button type="primary" size="mini" @click="createBill" v-if="hasPermission(PermIds.WMS_DECINVBILL_CREATE)">新建</el-button>
               </router-link>
             </el-row>
             <el-row style="margin-left:12px">

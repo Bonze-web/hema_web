@@ -51,7 +51,7 @@
             <el-row>
               <router-link :to="{ path: '/wrhmanagement/overflowbill/add', query:{ status: 'create'} }">
                   <!-- <span v-if="child.meta&&child.meta.title" :title="child.meta.title">{{child.meta.title}}</span> -->
-                  <el-button type="primary" size="mini" v-if="hasPermission(PermIds.PRODUCT_CATEGORY_CREATE)">新建</el-button>
+                  <el-button type="primary" size="mini" v-if="hasPermission(PermIds.WMS_INCINVBILL_CREATE)">新建</el-button>
               </router-link>
             </el-row>
             <el-row style="margin-left:12px">

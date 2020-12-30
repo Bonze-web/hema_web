@@ -298,7 +298,7 @@ export default {
         let consumeQty = ''
         this.productList.forEach(item => {
           item.lineNum = this.productList.indexOf(item) + 1
-          item.consumeAmount = Number(item.consumeQtystr) * (item.price * item.qpc) + Number(item.consumeQty) * item.price 
+          item.consumeAmount = Number(item.consumeQtystr) * (item.price) + Number(item.consumeQty) * item.price 
           this.form.realTotalAmount += item.consumeAmount
           consumeQtystr = Number(consumeQtystr) + Number(item.consumeQtystr)
           consumeQty = Number(consumeQty) + Number(item.consumeQty)
