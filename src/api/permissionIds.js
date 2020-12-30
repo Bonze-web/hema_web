@@ -67,7 +67,7 @@ export default {
   /**
    * 系统组件-上传文件
    */
-  // SYS_DFS_UPLOAD : "sys:dfs:upload",
+  // SYS_DFS_UPLOAD: "sys:dfs:upload",
 
   /**
    * 系统组件-自定义服务通知模块
@@ -108,7 +108,7 @@ export default {
   WMS_BIN_VIEW: "wms:bin:view",
   WMS_BIN_CREATE: "wms:bin:create",
   WMS_BIN_UPDATE: "wms:bin:update",
-  WMS_BIN_DELETE: "wms:bin:remove",
+  WMS_BIN_DELETE: "wms:bin:delete",
   /**
    * 系统组件-日志查询
    */
@@ -245,11 +245,11 @@ export default {
    */
   WMS: "wms",
 
-  WMS_PICKAREA: "wms:pickarea",
-  WMS_PICKAREA_CREATE: "wms:pickarea:create",
-  WMS_PICKAREA_VIEW: "wms:pickarea_view",
-  WMS_PICKAREA_UPDATE: "wms:pickarea_update",
-  WMS_PICKAREA_DELETE: "wms:pickarea_delete",
+  // WMS_PICKAREA: "wms:pickarea",
+  // WMS_PICKAREA_CREATE: "wms:pickarea:create",
+  // WMS_PICKAREA_VIEW: "wms:pickarea_view",
+  // WMS_PICKAREA_UPDATE: "wms:pickarea_update",
+  // WMS_PICKAREA_DELETE: "wms:pickarea_delete",
 
   /**
    * 容器类型
@@ -276,6 +276,31 @@ export default {
   WMS_WAREHOUSE_VIEW: "wms:warehouse:view",
   WMS_WAREHOUSE_MODIFY: "wms:warehouse:modify",
   WMS_WAREHOUSE_DELETE: "wms:warehouse:delete",
+
+   /**
+   * 入库订单模块
+   */
+  WMS_ORDERBILL: "wms:orderbill",
+  WMS_ORDERBILL_VIEW: "wms:orderbill:view",
+  WMS_ORDERBILL_ARRIVE: "wms:orderbill:arrive",
+  WMS_ORDERBILL_FINISH: "wms:orderbill:finish",  
+
+    /**
+   * 收货装箱单模块
+   */
+  WMS_RECEIVE_BILL: "wms:receive_bill",
+  WMS_RECEIVE_BILL_VIEW: "wms:receive_bill:view",
+  WMS_RECEIVE_BILL_RECEIVE: "wms:receive_bill:receive",
+  WMS_RECEIVE_BILL_FAST_RECEIVE: "wms:receive_bill:fast_receive",
+
+    /**
+   * 质检类型
+   */
+ WMS_QUALITY_INSPECTION_TYPE: "wms:quality-inspection-type",
+ WMS_QUALITY_INSPECTION_TYPE_CREATE: "wms:quality-inspection-type:create",
+ WMS_QUALITY_INSPECTION_TYPE_UPDATE: "wms:quality-inspection-type:update",
+ WMS_QUALITY_INSPECTION_TYPE_VIEW: "wms:quality-inspection-type:view",
+ WMS_QUALITY_INSPECTION_TYPE_MODIFY: "wms:dock:modify",
 
   /**
    * 码头模块
@@ -304,6 +329,33 @@ export default {
   WMS_STORAGEAREA_VIEW: "wms:storagearea:view",
   WMS_STORAGEAREA_DELETE: "wms:storagearea:delete",
 
+  /**
+   * 拣货分区
+   */
+  WMS_PICKAREA: "wms:pickarea",
+  WMS_PICKAREA_CREATE: "wms:pickarea:create",
+  WMS_PICKAREA_VIEW: "wms:pickarea:view",
+  WMS_PICKAREA_UPDATE: "wms:pickarea:update",
+  WMS_PICKAREA_DELETE: "wms:pickarea:delete",
+
+   /**
+   * 用户拣货分区
+   */
+  WMS_USER_PICKAREA: "wms:user:pickarea",
+  WMS_USER_PICKAREA_CREATE: "wms:user:pickarea:create",
+  WMS_USER_PICKAREA_VIEW: "wms:user:pickarea:view",
+  WMS_USER_PICKAREA_UPDATE: "wms:user:pickarea:update",
+  WMS_USER_PICKAREA_DELETE: "wms:user:pickarea:delete",
+
+   /**
+   * 拣货顺序方案
+   */
+  WMS_PICKORDER: "wms:pickorder",
+  WMS_PICKORDER_CREATE: "wms:pickorder:create",
+  WMS_PICKORDER_UPDATE: "wms:pickorder:update",
+  WMS_PICKORDER_VIEW: "wms:pickorder:view",
+  WMS_PICKORDER_MODIFY: "wms:pickorder:modify",
+  WMS_PICKORDER_DELETE: "wms:pickorder:remove",
   /** ******************************* 微信小程序组件 *******************************************/
 
   /**
@@ -322,5 +374,32 @@ export default {
   SYS_APP_VIEW: "sys:app:view",
   SYS_APP_CREATE: "sys:app:create",
   SYS_APP_UPDATE: "sys:app:update",
-  SYS_APP_REMOVE: "sys:app:remove"
+  SYS_APP_REMOVE: "sys:app:remove",
+
+    /**
+   * 损耗单
+   */
+  WMS_DECINVBILL: "wms:decinvbill",
+  WMS_DECINVBILL_CREATE: "wms:decinvbill:create",
+  WMS_DECINVBILL_UPDATE: "wms:decinvbill:update",
+  WMS_DECINVBILL_VIEW: "wms:decinvbill:view",
+  WMS_DECINVBILL_AUDIT: "wms:decinvbill:audit",
+
+  /**
+   * 溢余单
+   */
+  WMS_INCINVBILL: "wms:incinvbill",
+  WMS_INCINVBILL_CREATE: "wms:incinvbill:create",
+  WMS_INCINVBILL_UPDATE: "wms:incinvbill:update",
+  WMS_INCINVBILL_VIEW: "wms:incinvbill:view",
+  WMS_INCINVBILL_AUDIT: "wms:incinvbill:audit",
+
+  /**
+   * 单据类型
+   */
+  WMS_PRETYPE: "wms:pretype",
+  WMS_PRETYPE_CREATE: "wms:pretype:create",
+  WMS_PRETYPE_UPDATE: "wms:pretype:update",
+  WMS_PRETYPE_DELETE: "wms:pretype:delete",
+  WMS_PRETYPE_VIEW: "wms:pretype:view"
 }

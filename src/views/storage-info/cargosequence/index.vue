@@ -1,7 +1,7 @@
 <template>
     <div class="table-index _table-index">   
         <el-container style="height: 500px; border: 1px solid #eee">
-          <el-aside width="300px" style="background-color: #fff;">
+          <el-aside width="300px" style="background-color: #fff;padding: 0 20px;border: 1px #eee solid;">
             <div class="seriation-left-header" style="padding-top:20px;display:flex;align-items: center;">
               <div class="seriation-left-title">拣货顺序方案</div>
               <el-button type="primary" @click.stop="newProjectsChange">新建方案</el-button>
@@ -11,7 +11,7 @@
               <el-collapse-item v-for="(ele, idx) in storeAllSchemeAll" :key="idx">
                 <template slot="title">
                     <div class="sequential-programme" style="font-size:14px;">
-                      <span class="el-icon-folder" style="display:flex;align-items: center;"><span style="padding-left:15px;" @click.stop="schemeOrStore('scheme', ele.schemeList)">{{'[' + ele.schemeList.code + ']' + ele.schemeList.name}}</span></span> 
+                      <span class="el-icon-folder" style="display:flex;align-items: center;max-width: 120px;overflow:hidden;color:#409EFF;cursor: pointer;"><span style="padding-left:15px;" @click.stop="schemeOrStore('scheme', ele.schemeList, ele)">{{'[' + ele.schemeList.code + ']' + ele.schemeList.name}}</span></span> 
                       <div class="operation-button">
                          <el-button
                             size="mini"
@@ -31,7 +31,7 @@
                 </template>
                 <div>
                   <div class="content-operation" v-for="(item, index) in ele.store" :key="index">
-                      <span class="el-icon-sort" style="display:flex;align-items: center;"><span style="padding-left:15px;" @click.stop="schemeOrStore('store', item, ele)">{{'[' + item.code + ']' + item.name}}</span></span> 
+                      <span class="el-icon-sort" style="display:flex;align-items: center;max-width: 100px;overflow:hidden;color:#409EFF;cursor: pointer;"><span style="padding-left:15px;" @click.stop="schemeOrStore('store', item, ele)">{{'[' + item.code + ']' + item.name}}</span></span> 
                       <div class="operation-button">
                          <el-button
                             size="mini"
@@ -177,10 +177,10 @@
         <el-dialog title="拣货顺序方案" :visible.sync="editProjects">
           <el-form :model="editProjectsInfo">
             <el-form-item label="方案代码" :label-width="formLabelWidth">
-              <el-input v-model="editProjectsInfo.name" autocomplete="off"></el-input>
-            </el-form-item>
-            <el-form-item label="方案名称" :label-width="formLabelWidth">
               <el-input v-model="editProjectsInfo.code" autocomplete="off"></el-input>
+            </el-form-item>
+              <el-form-item label="方案名称" :label-width="formLabelWidth">
+              <el-input v-model="editProjectsInfo.name" autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item label="备注" :label-width="formLabelWidth">
               <el-input
@@ -197,12 +197,12 @@
           </div>
         </el-dialog>
         <el-dialog title="新建门店组" :visible.sync="newStore">
-          <el-form :model="newStoreInfo">
-            <el-form-item label="代码" :label-width="formLabelWidth">
-              <el-input v-model="newStoreInfo.name" autocomplete="off"></el-input>
-            </el-form-item>
-            <el-form-item label="名称" :label-width="formLabelWidth">
+          <el-form :model="newStoreInfo" :rules="newStoreRules" ref="ruleForm">
+            <el-form-item label="代码" :label-width="formLabelWidth" prop="code">
               <el-input v-model="newStoreInfo.code" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="名称" :label-width="formLabelWidth" prop="name">
+              <el-input v-model="newStoreInfo.name" autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item label="拣货顺序方案" :label-width="formLabelWidth">
               <div>
@@ -219,17 +219,17 @@
             </el-form-item>
           </el-form>
           <div slot="footer" class="dialog-footer">
-            <el-button @click="dialogFormVisible = false">取 消</el-button>
+            <el-button @click="setStoreInfo">取 消</el-button>
             <el-button type="primary" @click="submintNewStoreInfo">确 定</el-button>
           </div>
         </el-dialog>
         <el-dialog title="编辑门店组" :visible.sync="editStore">
           <el-form :model="editStoreInfo">
             <el-form-item label="代码" :label-width="formLabelWidth">
-              <el-input v-model="editStoreInfo.name" autocomplete="off"></el-input>
+              <el-input v-model="editStoreInfo.code" autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item label="名称" :label-width="formLabelWidth">
-              <el-input v-model="editStoreInfo.code" autocomplete="off"></el-input>
+              <el-input v-model="editStoreInfo.name" autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item label="拣货顺序方案" :label-width="formLabelWidth">
               <div>
@@ -284,7 +284,7 @@
                         {{leftSelect.length}}/{{storedContentTotalCount}} 项
                     </div>
                     <el-input v-model="mySelfcodeOrName" placeholder="请输入代码或名称" @change="searchDataLeftChange"><i slot="prefix" class="el-input__icon el-icon-search" style="right:0" @click="searchDataLeftChange"></i></el-input>
-                    <div>
+                    <div style="margin-top:20px;">
                       <el-table
                         ref="multipleTable"
                         :data="storedContent"
@@ -301,9 +301,10 @@
                         </el-table-column>
                         <el-table-column
                           label="门店"
-                          width="calc(100% - 55px)">
+                          width="calc(100% - 55px)"
+                          style="padding: 7px 0;">
                           <template slot-scope="scope">
-                              {{ '[' + scope.row.storeCode + ']' + scope.row.storeName }}
+                              {{ '[' + scope.row.code + ']' + scope.row.name }}
                           </template>
                         </el-table-column>
                       </el-table>
@@ -338,6 +339,7 @@ import systemLog from "@/components/systemLog.vue"
 export default {
   data() {
       return {
+        headerSchemeOneFlag: 0,
         mySelfPage: 1,
         mySelfPageSize: 10,
         storedContent: [],
@@ -396,6 +398,14 @@ export default {
           name: [
             {required: true, message: '名称不能为空', trigger: 'blur'}
           ]
+        },
+        newStoreRules: {
+          code: [
+            {required: true, message: '代码不能为空', trigger: 'blur'}
+          ],
+          name: [
+            {required: true, message: '名称不能为空', trigger: 'blur'}
+          ]
         }
       }
   },
@@ -409,11 +419,14 @@ export default {
     this.newProjects = false;
     CargosequenceService.requestNewProjectsList(this.newProjectsList)
     .then((res) => {
-      console.log(res);
-      this.$message.success("新建成功")
+      this.$message.success("新建成功");
+      this.getAllPickOrder();
     }).catch((err) => {
       this.$message.error("新建失败" + err.message)
     })
+   },
+   setStoreInfo() {
+     this.newStore = false;
    },
    // 通过搜索接口来所有方案
    searchScheme() {
@@ -431,9 +444,12 @@ export default {
       })
    },
    getAllPickOrder() {
-     CargosequenceService.getAllPickOrder()
+     const postData = {
+       storeCodeEqOrNameLk: this.codeEqOrNameLike || null
+     }
+     CargosequenceService.getAllPickOrder(postData)
       .then((res) => {
-        console.log(res);
+        this.getAllGrpByPickId(res);
       }).catch((err) => {
         this.$message.error("请求失败" + err.message)
       })
@@ -441,24 +457,32 @@ export default {
    // 获取指定方案顺序下的门店组
    getAllGrpByPickId(schemeArr) {
      // schemeArr是所有方案的信息
-     console.log(schemeArr);
         if (schemeArr.length <= 0) return false;
+        this.storeAllSchemeAll = [];
         schemeArr.forEach((ele, idx) => {
-          CargosequenceService.getAllGrpByPickId(ele.pickOrderId)
+          CargosequenceService.getAllGrpByPickId(ele.id)
           .then((res) => {
             // 这里是所有的门店组的信息
-            console.log(res);
-            this.storeAllSchemeAll.push({schemeList: ele, store: res.data});
+            this.storeAllSchemeAll.push({schemeList: ele, store: res});
+            // console.log(this.storeAllSchemeAll[0].schemeList);
+            // this.editProjectsInfo = this.storeAllSchemeAll[0].schemeList;
           }).catch((err) => {
             this.$message.error("请求所有的方案失败" + err.message)
           })
+          if (idx === 0) {
+            // if (this.headerSchemeOneFlag !== 0) return false; 
+            this.getById(ele.id);
+            this.headerScheme = "[" + ele.code + "]" + ele.name;
+            // this.headerSchemeOneFlag = 1;
+          }
         })
    },
    // 获取门店组下面所有的所有的门店
    getAllStoreByGrpId(id) {
       CargosequenceService.getAllStoreByGrpId(id)
       .then((res) => {
-          const storeOptionArr = res.data;
+        console.log(res);
+          const storeOptionArr = res;
           storeOptionArr.forEach((ele, idx) => {
               ele.idx = idx + 1;
               this.storeOption.push(ele);
@@ -472,7 +496,7 @@ export default {
    getById(id) {
       CargosequenceService.getById(id)
       .then((res) => {
-        this.getByIdDetail = res.data;
+        this.getByIdDetail = res;
       }).catch((err) => {
         this.$message.error("方案详情获取失败" + err.message)
       })
@@ -494,6 +518,7 @@ export default {
       CargosequenceService.updateScheme(this.editProjectsInfo)
       .then((res) => {
         this.$message.success("修改成功");
+        this.getAllPickOrder();
       }).catch((err) => {
         this.$message.error("失败" + err.message)
       })
@@ -502,25 +527,38 @@ export default {
       this.newStore = true;
    },
    submintNewStoreInfo() {
-      this.newStoreInfo.pickorderId = this.getByIdDetail.pickOrderId;
-      this.newStoreInfo.status = this.getByIdDetail.status;
-      CargosequenceService.createGrp(this.newStoreInfo)
-      .then((res) => {
-        this.$message.success("创建成功")
-      }).catch((err) => {
-        this.$message.error("创建失败" + err.message)
-      })
+     this.$refs.ruleForm.validate((valid) => {
+          if (valid) {
+            this.newStoreInfo.pickorderId = this.getByIdDetail.id;
+            this.newStoreInfo.status = this.getByIdDetail.status;
+            CargosequenceService.createGrp(this.newStoreInfo)
+            .then((res) => {
+              this.$message.success("创建成功");
+              this.getByIdDetail = {
+                code: "",
+                name: "",
+                remark: ""
+              }
+              this.getAllPickOrder();
+              this.newStore = false;
+            }).catch((err) => {
+              this.$message.error("创建失败" + err.message)
+            })
+          }
+        });
    },
     editStoreChange(obj, schemeOpt) {
     this.editStore = true;
     this.editStoreInfo = obj;
-    this.editStoreInfo.getByIdMes = '[' + schemeOpt.code + ']' + schemeOpt.name;
+    this.editStoreInfo.getByIdMes = '[' + schemeOpt.schemeList.code + ']' + schemeOpt.schemeList.name;
    },
    submitEditStoreChange() {
      this.editStore = false;
      CargosequenceService.updateGrpScheme(this.editStoreInfo)
       .then((res) => {
         this.$message.success("修改成功");
+        this.editStoreInfo = {};
+        this.getAllPickOrder();
       }).catch((err) => {
         this.$message.error("失败" + err.message)
       })
@@ -589,15 +627,15 @@ export default {
     storedContentChange() {
         this.storedContent = [];
         const mySelfData = {
-          codeOrNameEquals: this.mySelfcodeOrName,
+          codeEqOrNameLike: this.mySelfcodeOrName || null,
           page: this.mySelfPage,
           pageSize: this.mySelfPageSize,
           searchCount: true
         }
         CargosequenceService.queryItem(mySelfData)
         .then((res) => {
-          this.storedContent = res.data.records;
-          this.storedContentTotalCount = res.data.totalCount;
+          this.storedContent = res.records;
+          this.storedContentTotalCount = res.totalCount;
         }).catch((err) => {
           this.$message.error("获取信息失败" + err.message)
         })
@@ -699,6 +737,32 @@ export default {
     font-weight: bold;
   }
 }
+.head{
+    background: #fff;
+    padding: 15px 12px;
+    border-radius: 12px;
+    border: 1px #eee solid;
+    display: flex;
+    justify-content: space-between;
+}
+.head-title{
+    display: flex;
+    justify-content: left;
+}
+.info-content{
+    background: #fff;
+    border-radius: 12px;
+    padding: 15px 12px;
+}
+.info-box{
+    margin: 4px 0;
+    font-size: 12px;
+    display: flex;
+    justify-content: left;
+}
+.info-title{
+    margin: 12px 0;
+}
 /deep/ .el-input__prefix {
     width: 30px;
     left: calc(100% - 30px);
@@ -711,6 +775,9 @@ export default {
   /deep/ .el-dialog {
     min-width: 670px;
     width: 70%;
+  }
+  /deep/ .el-table .cell {
+    padding: 7px 0;
   }
   .shuttle {
     width: 100%;

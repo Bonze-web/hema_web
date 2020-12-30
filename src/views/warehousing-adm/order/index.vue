@@ -4,7 +4,7 @@
       <el-form ref="form" style="display: flex;flex-wrap:wrap;" :model="form" label-width="180px" label-position="right" >
 
         <el-form-item label="入库订单单号或外部单号：">
-          <el-input type="text" placeholder="请输入入库订单单号或外部单号" v-model="form.billNumberLike" class="input-width" ></el-input>
+          <el-input type="text" placeholder="请输入入库订单单号或外部单号" v-model="form.billNumberOrSrcBillNumberLike" class="input-width" ></el-input>
         </el-form-item>
 
         <el-form-item label="来源单号：">
@@ -15,12 +15,17 @@
           <el-input type="text" placeholder="请输入供应商" v-model="form.vendorCodeEqualsOrNameLike" class="input-width" ></el-input>
         </el-form-item>
 
+
         <el-form-item label="入库订单来源：">
-          <el-input type="text" placeholder="请输入库订单来源" v-model="form.srcBillNumberLike" class="input-width" ></el-input>
+          <el-select v-model="form.srcWayEquals" placeholder="请选择订单来源" class="input-width" >
+            <el-option value="MANUAL" label="手工"></el-option>
+            <el-option value="API" label="接口导入"></el-option>
+            <el-option value="EXCEL" label="文件导入"></el-option>
+          </el-select>
         </el-form-item>
 
         <el-form-item label="收货方式：">
-          <el-select v-model="form.type" placeholder="请选择状态" class="input-width" >
+          <el-select v-model="form.typeEquals" placeholder="请选择状态" class="input-width" >
             <el-option value="NOTTRUST" label="清点收货"></el-option>
             <el-option value="TRUST" label="信任收货"></el-option>
           </el-select>
@@ -31,23 +36,23 @@
         </el-form-item>
 
         <el-form-item label="创建日期：">
-          <el-date-picker class="input-width" v-model="createTime" type="datetimerange" format="yyyy-MM-dd" value-format="yyyy-MM-dd HH:mm:ss" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期" ></el-date-picker>
-        </el-form-item>
-
-        <el-form-item label="到货日期：">
-          <el-date-picker class="input-width" v-model="arrival" type="datetimerange" format="yyyy-MM-dd" value-format="yyyy-MM-dd HH:mm:ss" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期" ></el-date-picker>
+          <el-date-picker class="input-width _picker" v-model="createTime" type="datetimerange" value-format="yyyy-MM-dd HH:mm:ss" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期" ></el-date-picker>
         </el-form-item>
 
         <el-form-item label="状态：">
           <el-select v-model="form.status" placeholder="请选择状态" class="input-width" >
             <el-option value="" label="全部"></el-option>
             <el-option value="INITIAL" label="初始"></el-option>
-            <el-option value="ARRIVED" label="已到货登记"></el-option>
+            <el-option value="ARRIVED" label="已登记"></el-option>
             <el-option value="QUALITY" label="已质检"></el-option>
             <el-option value="RECEIVING" label="进行中"></el-option>
             <el-option value="FINISHED" label="已完成"></el-option>
             <el-option value="ABORTED" label="已取消"></el-option>
           </el-select>
+        </el-form-item>
+
+        <el-form-item label="到货日期：">
+          <el-date-picker class="input-width _picker" v-model="arrival" type="datetimerange" value-format="yyyy-MM-dd HH:mm:ss" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期" ></el-date-picker>
         </el-form-item>
 
         <el-form-item>
@@ -81,7 +86,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column prop="srcBillNumber" label="外部单号"></el-table-column>
+        <el-table-column prop="srcBillNumber" label="来源单号"></el-table-column>
 
         <el-table-column prop="srcApi" label="通知订单类型" style="height: 20px">
           <template slot-scope="scope">{{ scope.row.srcApi | setSrcApi }}</template>
@@ -116,7 +121,11 @@
 
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button v-if="scope.row.status === 'RECEIVING'" size="mini" type="text" @click="putFinish(scope.row.billNumber, scope.row.version)">收货完成</el-button>
+            <!-- <el-button size="mini" type="text" >
+              <router-link style="color: #409eff" :to="{ path: '/warehousing-adm/oeder/edit', query:{ id: scope.row.id } }" >查看</router-link>
+            </el-button> -->
+            <el-button v-if="scope.row.status === 'RECEIVING'" size="mini" type="text" @click="putFinish(scope.row.billNumber, scope.row.version, scope.row.dcId)">收货完成</el-button>
+            <el-button v-else-if="scope.row.status === 'FINISHED'" size="mini" type="text" @click="printingBtn(scope.row)">打印</el-button>
             <div v-else>--</div>
           </template>
         </el-table-column>
@@ -184,11 +193,12 @@ export default {
     return {
       listData: [], // 列表数据
       form: {
-        billNumberLike: '', // 单号
+        billNumberOrSrcBillNumberLike: '', // 单号
         srcBillNumberLike: '', //  来源单号
         vendorCodeEqualsOrNameLike: '', // 供应商代码等于或者名称类似于
         wrhCodeEqualsOrNameLike: '', // 入库仓库
-        type: '', // 收货方式
+        typeEquals: '', // 收货方式
+        srcWayEquals: '', // 订单来源
         productCodeOrNameLike: '', // 商品代码等于或者名称类似于
         status: '' // 状态等于
       },
@@ -214,19 +224,20 @@ export default {
     },
     clearInput: function() {
       this.form = {
-        billNumberLike: '', // 单号
+        billNumberOrSrcBillNumberLike: '', // 单号
         srcBillNumberLike: '', //  来源单号
         vendorCodeEqualsOrNameLike: '', // 供应商代码等于或者名称类似于
         wrhCodeEqualsOrNameLike: '', // 入库仓库
+        typeEquals: '', // 收货方式
+        srcWayEquals: '', // 订单来源
         productCodeOrNameLike: '', // 商品代码等于或者名称类似于
         status: '' // 状态等于
       };
 
-      this.toEffect = ''; // 到效日期
       this.arrival = ''; // 到货日期
-      this.receivingGoods = ''; // 收货日期
+      this.createTime = ''; // 创建日期
     },
-    putFinish(billNumber, version) {
+    putFinish(billNumber, version, dcId) {
       // console.log(billNumber, version)
       // 确认收货
       const _this = this;
@@ -236,6 +247,7 @@ export default {
         type: 'warning'
       }).then(() => {
         const obj = {
+          dcId,
           billNumber,
           version
         }
@@ -264,18 +276,22 @@ export default {
       const data = {
         page: this.page,
         pageSize: this.pageSize,
-        billNumberLike: this.form.billNumberLike, // 单号
+        billNumberOrSrcBillNumberLike: this.form.billNumberOrSrcBillNumberLike, // 单号
         srcBillNumberLike: this.form.srcBillNumberLike, //  来源单号
         vendorCodeEqualsOrNameLike: this.form.vendorCodeEqualsOrNameLike, // 供应商代码等于或者名称类似于
         wrhCodeEqualsOrNameLike: this.form.wrhCodeEqualsOrNameLike, // 入库仓库
-        type: this.form.type, // 收货方式
+        typeEquals: this.form.typeEquals ? this.form.typeEquals : null, // 收货方式
         productCodeOrNameLike: this.form.productCodeOrNameLike, // 商品代码等于或者名称类似于
+        srcWayEquals: this.form.srcWayEquals ? this.form.srcWayEquals : null, // 订单来源
         statusEquals: this.form.status ? this.form.status : null, // 状态等于
         realArrivalDateGte: this.arrival[0], // 到货日期小于等于
         realArrivalDateLte: this.arrival[1], // 到货日期小于等于
         beginReceiveTimeGte: this.createTime[0], // 创建日期大于等于
-        beginReceiveTimeLte: this.createTime[1] // 创建日期小于等于
+        beginReceiveTimeLte: this.createTime[1], // 创建日期小于等于
+        searchCount: true
       };
+
+      console.log(data)
 
       WarehousingAdmServers.queryOrderBill(data).then((res) => {
         const records = res.records;
@@ -293,10 +309,11 @@ export default {
       this.pageSize = Number(e);
       this.page = 1;
       this.queryOrderBill(true);
+    },
+    printingBtn(data) {
+      console.log(data)
+      this.$message.error("打印功能还未开通")
     }
-    // printingBtn() {
-    //   this.$message.error("打印功能还未开通")
-    // }
   },
   created() {
     this.queryOrderBill();
@@ -343,16 +360,17 @@ export default {
   },
   filters: {
     setScope(status) {
+      // 状态。INITIAL:初始，ARRIVED:已登记，QUALITY:已质检，RECEIVING:进行中，FINISHED:已完成，ABORTED:已取消
       switch (status) {
         case 'INITIAL':
           return "初始"
         case 'ARRIVED':
-          return "已到货登记"
+          return "已登记"
         case 'QUALITY ':
           return "已质检"
         case 'RECEIVING':
           return "进行中"
-        case 'INISHED':
+        case 'FINISHED':
           return "已完成"
         case 'ABORTED ':
           return "已取消"
@@ -386,10 +404,12 @@ export default {
 
 <style lang="scss" scoped>
 @import "src/styles/mixin.scss";
-// .table-index .el-table .cell{
-//   padding-left: 0;
-//   margin: 10px
-// }
+.input-width{
+  &._picker{
+    width: 580px
+  }
+}
+
 </style>
 
 <style lang="scss">

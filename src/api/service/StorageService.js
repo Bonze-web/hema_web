@@ -105,8 +105,8 @@ export default {
      * 
      * 更新货区
      */
-    updateArea() {
-        return request.put('/wms/bin/updateZone')
+    updateArea(data) {
+        return request.put('/wms/bin/updateZone', data)
     },
     /**
      * 
@@ -148,6 +148,20 @@ export default {
             ...data
         }
         return request.get('/wms/bin/queryPath', {params: param})
+    },
+    /**
+     * 
+     * 更新货道
+     */
+    updateLane(data) {
+        return request.put('/wms/bin/updatePath', data)
+    },
+    /**
+     * 
+     * 更新货架
+     */
+    updateShelf(data) {
+        return request.put('/wms/bin/updateShelf', data)
     },
      /**
       * 新建货架

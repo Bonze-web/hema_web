@@ -13,7 +13,7 @@
             <el-input type="tel" maxlength="11" v-model="objDate.driverPhone" placeholder="请输入司机联系方式"></el-input>
           </div>
           <div class="item">
-            <span>车辆号码：</span>
+            <span>车牌号码：</span>
             <el-input type="text" v-model="objDate.carNumber" placeholder="请输入车辆号码"></el-input>
           </div>
 
@@ -81,11 +81,15 @@ export default {
     },
     onSubmit() {
       const _this = this;
-      const data = Object.assign(this.getData, this.objDate)
+      // const data = Object.assign(this.getData, this.objDate)
+      const data = this.objDate;
+      data.version = this.getData.version;
+      data.billNumber = this.getData.billNumber;
+      data.dcId = this.getData.dcId
 
       const cart = /(^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领A-Z]{1}[A-Z]{1}[A-Z0-9]{4}[A-Z0-9挂学警港澳]{1}$)/;
         
-      const myreg = /^[1][3,4,5,7,8,9][0-9]{9}$/;
+      const myreg = /^[1]\d{10}$/;
       if (!myreg.test(this.objDate.driverPhone)) {
         this.$message.error("手机号码输入有误")
         return false;
@@ -118,9 +122,9 @@ export default {
       const year = data.getFullYear();
       const moth = data.getMonth() + 1;
       const dat = data.getDate();
-      const hos = data.getUTCHours();
-      const mutes = data.getUTCMinutes();
-      const secon = data.getUTCSeconds();
+      const hos = data.getHours();
+      const mutes = data.getMinutes();
+      const secon = data.getSeconds();
 
       function setZero(num) {
         if (num < 10) {

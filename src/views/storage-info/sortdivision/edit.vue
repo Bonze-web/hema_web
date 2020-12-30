@@ -15,7 +15,7 @@
             </div>
             <div>
                 <el-button @click="back">返回</el-button>
-                <el-button type="primary" @click="editSupplier">编辑</el-button>
+                <el-button type="primary" @click="editSupplier" v-if="hasPermission(PermIds.WMS_PICKAREA_UPDATE)">编辑</el-button>
             </div>
         </div>
         <div style="height:20px" />
@@ -53,8 +53,8 @@
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="上架规则" prop="putawayRule">
                                           <el-select v-model="form.putawayRule" placeholder="请选择上架规则">
-                                            <el-option label="TT" value="TT"></el-option>
-                                            <el-option label="STACK " value="STACK"></el-option>
+                                            <el-option label="T型" value="T"></el-option>
+                                            <el-option label="地堆 " value="STACK"></el-option>
                                           </el-select>
                                         </el-form-item>
                                     </el-col>
@@ -107,7 +107,7 @@
               </div>
           </el-row>
           <el-table
-              :data="storageListRead"
+              :data="storageList"
               style="width: 100%;text-align:center"
           >
             <el-table-column prop="name" label="存储分区">
@@ -218,9 +218,9 @@
             </div>
         </el-dialog>
         <el-dialog title="存储方案调序" :visible.sync="dialogFormVisible">
-          <el-form :model="form">
+          <el-form :model="form" :rules="rulesNum">
             <el-form-item label="存储方案:" >
-              {{'[' + storageObjzanshi.code + ']' + storageObjzanshi.name}}
+              {{ storageObjzanshi.name }}
             </el-form-item>
             <el-form-item label="存储方案数量:">
               {{storageList.length}}
@@ -243,10 +243,19 @@
 <script>
 import SortdivisionService from "@/api/service/SortdivisionService";
 import systemLog from "@/components/systemLog.vue"
+import PermIds from "@/api/permissionIds";
+import { mapGetters } from "vuex";
 export default {
   data() {
       return {
+        PermIds: PermIds,
+        rulesNum: {
+          afterNum: [
+            
+          ]
+        },
         storageListRead: [],
+        storageListReadLength: 0,
         tabActiveName: "suppliers",
         time: false,
         dialogFormVisible: false,
@@ -288,13 +297,7 @@ export default {
           binScope: '',
           stockType: "",
           putawayRule: "",
-          storageList: [
-            {
-              name: "rrr",
-              orderNumber: 0,
-              storageId: "666"
-            }
-          ]
+          storageList: []
         },
         suppliersInfo: {}, 
         createRules: {
@@ -306,7 +309,7 @@ export default {
           ],
           binScope: [
             { required: true, message: '请填写货位范围', trigger: 'blur' },
-            { required: true, pattern: /^([1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[,]+[1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[-]+[1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[(]+[1-9]+\/[1-9]+[)]+)$/, message: '请填写货位范围', trigger: 'blur' }
+            { required: true, pattern: /^(([1-9a-zA-Z]+[-]+[1-9a-zA-Z]+){0,64}[1-9a-zA-Z]{0,64}([(]+[1-9]+\/[1-9]+[)]+)?[,]?[1-9a-zA-Z]{0,64}[,]?){0,64}$/, message: '格式10、10(1/2)、10-20，多个以逗号隔开', trigger: 'blur' }
           ],
           stockType: [
             { required: true, message: '请填写存储类型', trigger: 'blur' }
@@ -330,31 +333,40 @@ export default {
       // 通过后台获取存储分区的内容 start
       clickstoredContentChange() {
           this.establish = true;
+          this.storageListReadLength = this.storageList.length;
+          this.storageList.forEach((ele, idx) => {
+            this.storageListRead.push(ele);
+          })
           this.storedContentChange();
       },
       leftHandleComfirm() {
-        this.establish = false;
-        const lenthRecodes = this.storageList.length;
-        console.log(this.leftSelect);
-        if (this.storageList.length > 0) { 
-          this.storageList.push(...this.leftSelect)
+        if (this.storageListRead.length > 0) { 
+          this.leftSelect.forEach((ele, idx) => {
+            const storeObj = {};
+            storeObj.name = ele.name;
+            storeObj.storageId = ele.id;
+            storeObj.orderNumber = this.storageListReadLength + idx;
+            this.storageListRead.push(storeObj);
+          })
+          
           const newobj = {}; 
-          this.storageList = this.storageList.reduce((preVal, curVal) => {
-            newobj[curVal.id] ? '' : newobj[curVal.id] = preVal.push(curVal); 
+          this.storageListRead = this.storageListRead.reduce((preVal, curVal) => {
+            newobj[curVal.storageId] ? '' : newobj[curVal.storageId] = preVal.push(curVal); 
             return preVal 
           }, []);
-          this.updateStorageList();
         } else {
-          console.log(this.storageList);
           this.leftSelect.forEach((ele, idx) => {
             const storeObj = ele;
             storeObj.storageId = ele.id;
-            storeObj.orderNumber = lenthRecodes + idx + 1;
-            this.storageList.push(storeObj);
-            // this.storageList.push({id: ele.id, storageId: ele.id, name: ele.name, orderNumber: lenthRecodes + idx + 1, code: ele.code, version: ele.version});
+            storeObj.orderNumber = idx + 1;
+            this.storageListRead.push(storeObj);
           })
         }
         this.$refs.multipleTable.clearSelection();
+        this.establish = false;
+        console.log(this.storageListRead);
+        this.storageList = this.storageListRead;
+        this.updateStorageList();
       },
       storedContentChange() {
         this.storedContent = [];
@@ -406,6 +418,7 @@ export default {
         this.storageList = objCurTt;
       },
       back: function() {
+        this.$store.dispatch("tagsView/delView", this.$route);
         this.$router.go(-1)
       },
       statusChange: function() {
@@ -449,7 +462,7 @@ export default {
         .then((res) => {
           console.log(res);
           this.suppliersInfo = res;
-          this.storageListRead = this.suppliersInfo.storageList;
+          this.storageList = this.suppliersInfo.storageList;
         })
         .catch((err) => {
           this.$message.error("获取详情失败" + err.message)
@@ -479,6 +492,7 @@ export default {
             } else {
               // 因为提交的时候,需要传递状态值,所以先转换一下,这里是编辑
               this.form.storageList = this.storageList;
+              console.log(this.form);
               SortdivisionService.updateSupplier(this.form)
               .then(res => {
                 console.log(res)
@@ -500,8 +514,9 @@ export default {
         this.status = "edit"
         // 这个form肯定就是编辑页面的数据,suppliersInfo是前一个页面传递过来的数据
         // 传递的是form是用户填写的数据
-        this.storageList = this.storageListRead;
-        this.form = Object.assign(this.form, this.suppliersInfo)
+        // this.storageList = this.storageListRead;
+        this.form = Object.assign(this.form, this.suppliersInfo);
+        console.log(this.form);
       },
       // 弹出界面的方法
       handleSizeChangeOne(e) {
@@ -532,6 +547,9 @@ export default {
     },
     components: {
       "system-log": systemLog
+    },
+     computed: {
+       ...mapGetters(["hasPermission", "workingOrg"])
     }
 };
 </script>

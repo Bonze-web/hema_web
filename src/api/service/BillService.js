@@ -26,7 +26,7 @@ export default {
      * 请求损耗单详情
      */
     getLossBillDetail(id) {
-        return request.post('/wms/decinvbill/getDetail?id=' + id)
+        return request.get('/wms/decinvbill/getDetail?id=' + id)
     },
     /**
      * 请求溢余单列表
@@ -50,7 +50,7 @@ export default {
      * 请求溢余单详情
      */
     getOverflowBillDetail(id) {
-        return request.post('/wms/incinv/getDetail?id=' + id)
+        return request.get('/wms/incinv/getDetail?id=' + id)
     },
     /**
      * 搜索报损人

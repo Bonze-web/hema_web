@@ -2,18 +2,15 @@
     <div>
         <div class="head">
             <div class="head-title">
-                <div style="margin:8px">{{ '[' + dataList.barcode  +']' + dataList.containerTypeName  }}</div>
-                <!-- <template> -->
-                  <div style="margin:11px 0 5px 0; font-size: 12px; color: #999">{{ state }}</div>
-                <!-- </template> -->
+                <div style="margin:8px">{{ dataList.orderbillIdNumber }}</div>
+                <div style="margin:11px 0 5px 0; font-size: 12px; color: #999">{{ dataList.status | setStatus }}</div>
             </div>
             <div>
                 <el-button @click="back">返回</el-button>
-                <el-button type="primary"  @click="printingBtn">打印</el-button>
+                <!-- <el-button type="primary"  @click="printingBtn">打印</el-button> -->
             </div>
         </div>
         <div style="height:20px" />
-
 
         <!-- 编辑 -->
         <!-- <div class="info-content" v-if="status === 'create' || status === 'edit'">
@@ -90,74 +87,75 @@
             <div>
                 <template>
                     <el-tabs v-model="tabActiveName">
-                        <el-tab-pane label="容器详情" name="category">
+                        <el-tab-pane label="收货装箱单" name="category">
                             <div class="info-title">基本信息</div>
                             <el-col :span="6" class="info-box">
-                                <div>条码:</div>
-                                <div>{{ dataList.barcode }}</div>
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>容器类型:</div>
-                                <!-- <router-link style="color: #409eff" :to="{ path: '/basicinfo/container/edit' }" > -->
-                                  {{ '[' + dataList.useStatus + ']' + dataList.containerTypeName }}
-                                <!-- </router-link> -->
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>所属对象:</div>
-                                <div>{{ dataList.storageNumber }}</div>
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>父容器:</div>
-                                <div>{{ dataList.parentId ? dataList.parentId : "&lt;空&gt;" }}</div>
+                                <div>质检单号:</div>
+                                <div>{{ dataList.orderNumber }}</div>
                             </el-col>
 
                             <el-col :span="6" class="info-box">
-                                <div>当前位置:</div>
-                                <div>{{ dataList.positionCode }}</div>
+                                <div>创建时间:</div>
+                                <div>{{ dataList.createTime }}</div>
                             </el-col>
 
                             <el-col :span="6" class="info-box">
-                                <div>目标位置:</div>
-                                <div>{{ dataList.toPositionCode ? dataList.toPositionCode : "&lt;空&gt;" }}</div>
+                                <div>最后更新时间:</div>
+                                <div>{{ dataList.updateTime ? dataList.updateTime : "&lt;空&gt;" }}</div>
                             </el-col>
-                            <br>
+
+                            <el-col :span="6" class="info-box">
+                                <div>入库订单单号:</div>
+                                <div>{{dataList.orderBillNumber}}</div>
+                            </el-col>
+
+                            <el-col :span="6" class="info-box">
+                                <div>最后更新人:</div>
+                                <div>{{ dataList.updatorName }}</div>
+                            </el-col>
 
                             <el-col>
-                                <div  class="info-title title">子容器</div>
+                                <div  class="info-title title">质检类型</div>
                             </el-col>
+                            <el-input type="text" v-model="iptVal" placeholder="请输入商品编号" class="input-width" ></el-input>
+                            <el-button type="primary" size="mini" @click="onSubmit" >立即搜索</el-button>
 
                             <div style="height:20px" />
 
-                            <el-table :data="dataList.sonList" style="width: 100%; text-align: center" :row-style="{ height: '16px', padding: '-4px' }" >
+                            <el-table :data="qualityInspectionTypeList" style="width: 100%; text-align: center" :row-style="{ height: '16px', padding: '-4px' }" >
+                              <el-table-column type="index" label="序号"></el-table-column>
 
-                            <el-table-column prop="a" label="条码" style="height: 20px">
-                              <template slot-scope="scope">
-                                <span>条码{{ scope.row.barcode }}</span>
-                              </template>
-                            </el-table-column>
+                              <el-table-column prop="productCode" label="商品编码" style="height: 20px"></el-table-column>
+                              <el-table-column prop="productName" label="商品名称" style="height: 20px"></el-table-column>
 
-                            <el-table-column prop="b" label="容器类型" style="height: 20px">
-                              <template slot-scope="scope">
-                                <span>容器类型{{ scope.row.containerTypeName }}</span>
-                              </template>
-                            </el-table-column>
+                              <el-table-column prop="qualityInspectionType" label="质检类型" style="height: 20px">
+                                <template slot-scope="qualityInspectionType">
+                                  {{ qualityInspectionType | setQualityInspectionType }}
+                                </template>
+                              </el-table-column>
 
-                            <el-table-column prop="c" label="状态">
-                              <template slot-scope="scope">
-                                {{ scope.row.status | dcStatus }}
-                              </template>
-                            </el-table-column>
+                              <el-table-column prop="actualInspectionNum" label="实检数量" style="height: 20px"></el-table-column>
+                              <el-table-column prop="unqualifiedNum" label="不合格数量" style="height: 20px"></el-table-column>
 
-                          </el-table>
+                              <el-table-column prop="updateTime" label="最后更新时间" style="height: 20px"></el-table-column>
+                              <el-table-column prop="updatorName" label="最后更新人名称" style="height: 20px"></el-table-column>
 
+                              <el-table-column prop="vehicleExternalTemperature" label="车辆外部温度" style="height: 20px"></el-table-column>
+                              <el-table-column prop="vehicleTemperature" label="车辆温度" style="height: 20px"></el-table-column>
 
+                              <el-table-column prop="status" label="状态" style="height: 20px">
+                                <template slot-scope="status">
+                                  {{ status | setSonStatus }}
+                                </template>
+                              </el-table-column>
+
+                            </el-table>
                         </el-tab-pane>
 
-                        <el-tab-pane label="操作日志" name="active">
+                        <!-- <el-tab-pane label="操作日志" name="active">
                           <el-table :data="dataList.sonList" style="width: 100%; text-align: center" :row-style="{ height: '16px', padding: '-4px' }" >
-                            操作日志
 
-                            <!-- <el-table-column prop="a" label="操作时间" style="height: 20px">
+                            <el-table-column prop="a" label="操作时间" style="height: 20px">
                               <template slot-scope="scope">
                                   <span>条码{{ scope.row.a }}</span>
                               </template>
@@ -166,7 +164,6 @@
                             <el-table-column prop="b" label="操作类型" style="height: 20px">
                               <template slot-scope="scope">
                                   <span>容器类型{{ scope.row.b }}</span>
-                              </template>
                             </el-table-column>
 
                             <el-table-column prop="c" label="事件">
@@ -179,10 +176,10 @@
                               <template slot-scope="scope">
                                 {{ scope.row.d }}
                               </template>
-                            </el-table-column> -->
+                            </el-table-column>
 
                           </el-table>
-                        </el-tab-pane>
+                        </el-tab-pane> -->
                     </el-tabs>
                 </template>
             </div>
@@ -191,17 +188,17 @@
 </template>
 
 <script>
-import BasicService from "@/api/service/BasicService";
+import WarehousingAdmServers from "@/api/service/WarehousingAdmServers";
+// DetailsqualityInspection  详情get（id）函数
 
 export default {
   data() {
       return {
-        state: '', // 状态
         tabActiveName: 'category', // tab栏名称
-        active: 'ccc',
-        status: '', // 页面状态
         id: '', // 货位类别ID
-        dataList: {} // 详情数据
+        iptVal: '', // 搜索
+        dataList: {}, // 详情数据
+        orderBillItems: []
       }
     },
     computed: {
@@ -211,47 +208,75 @@ export default {
         this.$store.dispatch("tagsView/delView", this.$route);
         this.$router.go(-1)
       },
-      getQueryStatus: function() {
-        this.id = this.$route.query.id;
-        this.ocntainerOcntainer(this.id) // 获取详情
+      onSubmit() {
+        if (this.iptVal === '') {
+          this.orderBillItems = this.dataList.orderBillItems
+        } else {
+          this.orderBillItems = this.dataList.orderBillItems.filter((item) => {
+            return item.billNumber.indexOf(this.iptVal) !== -1
+          })
+        }
       },
-      ocntainerOcntainer: function(id) {
-        BasicService.ocntainerOcntainer(id)
-        .then((res) => {
-          let state = '';
+      detailsqualityInspection() {
+        this.id = this.$route.query.id;
 
-          if (res.status === 'ON') {
-            state = '已使用'
-          } else if (res.status === 'OFF') {
-            state = '未使用'
-          } else {
-            state = '未知'
-          }
-
+        WarehousingAdmServers.detailsqualityInspection(this.id)
+        .then(res => {
+          console.log(res)
           this.dataList = res;
-
-          console.log(this.dataList.sonList)
-
-          this.state = state
+          this.orderBillItems = res.orderBillItems;
         })
-        .catch((err) => {
-          this.$message.error("获取详情失败" + err.message)
-        })
+        .catch(err => {
+          this.$message.error("查询失败" + err.message)
+        });
       },
       printingBtn() {
         this.$message.error("打印功能还未开通")
       }
     },
     created() {
-      this.getQueryStatus()
+      this.detailsqualityInspection()
     },
     filters: {
-      dcStatus(status) {
+      setStatus(status) {
+      // 质检单状态，PENDING_QUALITY_INSPECTION:待质检，FINISHED:已完成，UNFINISHED:未完成
         switch (status) {
-          case 'ON':
-            return "已使用"
-          case 'OFF':
-            return "未使用"
+          case 'PENDING_QUALITY_INSPECTION':
+            return "待质检"
+          case 'FINISHED':
+            return "已完成"
+          case 'UNFINISHED':
+            return "未完成"
+          default:
+            return '未知';
+        }
+      },
+      setSonStatus(status) {
+      // 质检列表 PENDING_QUALITY_INSPECTION：待质检，QUALIFIED：合格，UNQUALIFIED：不合格
+        switch (status) {
+          case '质检单状态，PENDING_QUALITY_INSPECTION':
+            return "待质检"
+          case 'QUALIFIED':
+            return "合格"
+          case 'UNQUALIFIED':
+            return "不合格"
+          default:
+            return '未知';
+        }
+      },
+      setQualityInspectionType(type) {
+      // --质检项类型：1运输条件，2农残药残，3破坏检测，4外观检测，5食安检测
+        switch (type) {
+          case '1':
+            return "运输条件"
+          case '2':
+            return "农残药残"
+          case '3':
+            return "破坏检测"
+          case '4':
+            return "外观检测"
+          case '5':
+            return "食安检测"
           default:
             return '未知';
         }

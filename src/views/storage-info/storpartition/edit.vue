@@ -15,7 +15,7 @@
             </div>
             <div>
                 <el-button @click="back">返回</el-button>
-                <el-button type="primary" @click="editSupplier">编辑</el-button>
+                <el-button type="primary" @click="editSupplier" v-if="hasPermission(PermIds.WMS_STORAGEAREA_UPDATE)">编辑</el-button>
             </div>
         </div>
         <div style="height:20px" />
@@ -78,10 +78,13 @@
 <script>
 // import { mapGetters } from "vuex";
 import StorpartitionService from "@/api/service/StorpartitionService";
+import PermIds from "@/api/permissionIds";
+import { mapGetters } from "vuex";
 
 export default {
   data() {
       return {
+        PermIds: PermIds,
         status: '', // 页面状态
         id: '', 
         tabActiveName: 'suppliers', // tab栏名
@@ -100,19 +103,21 @@ export default {
             { required: true, message: '请输入码头名称', trigger: 'blur' }
           ],
           binScope: [
-            { required: true, message: '请填写货位范围', trigger: 'blur' }
+            { required: true, message: '请填写货位范围', trigger: 'blur' },
+            { required: true, pattern: /^([1-9a-zA-Z]{1,64}[,]{0,1}){0,64}$|^(([1-9a-zA-Z]+[-]+[1-9a-zA-Z]+){0,64}[1-9a-zA-Z]{0,64}([(]+[1-9]+\/[1-9]+[)]+)?[,]?[1-9a-zA-Z]{0,64}[,]?){0,64}$/, message: '格式10、10(1/2)、10-20，多个以逗号隔开', trigger: 'blur' }
           ]
         }
       }
     },
     computed: {
-
+      ...mapGetters(["hasPermission", "workingOrg"])
     },
     methods: {
       levelChange() {
         console.log(this.form)
       },
       back: function() {
+        this.$store.dispatch("tagsView/delView", this.$route);
         this.$router.go(-1)
       },
       statusChange: function() {
@@ -153,7 +158,8 @@ export default {
       getSuppliers: function(id) {
         StorpartitionService.getSuppliersDetail(id)
         .then((res) => {
-          this.suppliersInfo = res.data;
+          console.log(res);
+          this.suppliersInfo = res;
         })
         .catch((err) => {
           this.$message.error("获取详情失败" + err)
@@ -164,11 +170,11 @@ export default {
           if (valid) {
             if (this.status === 'create') {
               // 创建验证货位范围
-              const reg = /^([1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[,]+[1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[-]+[1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[(]+[1-9]+\/[1-9]+[)]+)$/;
-              if (!reg.test(this.form.binScope)) {
-                this.$message.error("满足格式10、10(1/2)、10-20，多个以逗号隔开");
-                return false;
-              }
+              // const reg = /^([1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[,]+[1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[-]+[1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[(]+[1-9]+\/[1-9]+[)]+)$/;
+              // if (!reg.test(this.form.binScope)) {
+              //   this.$message.error("满足格式10、10(1/2)、10-20，多个以逗号隔开");
+              //   return false;
+              // }
               StorpartitionService.createSuppliers(this.form)
               .then(res => {
                 this.$message.success("创建成功")
@@ -187,7 +193,7 @@ export default {
                 this.$router.go(-1)
               })
               .catch(err => {
-                this.$message.error("更新失败" + err)
+                this.$message.error("更新失败" + err.message)
               })
             }
           } else {

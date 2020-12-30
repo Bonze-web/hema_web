@@ -332,6 +332,7 @@ export default {
         this.storageList = objCurTt;
       },
       back: function() {
+        this.$store.dispatch("tagsView/delView", this.$route);
         this.$router.go(-1)
       },
       statusChange: function() {

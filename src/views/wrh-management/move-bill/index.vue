@@ -55,7 +55,7 @@
               </router-link>
             </el-row>
             <el-row style="margin-left:12px">
-              <el-button type="primary" size="mini" @click="table = true">管理溢余类型</el-button>
+              <el-button type="primary" size="mini" @click="table = true">管理移库类型</el-button>
             </el-row>
           </div>
           <el-table
@@ -71,7 +71,7 @@
                         </router-link>
                     </template>
                 </el-table-column>
-                <el-table-column prop="billType" label="溢余类型"></el-table-column>
+                <el-table-column prop="billType" label="移库类型"></el-table-column>
                 <el-table-column prop="wrhCode" label="仓库">
                   <template slot-scope="scope">
                     {{ '[' + scope.row.wrhCode + ']' + scope.row.wrhName }}
@@ -95,14 +95,14 @@
 
 
 
-  <!-- 管理溢余类型抽屉 -->
+  <!-- 管理移库类型抽屉 -->
         <el-drawer
             :visible.sync="table"
             direction="rtl"
             :with-header="false"
             size="50%"
           >
-            <div class="loss-type-box"><bill-type billTitle="溢余类型" :billList="billList" lossType="INCINV" @getAlllossType="getAlllossType" @goBack="goBack"></bill-type></div>
+            <div class="loss-type-box"><bill-type billTitle="移库类型" :billList="billList" lossType="INCINV" @getAlllossType="getAlllossType" @goBack="goBack"></bill-type></div>
           </el-drawer>
     </div>
 </template>
@@ -174,7 +174,7 @@ export default {
         this.billList = res
       })
       .catch((err) => {
-        this.$message.error('获取溢余类别失败' + err.message)
+        this.$message.error('获取移库类别失败' + err.message)
       })
     },
     getOverflowBillList: function() {

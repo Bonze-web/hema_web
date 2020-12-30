@@ -537,7 +537,8 @@ const StorageInfoPackage = {
         icon: 'table',
         permission: PermIds.WMS_WAREHOUSE_VIEW
       }
-    }, {
+    }, 
+    {
       path: "add",
       name: "Add",
       component: () =>
@@ -645,7 +646,8 @@ const StorageInfoPackage = {
     component: AModule,
     meta: {
       title: '拣货分区',
-      icon: 'table'
+      icon: 'table',
+      permission: PermIds.WMS_PICKAREA
     },
     children: [{
       path: "",
@@ -655,7 +657,8 @@ const StorageInfoPackage = {
         hidden: true,
       meta: {
         title: '拣货分区',
-        icon: 'table'
+        icon: 'table',
+        permission: PermIds.WMS_PICKAREA_VIEW
       }
     }, {
       path: "edit",
@@ -665,7 +668,8 @@ const StorageInfoPackage = {
         hidden: true,
         meta: {
           title: '编辑拣货分区',
-          icon: 'table'
+          icon: 'table',
+         permission: PermIds.WMS_PICKAREA_VIEW
         }
       },
       {
@@ -676,7 +680,53 @@ const StorageInfoPackage = {
         hidden: true,
         meta: {
           title: '新建拣货分区',
-          icon: 'table'
+          icon: 'table',
+          permission: PermIds.WMS_PICKAREA_CREATE
+        }
+      }] 
+  },
+  {
+    path: "personnelbind",
+    name: "Personnelbind",
+    component: AModule,
+    meta: {
+      title: '用户拣货分区绑定',
+      icon: 'table',
+      permission: PermIds.WMS_USER_PICKAREA
+    },
+    children: [{
+      path: "",
+      name: "PersonnelbindView",
+      component: () =>
+        import('@/views/storage-info/personnelbind/index'),
+        hidden: true,
+      meta: {
+        title: '用户拣货分区绑定',
+        icon: 'table',
+        permission: PermIds.WMS_USER_PICKAREA_VIEW
+      }
+    }, {
+      path: "edit",
+      name: "PersonnelbindEdit",
+      component: () =>
+        import('@/views/storage-info/personnelbind/edit'),
+        hidden: true,
+        meta: {
+          title: '编辑用户拣货分区',
+          icon: 'table',
+          permission: PermIds.WMS_USER_PICKAREA_VIEW
+        }
+      },
+      {
+        path: "add",
+        name: "PersonnelbindAdd",
+        component: () =>
+          import('@/views/storage-info/personnelbind/add'),
+        hidden: true,
+        meta: {
+          title: '新建用户拣货分区',
+          icon: 'table',
+          permission: PermIds.WMS_USER_PICKAREA_CREATE
         }
       }] 
   },
@@ -686,7 +736,8 @@ const StorageInfoPackage = {
     component: AModule,
     meta: {
       title: '拣货顺序',
-      icon: 'table'
+      icon: 'table',
+      permission: PermIds.WMS_PICKORDER
     },
     children: [{
       path: "",
@@ -696,7 +747,8 @@ const StorageInfoPackage = {
         hidden: true,
       meta: {
         title: '拣货顺序',
-        icon: 'table'
+        icon: 'table',
+        permission: PermIds.WMS_PICKORDER_VIEW
       }
     }, {
       path: "edit",
@@ -705,8 +757,9 @@ const StorageInfoPackage = {
         import('@/views/storage-info/cargosequence/edit'),
         hidden: true,
         meta: {
-          title: '编辑拣货分区',
-          icon: 'table'
+          title: '编辑拣货拣货顺序',
+          icon: 'table',
+          permission: PermIds.WMS_PICKORDER_VIEW
         }
       },
       {
@@ -716,8 +769,9 @@ const StorageInfoPackage = {
           import('@/views/storage-info/cargosequence/add'),
         hidden: true,
         meta: {
-          title: '新建拣货分区',
-          icon: 'table'
+          title: '新建拣货顺序',
+          icon: 'table',
+          permission: PermIds.WMS_PICKORDER_CREATE
         }
       }] 
   },
@@ -834,8 +888,8 @@ const warehousingAdm = {
     component: AModule,
     meta: {
       title: '入库订单',
-      icon: 'table'
-      // permission: PermIds.PRODUCT_SUPPLIER
+      icon: 'table',
+      permission: PermIds.WMS_ORDERBILL
     },
     children: [
       {
@@ -846,8 +900,8 @@ const warehousingAdm = {
       hidden: true,
       meta: {
         title: '入库订单列表',
-        icon: 'table'
-        // permission: PermIds.PRODUCT_SUPPLIER_VIEW
+        icon: 'table',
+        permission: PermIds.WMS_ORDERBILL_VIEW
       }
     }, {
       path: "edit",
@@ -856,18 +910,65 @@ const warehousingAdm = {
         import('@/views/warehousing-adm/order/edit'),
       hidden: true,
       meta: {
-        title: '查看供应商',
+        title: '入库订单详情',
+        icon: 'table',
+        permission: PermIds.WMS_ORDERBILL_VIEW
+      }
+    }
+    // {
+    //   path: "add",
+    //   name: "SuppliersAdd",
+    //   component: () =>
+    //     import('@/views/warehousing-adm/order/add'),
+    //   hidden: true,
+    //   meta: {
+    //     title: '新建供应商',
+    //     icon: 'table'
+    //     // permission: PermIds.PRODUCT_SUPPLIER_CREATE
+    //   }
+    // }
+  ]
+    },
+    {
+    path: "grounding",
+    name: "Grounding",
+    component: AModule,
+    meta: {
+      title: '上架单',
+      icon: 'table'
+      // permission: PermIds.PRODUCT_SUPPLIER
+    },
+    children: [
+      {
+      path: "",
+      name: "GroundingView",
+      component: () =>
+        import('@/views/warehousing-adm/grounding/index'),
+      hidden: true,
+      meta: {
+        title: '上架单列表',
+        icon: 'table'
+        // permission: PermIds.PRODUCT_SUPPLIER_VIEW
+      }
+    }, {
+      path: "edit",
+      name: "GroundingEdit",
+      component: () =>
+        import('@/views/warehousing-adm/grounding/edit'),
+      hidden: true,
+      meta: {
+        title: '上架单详情',
         icon: 'table'
         // permission: PermIds.PRODUCT_SUPPLIER_VIEW
       }
     }, {
       path: "add",
-      name: "SuppliersAdd",
+      name: "GroundingAdd",
       component: () =>
-        import('@/views/warehousing-adm/order/add'),
+        import('@/views/warehousing-adm/grounding/add'),
       hidden: true,
       meta: {
-        title: '新建供应商',
+        title: '新建上架单',
         icon: 'table'
         // permission: PermIds.PRODUCT_SUPPLIER_CREATE
       }
@@ -879,8 +980,8 @@ const warehousingAdm = {
       component: AModule,
       meta: {
         title: '到货登记',
-        icon: 'table'
-        // permission: PermIds.PRODUCT_SUPPLIER
+        icon: 'table',
+        permission: PermIds.WMS_ORDERBILL_ARRIVE
       },
       children: [
         {
@@ -891,13 +992,86 @@ const warehousingAdm = {
           hidden: true,
           meta: {
             title: '到货登记',
+            icon: 'table',
+            permission: PermIds.WMS_ORDERBILL_ARRIVE
+          }
+        }
+      ]
+    },
+    {
+      path: "packing",
+      name: "Packing",
+      component: AModule,
+      meta: {
+        title: '收货装箱',
+        icon: 'table',
+        permission: PermIds.WMS_RECEIVE_BILL
+      },
+      children: [
+        {
+          path: "",
+          name: "PackingView",
+          component: () =>
+            import('@/views/warehousing-adm/packing/index'),
+          hidden: true,
+          meta: {
+            title: '收货装箱',
+            icon: 'table',
+            permission: PermIds.WMS_RECEIVE_BILL_VIEW
+          }
+        },
+        {
+          path: "edit",
+          name: "PackingEdit",
+          component: () =>
+            import('@/views/warehousing-adm/packing/edit'),
+          hidden: true,
+          meta: {
+            title: '装箱详情',
+            icon: 'table',
+            permission: PermIds.WMS_RECEIVE_BILL_VIEW
+          }
+        }
+      ]
+    },
+    {
+      path: "quality",
+      name: "Quality",
+      component: AModule,
+      meta: {
+        title: '质检单',
+        icon: 'table'
+        // permission: PermIds.WMS_QUALITY_INSPECTION_TYPE
+      },
+      children: [
+        {
+          path: "",
+          name: "QualityView",
+          component: () =>
+            import('@/views/warehousing-adm/quality/index'),
+          hidden: true,
+          meta: {
+            title: '质检单',
             icon: 'table'
-            // permission: PermIds.PRODUCT_SUPPLIER_VIEW
+            // permission: PermIds.WMS_QUALITY_INSPECTION_TYPE_VIEW
+          }
+        },
+        {
+          path: "edit",
+          name: "QualityEdit",
+          component: () =>
+            import('@/views/warehousing-adm/quality/edit'),
+          hidden: true,
+          meta: {
+            title: '质检详情',
+            icon: 'table'
+            // permission: PermIds.WMS_QUALITY_INSPECTION_TYPE_VIEW
           }
         }
       ]
     }
   ]}
+  
   /*
  * 单据管理包
  */
@@ -918,7 +1092,7 @@ const BillManagement = {
     meta: {
       title: '损耗单',
       icon: 'table',
-      permission: PermIds.PRODUCT_SUPPLIER
+      permission: PermIds.WMS_DECINVBILL
     },
     children: [{
       path: "",
@@ -929,7 +1103,7 @@ const BillManagement = {
       meta: {
         title: '损耗单',
         icon: 'table',
-        permission: PermIds.PRODUCT_SUPPLIER_VIEW
+        permission: PermIds.WMS_DECINVBILL_VIEW
       }
     }, {
       path: "edit",
@@ -940,7 +1114,7 @@ const BillManagement = {
       meta: {
         title: '查看损耗单',
         icon: 'table',
-        permission: PermIds.PRODUCT_SUPPLIER_VIEW
+        permission: PermIds.WMS_DECINVBILL_VIEW
       }
     }, {
       path: "add",
@@ -951,7 +1125,7 @@ const BillManagement = {
       meta: {
         title: '新建损耗单',
         icon: 'table',
-        permission: PermIds.PRODUCT_SUPPLIER_VIEW
+        permission: PermIds.WMS_DECINVBILL_CREATE
       }
     }, {
       path: "batchadd",
@@ -972,7 +1146,7 @@ const BillManagement = {
     meta: {
       title: '溢余单',
       icon: 'table',
-      permission: PermIds.PRODUCT_SUPPLIER
+      permission: PermIds.WMS_INCINVBILL
     },
     children: [{
       path: "",
@@ -983,29 +1157,29 @@ const BillManagement = {
       meta: {
         title: '溢余单',
         icon: 'table',
-        permission: PermIds.PRODUCT_SUPPLIER_VIEW
+        permission: PermIds.WMS_INCINVBILL_VIEW
       }
     }, {
       path: "edit",
-      name: "LossBillEdit",
+      name: "OverflowBillEdit",
       component: () =>
         import('@/views/wrh-management/overflow-bill/edit'),
       hidden: true,
       meta: {
         title: '查看溢余单',
         icon: 'table',
-        permission: PermIds.PRODUCT_SUPPLIER_VIEW
+        permission: PermIds.WMS_INCINVBILL_VIEW
       }
     }, {
       path: "add",
-      name: "LossBillAdd",
+      name: "OverflowBillAdd",
       component: () =>
         import('@/views/wrh-management/overflow-bill/add'),
       hidden: true,
       meta: {
         title: '新建溢余单',
         icon: 'table',
-        permission: PermIds.PRODUCT_SUPPLIER_VIEW
+        permission: PermIds.WMS_INCINVBILL_CREATE
       }
     }, {
       path: "batchadd",
@@ -1017,6 +1191,49 @@ const BillManagement = {
         title: '批量增加商品',
         icon: 'table',
         permission: PermIds.PRODUCT_SUPPLIER_VIEW
+      }
+    }]
+  }, {
+    path: "movebill",
+    name: "MoveBill",
+    component: AModule,
+    meta: {
+      title: '移库单',
+      icon: 'table',
+      permission: PermIds.WMS_INCINVBILL
+    },
+    children: [{
+      path: "",
+      name: "MoveView",
+      component: () =>
+        import('@/views/wrh-management/move-bill/index'),
+      hidden: true,
+      meta: {
+        title: '移库单',
+        icon: 'table',
+        permission: PermIds.WMS_INCINVBILL_VIEW
+      }
+    }, {
+      path: "edit",
+      name: "MoveBillEdit",
+      component: () =>
+        import('@/views/wrh-management/move-bill/edit'),
+      hidden: true,
+      meta: {
+        title: '查看移库单',
+        icon: 'table',
+        permission: PermIds.WMS_INCINVBILL_VIEW
+      }
+    }, {
+      path: "add",
+      name: "MoveBillAdd",
+      component: () =>
+        import('@/views/wrh-management/move-bill/add'),
+      hidden: true,
+      meta: {
+        title: '新建移库单',
+        icon: 'table',
+        permission: PermIds.WMS_INCINVBILL_CREATE
       }
     }]
   }]

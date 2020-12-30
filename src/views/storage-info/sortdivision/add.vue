@@ -45,16 +45,16 @@
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="存储类型" prop="stockType">
                                           <el-select v-model="form.stockType" placeholder="请选择存储类型">
-                                            <el-option label="CASE" value="CASE"></el-option>
-                                            <el-option label="SPLIT" value="SPLIT"></el-option>
+                                            <el-option label="整箱" value="CASE"></el-option>
+                                            <el-option label="拆零" value="SPLIT"></el-option>
                                           </el-select>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="上架规则" prop="putawayRule">
                                           <el-select v-model="form.putawayRule" placeholder="请选择上架规则">
-                                            <el-option label="TT" value="TT"></el-option>
-                                            <el-option label="STACK " value="STACK"></el-option>
+                                            <el-option label="T型" value="T"></el-option>
+                                            <el-option label="地堆 " value="STACK"></el-option>
                                           </el-select>
                                         </el-form-item>
                                     </el-col>
@@ -272,7 +272,7 @@ export default {
           ],
           binScope: [
             { required: true, message: '请填写货位范围', trigger: 'blur' },
-            { required: true, pattern: /^([1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[,]+[1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[-]+[1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[(]+[1-9]+\/[1-9]+[)]+)$/, message: '请填写货位范围', trigger: 'blur' }
+            { required: true, pattern: /^(([1-9a-zA-Z]+[-]+[1-9a-zA-Z]+){0,64}[1-9a-zA-Z]{0,64}([(]+[1-9]+\/[1-9]+[)]+)?[,]?[1-9a-zA-Z]{0,64}[,]?){0,64}$/, message: '格式10、10(1/2)、10-20，多个以逗号隔开', trigger: 'blur' }
           ],
           stockType: [
             { required: true, message: '请填写存储类型', trigger: 'blur' }
@@ -357,7 +357,8 @@ export default {
         this.storageList = objCurTt;
       },
       back: function() {
-        this.$router.go(-1)
+        this.$store.dispatch("tagsView/delView", this.$route);
+        this.$router.go(-1);
       },
       statusChange: function() {
         // 这个地方是已经点击了之后传过来的值,本来是打开的,点击之后已经成了false传递到这里,所以应该执行关闭键
@@ -426,7 +427,8 @@ export default {
               this.form.storageList = this.storageList;
               SortdivisionService.createSuppliers(this.form)
               .then(res => {
-                this.$message.success("创建成功")
+                this.$message.success("创建成功");
+                this.$store.dispatch("tagsView/delView", this.$route);
                 this.$router.go(-1)
               })
               .catch(err => {

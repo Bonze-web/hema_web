@@ -6,7 +6,7 @@
             <div>
                 <el-button @click="back">取消</el-button>
                 <el-button type="primary" @click="createSuppliers">确认</el-button>
-                <!-- <el-button type="primary" v-if="status === 'create'">确认并创建</el-button> -->
+                <el-button type="primary" v-if="status === 'create'" @click="createConfirm">确认并创建</el-button>
             </div>
         </div>
         <div class="head" v-if="status === 'read'">
@@ -101,7 +101,7 @@ export default {
           ],
           binScope: [
             { required: true, message: '请填写货位范围', trigger: 'blur' },
-            { required: true, pattern: /^([1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[,]+[1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[-]+[1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[(]+[1-9]+\/[1-9]+[)]+)$/, message: '请填写货位范围', trigger: 'blur' }
+            { required: true, pattern: /^([1-9a-zA-Z]{1,64}[,]{0,1}){0,64}$|^(([1-9a-zA-Z]+[-]+[1-9a-zA-Z]+){0,64}[1-9a-zA-Z]{0,64}([(]+[1-9]+\/[1-9]+[)]+)?[,]?[1-9a-zA-Z]{0,64}[,]?){0,64}$/, message: '格式10、10(1/2)、10-20，多个以逗号隔开', trigger: 'blur' }          
           ]
         }
       }
@@ -110,11 +110,29 @@ export default {
 
     },
     methods: {
-      levelChange() {
-        console.log(this.form)
+      createConfirm() {
+         this.$refs.form.validate(valid => {
+               if (valid) {
+                  StorpartitionService.createSuppliers(this.form)
+                  .then(res => {
+                    this.$message.success("创建成功")
+                    this.form = {
+                      code: '',
+                      name: '',
+                      binScope: ''
+                    }
+                  })
+                  .catch(err => {
+                    if (err && err.code !== 200) {
+                      this.$message.error("创建失败" + err.message)
+                    }
+                  })
+               }
+         });
       },
       back: function() {
-        this.$router.go(-1)
+        this.$store.dispatch("tagsView/delView", this.$route);
+        this.$router.go(-1);
       },
       statusChange: function() {
         // 这个地方是已经点击了之后传过来的值,本来是打开的,点击之后已经成了false传递到这里,所以应该执行关闭键
@@ -187,7 +205,7 @@ export default {
                 // console.log(res);
                
                 this.$message.success("创建成功")
-                 this.$store.dispatch("tagsView/delView", this.$route);
+                this.$store.dispatch("tagsView/delView", this.$route);
                 this.$router.go(-1)
               })
               .catch(err => {

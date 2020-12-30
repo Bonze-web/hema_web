@@ -20,17 +20,17 @@
                                 <el-row :gutter="20">
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="代码" prop="code">
-                                            <el-input v-model="form.code"></el-input>
+                                            <el-input maxlength="40" v-model="form.code"></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="名称" prop="name">
-                                            <el-input v-model="form.name"></el-input>
+                                            <el-input maxlength="40" v-model="form.name"></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="简称">
-                                            <el-input v-model="form.anotherName"></el-input>
+                                            <el-input maxlength="40" v-model="form.anotherName"></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <!-- <el-col :span="6" class="info-box">
@@ -40,7 +40,7 @@
                                     </el-col> -->
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="联系人" prop="contactName">
-                                            <el-input v-model="form.contactName"></el-input>
+                                            <el-input maxlength="40" v-model="form.contactName"></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
@@ -50,27 +50,27 @@
                                     </el-col>
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="地址" prop="address">
-                                            <el-input v-model="form.address"></el-input>
+                                            <el-input maxlength="40" v-model="form.address"></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="邮编" prop="postCode">
-                                            <el-input v-model="form.postCode"></el-input>
+                                            <el-input maxlength="40" v-model="form.postCode"></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="主页">
-                                            <el-input v-model="form.homePage"></el-input>
+                                            <el-input maxlength="40" v-model="form.homePage"></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="经营者备案码">
-                                            <el-input v-model="form.recordCode"></el-input>
+                                            <el-input maxlength="40" v-model="form.recordCode"></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="自定义字段1">
-                                            <el-input v-model="form.customField"></el-input>
+                                            <el-input maxlength="40" v-model="form.customField"></el-input>
                                         </el-form-item>
                                     </el-col>
                                 </el-row>

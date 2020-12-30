@@ -2,7 +2,7 @@
     <div>
         <div class="head">
             <div class="head-title">
-                <div style="margin:8px">入库订单{{ dataList.billNumber  }}</div>
+                <div style="margin:8px">{{ '[' + dataList.wrhCode  +']' + dataList.wrhName  }}</div>
                 <div style="margin:11px 0 5px 0; font-size: 12px; color: #999">{{ dataList.status | setStatus }}</div>
             </div>
             <div>
@@ -93,13 +93,19 @@
                                 <div>订单来源类型:</div>
                                 <div>{{ dataList.srcWay | setSrcWay }}</div>
                             </el-col>
+
+                             <el-col :span="6" class="info-box">
+                                <div>来源单号:</div>
+                                <div>{{dataList.srcBillNumber}}</div>
+                            </el-col>
+                            
                             <el-col :span="6" class="info-box">
                                 <div>供应商:</div>
                                 <div>{{ '[' + dataList.vendorId + ']' + dataList.vendorName }}</div>
                             </el-col>
                             <el-col :span="6" class="info-box">
                                 <div>物流方式:</div>
-                                <div>{{ dataList.isLogisticMode }}</div>
+                                <div>{{ dataList.isLogisticMode | setIsLogisticMode }}</div>
                             </el-col>
                             <el-col :span="6" class="info-box">
                                 <div>入库仓库:</div>
@@ -119,11 +125,6 @@
                             <el-col :span="6" class="info-box">
                                 <div>送达日期:</div>
                                 <div>{{ dataList.endReceiveTime ? dataList.endReceiveTime : "&lt;空&gt;" }}</div>
-                            </el-col>
-
-                            <el-col :span="6" class="info-box">
-                                <div>来源单号:</div>
-                                <div>{{dataList.srcBillNumber}}</div>
                             </el-col>
 
                             <el-col :span="6" class="info-box">
@@ -147,7 +148,7 @@
 
                             <el-table :data="orderBillItems" style="width: 100%; text-align: center" :row-style="{ height: '16px', padding: '-4px' }" >
                               <el-table-column type="index" label="序号"></el-table-column>
-                              <el-table-column prop="billNumber" label="商品编码" style="height: 20px"></el-table-column>
+                              <el-table-column prop="productCode" label="商品编码" style="height: 20px"></el-table-column>
                               <el-table-column prop="productName" label="商品名称" style="height: 20px"></el-table-column>
                               <el-table-column prop="munit" label="单位" style="height: 20px"></el-table-column>
                               <el-table-column prop="spec" label="规格" style="height: 20px"></el-table-column>
@@ -226,7 +227,7 @@ export default {
           this.orderBillItems = this.dataList.orderBillItems
         } else {
           this.orderBillItems = this.dataList.orderBillItems.filter((item) => {
-            return item.billNumber.indexOf(this.iptVal) !== -1
+            return item.productCode.indexOf(this.iptVal) !== -1
           })
         }
       },
@@ -290,8 +291,19 @@ export default {
         default:
           return '未知';
       }
+    },
+    setIsLogisticMode(type) {
+      // 物流模式，UNIFY：统配、CROSS：越库
+      switch (type) {
+        case 'UNIFY':
+          return "统配"
+        case 'CROSS':
+          return "越库"
+        default:
+          return '未知';
+      }
     }
-    }
+  }
 };
 </script>
 

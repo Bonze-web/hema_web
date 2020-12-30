@@ -5,7 +5,7 @@
       <el-form ref="form" style="display: flex" :model="form" label-width="10px" label-position="right" >
 
         <el-form-item>
-          <el-input placeholder="请输入内容" v-model="form.keyword">
+          <el-input placeholder="请输入货区/货道/货架/货位的编号" v-model="form.keyword">
             <i slot="prefix" class="el-input__icon el-icon-search"></i>
           </el-input>
         </el-form-item>
@@ -33,7 +33,6 @@
       node-key="id"
       lazy
       :props="props"
-      accordion
       :load="loadNode">
       <span class="custom-tree-node" slot-scope="{ node, data }">
         <span>{{ node.label }}</span>
@@ -51,6 +50,9 @@
             <div class="tree-box" v-if="node.level === 4">
               货位用途：{{ data.binusage | binUsage }}
             </div>
+            <div class="tree-box" v-if="node.level === 4">
+              状态：{{ data.status }}
+            </div>
             <!-- <div class="tree-box" v-if="node.level === 4">
               <el-select v-model="formEditSpace.binusage" placeholder="请选择货位用途">
                 <el-option v-for="item in binUsage" :key="item.value" :label="item.name" :value="item.value"></el-option>
@@ -61,7 +63,7 @@
             <el-button
               type="text"
               size="mini"
-              v-if="node.level === 4 && hasPermission(PermIds.WMS_BIN_UPDATE)"
+              v-if="hasPermission(PermIds.WMS_BIN_UPDATE)"
               @click.stop="() => edit(node, data)">
               编辑
             </el-button>
@@ -105,16 +107,16 @@
       <el-dialog width="40%" title="新增货道" :visible.sync="dialogFormLane">
         <el-form :model="formLane" :rules="laneRules" ref="formLane">
           <el-form-item label="起始货区" :label-width="formLabelWidth" prop="startZoneCode">
-            <el-input v-model="formLane.startZoneCode"></el-input>
+            <el-input v-model="formLane.startZoneCode" placeholder="请输入起始货区"></el-input>
           </el-form-item>
           <el-form-item label="截止货区" :label-width="formLabelWidth" prop="endZoneCode">
-            <el-input v-model="formLane.endZoneCode"></el-input>
+            <el-input v-model="formLane.endZoneCode" placeholder="请输入截止货区"></el-input>
           </el-form-item>
           <el-form-item label="起始货道" :label-width="formLabelWidth" prop="startPath">
-            <el-input v-model="formLane.startPath"></el-input>
+            <el-input v-model="formLane.startPath" placeholder="请输入起始货道"></el-input>
           </el-form-item>
           <el-form-item label="平均货道数" :label-width="formLabelWidth" prop="size">
-            <el-input v-model="formLane.size"></el-input>
+            <el-input v-model="formLane.size" placeholder="请输入平均货道数"></el-input>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -128,16 +130,16 @@
       <el-dialog width="40%" title="新增货架" :visible.sync="dialogFormShelf">
         <el-form :model="formShelf" :rules="shelfRules" ref="formShelf">
           <el-form-item label="起始货道" :label-width="formLabelWidth" prop="startPathCode">
-            <el-input v-model="formShelf.startPathCode"></el-input>
+            <el-input v-model="formShelf.startPathCode" placeholder="请输入起始货道"></el-input>
           </el-form-item>
           <el-form-item label="截止货道" :label-width="formLabelWidth" prop="endPathCode">
-            <el-input v-model="formShelf.endPathCode"></el-input>
+            <el-input v-model="formShelf.endPathCode" placeholder="请输入截止货道"></el-input>
           </el-form-item>
           <el-form-item label="起始货架" :label-width="formLabelWidth" prop="startShelf">
-            <el-input v-model="formShelf.startShelf"></el-input>
+            <el-input v-model="formShelf.startShelf" placeholder="请输入起始货架"></el-input>
           </el-form-item>
           <el-form-item label="平均货道数" :label-width="formLabelWidth" prop="size">
-            <el-input v-model="formShelf.size"></el-input>
+            <el-input v-model="formShelf.size" placeholder="请输入平均货道数"></el-input>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -153,36 +155,36 @@
           <el-row :gutter="20">
             <el-col :span="12">
               <el-form-item label="货架范围" :label-width="formLabelWidth" prop="startShelfCode">
-                <el-input v-model="formSpace.startShelfCode" autocomplete="off"></el-input>
+                <el-input v-model="formSpace.startShelfCode" placeholder="请输入起始货架" autocomplete="off"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="7">
             <el-form-item label="" prop="endShelfCode">
-              <el-input v-model="formSpace.endShelfCode" autocomplete="off"></el-input>
+              <el-input v-model="formSpace.endShelfCode" placeholder="请输入截止货架" autocomplete="off"></el-input>
             </el-form-item>
             </el-col>
           </el-row>
           <el-row :gutter="20">
             <el-col :span="12">
               <el-form-item label="列码范围" :label-width="formLabelWidth" prop="startRowCode">
-                <el-input v-model="formSpace.startRowCode" autocomplete="off"></el-input>
+                <el-input v-model="formSpace.startRowCode" placeholder="请输入起始列" autocomplete="off"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="7">
             <el-form-item label="" prop="endRowCode">
-              <el-input v-model="formSpace.endRowCode" autocomplete="off"></el-input>
+              <el-input v-model="formSpace.endRowCode" placeholder="请输入截止列" autocomplete="off"></el-input>
             </el-form-item>
             </el-col>
           </el-row>
           <el-row :gutter="20">
             <el-col :span="12">
               <el-form-item label="层码范围" :label-width="formLabelWidth" prop="startFloorCode">
-                <el-input v-model="formSpace.startFloorCode" autocomplete="off"></el-input>
+                <el-input v-model="formSpace.startFloorCode" placeholder="请输入起始层" autocomplete="off"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="7">
             <el-form-item label="" prop="endFloorCode">
-              <el-input v-model="formSpace.endFloorCode" autocomplete="off"></el-input>
+              <el-input v-model="formSpace.endFloorCode" placeholder="请输入截止层" autocomplete="off"></el-input>
             </el-form-item>
             </el-col>
           </el-row>
@@ -200,7 +202,7 @@
           </el-form-item>
           
           <el-form-item label="备注" :label-width="formLabelWidth">
-            <textarea v-model="formSpace.remark"></textarea>
+            <textarea v-model="formSpace.remark"  placeholder="请输入备注"></textarea>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -211,11 +213,21 @@
 
 
     <!-- 更新货区 -->
-      <el-dialog width="40%" title="修改货位用途" :visible.sync="editFormSpace">
-        <el-form :model="formEditSpace" ref="formArea" :rules="areaRules">
+      <el-dialog width="40%" title="修改" :visible.sync="editFormSpace">
+        <el-form :model="formEditSpace" ref="formArea" :rules="editRules">
 
-          <el-form-item label="货道" :label-width="formLabelWidth" prop="name">
+          <el-form-item v-if="level === 4" label="货道" :label-width="formLabelWidth">
             {{ ShelfName }}
+          </el-form-item>
+
+          <el-form-item v-if="level === 1" label="名称" :label-width="formLabelWidth" prop="name">
+            <el-input v-model="formEditSpace.name" placeholder="请输入名称" ></el-input>
+          </el-form-item>
+
+          <el-form-item label="货位类型" :label-width="formLabelWidth" prop="bintypeId">
+            <el-select v-model="formEditSpace.bintypeId" placeholder="请选择货位类型">
+              <el-option v-for="item in bintypeList" :key="item.id" :label="item.name" :value="item.id"></el-option>
+            </el-select>
           </el-form-item>
   
           <el-form-item label="货位用途" :label-width="formLabelWidth" prop="binusage">
@@ -223,6 +235,11 @@
               <el-option v-for="item in binUsage" :key="item.value" :label="item.name" :value="item.value"></el-option>
             </el-select>
           </el-form-item>
+
+          <el-form-item v-if="level === 1" label="备注" :label-width="formLabelWidth">
+            <el-input v-model="formEditSpace.remark" placeholder="请输入备注" ></el-input>
+          </el-form-item>
+          
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="cancelEdit">取 消</el-button>
@@ -247,14 +264,28 @@ import PermIds from "@/api/permissionIds";
   export default {
     data() {
       return {
+        level: '',
         PermIds: PermIds,
         treeDataId: '', // 保存树结构货位ID以便后期修改时改变页面数据
         ShelfName: '',
         formEditSpace: {
+          name: '',
+          remark: '',
           id: '',
           binusage: '',
           version: '',
           bintypeId: ''
+        },
+        editRules: {
+          name: [
+            { required: true, message: '请输入名称', trigger: 'blur'}
+          ],
+          binusage: [
+            { required: true, message: '请输选择货位用途', trigger: 'blur'}
+          ],
+          bintypeId: [
+            { required: true, message: '请输选择货位类型', trigger: 'blur'}
+          ]
         },
         editFormSpace: false,
         bintypeList: [], // 货位类型
@@ -336,10 +367,10 @@ import PermIds from "@/api/permissionIds";
         },
         shelfRules: {
           startPathCode: [
-            { required: true, pattern: /^[A-Z0-9]{4,4}$/, message: '请输入四位的数字和大写字母的组合', trigger: 'change' }
+            { required: true, pattern: /^[A-Z0-9]{2,2}[0-9]{2,2}$/, message: '请输入四位的数字和大写字母的组合后两位必须是数字', trigger: 'change' }
           ],
           endPathCode: [
-            { required: true, pattern: /^[A-Z0-9]{4,4}$/, message: '请输入四位的数字和大写字母的组合', trigger: 'change' }
+            { required: true, pattern: /^[A-Z0-9]{2,2}[0-9]{2,2}$/, message: '请输入四位的数字和大写字母的组合后两位必须是数字', trigger: 'change' }
           ],
           size: [
             { required: true, pattern: /^([1-9]|[1-9]{2,2}|100)$/, message: '请输入1-100的整数', trigger: 'change' }
@@ -406,22 +437,60 @@ import PermIds from "@/api/permissionIds";
       this.formEditSpace.version = data.version
       this.formEditSpace.bintypeId = data.bintypeId
       this.formEditSpace.binusage = data.binusage
+      this.formEditSpace.name = data.name
+      this.formEditSpace.remark = data.remark
+      this.level = node.level
       this.treeDataId = node.id
     },
     cancelEdit: function() {
       this.editFormSpace = false
     },
     subEdit: function() {
-      StorageService.updateSpace(this.formEditSpace)
-      .then((res) => {
-        this.$message.success('修改成功')
-        this.editFormSpace = false
-        // this.treeData
-        this.getFreightArea()
-      })
-      .catch((err) => {
-        this.$message.error('修改失败' + err.message)
-      })
+      if (this.level === 1) {
+        StorageService.updateArea(this.formEditSpace)
+        .then((res) => {
+          this.$message.success('修改成功')
+          this.editFormSpace = false
+          // this.treeData
+          this.getFreightArea()
+        })
+        .catch((err) => {
+          this.$message.error('修改失败' + err.message)
+        })
+      } else if (this.level === 2) {
+        StorageService.updateLane(this.formEditSpace)
+        .then((res) => {
+          this.$message.success('修改成功')
+          this.editFormSpace = false
+          // this.treeData
+          this.getFreightArea()
+        })
+        .catch((err) => {
+          this.$message.error('修改失败' + err.message)
+        })
+      } else if (this.level === 3) {
+        StorageService.updateShelf(this.formEditSpace)
+        .then((res) => {
+          this.$message.success('修改成功')
+          this.editFormSpace = false
+          // this.treeData
+          this.getFreightArea()
+        })
+        .catch((err) => {
+          this.$message.error('修改失败' + err.message)
+        })
+      } else if (this.level === 4) {
+        StorageService.updateSpace(this.formEditSpace)
+        .then((res) => {
+          this.$message.success('修改成功')
+          this.editFormSpace = false
+          // this.treeData
+          this.getFreightArea()
+        })
+        .catch((err) => {
+          this.$message.error('修改失败' + err.message)
+        })
+      }
     },
     createCommand: function(command) {
       if (command === "area") {
