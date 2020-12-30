@@ -5,7 +5,7 @@
       <el-form ref="form" style="display: flex" :model="form" label-width="10px" label-position="right" >
 
         <el-form-item>
-          <el-input placeholder="请输入内容" v-model="form.keyword">
+          <el-input placeholder="请输入货区/货道/货架/货位的编号" v-model="form.keyword">
             <i slot="prefix" class="el-input__icon el-icon-search"></i>
           </el-input>
         </el-form-item>
@@ -33,7 +33,6 @@
       node-key="id"
       lazy
       :props="props"
-      accordion
       :load="loadNode">
       <span class="custom-tree-node" slot-scope="{ node, data }">
         <span>{{ node.label }}</span>
@@ -50,6 +49,9 @@
             </div>
             <div class="tree-box" v-if="node.level === 4">
               货位用途：{{ data.binusage | binUsage }}
+            </div>
+            <div class="tree-box" v-if="node.level === 4">
+              状态：{{ data.status }}
             </div>
             <!-- <div class="tree-box" v-if="node.level === 4">
               <el-select v-model="formEditSpace.binusage" placeholder="请选择货位用途">

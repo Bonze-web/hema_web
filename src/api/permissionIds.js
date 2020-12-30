@@ -383,6 +383,7 @@ export default {
   WMS_DECINVBILL_CREATE: "wms:decinvbill:create",
   WMS_DECINVBILL_UPDATE: "wms:decinvbill:update",
   WMS_DECINVBILL_VIEW: "wms:decinvbill:view",
+  WMS_DECINVBILL_AUDIT: "wms:decinvbill:audit",
 
   /**
    * 溢余单
@@ -390,5 +391,15 @@ export default {
   WMS_INCINVBILL: "wms:incinvbill",
   WMS_INCINVBILL_CREATE: "wms:incinvbill:create",
   WMS_INCINVBILL_UPDATE: "wms:incinvbill:update",
-  WMS_INCINVBILL_VIEW: "wms:incinvbill:view"
+  WMS_INCINVBILL_VIEW: "wms:incinvbill:view",
+  WMS_INCINVBILL_AUDIT: "wms:incinvbill:audit",
+
+  /**
+   * 单据类型
+   */
+  WMS_PRETYPE: "wms:pretype",
+  WMS_PRETYPE_CREATE: "wms:pretype:create",
+  WMS_PRETYPE_UPDATE: "wms:pretype:update",
+  WMS_PRETYPE_DELETE: "wms:pretype:delete",
+  WMS_PRETYPE_VIEW: "wms:pretype:view"
 }
