@@ -420,6 +420,7 @@ export default {
     CargosequenceService.requestNewProjectsList(this.newProjectsList)
     .then((res) => {
       this.$message.success("新建成功");
+      this.getAllPickOrder();
     }).catch((err) => {
       this.$message.error("新建失败" + err.message)
     })

@@ -736,8 +736,8 @@ const StorageInfoPackage = {
     component: AModule,
     meta: {
       title: '拣货顺序',
-      icon: 'table'
-      // permission: PermIds.WMS_PICKORDER
+      icon: 'table',
+      permission: PermIds.WMS_PICKORDER
     },
     children: [{
       path: "",
@@ -747,8 +747,8 @@ const StorageInfoPackage = {
         hidden: true,
       meta: {
         title: '拣货顺序',
-        icon: 'table'
-        // permission: PermIds.WMS_PICKORDER_VIEW
+        icon: 'table',
+        permission: PermIds.WMS_PICKORDER_VIEW
       }
     }, {
       path: "edit",
@@ -758,8 +758,8 @@ const StorageInfoPackage = {
         hidden: true,
         meta: {
           title: '编辑拣货拣货顺序',
-          icon: 'table'
-          // permission: PermIds.WMS_PICKORDER_VIEW
+          icon: 'table',
+          permission: PermIds.WMS_PICKORDER_VIEW
         }
       },
       {
@@ -770,8 +770,8 @@ const StorageInfoPackage = {
         hidden: true,
         meta: {
           title: '新建拣货顺序',
-          icon: 'table'
-          // permission: PermIds.WMS_PICKORDER_CREATE
+          icon: 'table',
+          permission: PermIds.WMS_PICKORDER_CREATE
         }
       }] 
   },

@@ -53,7 +53,7 @@
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="上架规则" prop="putawayRule">
                                           <el-select v-model="form.putawayRule" placeholder="请选择上架规则">
-                                            <el-option label="T型" value="TT"></el-option>
+                                            <el-option label="T型" value="T"></el-option>
                                             <el-option label="地堆 " value="STACK"></el-option>
                                           </el-select>
                                         </el-form-item>
