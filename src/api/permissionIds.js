@@ -108,7 +108,7 @@ export default {
   WMS_BIN_VIEW: "wms:bin:view",
   WMS_BIN_CREATE: "wms:bin:create",
   WMS_BIN_UPDATE: "wms:bin:update",
-  WMS_BIN_DELETE: "wms:bin:remove",
+  WMS_BIN_REMOVE: "wms:bin:remove",
   /**
    * 系统组件-日志查询
    */
@@ -374,5 +374,21 @@ export default {
   SYS_APP_VIEW: "sys:app:view",
   SYS_APP_CREATE: "sys:app:create",
   SYS_APP_UPDATE: "sys:app:update",
-  SYS_APP_REMOVE: "sys:app:remove"
+  SYS_APP_REMOVE: "sys:app:remove",
+
+    /**
+   * 损耗单
+   */
+  WMS_DECINVBILL: "wms:decinvbill",
+  WMS_DECINVBILL_CREATE: "wms:decinvbill:create",
+  WMS_DECINVBILL_UPDATE: "wms:decinvbill:update",
+  WMS_DECINVBILL_VIEW: "wms:decinvbill:view",
+
+  /**
+   * 溢余单
+   */
+  WMS_INCINVBILL: "wms:incinvbill",
+  WMS_INCINVBILL_CREATE: "wms:incinvbill:create",
+  WMS_INCINVBILL_UPDATE: "wms:incinvbill:update",
+  WMS_INCINVBILL_VIEW: "wms:incinvbill:view"
 }

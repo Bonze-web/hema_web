@@ -1092,7 +1092,7 @@ const BillManagement = {
     meta: {
       title: '损耗单',
       icon: 'table',
-      permission: PermIds.PRODUCT_SUPPLIER
+      permission: PermIds.WMS_DECINVBILL
     },
     children: [{
       path: "",
@@ -1103,7 +1103,7 @@ const BillManagement = {
       meta: {
         title: '损耗单',
         icon: 'table',
-        permission: PermIds.PRODUCT_SUPPLIER_VIEW
+        permission: PermIds.WMS_DECINVBILL_VIEW
       }
     }, {
       path: "edit",
@@ -1114,7 +1114,7 @@ const BillManagement = {
       meta: {
         title: '查看损耗单',
         icon: 'table',
-        permission: PermIds.PRODUCT_SUPPLIER_VIEW
+        permission: PermIds.WMS_DECINVBILL_VIEW
       }
     }, {
       path: "add",
@@ -1125,7 +1125,7 @@ const BillManagement = {
       meta: {
         title: '新建损耗单',
         icon: 'table',
-        permission: PermIds.PRODUCT_SUPPLIER_VIEW
+        permission: PermIds.WMS_DECINVBILL_CREATE
       }
     }, {
       path: "batchadd",
@@ -1146,7 +1146,7 @@ const BillManagement = {
     meta: {
       title: '溢余单',
       icon: 'table',
-      permission: PermIds.PRODUCT_SUPPLIER
+      permission: PermIds.WMS_INCINVBILL
     },
     children: [{
       path: "",
@@ -1157,7 +1157,7 @@ const BillManagement = {
       meta: {
         title: '溢余单',
         icon: 'table',
-        permission: PermIds.PRODUCT_SUPPLIER_VIEW
+        permission: PermIds.WMS_INCINVBILL_VIEW
       }
     }, {
       path: "edit",
@@ -1168,7 +1168,7 @@ const BillManagement = {
       meta: {
         title: '查看溢余单',
         icon: 'table',
-        permission: PermIds.PRODUCT_SUPPLIER_VIEW
+        permission: PermIds.WMS_INCINVBILL_VIEW
       }
     }, {
       path: "add",
@@ -1179,7 +1179,7 @@ const BillManagement = {
       meta: {
         title: '新建溢余单',
         icon: 'table',
-        permission: PermIds.PRODUCT_SUPPLIER_VIEW
+        permission: PermIds.WMS_INCINVBILL_CREATE
       }
     }, {
       path: "batchadd",
