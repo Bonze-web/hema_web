@@ -259,7 +259,7 @@ export default {
     putawayRuleChange(status) {
       switch (status) {
         case "TT":
-          return "TT型"
+          return "T型"
         case "STACK":
           return "地堆"
       }

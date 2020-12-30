@@ -197,7 +197,7 @@
           </div>
         </el-dialog>
         <el-dialog title="新建门店组" :visible.sync="newStore">
-          <el-form :model="newStoreInfo" :rules="newStoreRules">
+          <el-form :model="newStoreInfo" :rules="newStoreRules" ref="ruleForm">
             <el-form-item label="代码" :label-width="formLabelWidth" prop="code">
               <el-input v-model="newStoreInfo.name" autocomplete="off"></el-input>
             </el-form-item>
@@ -219,7 +219,7 @@
             </el-form-item>
           </el-form>
           <div slot="footer" class="dialog-footer">
-            <el-button @click="newStore = false;">取 消</el-button>
+            <el-button @click="setStoreInfo">取 消</el-button>
             <el-button type="primary" @click="submintNewStoreInfo">确 定</el-button>
           </div>
         </el-dialog>
@@ -423,6 +423,9 @@ export default {
       this.$message.error("新建失败" + err.message)
     })
    },
+   setStoreInfo() {
+     this.newStore = false;
+   },
    // 通过搜索接口来所有方案
    searchScheme() {
       const searchData = {
@@ -517,15 +520,19 @@ export default {
       this.newStore = true;
    },
    submintNewStoreInfo() {
-      this.newStoreInfo.pickorderId = this.getByIdDetail.id;
-      this.newStoreInfo.status = this.getByIdDetail.status;
-      CargosequenceService.createGrp(this.newStoreInfo)
-      .then((res) => {
-        this.$message.success("创建成功");
-        this.newStore = false;
-      }).catch((err) => {
-        this.$message.error("创建失败" + err.message)
-      })
+     this.$refs['formName'].validate((valid) => {
+          if (valid) {
+            this.newStoreInfo.pickorderId = this.getByIdDetail.id;
+            this.newStoreInfo.status = this.getByIdDetail.status;
+            CargosequenceService.createGrp(this.newStoreInfo)
+            .then((res) => {
+              this.$message.success("创建成功");
+              this.newStore = false;
+            }).catch((err) => {
+              this.$message.error("创建失败" + err.message)
+            })
+          }
+        });
    },
     editStoreChange(obj, schemeOpt) {
     this.editStore = true;
