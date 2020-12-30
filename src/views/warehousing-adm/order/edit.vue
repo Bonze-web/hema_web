@@ -93,13 +93,19 @@
                                 <div>订单来源类型:</div>
                                 <div>{{ dataList.srcWay | setSrcWay }}</div>
                             </el-col>
+
+                             <el-col :span="6" class="info-box">
+                                <div>来源单号:</div>
+                                <div>{{dataList.srcBillNumber}}</div>
+                            </el-col>
+                            
                             <el-col :span="6" class="info-box">
                                 <div>供应商:</div>
                                 <div>{{ '[' + dataList.vendorId + ']' + dataList.vendorName }}</div>
                             </el-col>
                             <el-col :span="6" class="info-box">
                                 <div>物流方式:</div>
-                                <div>{{ dataList.isLogisticMode }}</div>
+                                <div>{{ dataList.isLogisticMode | setIsLogisticMode }}</div>
                             </el-col>
                             <el-col :span="6" class="info-box">
                                 <div>入库仓库:</div>
@@ -119,11 +125,6 @@
                             <el-col :span="6" class="info-box">
                                 <div>送达日期:</div>
                                 <div>{{ dataList.endReceiveTime ? dataList.endReceiveTime : "&lt;空&gt;" }}</div>
-                            </el-col>
-
-                            <el-col :span="6" class="info-box">
-                                <div>来源单号:</div>
-                                <div>{{dataList.srcBillNumber}}</div>
                             </el-col>
 
                             <el-col :span="6" class="info-box">
@@ -290,8 +291,19 @@ export default {
         default:
           return '未知';
       }
+    },
+    setIsLogisticMode(type) {
+      // 物流模式，UNIFY：统配、CROSS：越库
+      switch (type) {
+        case 'UNIFY':
+          return "统配"
+        case 'CROSS':
+          return "越库"
+        default:
+          return '未知';
+      }
     }
-    }
+  }
 };
 </script>
 
