@@ -17,8 +17,8 @@ export default {
   createSuppliers(postData) {
     return request.post('/wms/pickarea/create', postData)
   },
-  getAllPickOrder() {
-    return request.get('/wms/pickOrder/getAllPickOrder');
+  getAllPickOrder(postData) {
+    return request.post('/wms/pickOrder/getAllPickOrder', postData)
   },
   getAllGrpByPickId(pickOrderId) {
     return request.get('/wms/pickOrder/getAllGrpByPickId?pickOrderId=' + pickOrderId);

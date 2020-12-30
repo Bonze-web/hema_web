@@ -19,7 +19,7 @@
                 <el-button @click="back" >返回</el-button>
                 <!-- <el-button @click="statusChange" >打印</el-button> -->
                 <!-- <el-button @click="removeLossBill" >删除</el-button> -->
-                <el-button v-if="form.status !== 'AUDITED'" @click="editLossBill" >编辑</el-button>
+                <el-button v-if="form.status !== 'AUDITED' && hasPermission(PermIds.WMS_INCINVBILL_UPDATE)" @click="editLossBill" >编辑</el-button>
                 <el-button type="primary" v-if="form.status !== 'AUDITED'" @click="check = true">审核</el-button>
                 <!-- <el-button type="primary" @click="editContainerType" :disabled="!billInfo.status" v-if="hasPermission(PermIds.WMS_CONTAINER_TYPE_UPDATE)">编辑</el-button> -->
             </div>

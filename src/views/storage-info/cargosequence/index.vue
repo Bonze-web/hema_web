@@ -11,7 +11,7 @@
               <el-collapse-item v-for="(ele, idx) in storeAllSchemeAll" :key="idx">
                 <template slot="title">
                     <div class="sequential-programme" style="font-size:14px;">
-                      <span class="el-icon-folder" style="display:flex;align-items: center;"><span style="padding-left:15px;" @click.stop="schemeOrStore('scheme', ele.schemeList)">{{'[' + ele.schemeList.code + ']' + ele.schemeList.name}}</span></span> 
+                      <span class="el-icon-folder" style="display:flex;align-items: center;"><span style="padding-left:15px;" @click.stop="schemeOrStore('scheme', ele.schemeList, ele)">{{'[' + ele.schemeList.code + ']' + ele.schemeList.name}}</span></span> 
                       <div class="operation-button">
                          <el-button
                             size="mini"
@@ -197,11 +197,11 @@
           </div>
         </el-dialog>
         <el-dialog title="新建门店组" :visible.sync="newStore">
-          <el-form :model="newStoreInfo">
-            <el-form-item label="代码" :label-width="formLabelWidth">
+          <el-form :model="newStoreInfo" :rules="newStoreRules" ref="ruleForm">
+            <el-form-item label="代码" :label-width="formLabelWidth" prop="code">
               <el-input v-model="newStoreInfo.name" autocomplete="off"></el-input>
             </el-form-item>
-            <el-form-item label="名称" :label-width="formLabelWidth">
+            <el-form-item label="名称" :label-width="formLabelWidth" prop="name">
               <el-input v-model="newStoreInfo.code" autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item label="拣货顺序方案" :label-width="formLabelWidth">
@@ -219,7 +219,7 @@
             </el-form-item>
           </el-form>
           <div slot="footer" class="dialog-footer">
-            <el-button @click="dialogFormVisible = false">取 消</el-button>
+            <el-button @click="setStoreInfo">取 消</el-button>
             <el-button type="primary" @click="submintNewStoreInfo">确 定</el-button>
           </div>
         </el-dialog>
@@ -396,6 +396,14 @@ export default {
           name: [
             {required: true, message: '名称不能为空', trigger: 'blur'}
           ]
+        },
+        newStoreRules: {
+          code: [
+            {required: true, message: '代码不能为空', trigger: 'blur'}
+          ],
+          name: [
+            {required: true, message: '名称不能为空', trigger: 'blur'}
+          ]
         }
       }
   },
@@ -415,6 +423,9 @@ export default {
       this.$message.error("新建失败" + err.message)
     })
    },
+   setStoreInfo() {
+     this.newStore = false;
+   },
    // 通过搜索接口来所有方案
    searchScheme() {
       const searchData = {
@@ -431,9 +442,12 @@ export default {
       })
    },
    getAllPickOrder() {
-     CargosequenceService.getAllPickOrder()
+     const postData = {
+       storeCodeEqOrNameLk: this.codeEqOrNameLike || null
+     }
+     CargosequenceService.getAllPickOrder(postData)
       .then((res) => {
-        console.log(res);
+        this.getAllGrpByPickId(res);
       }).catch((err) => {
         this.$message.error("请求失败" + err.message)
       })
@@ -441,14 +455,18 @@ export default {
    // 获取指定方案顺序下的门店组
    getAllGrpByPickId(schemeArr) {
      // schemeArr是所有方案的信息
-     console.log(schemeArr);
         if (schemeArr.length <= 0) return false;
         schemeArr.forEach((ele, idx) => {
-          CargosequenceService.getAllGrpByPickId(ele.pickOrderId)
+          if (idx === 0) {
+            this.getById(ele.id);
+            this.headerScheme = "[" + ele.code + "]" + ele.name;
+          }
+          CargosequenceService.getAllGrpByPickId(ele.id)
           .then((res) => {
             // 这里是所有的门店组的信息
-            console.log(res);
-            this.storeAllSchemeAll.push({schemeList: ele, store: res.data});
+            this.storeAllSchemeAll.push({schemeList: ele, store: res});
+            // console.log(this.storeAllSchemeAll[0].schemeList);
+            // this.editProjectsInfo = this.storeAllSchemeAll[0].schemeList;
           }).catch((err) => {
             this.$message.error("请求所有的方案失败" + err.message)
           })
@@ -472,7 +490,7 @@ export default {
    getById(id) {
       CargosequenceService.getById(id)
       .then((res) => {
-        this.getByIdDetail = res.data;
+        this.getByIdDetail = res;
       }).catch((err) => {
         this.$message.error("方案详情获取失败" + err.message)
       })
@@ -502,14 +520,19 @@ export default {
       this.newStore = true;
    },
    submintNewStoreInfo() {
-      this.newStoreInfo.pickorderId = this.getByIdDetail.pickOrderId;
-      this.newStoreInfo.status = this.getByIdDetail.status;
-      CargosequenceService.createGrp(this.newStoreInfo)
-      .then((res) => {
-        this.$message.success("创建成功")
-      }).catch((err) => {
-        this.$message.error("创建失败" + err.message)
-      })
+     this.$refs['formName'].validate((valid) => {
+          if (valid) {
+            this.newStoreInfo.pickorderId = this.getByIdDetail.id;
+            this.newStoreInfo.status = this.getByIdDetail.status;
+            CargosequenceService.createGrp(this.newStoreInfo)
+            .then((res) => {
+              this.$message.success("创建成功");
+              this.newStore = false;
+            }).catch((err) => {
+              this.$message.error("创建失败" + err.message)
+            })
+          }
+        });
    },
     editStoreChange(obj, schemeOpt) {
     this.editStore = true;

@@ -8,9 +8,9 @@ export default {
      *
      */
     putwayBillQuery(data) {
-        return request.get('/wms/putwayBill/query', {params: data})
+        return request.get('/wms/putawayBill/query', {params: data})
     },
     putwayBillQueryItems(data) {
-        return request.get('/wms/putwayBill/queryItems', {params: data})
+        return request.get('/wms/putawayBill/queryItems', {params: data})
     }
 }

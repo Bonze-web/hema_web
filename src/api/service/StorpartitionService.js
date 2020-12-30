@@ -14,7 +14,7 @@ export default {
     console.log(postData);
     // return request.post('/wms/storagearea/query', param)
     // return request.get('/wms/storagearea/query', param)
-    return request.get('/wms/storagearea/query', {param: postData})
+    return request.get('/wms/storagearea/query', {params: postData})
   },
   /**
    * 获取详情
