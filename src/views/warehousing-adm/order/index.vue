@@ -360,12 +360,12 @@ export default {
   },
   filters: {
     setScope(status) {
-      // 状态。INITIAL:初始，ARRIVED:已到货登记，QUALITY:已质检，RECEIVING:进行中，FINISHED:已完成，ABORTED:已取消
+      // 状态。INITIAL:初始，ARRIVED:已登记，QUALITY:已质检，RECEIVING:进行中，FINISHED:已完成，ABORTED:已取消
       switch (status) {
         case 'INITIAL':
           return "初始"
         case 'ARRIVED':
-          return "已到货登记"
+          return "已登记"
         case 'QUALITY ':
           return "已质检"
         case 'RECEIVING':
