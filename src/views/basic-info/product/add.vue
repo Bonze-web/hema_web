@@ -83,7 +83,7 @@
                     <el-select v-model="form.shelfLifeType" placeholder="请选择">
                       <el-option label="不管理保质期" value="NO_CARE"></el-option>
                       <el-option label="按到效期" value="VALID_DATE"></el-option>
-                      <el-option label="按生产日期" value="PRODUCT_DATE "></el-option>
+                      <el-option label="按生产日期" value="PRODUCT_DATE"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
