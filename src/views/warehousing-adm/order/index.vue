@@ -43,7 +43,7 @@
           <el-select v-model="form.status" placeholder="请选择状态" class="input-width" >
             <el-option value="" label="全部"></el-option>
             <el-option value="INITIAL" label="初始"></el-option>
-            <el-option value="ARRIVED" label="已到货登记"></el-option>
+            <el-option value="ARRIVED" label="已登记"></el-option>
             <el-option value="QUALITY" label="已质检"></el-option>
             <el-option value="RECEIVING" label="进行中"></el-option>
             <el-option value="FINISHED" label="已完成"></el-option>
