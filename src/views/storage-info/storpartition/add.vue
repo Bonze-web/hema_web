@@ -111,20 +111,24 @@ export default {
     },
     methods: {
       createConfirm() {
-          StorpartitionService.createSuppliers(this.form)
-              .then(res => {
-                this.$message.success("创建成功")
-                this.form = {
-                  code: '',
-                  name: '',
-                  binScope: ''
-                }
-              })
-              .catch(err => {
-                if (err && err.code !== 200) {
-                  this.$message.error("创建失败" + err.message)
-                }
-              })
+         this.$refs.form.validate(valid => {
+               if (valid) {
+                  StorpartitionService.createSuppliers(this.form)
+                  .then(res => {
+                    this.$message.success("创建成功")
+                    this.form = {
+                      code: '',
+                      name: '',
+                      binScope: ''
+                    }
+                  })
+                  .catch(err => {
+                    if (err && err.code !== 200) {
+                      this.$message.error("创建失败" + err.message)
+                    }
+                  })
+               }
+         });
       },
       back: function() {
         this.$store.dispatch("tagsView/delView", this.$route);
