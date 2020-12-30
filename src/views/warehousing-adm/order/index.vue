@@ -36,11 +36,7 @@
         </el-form-item>
 
         <el-form-item label="创建日期：">
-          <el-date-picker class="input-width" v-model="createTime" type="datetimerange" format="yyyy-MM-dd" value-format="yyyy-MM-dd HH:mm:ss" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期" ></el-date-picker>
-        </el-form-item>
-
-        <el-form-item label="到货日期：">
-          <el-date-picker class="input-width" v-model="arrival" type="datetimerange" format="yyyy-MM-dd" value-format="yyyy-MM-dd HH:mm:ss" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期" ></el-date-picker>
+          <el-date-picker class="input-width _picker" v-model="createTime" type="datetimerange" value-format="yyyy-MM-dd HH:mm:ss" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期" ></el-date-picker>
         </el-form-item>
 
         <el-form-item label="状态：">
@@ -53,6 +49,10 @@
             <el-option value="FINISHED" label="已完成"></el-option>
             <el-option value="ABORTED" label="已取消"></el-option>
           </el-select>
+        </el-form-item>
+
+        <el-form-item label="到货日期：">
+          <el-date-picker class="input-width _picker" v-model="arrival" type="datetimerange" value-format="yyyy-MM-dd HH:mm:ss" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期" ></el-date-picker>
         </el-form-item>
 
         <el-form-item>
@@ -404,10 +404,12 @@ export default {
 
 <style lang="scss" scoped>
 @import "src/styles/mixin.scss";
-// .table-index .el-table .cell{
-//   padding-left: 0;
-//   margin: 10px
-// }
+.input-width{
+  &._picker{
+    width: 580px
+  }
+}
+
 </style>
 
 <style lang="scss">

@@ -1063,7 +1063,7 @@ const warehousingAdm = {
             import('@/views/warehousing-adm/quality/edit'),
           hidden: true,
           meta: {
-            title: '装箱详情',
+            title: '质检详情',
             icon: 'table'
             // permission: PermIds.WMS_QUALITY_INSPECTION_TYPE_VIEW
           }
