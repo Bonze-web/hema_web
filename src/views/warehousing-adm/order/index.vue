@@ -371,7 +371,7 @@ export default {
         case 'RECEIVING':
           return "进行中"
         case 'FINISHED':
-          return "收货完成"
+          return "已完成"
         case 'ABORTED ':
           return "已取消"
         default:
