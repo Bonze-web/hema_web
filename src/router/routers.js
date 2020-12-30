@@ -910,7 +910,7 @@ const warehousingAdm = {
         import('@/views/warehousing-adm/order/edit'),
       hidden: true,
       meta: {
-        title: '查看供应商',
+        title: '入库订单详情',
         icon: 'table',
         permission: PermIds.WMS_ORDERBILL_VIEW
       }
