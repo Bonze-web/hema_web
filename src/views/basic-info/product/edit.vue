@@ -272,11 +272,11 @@
                 </el-col>
                 <el-col :span="6" class="info-box">
                   <div>整件拣货位:</div>
-                  <div>{{ }}</div>
+                  <div>{{ businessInfo.casePickBin }}</div>
                 </el-col>
                 <el-col :span="6" class="info-box">
                   <div>拆零拣货位:</div>
-                  <div>{{ }}</div>
+                  <div>{{ businessInfo.splitPickBin }}</div>
                 </el-col>
                 <el-col :span="6" class="info-box">
                   <div>收货后加工:</div>
@@ -297,6 +297,14 @@
                 <el-col :span="6" class="info-box">
                   <div>超出比例(%):</div>
                   <div>{{ businessInfo.overDeliveryRate }}</div>
+                </el-col>
+                <el-col :span="6" class="info-box">
+                  <div>整件拣货分区:</div>
+                  <div>{{ businessInfo.casePickAreaName }}</div>
+                </el-col>
+                <el-col :span="6" class="info-box">
+                  <div>拆零拣货分区:</div>
+                  <div>{{ businessInfo.splitPickAreaName }}</div>
                 </el-col>
               </el-row>
             </el-tab-pane>
@@ -494,13 +502,13 @@
               </el-form-item>
             </el-col>-->
             <el-col :span="6" class="info-box">
-              <el-form-item label="整件拣货位" prop="wholePiecePickingLocation">
-                <el-select v-model="businessForm.wholePiecePickingLocation" placeholder="请选择"></el-select>
+              <el-form-item label="整件拣货位" prop="casePickBin">
+                <pick-bin-select stockType="CASE" :selectValue.sync="businessForm.casePickBin" @onselected="onCasePickBinSelected"></pick-bin-select>
               </el-form-item>
             </el-col>
             <el-col :span="6" class="info-box">
-              <el-form-item label="拆零拣货位" prop="pickingLocation">
-                <el-select v-model="businessForm.pickingLocation" placeholder="请选择"></el-select>
+              <el-form-item label="拆零拣货位" prop="splitPickBin">
+                <pick-bin-select stockType="CASE" :selectValue.sync="businessForm.splitPickBin" @onselected="onSplitPickBinSelected"></pick-bin-select>
               </el-form-item>
             </el-col>
             <el-col :span="6" class="info-box">
@@ -531,6 +539,16 @@
                 <el-input v-model="businessForm.overDeliveryRate"></el-input>
               </el-form-item>
             </el-col>
+            <el-col :span="6" class="info-box">
+              <el-form-item label="整件拣货分区" prop="casePickAreaCode">
+                <pickarea-select stockType="CASE" :selectValue.sync="businessForm.casePickAreaCode" @onselected="onCasePickareaSelected"></pickarea-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6" class="info-box">
+              <el-form-item label="拆零拣货分区" prop="splitPickAreaCode">
+                <pickarea-select stockType="SPLIT" :selectValue.sync="businessForm.splitPickAreaCode" @onselected="onSplitPickareaSelected"></pickarea-select>
+              </el-form-item>
+            </el-col>
           </el-row>
         </el-form>
       </div>
@@ -549,6 +567,8 @@ import PermIds from "@/api/permissionIds";
 import vendorSelect from "@/components/vendorSelect.vue";
 import productCategorySelect from "@/components/productCategorySelect.vue";
 import productSpecSelect from "@/components/productSpecSelect.vue";
+import pickareaSelect from "@/components/pickareaSelect.vue";
+import pickBinSelect from "@/components/pickBinSelect.vue";
 import systemLog from "@/components/systemLog.vue";
 
 export default {
@@ -749,8 +769,14 @@ export default {
         shelfLifeDays: 0,
         shelfLifeType: "NO_CARE",
         unloadAdvice: "",
-        wholePiecePickingLocation: "",
-        pickingLocation: ""
+        casePickAreaCode: "",
+        casePickAreaId: "",
+        casePickAreaName: "",
+        casePickBin: "",
+        splitPickAreaCode: "",
+        splitPickAreaId: "",
+        splitPickAreaName: "",
+        splitPickBin: ""
       },
       businessFormRules: {
         putawayBin: [
@@ -1071,6 +1097,22 @@ export default {
       this.form.categoryId = val.id ? val.id : "";
       this.form.categoryName = val.name ? val.name : "";
     },
+    onCasePickareaSelected(val) {
+      this.businessForm.casePickAreaCode = val.code ? val.code : "";
+      this.businessForm.casePickAreaId = val.id ? val.id : "";
+      this.businessForm.casePickAreaName = val.name ? val.name : "";
+    },
+    onSplitPickareaSelected(val) {
+      this.businessForm.splitPickAreaCode = val.code ? val.code : "";
+      this.businessForm.splitPickAreaId = val.id ? val.id : "";
+      this.businessForm.splitPickAreaName = val.name ? val.name : "";
+    },
+    onCasePickBinSelected(val) {
+      this.businessForm.casePickBin = val.code ? val.code : "";
+    },
+    onSplitPickBinSelected(val) {
+      this.businessForm.splitPickBin = val.code ? val.code : "";
+    },
     // 保质期处理
     clickEditShelfLife() {
       this.isEditShelfLife = true;
@@ -1131,7 +1173,15 @@ export default {
           processe: this.businessForm.processe,
           putawayBin: this.businessForm.putawayBin,
           settleUnit: this.businessForm.settleUnit,
-          unloadAdvice: this.businessForm.unloadAdvice
+          unloadAdvice: this.businessForm.unloadAdvice,
+          casePickAreaCode: this.businessForm.casePickAreaCode,
+          casePickAreaId: this.businessForm.casePickAreaId,
+          casePickAreaName: this.businessForm.casePickAreaName,
+          casePickBin: this.businessForm.casePickBin,
+          splitPickAreaCode: this.businessForm.splitPickAreaCode,
+          splitPickAreaId: this.businessForm.splitPickAreaId,
+          splitPickAreaName: this.businessForm.splitPickAreaName,
+          splitPickBin: this.businessForm.splitPickBin
         };
         // 业务信息
         if (this.businessForm.settleUnit === "WEIGHT") {
@@ -1667,7 +1717,9 @@ export default {
     vendorSelect,
     productCategorySelect,
     systemLog,
-    productSpecSelect
+    productSpecSelect,
+    pickareaSelect,
+    pickBinSelect
   }
 };
 </script>
