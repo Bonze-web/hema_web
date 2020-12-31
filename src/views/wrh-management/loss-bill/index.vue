@@ -9,7 +9,14 @@
                     <el-input type='text' placeholder="请输入仓库编号" v-model="form.wareCodeOrNameLikes" class="input-width"></el-input>
                 </el-form-item>
                 <el-form-item label="报损员">
-                    <el-input type='text' placeholder="请输入报损员" v-model="form.decerNameLikes" class="input-width"></el-input>
+                    <el-autocomplete
+                      class="inline-input"
+                      v-model="form.decerNameLikes"
+                      :fetch-suggestions="querySearch"
+                      placeholder="请输入报损人"
+                      :trigger-on-focus="false"
+                      @select="handleSelect"
+                  ></el-autocomplete>
                 </el-form-item>
                 <el-form-item label="状态">
                     <el-select v-model="form.statusEquals" placeholder="请选择状态">
@@ -30,7 +37,8 @@
                 <el-form-item label="创建时间">
                     <el-date-picker
                       v-model="form.beginAndEndDate"
-                      type="daterange"
+                      type="datetimerange"
+                      value-format="yyyy-MM-dd HH:mm:ss"
                       range-separator="至"
                       start-placeholder="开始日期"
                       end-placeholder="结束日期">
@@ -108,6 +116,7 @@
 </template>
 
 <script>
+import MemberService from '@/api/service/MemberService'
 import billType from '../../../components/billType.vue';
 import BillTypeService from '@/api/service/BillTypeService'
 import BillService from "@/api/service/BillService";
@@ -117,6 +126,7 @@ import { mapGetters, mapActions } from "vuex";
 export default {
   data() {
       return {
+        restaurants: [], // 用户列表
         PermIds: PermIds,
         table: false,
         billList: [],
@@ -145,6 +155,22 @@ export default {
     createBill: function() {
       this.clearSelection()
     },
+    querySearch: function(queryString, cb) {
+          // 搜索报损人
+          const restaurants = this.restaurants;
+          const results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+          // 调用 callback 返回建议列表的数据
+          cb(results);
+      },
+      handleSelect: function(e) {
+        console.log(e)
+        this.form.decerId = e.id
+      },
+      createFilter(queryString) {
+        return (restaurant) => {
+          return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+        };
+      },
     goBack: function() {
       this.table = false
     },
@@ -192,11 +218,26 @@ export default {
       .catch((err) => {
         _this.$message.error('获取单据列表失败' + err.message)
       })
-    }
+    },
+    getUsers: function() {
+        MemberService.query(1, 0)
+        .then((res) => {
+          res.records.forEach((item) => {
+            const obj = {
+              value: item.username,
+              id: item.id
+            }
+            this.restaurants.push(obj)
+          })
+        }).catch((err) => {
+          this.$message.error('获取用户列表失败' + err.message)
+        })
+      }
   },
   created() {
     this.getAlllossType()
     this.getBillList()
+    this.getUsers()
   },
   beforeRouteEnter(to, from, next) {
       next(vm => {

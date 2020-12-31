@@ -12,7 +12,7 @@
         </el-form-item>
 
         <el-form-item label="供应商：">
-          <el-input type="text" placeholder="请输入供应商" v-model="form.vendorCodeOrNameEquals" class="input-width" ></el-input>
+          <el-input type="text" placeholder="请输入供应商" v-model="form.vendorCodeOrNameLike" class="input-width" ></el-input>
         </el-form-item>
 
         <el-form-item label="容器码：">
@@ -22,25 +22,21 @@
           <el-input type="text" placeholder="请输入操作人" v-model="form.creatorNameOrCodeEquals" class="input-width" ></el-input>
         </el-form-item>
         <!-- ==== -->
-
-        <el-form-item label="入库日期：">
-          <el-date-picker class="input-width" v-model="warehousingTime" type="datetimerange" format="yyyy-MM-dd" value-format="yyyy-MM-dd HH:mm:ss" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期" ></el-date-picker>
-        </el-form-item>
-
-        <el-form-item label="收货日期：">
-          <el-date-picker class="input-width" v-model="shipmentTime" type="datetimerange" format="yyyy-MM-dd" value-format="yyyy-MM-dd HH:mm:ss" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期" ></el-date-picker>
-        </el-form-item>
-
         <el-form-item label="状态：">
           <el-select v-model="form.status" placeholder="请选择状态" class="input-width" >
             <el-option value="" label="全部"></el-option>
             <el-option value="INITIAL" label="初始"></el-option>
-            <el-option value="ARRIVED" label="已到货登记"></el-option>
-            <el-option value="QUALITY" label="已质检"></el-option>
-            <el-option value="RECEIVING" label="进行中"></el-option>
-            <el-option value="FINISHED" label="已完成"></el-option>
-            <el-option value="ABORTED" label="已取消"></el-option>
+            <el-option value="RECEIVED" label="暂存"></el-option>
+            <el-option value="PUTAWAY" label="上架完成"></el-option>
           </el-select>
+        </el-form-item>
+
+        <el-form-item label="入库日期：">
+          <el-date-picker class="input-width _picker" v-model="warehousingTime" type="datetimerange" value-format="yyyy-MM-dd HH:mm:ss" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期" ></el-date-picker>
+        </el-form-item>
+        
+        <el-form-item label="收货日期：">
+          <el-date-picker class="input-width _picker" v-model="shipmentTime" type="datetimerange" value-format="yyyy-MM-dd HH:mm:ss" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期" ></el-date-picker>
         </el-form-item>
 
         <el-form-item>
@@ -84,7 +80,7 @@
           <template slot-scope="scope">{{ scope.row.type | setType }}</template>
         </el-table-column>
 
-        <el-table-column prop="scope" label="容器号">
+        <el-table-column prop="scope" label="容器码">
           <template slot-scope="scope">
             {{ scope.row.containerBarcode }}
           </template>
@@ -150,9 +146,10 @@ export default {
       form: {
         billNumberEquals: '', // 收货装箱单号：
         orderBillNumberOrSrcNumberEquals: '', // 入库订单或外部单号
-        vendorCodeOrNameEquals: '', // 供应商
+        vendorCodeOrNameLike: '', // 供应商
         containerBarcodeEquals: '', // 容器码
-        creatorNameOrCodeEquals: '' // 操作人
+        creatorNameOrCodeEquals: '', // 操作人
+        status: '' // 状态
       },
       warehousingTime: '', // 入库时间
       shipmentTime: '', // 收货时间
@@ -177,9 +174,10 @@ export default {
       this.form = {
         billNumberEquals: '', // 收货装箱单号：
         orderBillNumberOrSrcNumberEquals: '', // 入库订单或外部单号
-        vendorCodeOrNameEquals: '', // 供应商
+        vendorCodeOrNameLike: '', // 供应商
         containerBarcodeEquals: '', // 容器码
-        creatorNameOrCodeEquals: '' // 操作人
+        creatorNameOrCodeEquals: '', // 操作人
+        status: '' // 状态
       };
 
       this.warehousingTime = ''; // 入库时间
@@ -223,15 +221,16 @@ export default {
       const data = {
         page: this.page,
         pageSize: this.pageSize,
-        billNumberEquals: this.form.billNumberEquals,
-        orderBillNumberOrSrcNumberEquals: this.form.orderBillNumberOrSrcNumberEquals,
-        vendorCodeOrNameEquals: this.form.vendorCodeOrNameEquals,
-        containerBarcodeEquals: this.form.containerBarcodeEquals,
-        creatorNameOrCodeEquals: this.form.creatorNameOrCodeEquals,
-        orderBillBeginDate: this.warehousingTime[0],
-        orderBillEndDate: this.warehousingTime[1],
-        receiveBillBeginDate: this.shipmentTime[0],
-        receiveBillEndDate: this.shipmentTime[1],
+        billNumberEquals: this.form.billNumberEquals ? this.form.billNumberEquals : null,
+        orderBillNumberOrSrcNumberEquals: this.form.orderBillNumberOrSrcNumberEquals ? this.form.orderBillNumberOrSrcNumberEquals : null,
+        vendorCodeOrNameLike: this.form.vendorCodeOrNameLike ? this.form.vendorCodeOrNameLike : null,
+        containerBarcodeEquals: this.form.containerBarcodeEquals ? this.form.containerBarcodeEquals : null,
+        creatorNameOrCodeEquals: this.form.creatorNameOrCodeEquals ? this.form.creatorNameOrCodeEquals : null,
+        statusIn: this.form.status ? this.form.status : null,
+        orderBillBeginDate: this.warehousingTime[0] ? this.warehousingTime[0] : null,
+        orderBillEndDate: this.warehousingTime[1] ? this.warehousingTime[1] : null,
+        receiveBillBeginDate: this.shipmentTime[0] ? this.shipmentTime[0] : null,
+        receiveBillEndDate: this.shipmentTime[1] ? this.shipmentTime[1] : null,
         searchCount: true
       };
 
@@ -268,6 +267,7 @@ export default {
   },
   filters: {
     setType(type) {
+      // 收货类型，FAST：快速收货，NORMAL：正常收货，TRUST：信任收货
       switch (type) {
         case 'FAST':
           return "快速收货"
@@ -280,15 +280,14 @@ export default {
       }
     },
     setStatus(status) {
+      // 状态。INITIAL:初始，RECEIVED:暂存，PUTAWAY:上架完成
       switch (status) {
         case 'INITIAL':
-          return "进行中"
+          return "初始"
         case 'RECEIVED':
-          return "收货完成"
+          return "暂存"
         case 'PUTAWAY':
           return "上架完成"
-        case 'DELETED':
-          return "已删除"
         default:
           return '未知';
       }
@@ -299,6 +298,11 @@ export default {
 
 <style lang="scss" scoped>
 @import "src/styles/mixin.scss";
+.input-width{
+  &._picker{
+    width: 580px
+  }
+}
 </style>
 
 <style lang="scss">

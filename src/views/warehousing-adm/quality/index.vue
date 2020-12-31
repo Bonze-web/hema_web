@@ -3,12 +3,12 @@
     <div class="select-head">
       <el-form ref="form" style="display: flex;flex-wrap:wrap;" :model="form" label-width="180px" label-position="right" >
 
-        <el-form-item label="质检单单号：">
-          <el-input type="text" placeholder="请输入质检单单号" v-model="form.billNumberEquals" class="input-width" ></el-input>
-        </el-form-item>
-
         <el-form-item label="入库订单：">
           <el-input type="text" placeholder="请输入入库订单" v-model="form.orderbillIdNumber" class="input-width" ></el-input>
+        </el-form-item>
+
+        <el-form-item label="质检单单号：">
+          <el-input type="text" placeholder="请输入质检单单号" v-model="form.billNumber" class="input-width" ></el-input>
         </el-form-item>
 
         <el-form-item label="质检状态：">
@@ -59,13 +59,55 @@
           </template>
         </el-table-column>
 
+        <el-table-column prop="scope" label="质检单号">
+          <template slot-scope="scope">
+            {{ scope.row.billNumber }}
+          </template>
+        </el-table-column>
+        
         <el-table-column prop="scope" label="创建人">
           <template slot-scope="scope">
-            {{ scope.row.creatorName }}
+            {{ scope.row.creatorName ? scope.row.creatorName : "&lt;空&gt;" }}
           </template>
         </el-table-column>
 
-        <el-table-column prop="scope" label="收货类型" style="height: 20px">
+        <el-table-column prop="scope" label="创建日期">
+          <template slot-scope="scope">
+            {{ scope.row.createTime ? scope.row.createTime : "&lt;空&gt;" }}
+          </template>
+        </el-table-column>
+
+        <el-table-column prop="scope" label="最后更新人">
+          <template slot-scope="scope">
+            {{ scope.row.updatorName ? scope.row.updatorName : "&lt;空&gt;" }}
+          </template>
+        </el-table-column>
+
+        <el-table-column prop="scope" label="最后更新时间">
+          <template slot-scope="scope">
+            {{ scope.row.updateTime ? scope.row.updateTime : "&lt;空&gt;" }}
+          </template>
+        </el-table-column>
+
+        <el-table-column prop="orderbillType" label="收货方式" style="height: 20px">
+          <template slot-scope="orderbillType">
+            {{ orderbillType | setOrderbillType }}
+          </template>
+        </el-table-column>
+
+        <el-table-column prop="scope" label="状态">
+          <template slot-scope="scope">
+            {{ scope.row.status | setStatus }}
+          </template>
+        </el-table-column>
+
+
+      
+
+
+        <!-- createTime -->
+
+        <!-- <el-table-column prop="scope" label="收货类型" style="height: 20px">
           <template slot-scope="scope">{{ scope.row.type | setType }}</template>
         </el-table-column>
 
@@ -79,12 +121,6 @@
 
         <el-table-column prop="unqualifiedNum" label="不合格数量"></el-table-column>
 
-        <el-table-column prop="scope" label="状态">
-          <template slot-scope="scope">
-            {{ scope.row.status | setStatus }}
-          </template>
-        </el-table-column>
-
         <el-table-column prop="scope" label="最后更新时间">
           <template slot-scope="scope">
             {{ scope.row.updateTime ? scope.row.updateTime : "&lt;空&gt;" }}
@@ -95,7 +131,7 @@
           <template slot-scope="scope">
             {{ scope.row.updatorName }}
           </template>
-        </el-table-column>
+        </el-table-column> -->
 
       </el-table>
 
@@ -124,7 +160,7 @@ export default {
     return {
       listData: [], // 列表数据
       form: {
-        billNumberEquals: '', // 质检单号
+        billNumber: '', // 质检单号
         orderbillIdNumber: '', // 入库单号
         status: '' // 质检状态
       },
@@ -148,7 +184,7 @@ export default {
     },
     clearInput: function() {
       this.form = {
-        billNumberEquals: '', // 质检单号
+        billNumber: '', // 质检单号
         orderbillIdNumber: '', // 入库单号
         status: '' // 质检状态
       };
@@ -188,9 +224,9 @@ export default {
       const data = {
         page: this.page,
         pageSize: this.pageSize,
-        billNumberEquals: this.form.billNumberEquals, // 质检单号
+        // billNumber: this.form.billNumber, // 质检单号
         orderbillIdNumber: this.form.orderbillIdNumber, // 入库单号
-        status: this.form.status, // 质检状态
+        status: this.form.status ? this.form.status : null, // 质检状态
         orderTimeStart: this.qualityTime[0], // 质检开始时间
         orderTimeEnd: this.qualityTime[1], // 质检结束时间
         searchCount: true
@@ -237,6 +273,17 @@ export default {
           return "已完成"
         case 'UNFINISHED':
           return "未完成"
+        default:
+          return '未知';
+      }
+    },
+    setOrderbillType(type) {
+    // 收货方式，NOTTRUST：清点收货；TRUST：信任收货
+      switch (type) {
+        case 'NOTTRUST':
+          return "清点收货"
+        case 'TRUST':
+          return "信任收货"
         default:
           return '未知';
       }

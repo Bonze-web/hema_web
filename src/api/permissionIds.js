@@ -384,7 +384,7 @@ export default {
   WMS_DECINVBILL_UPDATE: "wms:decinvbill:update",
   WMS_DECINVBILL_VIEW: "wms:decinvbill:view",
   WMS_DECINVBILL_AUDIT: "wms:decinvbill:audit",
-
+  WMS_DECINVBILL_DELETE: "wms:decinvbill:delete",
   /**
    * 溢余单
    */
@@ -393,7 +393,7 @@ export default {
   WMS_INCINVBILL_UPDATE: "wms:incinvbill:update",
   WMS_INCINVBILL_VIEW: "wms:incinvbill:view",
   WMS_INCINVBILL_AUDIT: "wms:incinvbill:audit",
-
+  WMS_INCINVBILL_DELETE: "wms:incinvbill:delete",
   /**
    * 单据类型
    */
