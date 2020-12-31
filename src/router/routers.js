@@ -1040,8 +1040,8 @@ const warehousingAdm = {
       component: AModule,
       meta: {
         title: '质检单',
-        icon: 'table'
-        // permission: PermIds.WMS_QUALITY_INSPECTION_TYPE
+        icon: 'table',
+        permission: PermIds.WMS_QUALITY_INSPECTION_ORDER
       },
       children: [
         {
@@ -1052,8 +1052,8 @@ const warehousingAdm = {
           hidden: true,
           meta: {
             title: '质检单',
-            icon: 'table'
-            // permission: PermIds.WMS_QUALITY_INSPECTION_TYPE_VIEW
+            icon: 'table',
+            permission: PermIds.WMS_QUALITY_INSPECTION_ORDER_VIEW
           }
         },
         {
@@ -1064,8 +1064,8 @@ const warehousingAdm = {
           hidden: true,
           meta: {
             title: '质检详情',
-            icon: 'table'
-            // permission: PermIds.WMS_QUALITY_INSPECTION_TYPE_VIEW
+            icon: 'table',
+            permission: PermIds.WMS_QUALITY_INSPECTION_ORDER_VIEW
           }
         }
       ]
@@ -1249,8 +1249,90 @@ const BillManagement = {
           permission: PermIds.WMS_INCINVBILL_CREATE
         }
       }]
+    },
+    {
+      path: "demolitionand",
+      name: "DemolitionAnd",
+      component: AModule,
+      meta: {
+        title: '容器拆并单',
+        icon: 'table'
+<<<<<<< HEAD
+      }
+    }]
+  },
+  {
+    path: "adjustinfo",
+    name: "Adjustinfo",
+    component: AModule,
+    meta: {
+      title: '库存信息调整单',
+      icon: 'table'
+    },
+    children: [{
+      path: "",
+      name: "AdjustinfoView",
+      component: () =>
+        import('@/views/wrh-management/adjustinfo/index'),
+      hidden: true,
+      meta: {
+        title: '库存信息调整单',
+        icon: 'table'
+      }
+    }, {
+      path: "edit",
+      name: "AdjustinfoEdit",
+      component: () =>
+        import('@/views/wrh-management/adjustinfo/edit'),
+      hidden: true,
+      meta: {
+        title: '查看库存信息调整单',
+        icon: 'table'
+      }
+    }, {
+      path: "add",
+      name: "AdjustinfoAdd",
+      component: () =>
+        import('@/views/wrh-management/adjustinfo/add'),
+      hidden: true,
+      meta: {
+        title: '新建库存信息调整单',
+        icon: 'table'
+      }
+    }]
+  }]
+=======
+        // permission: PermIds.
+      },
+      children: [
+        {
+          path: "",
+          name: "DemolitionAndView",
+          component: () =>
+            import('@/views/wrh-management/demolition-and/index'),
+          hidden: true,
+          meta: {
+            title: '容器拆并单',
+            icon: 'table'
+            // permission: PermIds.
+          }
+        },
+        {
+          path: "edit",
+          name: "DemolitionAndEdit",
+          component: () =>
+            import('@/views/wrh-management/demolition-and/edit'),
+          hidden: true,
+          meta: {
+            title: '拆并详情',
+            icon: 'table'
+            // permission: PermIds.
+          }
+        }
+      ]
     }
 ]
+>>>>>>> aab011b151560299282a2910f9024ced5274ea69
 }
 
 /**

@@ -225,18 +225,18 @@
         <el-dialog title="收货地址" :visible.sync="Actual">
           <el-upload
             ref="upload"
-            :auto-upload="false"
+            auto-upload="false"
             class="upload-demo"
             :on-preview="handlePreview"
-            action=""
-            :before-upload="handel"
+            action="/wms/api/sys/user/getLoginUser"
             :on-remove="handleRemove"
             :before-remove="beforeRemove"
-            :limit="1"
-            accept=".xlsx"
+            multiple
+            :limit="3"
+            :on-exceed="handleExceed"
             :file-list="fileList">
             <el-button size="small" type="primary">点击上传</el-button>
-            <div slot="tip" class="el-upload__tip">只能上传.xlsx文件</div>
+            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
           </el-upload>
           <div style="padding-top: 20px;">
             <el-link type="primary">下载模块</el-link>
@@ -282,9 +282,6 @@ export default {
       }
     },
     methods: {
-      handel(data) {
-        console.log(data);
-      },
       upClick() {
         console.log(this.$refs.upload)
       },

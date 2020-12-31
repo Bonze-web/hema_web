@@ -294,7 +294,7 @@ import PermIds from "@/api/permissionIds";
           { name: "上架中转位", value: "PUTAWAY" },
           { name: "拣货位", value: "PICK" },
           { name: "存储位", value: "STORAGE" },
-          { name: "拣货存储位", value: "PICK_STORAGE" },
+          { name: "拣货存储位", value: "PICKSTORAGE" },
           { name: "统配拣货暂存位", value: "UNIFYPICK" },
           { name: "统配集货存储位", value: "UNIFYCOLLECT" },
           { name: "补货暂存位", value: "RPL" },
