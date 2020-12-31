@@ -87,16 +87,26 @@
             <div>
                 <template>
                     <el-tabs v-model="tabActiveName">
-                        <el-tab-pane label="收货装箱单" name="category">
+                        <el-tab-pane label="质检单详情" name="category">
                             <div class="info-title">基本信息</div>
                             <el-col :span="6" class="info-box">
                                 <div>质检单号:</div>
-                                <div>{{ dataList.orderNumber }}</div>
+                                <div>{{ dataList.billNumber }}</div>
                             </el-col>
 
                             <el-col :span="6" class="info-box">
-                                <div>创建时间:</div>
-                                <div>{{ dataList.createTime }}</div>
+                                <div>创建人:</div>
+                                <div>{{ dataList.creatorName ? dataList.creatorName : "&lt;空&gt;" }}</div>
+                            </el-col>
+
+                            <el-col :span="6" class="info-box">
+                                <div>创建日期:</div>
+                                <div>{{ dataList.createTime ? dataList.createTime : "&lt;空&gt;" }}</div>
+                            </el-col>
+
+                            <el-col :span="6" class="info-box">
+                                <div>最后更新人:</div>
+                                <div>{{ dataList.updatorName ? dataList.updatorName : "&lt;空&gt;" }}</div>
                             </el-col>
 
                             <el-col :span="6" class="info-box">
@@ -105,14 +115,10 @@
                             </el-col>
 
                             <el-col :span="6" class="info-box">
-                                <div>入库订单单号:</div>
-                                <div>{{dataList.orderBillNumber}}</div>
+                                <div>收货方式:</div>
+                                <div>{{ dataList.orderbillType | setOrderbillType }}</div>
                             </el-col>
 
-                            <el-col :span="6" class="info-box">
-                                <div>最后更新人:</div>
-                                <div>{{ dataList.updatorName }}</div>
-                            </el-col>
 
                             <el-col>
                                 <div  class="info-title title">质检类型</div>
@@ -220,6 +226,8 @@ export default {
       detailsqualityInspection() {
         this.id = this.$route.query.id;
 
+        console.log(WarehousingAdmServers)
+
         WarehousingAdmServers.detailsqualityInspection(this.id)
         .then(res => {
           console.log(res)
@@ -277,6 +285,17 @@ export default {
             return "外观检测"
           case '5':
             return "食安检测"
+          default:
+            return '未知';
+        }
+      },
+      setOrderbillType(type) {
+      // 收货方式，NOTTRUST：清点收货；TRUST：信任收货
+        switch (type) {
+          case 'NOTTRUST':
+            return "清点收货"
+          case 'TRUST':
+            return "信任收货"
           default:
             return '未知';
         }
