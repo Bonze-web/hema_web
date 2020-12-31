@@ -32,16 +32,17 @@
       :data="treeData"
       node-key="id"
       lazy
+      ref="customTree"
       :props="props"
       :load="loadNode">
       <span class="custom-tree-node" slot-scope="{ node, data }">
-        <span>{{ node.label }}</span>
+        <span style="width: 200px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">{{ node.label }}</span>
         <span class="tree-content">
           <div class="content-info">
             <div class="tree-box" v-if="node.level === 1">
               名称：{{ data.name }}
             </div>
-            <div class="tree-box" v-if="node.level === 4" style="margin-right:48px;width: 200px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">
+            <div class="tree-box" v-if="node.level === 4" style="margin-right:48px;">
               货位类型：{{ data.bintypeName }}
             </div>
             <div class="tree-box" v-if="node.level === 1">
@@ -264,6 +265,7 @@ import PermIds from "@/api/permissionIds";
   export default {
     data() {
       return {
+        maps: new Map(),
         level: '',
         PermIds: PermIds,
         treeDataId: '', // 保存树结构货位ID以便后期修改时改变页面数据
@@ -777,10 +779,7 @@ import PermIds from "@/api/permissionIds";
       StorageService.removeArea(data.id, data.version)
       .then((res) => {
         this.$message.success('删除成功')
-        const parent = node.parent;
-        const children = parent.childNodes;
-        const index = children.findIndex(d => d.id === data.id);
-        children.splice(index, 1)
+        this.$refs.customTree.remove(data)
       })
       .catch((err) => {
         this.$message.error('删除失败' + err.message)
@@ -790,10 +789,7 @@ import PermIds from "@/api/permissionIds";
       StorageService.removeSpace(data.id, data.version)
       .then((res) => {
         this.$message.success('删除成功')
-        const parent = node.parent;
-        const children = parent.childNodes;
-        const index = children.findIndex(d => d.id === data.id);
-        children.splice(index, 1);
+        this.$refs.customTree.remove(data)
       })
       .catch((err) => {
         this.$message.error('删除失败' + err.message)
@@ -803,10 +799,7 @@ import PermIds from "@/api/permissionIds";
       StorageService.removeLane(data.id, data.version)
       .then((res) => {
         this.$message.success('删除成功')
-        const parent = node.parent;
-        const children = parent.childNodes;
-        const index = children.findIndex(d => d.id === data.id);
-        children.splice(index, 1);
+        this.$refs.customTree.remove(data)
       })
       .catch((err) => {
         this.$message.error('删除失败' + err.message)
@@ -816,10 +809,7 @@ import PermIds from "@/api/permissionIds";
       StorageService.removeShelf(data.id, data.version)
       .then((res) => {
         this.$message.success('删除成功')
-        const parent = node.parent;
-        const children = parent.childNodes;
-        const index = children.findIndex(d => d.id === data.id);
-        children.splice(index, 1);
+        this.$refs.customTree.remove(data)
       })
       .catch((err) => {
         this.$message.error('删除失败' + err.message)
@@ -917,5 +907,9 @@ import PermIds from "@/api/permissionIds";
 .content-info .tree-box{
   width: 120px;
   margin-top: 6px;
+  width: 200px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 </style>
