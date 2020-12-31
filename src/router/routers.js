@@ -1251,89 +1251,46 @@ const BillManagement = {
       }]
     },
     {
-      path: "demolitionand",
-      name: "DemolitionAnd",
+      path: "adjustinfo",
+      name: "Adjustinfo",
       component: AModule,
-      meta: {
-        title: '容器拆并单',
-        icon: 'table'
-<<<<<<< HEAD
-      }
-    }]
-  },
-  {
-    path: "adjustinfo",
-    name: "Adjustinfo",
-    component: AModule,
-    meta: {
-      title: '库存信息调整单',
-      icon: 'table'
-    },
-    children: [{
-      path: "",
-      name: "AdjustinfoView",
-      component: () =>
-        import('@/views/wrh-management/adjustinfo/index'),
-      hidden: true,
       meta: {
         title: '库存信息调整单',
         icon: 'table'
-      }
-    }, {
-      path: "edit",
-      name: "AdjustinfoEdit",
-      component: () =>
-        import('@/views/wrh-management/adjustinfo/edit'),
-      hidden: true,
-      meta: {
-        title: '查看库存信息调整单',
-        icon: 'table'
-      }
-    }, {
-      path: "add",
-      name: "AdjustinfoAdd",
-      component: () =>
-        import('@/views/wrh-management/adjustinfo/add'),
-      hidden: true,
-      meta: {
-        title: '新建库存信息调整单',
-        icon: 'table'
-      }
-    }]
-  }]
-=======
-        // permission: PermIds.
       },
-      children: [
-        {
-          path: "",
-          name: "DemolitionAndView",
-          component: () =>
-            import('@/views/wrh-management/demolition-and/index'),
-          hidden: true,
-          meta: {
-            title: '容器拆并单',
-            icon: 'table'
-            // permission: PermIds.
-          }
-        },
-        {
-          path: "edit",
-          name: "DemolitionAndEdit",
-          component: () =>
-            import('@/views/wrh-management/demolition-and/edit'),
-          hidden: true,
-          meta: {
-            title: '拆并详情',
-            icon: 'table'
-            // permission: PermIds.
-          }
+      children: [{
+        path: "",
+        name: "AdjustinfoView",
+        component: () =>
+          import('@/views/wrh-management/adjustinfo/index'),
+        hidden: true,
+        meta: {
+          title: '库存信息调整单',
+          icon: 'table'
         }
-      ]
-    }
-]
->>>>>>> aab011b151560299282a2910f9024ced5274ea69
-}
+      }, {
+        path: "edit",
+        name: "AdjustinfoEdit",
+        component: () =>
+          import('@/views/wrh-management/adjustinfo/edit'),
+        hidden: true,
+        meta: {
+          title: '查看库存信息调整单',
+          icon: 'table'
+        }
+      }, {
+        path: "add",
+        name: "AdjustinfoAdd",
+        component: () =>
+          import('@/views/wrh-management/adjustinfo/add'),
+        hidden: true,
+        meta: {
+          title: '新建库存信息调整单',
+          icon: 'table'
+        }
+      }]
+    }]
+  }
 
 /**
  * 动态路由
