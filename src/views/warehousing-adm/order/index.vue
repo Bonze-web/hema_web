@@ -88,7 +88,7 @@
 
         <el-table-column prop="srcBillNumber" label="来源单号"></el-table-column>
 
-        <el-table-column prop="srcApi" label="通知订单类型" style="height: 20px">
+        <el-table-column prop="srcApi" label="入库订单类型" style="height: 20px">
           <template slot-scope="scope">{{ scope.row.srcApi | setSrcApi }}</template>
         </el-table-column>
 

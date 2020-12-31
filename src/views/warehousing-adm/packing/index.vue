@@ -108,7 +108,7 @@
 
         <el-table-column prop="scope" label="操作人">
           <template slot-scope="scope">
-            {{ scope.row.updatorName }}
+            {{ scope.row.creatorName }}
           </template>
         </el-table-column>
 
@@ -152,7 +152,7 @@ export default {
         status: '' // 状态
       },
       // warehousingTime: '', // 入库时间
-      shipmentTime: '', // 收货时间
+      shipmentTime: '', // 开始收货时间
       page: 1,
       pageSize: 10,
       totalCount: 0
@@ -181,7 +181,7 @@ export default {
       };
 
       // this.warehousingTime = ''; // 入库时间
-      this.shipmentTime = ''; // 收货时间
+      this.shipmentTime = ''; // 开始收货时间
     },
     putFinish(billNumber, version) {
       // console.log(billNumber, version)
