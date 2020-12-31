@@ -728,7 +728,8 @@ import PermIds from "@/api/permissionIds";
     getWrhQuery: function() {
       const data = {
         page: 1,
-        pageSize: 0
+        pageSize: 0,
+        statusEquals: 'OFF'
       }
       StorageService.warehouseInit(data)
       .then((res) => {
@@ -779,7 +780,7 @@ import PermIds from "@/api/permissionIds";
         const parent = node.parent;
         const children = parent.childNodes;
         const index = children.findIndex(d => d.id === data.id);
-        children.splice(index, 1);
+        children.splice(index, 1)
       })
       .catch((err) => {
         this.$message.error('删除失败' + err.message)

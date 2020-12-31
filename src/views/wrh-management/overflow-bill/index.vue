@@ -9,7 +9,14 @@
                     <el-input type='text' placeholder="请输入上级类别编号/名称" v-model="form.wareCodeOrNameLikes" class="input-width"></el-input>
                 </el-form-item>
                 <el-form-item label="报告员">
-                    <el-input type='text' placeholder="请输入上级类别编号/名称" v-model="form.decerNameLikes" class="input-width"></el-input>
+                    <el-autocomplete
+                      class="inline-input"
+                      v-model="form.decerNameLikes"
+                      :fetch-suggestions="querySearch"
+                      placeholder="请输入报告员"
+                      :trigger-on-focus="false"
+                      @select="handleSelect"
+                  ></el-autocomplete>
                 </el-form-item>
                 <el-form-item label="状态">
                     <el-select v-model="form.statusEquals" placeholder="请选择状态">
@@ -31,6 +38,7 @@
                     <el-date-picker
                       v-model="form.beginAndEndDate"
                       type="daterange"
+                      value-format="yyyy-MM-dd HH:mm:ss"
                       range-separator="至"
                       start-placeholder="开始日期"
                       end-placeholder="结束日期">
@@ -90,6 +98,16 @@
                 </el-table-column>
                 <el-table-column prop="srcBillNumber" label="来源单号"></el-table-column>
             </el-table>
+            <el-pagination
+                style="float:right"
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :current-page="1"
+                :page-sizes="[10, 20, 30, 50]"
+                :page-size="pageSize"
+                layout="total, sizes, prev, pager, next, jumper"
+                :total="totalCount">
+            </el-pagination>
         </div>
 
 
@@ -108,6 +126,7 @@
 </template>
 
 <script>
+import MemberService from '@/api/service/MemberService'
 import billType from '../../../components/billType.vue';
 import BillTypeService from '@/api/service/BillTypeService'
 import BillService from "@/api/service/BillService";
@@ -117,6 +136,7 @@ import { mapGetters } from "vuex";
 export default {
   data() {
       return {
+        restaurants: [], // 用户列表
         PermIds: PermIds,
         table: false,
         billList: [],
@@ -131,7 +151,10 @@ export default {
           beginAndEndDate: [],
           srcBillNumber: '' // 来源单号
         },
-        lossBill: []
+        lossBill: [],
+        page: 1,
+        pageSize: 10,
+        totalCount: 0
       }
     },
   components: {
@@ -144,6 +167,31 @@ export default {
     goBack: function() {
       this.table = false
     },
+    handleCurrentChange: function(e) {
+      this.page = Number(e)
+      this.getOverflowBillList()
+    },
+    handleSizeChange: function(e) {
+      this.pageSize = Number(e)
+      this.page = 1
+      this.getOverflowBillList()
+    },
+    querySearch: function(queryString, cb) {
+          // 搜索报损人
+          const restaurants = this.restaurants;
+          const results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+          // 调用 callback 返回建议列表的数据
+          cb(results);
+      },
+      handleSelect: function(e) {
+        console.log(e)
+        this.form.decerId = e.id
+      },
+      createFilter(queryString) {
+        return (restaurant) => {
+          return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+        };
+      },
     onSelect: function() {
      if (this.form.beginAndEndDate.length > 0) {
         this.form.beginTime = this.form.beginAndEndDate[0]
@@ -179,8 +227,8 @@ export default {
     },
     getOverflowBillList: function() {
       const _this = this
-      _this.form.page = 1
-      _this.form.pageSize = 0
+      _this.form.page = this.page
+      _this.form.pageSize = this.pageSize
       BillService.getOverflowBillList(_this.form)
       .then((res) => {
         _this.lossBill = res.records
@@ -188,11 +236,26 @@ export default {
       .catch((err) => {
         _this.$message.error('获取单据列表失败' + err.message)
       })
-    }
+    },
+    getUsers: function() {
+        MemberService.query(1, 0)
+        .then((res) => {
+          res.records.forEach((item) => {
+            const obj = {
+              value: item.username,
+              id: item.id
+            }
+            this.restaurants.push(obj)
+          })
+        }).catch((err) => {
+          this.$message.error('获取用户列表失败' + err.message)
+        })
+      }
   },
   created() {
     this.getAlllossType()
     this.getOverflowBillList()
+    this.getUsers()
   },
   beforeRouteEnter(to, from, next) {
       next(vm => {
