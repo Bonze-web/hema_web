@@ -51,7 +51,7 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="到货日期：">
+        <el-form-item label="开始收货时间：">
           <el-date-picker class="input-width _picker" v-model="arrival" type="datetimerange" value-format="yyyy-MM-dd HH:mm:ss" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期" ></el-date-picker>
         </el-form-item>
 
@@ -98,9 +98,9 @@
           </template>
         </el-table-column>
 
-        <el-table-column prop="endReceiveTime" label="通知日期">
+        <el-table-column prop="inputTime" label="订单接收时间">
           <template slot-scope="scope">
-            {{ scope.row.endReceiveTime ? scope.row.endReceiveTime : "&lt;空&gt;" }}
+            {{ scope.row.inputTime ? scope.row.inputTime : "&lt;空&gt;" }}
           </template>
         </el-table-column>
 
@@ -284,10 +284,10 @@ export default {
         productCodeOrNameLike: this.form.productCodeOrNameLike, // 商品代码等于或者名称类似于
         srcWayEquals: this.form.srcWayEquals ? this.form.srcWayEquals : null, // 订单来源
         statusEquals: this.form.status ? this.form.status : null, // 状态等于
-        realArrivalDateGte: this.arrival[0], // 到货日期小于等于
-        realArrivalDateLte: this.arrival[1], // 到货日期小于等于
-        beginReceiveTimeGte: this.createTime[0], // 创建日期大于等于
-        beginReceiveTimeLte: this.createTime[1], // 创建日期小于等于
+        beginReceiveTimeGte: this.arrival[0], // 开始收货日期
+        beginReceiveTimeLte: this.arrival[1], // 开始收货日期
+        createTimeGte: this.createTime[0], // 创建日期大于等于
+        createTimeLte: this.createTime[1], // 创建日期小于等于
         searchCount: true
       };
 

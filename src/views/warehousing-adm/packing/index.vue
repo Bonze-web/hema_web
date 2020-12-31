@@ -31,11 +31,11 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="入库日期：">
+        <!-- <el-form-item label="入库日期：">
           <el-date-picker class="input-width _picker" v-model="warehousingTime" type="datetimerange" value-format="yyyy-MM-dd HH:mm:ss" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期" ></el-date-picker>
-        </el-form-item>
+        </el-form-item> -->
         
-        <el-form-item label="收货日期：">
+        <el-form-item label="开始收货时间：">
           <el-date-picker class="input-width _picker" v-model="shipmentTime" type="datetimerange" value-format="yyyy-MM-dd HH:mm:ss" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期" ></el-date-picker>
         </el-form-item>
 
@@ -151,7 +151,7 @@ export default {
         creatorNameOrCodeEquals: '', // 操作人
         status: '' // 状态
       },
-      warehousingTime: '', // 入库时间
+      // warehousingTime: '', // 入库时间
       shipmentTime: '', // 收货时间
       page: 1,
       pageSize: 10,
@@ -180,7 +180,7 @@ export default {
         status: '' // 状态
       };
 
-      this.warehousingTime = ''; // 入库时间
+      // this.warehousingTime = ''; // 入库时间
       this.shipmentTime = ''; // 收货时间
     },
     putFinish(billNumber, version) {
@@ -227,10 +227,10 @@ export default {
         containerBarcodeEquals: this.form.containerBarcodeEquals ? this.form.containerBarcodeEquals : null,
         creatorNameOrCodeEquals: this.form.creatorNameOrCodeEquals ? this.form.creatorNameOrCodeEquals : null,
         statusIn: this.form.status ? this.form.status : null,
-        orderBillBeginDate: this.warehousingTime[0] ? this.warehousingTime[0] : null,
-        orderBillEndDate: this.warehousingTime[1] ? this.warehousingTime[1] : null,
-        receiveBillBeginDate: this.shipmentTime[0] ? this.shipmentTime[0] : null,
-        receiveBillEndDate: this.shipmentTime[1] ? this.shipmentTime[1] : null,
+        // orderBillBeginDate: this.warehousingTime[0] ? this.warehousingTime[0] : null,
+        // orderBillEndDate: this.warehousingTime[1] ? this.warehousingTime[1] : null,
+        receiveBillBeginDate: this.shipmentTime[0] ? this.shipmentTime[0] : null, // 开始收货时间
+        receiveBillEndDate: this.shipmentTime[1] ? this.shipmentTime[1] : null, // 开始收货时间
         searchCount: true
       };
 
