@@ -1,19 +1,21 @@
 /* 
  *基本资料相关接口 
-*/
+ */
 import request from '@/utils/request'
 
 export default {
   /**
-  * @param {int} pageSize
-  * @param {int} page
-  */
+   * @param {int} pageSize
+   * @param {int} page
+   */
   // 一开始我就要请求的接口
   // 分页的接口请求
   getSuppliersList(postData) {
     // return request.post('/wms/storagearea/query', param)
     // return request.get('/wms/storagearea/query', param)
-    return request.get('/wms/userpickarea/query', {params: postData})
+    return request.get('/wms/userpickarea/query', {
+      params: postData
+    })
   },
   /**
    * 获取详情
@@ -25,10 +27,26 @@ export default {
   },
   getPickareaQuery() {
     const postData = {
-        page: 1,
-        pageSize: 0
+      page: 1,
+      pageSize: 0
     }
-    return request.get('/wms/pickarea/query', {params: postData})
+    return request.get('/wms/pickarea/query', {
+      params: postData
+    })
+  },
+  /**
+   * 分页查询拣货分区
+   */
+  queryPickarea(page, pageSize, opts) {
+    var params = {
+      page: page,
+      pageSize: pageSize,
+      searchCount: true,
+      ...opts
+    }
+    return request.get('/wms/pickarea/query', {
+      params: params
+    });
   },
   /**
    * 创建
@@ -46,10 +64,12 @@ export default {
   },
   userQuery() {
     const postData = {
-        page: 1,
-        pageSize: 0
+      page: 1,
+      pageSize: 0
     }
-    return request.get('/sys/user/query', {params: postData})
+    return request.get('/sys/user/query', {
+      params: postData
+    })
   }
-}
 
+}
