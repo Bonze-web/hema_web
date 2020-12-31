@@ -1237,6 +1237,17 @@ const BillManagement = {
           icon: 'table',
           permission: PermIds.WMS_INCINVBILL_CREATE
         }
+      }, {
+        path: "batchadd",
+        name: "MoveBillBatchAdd",
+        component: () =>
+          import('@/views/wrh-management/move-bill/batch-add'),
+        hidden: true,
+        meta: {
+          title: '批量添加',
+          icon: 'table',
+          permission: PermIds.WMS_INCINVBILL_CREATE
+        }
       }]
     }
 ]
