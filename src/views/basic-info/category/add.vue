@@ -85,10 +85,12 @@ export default {
         categoryInfo: {}, // 供应商信息
         createRules: {
           code: [
-            { required: true, message: '请输入类别代码', trigger: 'blur' }
+            { required: true, message: '请输入类别代码', trigger: 'blur' },
+            { max: 20, message: '输入的字符不允许超过20', trigger: 'blur' }
           ],
           name: [
-            { required: true, message: '请输入类别名称', trigger: 'blur' }
+            { required: true, message: '请输入类别名称', trigger: 'blur' },
+            { max: 20, message: '输入的字符不允许超过20', trigger: 'blur' }
           ],
           level: [
             { required: true, message: '请选择类别级别', trigger: 'blur' }

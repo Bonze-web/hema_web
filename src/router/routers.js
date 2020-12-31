@@ -1139,104 +1139,118 @@ const BillManagement = {
         permission: PermIds.PRODUCT_SUPPLIER_VIEW
       }
     }]
-  }, {
-    path: "overflowbill",
-    name: "OverflowBill",
-    component: AModule,
-    meta: {
-      title: '溢余单',
-      icon: 'table',
-      permission: PermIds.WMS_INCINVBILL
     },
-    children: [{
-      path: "",
-      name: "OverflowView",
-      component: () =>
-        import('@/views/wrh-management/overflow-bill/index'),
-      hidden: true,
+    {
+      path: "overflowbill",
+      name: "OverflowBill",
+      component: AModule,
       meta: {
         title: '溢余单',
         icon: 'table',
-        permission: PermIds.WMS_INCINVBILL_VIEW
-      }
-    }, {
-      path: "edit",
-      name: "OverflowBillEdit",
-      component: () =>
-        import('@/views/wrh-management/overflow-bill/edit'),
-      hidden: true,
-      meta: {
-        title: '查看溢余单',
-        icon: 'table',
-        permission: PermIds.WMS_INCINVBILL_VIEW
-      }
-    }, {
-      path: "add",
-      name: "OverflowBillAdd",
-      component: () =>
-        import('@/views/wrh-management/overflow-bill/add'),
-      hidden: true,
-      meta: {
-        title: '新建溢余单',
-        icon: 'table',
-        permission: PermIds.WMS_INCINVBILL_CREATE
-      }
-    }, {
-      path: "batchadd",
-      name: "BatchAdd",
-      component: () =>
-        import('@/views/wrh-management/loss-bill/batch-add'),
-      hidden: true,
-      meta: {
-        title: '批量增加商品',
-        icon: 'table',
-        permission: PermIds.PRODUCT_SUPPLIER_VIEW
-      }
-    }]
-  }, {
-    path: "movebill",
-    name: "MoveBill",
-    component: AModule,
-    meta: {
-      title: '移库单',
-      icon: 'table',
-      permission: PermIds.WMS_INCINVBILL
+        permission: PermIds.WMS_INCINVBILL
+      },
+      children: [{
+        path: "",
+        name: "OverflowView",
+        component: () =>
+          import('@/views/wrh-management/overflow-bill/index'),
+        hidden: true,
+        meta: {
+          title: '溢余单',
+          icon: 'table',
+          permission: PermIds.WMS_INCINVBILL_VIEW
+        }
+      }, {
+        path: "edit",
+        name: "OverflowBillEdit",
+        component: () =>
+          import('@/views/wrh-management/overflow-bill/edit'),
+        hidden: true,
+        meta: {
+          title: '查看溢余单',
+          icon: 'table',
+          permission: PermIds.WMS_INCINVBILL_VIEW
+        }
+      }, {
+        path: "add",
+        name: "OverflowBillAdd",
+        component: () =>
+          import('@/views/wrh-management/overflow-bill/add'),
+        hidden: true,
+        meta: {
+          title: '新建溢余单',
+          icon: 'table',
+          permission: PermIds.WMS_INCINVBILL_CREATE
+        }
+      }, {
+        path: "batchadd",
+        name: "BatchAdd",
+        component: () =>
+          import('@/views/wrh-management/loss-bill/batch-add'),
+        hidden: true,
+        meta: {
+          title: '批量增加商品',
+          icon: 'table',
+          permission: PermIds.PRODUCT_SUPPLIER_VIEW
+        }
+      }]
     },
-    children: [{
-      path: "",
-      name: "MoveView",
-      component: () =>
-        import('@/views/wrh-management/move-bill/index'),
-      hidden: true,
+    {
+      path: "movebill",
+      name: "MoveBill",
+      component: AModule,
       meta: {
         title: '移库单',
         icon: 'table',
-        permission: PermIds.WMS_INCINVBILL_VIEW
-      }
-    }, {
-      path: "edit",
-      name: "MoveBillEdit",
-      component: () =>
-        import('@/views/wrh-management/move-bill/edit'),
-      hidden: true,
-      meta: {
-        title: '查看移库单',
-        icon: 'table',
-        permission: PermIds.WMS_INCINVBILL_VIEW
-      }
-    }, {
-      path: "add",
-      name: "MoveBillAdd",
-      component: () =>
-        import('@/views/wrh-management/move-bill/add'),
-      hidden: true,
-      meta: {
-        title: '新建移库单',
-        icon: 'table',
-        permission: PermIds.WMS_INCINVBILL_CREATE
-      }
-    }]
-  }]
+        permission: PermIds.WMS_INCINVBILL
+      },
+      children: [{
+        path: "",
+        name: "MoveView",
+        component: () =>
+          import('@/views/wrh-management/move-bill/index'),
+        hidden: true,
+        meta: {
+          title: '移库单',
+          icon: 'table',
+          permission: PermIds.WMS_INCINVBILL_VIEW
+        }
+      }, {
+        path: "edit",
+        name: "MoveBillEdit",
+        component: () =>
+          import('@/views/wrh-management/move-bill/edit'),
+        hidden: true,
+        meta: {
+          title: '查看移库单',
+          icon: 'table',
+          permission: PermIds.WMS_INCINVBILL_VIEW
+        }
+      }, {
+        path: "add",
+        name: "MoveBillAdd",
+        component: () =>
+          import('@/views/wrh-management/move-bill/add'),
+        hidden: true,
+        meta: {
+          title: '新建移库单',
+          icon: 'table',
+          permission: PermIds.WMS_INCINVBILL_CREATE
+        }
+      }, {
+        path: "batchadd",
+        name: "MoveBillBatchAdd",
+        component: () =>
+          import('@/views/wrh-management/move-bill/batch-add'),
+        hidden: true,
+        meta: {
+          title: '批量添加',
+          icon: 'table',
+          permission: PermIds.WMS_INCINVBILL_CREATE
+        }
+      }]
+    }
+]
 }
 
 /**

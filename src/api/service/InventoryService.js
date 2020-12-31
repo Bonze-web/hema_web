@@ -5,34 +5,34 @@ import request from '@/utils/request'
  */
 export default {
     /**
-     * 请求损耗单列表
+     * 请求盘点单列表
      */
     getBillList(data) {
-        return request.get('/wms/decinvbill/query', {params: data})
+        return request.get('/stock/stock-take-bill', {params: data})
     },
     /**
-     * 新建损耗单
+     * 新建
      */
     createLossBill(postData) {
-        return request.post('/wms/decinvbill/create', postData)
+        return request.post('/stock/stock-take-bill', postData)
     },
     /**
-     * 修改损耗单
+     * 修改
      */
     updateLossBill(postData) {
-        return request.post('/wms/decinvbill/update', postData)
+        return request.put('/stock/stock-take-bill', postData)
     },
     /**
-     * 删除损耗单
-     */
-    deleteLossBill(id) {
-        return request.put('/wms/decinvbill/delete?id=' + id)
-    },
-    /**
-     * 请求损耗单详情
+     * 请求详情
      */
     getLossBillDetail(id) {
-        return request.get('/wms/decinvbill/getDetail?id=' + id)
+        return request.get('/stock/stock-take-bill/' + id)
+    },
+    closeInventory(id) {
+        return request.put('/stock/stock-take-bill/' + id + '/close')
+    },
+    startInventory(id) {
+        return request.put('/stock/stock-take-bill/' + id + '/start')
     },
     /**
      * 请求溢余单列表
@@ -53,13 +53,6 @@ export default {
         return request.post('/wms/incinv/update', postData)
     },
     /**
-     * 
-     * 删除溢余单
-     */
-    deleteOverflowBill(id) {
-        return request.put('/wms/incinv/delete?id=' + id)
-    },
-    /**
      * 请求溢余单详情
      */
     getOverflowBillDetail(id) {
@@ -70,11 +63,5 @@ export default {
      */
     getDeccer(data) {
         return request.get('', {params: data})
-    },
-    /**
-     * 查询移库单
-     */
-    getMovebillList(data) {
-        return request.get('/wms/move-bill', {params: data})
     }
 }
