@@ -53,7 +53,7 @@
       <!--编辑用户角色对话框 -->
       <edit-user-role ref="dlgEditRole"></edit-user-role>
 
-      <el-table :data="pageData.records" style="width: 100%" v-loading="listLoading">
+      <el-table :data="pageData.records" style="width: 100%" v-loading="listLoading" @sort-change="handleSortChange">
         <!--checkbox 适当加宽，否则IE下面有省略号 https://github.com/ElemeFE/element/issues/1563-->
         <el-table-column prop="id" type="index" width="50"></el-table-column>
         <!-- <el-table-column label="头像" width="76">
@@ -61,11 +61,11 @@
             <img :src='scope.row.avatar' style="height: 35px;vertical-align: middle;" alt="">
           </template>
         </el-table-column>-->
-        <el-table-column prop="realName" label="昵称"></el-table-column>
-        <el-table-column prop="username" label="用户名"></el-table-column>
+        <el-table-column prop="realName" label="昵称" sortable="custom"></el-table-column>
+        <el-table-column prop="username" label="用户名" sortable="custom"></el-table-column>
         <el-table-column prop="workNumber" label="工号"></el-table-column>
         <el-table-column prop="orgName" label="所属组织"></el-table-column>
-        <el-table-column label="状态" width="80">
+        <el-table-column prop="state" label="状态" width="80" sortable="custom">
           <template slot-scope="scope">{{ scope.row | formatState }}</template>
         </el-table-column>
         <el-table-column label="操作" width="300">
@@ -137,9 +137,10 @@ export default {
       qryForm: {
         nameLike: "",
         disabled: "false",
-        upperOrgIdEquals: ""
+        upperOrgIdEquals: "",
+        orderField: "",
+        orderDirection: ""
       },
-
       pageData: {
         page: 1,
         pageSize: 10,
@@ -245,7 +246,14 @@ export default {
           }
         });
     },
-
+    /* 处理表格排序 */
+    handleSortChange(val) {
+      console.log(val);
+      this.qryForm.orderField = Utils.toLine(val.prop);
+      this.qryForm.orderDirection = val.order === "ascending" ? "asc" : "desc";
+      // 此处需第一页查
+      this.reload();
+    },
     /**
      * 加载数据
      *
