@@ -372,7 +372,7 @@ export default {
           return "进行中"
         case 'FINISHED':
           return "已完成"
-        case 'ABORTED ':
+        case 'ABORTED':
           return "已取消"
         default:
           return '未知';

@@ -1040,8 +1040,8 @@ const warehousingAdm = {
       component: AModule,
       meta: {
         title: '质检单',
-        icon: 'table'
-        // permission: PermIds.WMS_QUALITY_INSPECTION_TYPE
+        icon: 'table',
+        permission: PermIds.WMS_QUALITY_INSPECTION_ORDER
       },
       children: [
         {
@@ -1052,8 +1052,8 @@ const warehousingAdm = {
           hidden: true,
           meta: {
             title: '质检单',
-            icon: 'table'
-            // permission: PermIds.WMS_QUALITY_INSPECTION_TYPE_VIEW
+            icon: 'table',
+            permission: PermIds.WMS_QUALITY_INSPECTION_ORDER_VIEW
           }
         },
         {
@@ -1064,8 +1064,8 @@ const warehousingAdm = {
           hidden: true,
           meta: {
             title: '质检详情',
-            icon: 'table'
-            // permission: PermIds.WMS_QUALITY_INSPECTION_TYPE_VIEW
+            icon: 'table',
+            permission: PermIds.WMS_QUALITY_INSPECTION_ORDER_VIEW
           }
         }
       ]
@@ -1238,6 +1238,42 @@ const BillManagement = {
           permission: PermIds.WMS_INCINVBILL_CREATE
         }
       }]
+    },
+    {
+      path: "demolitionand",
+      name: "DemolitionAnd",
+      component: AModule,
+      meta: {
+        title: '容器拆并单',
+        icon: 'table'
+        // permission: PermIds.
+      },
+      children: [
+        {
+          path: "",
+          name: "DemolitionAndView",
+          component: () =>
+            import('@/views/wrh-management/demolition-and/index'),
+          hidden: true,
+          meta: {
+            title: '容器拆并单',
+            icon: 'table'
+            // permission: PermIds.
+          }
+        },
+        {
+          path: "edit",
+          name: "DemolitionAndEdit",
+          component: () =>
+            import('@/views/wrh-management/demolition-and/edit'),
+          hidden: true,
+          meta: {
+            title: '拆并详情',
+            icon: 'table'
+            // permission: PermIds.
+          }
+        }
+      ]
     }
 ]
 }
