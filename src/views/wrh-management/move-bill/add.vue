@@ -16,30 +16,36 @@
                                 <div class="info-title">基本信息</div>
                                 <el-row :gutter="20">
                                     <el-col :span="6" class="info-box">
-                                        <el-form-item label="移库类型" prop="billTypeId">
+                                        <el-form-item label="移库类型" prop="moveType">
                                           <el-select v-model="form.moveType" placeholder="请选择移库类型">
                                             <el-option v-for="item in billTypeList" :key="item.id" :label="item.typeName" :value="item.id"></el-option>
                                           </el-select>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
-                                        <el-form-item label="移库员" prop="decerName">
-                                            <el-autocomplete
-                                                class="inline-input"
-                                                v-model="form.moverName"
-                                                :fetch-suggestions="querySearch"
-                                                placeholder="请输入移库员"
-                                                :trigger-on-focus="false"
-                                                @select="handleSelect"
-                                            ></el-autocomplete>
+                                        <el-form-item label="移库员" prop="moverId">
+                                             <el-select
+                                              v-model="moverId"
+                                              filterable
+                                              remote
+                                              reserve-keyword
+                                              placeholder="请输入移库员名称"
+                                              :remote-method="getUsers">
+                                              <el-option
+                                                v-for="item in restaurants"
+                                                :key="item.id"
+                                                :label="item.value"
+                                                :value="item.id">
+                                              </el-option>
+                                            </el-select>
                                         </el-form-item>
                                     </el-col>
                                 </el-row>
                                 <div class="info-title">
                                     <div>
+                                      商品明细
                                     <!-- <router-link @click="batchAddProduct" style="color:#409EFF" :to="{ path: '/wrhmanagement/lossbill/batchAdd' }"> -->
-                                        <el-button size="mini" type="text" icon="el-icon-circle-plus" @click="AddProduct">添加</el-button>
-                                        <el-button size="mini" type="text" icon="el-icon-remove" @click="removeProduct">删除</el-button>
+                                        <el-button size="mini" type="text" @click="bacthAddProduct">批量添加</el-button>
                                     <!-- </router-link> -->
                                     </div>
                                     <div class="list-count">
@@ -54,12 +60,7 @@
                                       style="width: 100%;text-align:center"
                                       @selection-change="handleSelectionChange"
                                     >
-                                    <el-table-column
-                                      fixed
-                                      type="selection"
-                                      width="55">
-                                    </el-table-column>
-                                    <el-table-column label="行" width="120">
+                                    <el-table-column label="行" width="55">
                                       <template slot-scope="scope">
                                         {{ scope.$index + 1 }}
                                       </template>
@@ -157,6 +158,7 @@ import { mapGetters } from "vuex";
 export default {
   data() {
       return {
+        restaurants: [], // 移库员列表
         PermIds: PermIds,
         form: {
           moveType: '', // 移库类型
@@ -169,6 +171,14 @@ export default {
           toWarehouseCode: '', // 目标仓编码
           toWarehouseId: '', // 目标仓id
           toWarehouseName: '' // 目标仓名称
+        },
+        createRules: {
+          moveType: [
+            { required: true, message: '请选择移库类型', trigger: 'blur' }
+          ],
+          moverId: [
+            { required: true, message: '请选择移库员', trigger: 'blur' }
+          ]
         },
         billTypeList: [], // 单据类型列表
         productList: [], // 临时的商品明细
@@ -189,8 +199,8 @@ export default {
         console.log(e)
         this.form.moverId = e.id
       },
-      AddProduct: function() {
-        this.productList.push({index: this.productList.length})
+      bacthAddProduct: function() {
+        this.$router.push({path: '/wrhmanagement/movebill/batchAdd', query: {id: this.form.wrhId}})
       },
       handleSelectionChange: function(val) {
         this.removeProductList = val
@@ -323,6 +333,7 @@ export default {
         });
       },
       getUsers: function() {
+        this.restaurants = []
         MemberService.query(1, 0, {nameLike: this.form.decerName})
         .then((res) => {
           res.records.forEach((item) => {
@@ -341,7 +352,6 @@ export default {
       this.getAllBillType()
       this.getQueryStatus()
       this.getWrhList()
-      this.getUsers()
       this.clearSelection()
       // for (const item in this.productList) {
       //   this.productList[item].consumeAmount = 0
