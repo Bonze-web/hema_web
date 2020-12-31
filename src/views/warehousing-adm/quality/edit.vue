@@ -119,7 +119,6 @@
                                 <div>{{ dataList.orderbillType | setOrderbillType }}</div>
                             </el-col>
 
-
                             <el-col>
                                 <div  class="info-title title">质检类型</div>
                             </el-col>
@@ -131,8 +130,9 @@
                             <el-table :data="qualityInspectionTypeList" style="width: 100%; text-align: center" :row-style="{ height: '16px', padding: '-4px' }" >
                               <el-table-column type="index" label="序号"></el-table-column>
 
+                              <!-- <el-table-column prop="billId" label="质检单号" style="height: 20px"></el-table-column> -->
                               <el-table-column prop="productCode" label="商品编码" style="height: 20px"></el-table-column>
-                              <el-table-column prop="productName" label="商品名称" style="height: 20px"></el-table-column>
+                              <el-table-column prop="licensePlateNumber" label="车牌号码" style="height: 20px"></el-table-column>
 
                               <el-table-column prop="qualityInspectionType" label="质检类型" style="height: 20px">
                                 <template slot-scope="qualityInspectionType">
@@ -140,14 +140,23 @@
                                 </template>
                               </el-table-column>
 
-                              <el-table-column prop="actualInspectionNum" label="实检数量" style="height: 20px"></el-table-column>
-                              <el-table-column prop="unqualifiedNum" label="不合格数量" style="height: 20px"></el-table-column>
+                              <el-table-column prop="scope" label="车辆温度" style="height: 20px">
+                                <template slot-scope="scope">
+                                  {{ scope.row.vehicleTemperature ? scope.row.vehicleTemperature : "&lt;空&gt;" }}
+                                </template>
+                              </el-table-column>
 
-                              <el-table-column prop="updateTime" label="最后更新时间" style="height: 20px"></el-table-column>
-                              <el-table-column prop="updatorName" label="最后更新人名称" style="height: 20px"></el-table-column>
+                              <el-table-column prop="scope" label="车辆外部温度" style="height: 20px">
+                                <template slot-scope="scope">
+                                  {{ scope.row.vehicleExternalTemperature ? scope.row.vehicleExternalTemperature : "&lt;空&gt;" }}
+                                </template>
+                              </el-table-column>
 
-                              <el-table-column prop="vehicleExternalTemperature" label="车辆外部温度" style="height: 20px"></el-table-column>
-                              <el-table-column prop="vehicleTemperature" label="车辆温度" style="height: 20px"></el-table-column>
+                              <el-table-column prop="scope" label="产品包装温度" style="height: 20px">
+                                <template slot-scope="scope">
+                                  {{ scope.row.productContainerTemperature ? scope.row.productContainerTemperature : "&lt;空&gt;" }}
+                                </template>
+                              </el-table-column>
 
                               <el-table-column prop="status" label="状态" style="height: 20px">
                                 <template slot-scope="status">
@@ -204,7 +213,7 @@ export default {
         id: '', // 货位类别ID
         iptVal: '', // 搜索
         dataList: {}, // 详情数据
-        orderBillItems: []
+        qualityInspectionTypeList: []
       }
     },
     computed: {
@@ -216,23 +225,21 @@ export default {
       },
       onSubmit() {
         if (this.iptVal === '') {
-          this.orderBillItems = this.dataList.orderBillItems
+          this.qualityInspectionTypeList = this.dataList.qualityInspectionTypeList
         } else {
-          this.orderBillItems = this.dataList.orderBillItems.filter((item) => {
-            return item.billNumber.indexOf(this.iptVal) !== -1
+          this.qualityInspectionTypeList = this.dataList.qualityInspectionTypeList.filter((item) => {
+            return item.productCode.indexOf(this.iptVal) !== -1
           })
         }
       },
       detailsqualityInspection() {
         this.id = this.$route.query.id;
 
-        console.log(WarehousingAdmServers)
-
         WarehousingAdmServers.detailsqualityInspection(this.id)
         .then(res => {
           console.log(res)
           this.dataList = res;
-          this.orderBillItems = res.orderBillItems;
+          this.qualityInspectionTypeList = res.qualityInspectionTypeList;
         })
         .catch(err => {
           this.$message.error("查询失败" + err.message)
