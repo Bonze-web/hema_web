@@ -103,7 +103,7 @@ export function timedown(endTime) {
   if (hour <= 9) hour = '0' + hour;
   if (minute <= 9) minute = '0' + minute;
   if (second <= 9) second = '0' + second;
-  
+
   return {
     day: day,
     hour: hour,
@@ -127,4 +127,15 @@ export function downloadFile(url, name) {
   eleLink.click();
   // 然后移除
   document.body.removeChild(eleLink);
+}
+
+// 下划线转换驼峰
+export function toHump(name) {
+  return name.replace(/\_(\w)/g, function(all, letter) {
+    return letter.toUpperCase();
+  });
+}
+// 驼峰转换下划线
+export function toLine(name) {
+  return name.replace(/([A-Z])/g, "_$1").toLowerCase();
 }
