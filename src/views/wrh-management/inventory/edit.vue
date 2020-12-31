@@ -272,7 +272,7 @@ export default {
     },
     methods: {
       leadingChange() {
-
+          
       },
       editSupplierStart() {
         this.inventoryStatus = "end";
