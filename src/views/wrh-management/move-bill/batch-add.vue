@@ -56,14 +56,12 @@
         </div>
         <div>
             <el-button size="mini" @click="goBack">取消</el-button>
-            <el-button type="primary" size="mini"  @click="batchAddLoss">添加</el-button>
+            <el-button type="primary" size="mini"  @click="batchAddMove">添加</el-button>
         </div>
     </div>
 </template>
 
 <script>
-// import BillTypeService from '@/api/service/BillTypeService'
-// import BillService from "@/api/service/BillService";
 import ProductService from "@/api/service/ProductService";
 import PermIds from "@/api/permissionIds";
 import { mapGetters, mapActions } from "vuex";
@@ -83,7 +81,7 @@ export default {
         page: 1,
         pageSize: 10,
         productList: [],
-        multipleSelection: [] // 被选中的商品
+        moveSelection: [] // 被选中的商品
       }
     },
   components: {
@@ -92,7 +90,7 @@ export default {
     ...mapGetters(["hasPermission"])
   },
   methods: {
-    ...mapActions(["addSelection", "clearSelection"]),
+    ...mapActions(["addMove", "clearMove"]),
     getRowKeys(row) {
       return row.id
     },
@@ -118,32 +116,26 @@ export default {
         this.$message.error('获取商品列表失败' + err.message)
       });
     },
-    batchAddLoss: function() {
-      // for (const item in this.multipleSelection) {
-      //   this.multipleSelection[item].consumeAmount = 0
-      //   this.multipleSelection[item].lineNum = 0
-      //   this.multipleSelection[item].consumeQty = 0
-      //   this.multipleSelection[item].consumeQtystr = 0
-      //   this.multipleSelection[item].stockId = this.multipleSelection[item].id
-      // }
-      this.addSelection(this.multipleSelection)
-      console.log(this.multipleSelection)
-      // this.$store.dispatch("tagsView/delView", this.$route);
+    batchAddMove: function() {
+      this.addMove(this.moveSelection)
+      this.$store.dispatch("tagsView/delView", this.$route);
       this.$router.go(-1)
     },
     handleSelectionChange(val) {
       // 列表进行选择保存数据
-      this.multipleSelection = val;
+      console.log(val)
+      this.moveSelection = val;
     },
     onSelect: function() {
       if (this.form.productNameOrCode || this.form.binCode || this.form.containerBarcode) {
-        console.log(this.multipleSelection)
+        console.log(this.moveSelection)
         this.form.page = this.page
         this.form.pageSize = this.pageSize
         ProductService.getAllStock(this.form)
         .then((result) => {
           this.productList = result.records
           this.totalCount = result.totalCount
+          this.toggleSelection(this.moveSelection)
         }).catch((err) => {
           this.$message.error('获取商品列表失败' + err.message)
         });
@@ -151,28 +143,30 @@ export default {
         this.$message.error('请至少填写一项以进行筛选搜索')
       }
     },
+    toggleSelection(rows) {
+      if (rows) {
+        console.log(rows, 'rows')
+        rows.forEach(row => {
+            this.$refs.multipleTable.toggleRowSelection(row);
+        });
+      }
+    }, 
     handleCurrentChange: function(e) {
         this.page = Number(e)
         this.onSelect()
+        this.toggleSelection()
       },
       handleSizeChange: function(e) {
         this.pageSize = Number(e)
         this.page = 1
         this.onSelect()
+        this.toggleSelection()
       }
   },
   created() {
-    this.multipleSelection = this.$store.state.bill.multipleSelection
-    this.handleSelectionChange(this.multipleSelection)
-    // this.clearSelection()
-    // this.getRowKeys()
+    this.moveSelection = this.$store.state.bill.moveSelection
+    this.toggleSelection(this.moveSelection)
   },
-  // beforeRouteEnter(to, from, next) {
-  //     next(vm => {
-  //       // 通过 `vm` 访问组件实例
-  //       vm.multipleSelection = vm.$store.state.bill.multipleSelection
-  //     })
-  //   },
   filters: {
   }
 };
