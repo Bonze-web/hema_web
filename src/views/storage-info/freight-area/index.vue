@@ -41,7 +41,7 @@
             <div class="tree-box" v-if="node.level === 1">
               名称：{{ data.name }}
             </div>
-            <div class="tree-box" v-if="node.level === 4" style="margin-right:48px">
+            <div class="tree-box" v-if="node.level === 4" style="margin-right:48px;width: 200px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">
               货位类型：{{ data.bintypeName }}
             </div>
             <div class="tree-box" v-if="node.level === 1">
@@ -51,7 +51,7 @@
               货位用途：{{ data.binusage | binUsage }}
             </div>
             <div class="tree-box" v-if="node.level === 4">
-              状态：{{ data.status }}
+              状态：{{ data.status | binStatus }}
             </div>
             <!-- <div class="tree-box" v-if="node.level === 4">
               <el-select v-model="formEditSpace.binusage" placeholder="请选择货位用途">
@@ -832,6 +832,22 @@ import PermIds from "@/api/permissionIds";
     this.getBinType()
   },
   filters: {
+    binStatus(status) {
+      switch (status) {
+        case "FREE":
+          return "空闲"
+        case "LOCKED":
+          return "锁定"
+        case "STOP":
+          return "异常"
+        case "USING":
+          return "使用中"
+        case "DELETE":
+          return "已删除"
+        default:
+          return "未知"
+      }
+    },
     binUsage(type) {
       switch (type) {
         case "UNIFYRECEIVE":
