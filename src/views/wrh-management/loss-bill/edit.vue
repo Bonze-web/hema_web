@@ -18,7 +18,7 @@
             <div v-show="!check">
                 <el-button @click="back" >返回</el-button>
                 <!-- <el-button @click="statusChange" >打印</el-button> -->
-                <!-- <el-button @click="removeLossBill" >删除</el-button> -->
+                <el-button @click="deleteLossBill" v-if="hasPermission(PermIds.WMS_DECINVBILL_DELETE)">删除</el-button>
                 <el-button v-if="form.status !== 'AUDITED' && hasPermission(PermIds.WMS_DECINVBILL_CREATE)" @click="editLossBill">编辑</el-button>
                 <el-button type="primary" v-if="form.status !== 'AUDITED' && hasPermission(PermIds.WMS_DECINVBILL_AUDIT)" @click="check = true">审核</el-button>
                 <!-- <el-button type="primary" @click="editContainerType" :disabled="!billInfo.status" v-if="hasPermission(PermIds.WMS_CONTAINER_TYPE_UPDATE)">编辑</el-button> -->
@@ -318,6 +318,22 @@ export default {
         // this.calcProduct(this.$store.state.bill.multipleSelection)
         this.status = 'read'
       },
+      deleteLossBill: function() {
+        this.$confirm("该操作将删除改损耗单据, 是否继续?", "提示", {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          BillService.deleteLossBill(this.id)
+          .then((result) => {
+            this.$message.success('删除成功')
+            this.$store.dispatch("tagsView/delView", this.$route);
+            this.$router.go(-1)
+          }).catch((err) => {
+            this.$message.error('删除失败' + err.message)
+          });
+        })
+      },
       selectWrh: function(e) {
         if (e && this.form.wrhId) {
           this.$confirm('更换仓库将会清空商品明细, 是否继续?', '提示', {
@@ -562,7 +578,9 @@ export default {
       next(vm => {
         // 通过 `vm` 访问组件实例
         // if ()
-        vm.getBillDetail()
+        if (vm.status !== "edit") {
+          vm.getBillDetail()
+        }
         vm.productList = vm.$store.state.bill.multipleSelection
         if (from.path === "/wrhmanagement/lossbill") {
           return
@@ -590,7 +608,7 @@ export default {
 <style lang="scss" scoped>
 // @import "src/styles/mixin.scss";
 .status{
-  background: #66ff99;
+  background: #008000;
   border-radius: 8px;
   padding: 4px;
   height: 32px;

@@ -28,7 +28,7 @@
     <div>
       <el-dialog title="新建" :visible.sync="dialogFormVisible" append-to-body>
         <el-form :model="form" :rules="createRules" ref="form">
-          <el-form-item label="损耗类型" label-width="120px" prop="typeName">
+          <el-form-item :label="billTitle" label-width="120px" prop="typeName">
             <el-input v-model="form.typeName" maxlength="32" placeholder="请输入单据类型的名称" autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item label="说明"  label-width="120px">
@@ -44,7 +44,7 @@
     <div>
       <el-dialog title="编辑" :visible.sync="dialogFormEdit" append-to-body>
         <el-form :model="editForm" :rules="createRules" ref="editForm">
-          <el-form-item label="损耗类型" label-width="120px" prop="typeName">
+          <el-form-item :label="billTitle" label-width="120px" prop="typeName">
             <el-input v-model="editForm.typeName" maxlength="32" placeholder="请输入单据类型的名称" autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item label="说明"  label-width="120px">
@@ -159,7 +159,7 @@ export default {
     cancelType() {
       this.dialogFormVisible = false
       this.form = {
-        lossType: '',
+        lossType: this.lossType,
         remark: '',
         billName: ''
       }
@@ -174,6 +174,11 @@ export default {
             _this.$emit('getAlllossType')
             _this.dialogFormVisible = false
             _this.$message.success('新建成功')
+            this.form = {
+              lossType: this.lossType,
+              remark: '',
+              billName: ''
+            }
           })
           .catch((err) => {
             _this.$message.error('新建失败' + err.message)

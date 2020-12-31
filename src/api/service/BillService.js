@@ -23,6 +23,12 @@ export default {
         return request.post('/wms/decinvbill/update', postData)
     },
     /**
+     * 删除损耗单
+     */
+    deleteLossBill(id) {
+        return request.put('/wms/decinvbill/delete?id=' + id)
+    },
+    /**
      * 请求损耗单详情
      */
     getLossBillDetail(id) {
@@ -47,6 +53,13 @@ export default {
         return request.post('/wms/incinv/update', postData)
     },
     /**
+     * 
+     * 删除溢余单
+     */
+    deleteOverflowBill(id) {
+        return request.put('/wms/incinv/delete?id=' + id)
+    },
+    /**
      * 请求溢余单详情
      */
     getOverflowBillDetail(id) {
@@ -57,5 +70,11 @@ export default {
      */
     getDeccer(data) {
         return request.get('', {params: data})
+    },
+    /**
+     * 查询移库单
+     */
+    getMovebillList(data) {
+        return request.get('/wms/move-bill', {params: data})
     }
 }

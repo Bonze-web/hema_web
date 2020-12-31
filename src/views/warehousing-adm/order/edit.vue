@@ -227,7 +227,7 @@ export default {
           this.orderBillItems = this.dataList.orderBillItems
         } else {
           this.orderBillItems = this.dataList.orderBillItems.filter((item) => {
-            return item.billNumber.indexOf(this.iptVal) !== -1
+            return item.productCode.indexOf(this.iptVal) !== -1
           })
         }
       },

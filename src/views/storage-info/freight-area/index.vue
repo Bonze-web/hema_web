@@ -41,7 +41,7 @@
             <div class="tree-box" v-if="node.level === 1">
               名称：{{ data.name }}
             </div>
-            <div class="tree-box" v-if="node.level === 4" style="margin-right:48px">
+            <div class="tree-box" v-if="node.level === 4" style="margin-right:48px;width: 200px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">
               货位类型：{{ data.bintypeName }}
             </div>
             <div class="tree-box" v-if="node.level === 1">
@@ -51,7 +51,7 @@
               货位用途：{{ data.binusage | binUsage }}
             </div>
             <div class="tree-box" v-if="node.level === 4">
-              状态：{{ data.status }}
+              状态：{{ data.status | binStatus }}
             </div>
             <!-- <div class="tree-box" v-if="node.level === 4">
               <el-select v-model="formEditSpace.binusage" placeholder="请选择货位用途">
@@ -294,7 +294,7 @@ import PermIds from "@/api/permissionIds";
           { name: "上架中转位", value: "PUTAWAY" },
           { name: "拣货位", value: "PICK" },
           { name: "存储位", value: "STORAGE" },
-          { name: "拣货存储位", value: "PICK_STORAGE" },
+          { name: "拣货存储位", value: "PICKSTORAGE" },
           { name: "统配拣货暂存位", value: "UNIFYPICK" },
           { name: "统配集货存储位", value: "UNIFYCOLLECT" },
           { name: "补货暂存位", value: "RPL" },
@@ -728,7 +728,8 @@ import PermIds from "@/api/permissionIds";
     getWrhQuery: function() {
       const data = {
         page: 1,
-        pageSize: 0
+        pageSize: 0,
+        statusEquals: 'OFF'
       }
       StorageService.warehouseInit(data)
       .then((res) => {
@@ -779,7 +780,7 @@ import PermIds from "@/api/permissionIds";
         const parent = node.parent;
         const children = parent.childNodes;
         const index = children.findIndex(d => d.id === data.id);
-        children.splice(index, 1);
+        children.splice(index, 1)
       })
       .catch((err) => {
         this.$message.error('删除失败' + err.message)
@@ -831,6 +832,22 @@ import PermIds from "@/api/permissionIds";
     this.getBinType()
   },
   filters: {
+    binStatus(status) {
+      switch (status) {
+        case "FREE":
+          return "空闲"
+        case "LOCKED":
+          return "锁定"
+        case "STOP":
+          return "异常"
+        case "USING":
+          return "使用中"
+        case "DELETE":
+          return "已删除"
+        default:
+          return "未知"
+      }
+    },
     binUsage(type) {
       switch (type) {
         case "UNIFYRECEIVE":

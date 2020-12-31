@@ -296,11 +296,10 @@ export default {
     /**
    * 质检类型
    */
- WMS_QUALITY_INSPECTION_TYPE: "wms:quality-inspection-type",
- WMS_QUALITY_INSPECTION_TYPE_CREATE: "wms:quality-inspection-type:create",
- WMS_QUALITY_INSPECTION_TYPE_UPDATE: "wms:quality-inspection-type:update",
- WMS_QUALITY_INSPECTION_TYPE_VIEW: "wms:quality-inspection-type:view",
- WMS_QUALITY_INSPECTION_TYPE_MODIFY: "wms:dock:modify",
+  WMS_QUALITY_INSPECTION_ORDER: "wms:quality-inspection-order",
+  WMS_QUALITY_INSPECTION_ORDER_CREATE: "wms:quality-inspection-order:create",
+  WMS_QUALITY_INSPECTION_ORDER_UPDATE: "wms:quality-inspection-order:update",
+  WMS_QUALITY_INSPECTION_ORDER_VIEW: "wms:quality-inspection-order:view",
 
   /**
    * 码头模块
@@ -384,7 +383,7 @@ export default {
   WMS_DECINVBILL_UPDATE: "wms:decinvbill:update",
   WMS_DECINVBILL_VIEW: "wms:decinvbill:view",
   WMS_DECINVBILL_AUDIT: "wms:decinvbill:audit",
-
+  WMS_DECINVBILL_DELETE: "wms:decinvbill:delete",
   /**
    * 溢余单
    */
@@ -393,7 +392,7 @@ export default {
   WMS_INCINVBILL_UPDATE: "wms:incinvbill:update",
   WMS_INCINVBILL_VIEW: "wms:incinvbill:view",
   WMS_INCINVBILL_AUDIT: "wms:incinvbill:audit",
-
+  WMS_INCINVBILL_DELETE: "wms:incinvbill:delete",
   /**
    * 单据类型
    */
