@@ -45,8 +45,8 @@
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="存储类型" prop="stockType">
                                           <el-select v-model="form.stockType" placeholder="请选择存储类型">
-                                            <el-option label="CASE" value="CASE"></el-option>
-                                            <el-option label="SPLIT" value="SPLIT"></el-option>
+                                            <el-option label="整箱" value="CASE"></el-option>
+                                            <el-option label="拆零" value="SPLIT"></el-option>
                                           </el-select>
                                         </el-form-item>
                                     </el-col>
@@ -85,11 +85,11 @@
                             </el-col>
                             <el-col :span="6" class="info-box">
                                 <div>存储类型:</div>
-                                <div>{{ suppliersInfo.stockType }}</div>
+                                <div>{{ suppliersInfo.stockType |stockTypeChange }}</div>
                             </el-col>
                             <el-col :span="6" class="info-box">
                                 <div>上架规则:</div>
-                                <div>{{ suppliersInfo.putawayRule }}</div>
+                                <div>{{ suppliersInfo.putawayRule | putawayRuleChange }}</div>
                             </el-col>
                         </el-tab-pane>
                     <el-tab-pane label="操作日志" name="operational">
@@ -112,7 +112,7 @@
           >
             <el-table-column prop="name" label="存储分区">
                 <template slot-scope="scope">
-                    <span style="color:#409EFF">{{ scope.row.name }}</span>
+                    <span style="color:#409EFF">{{ '[' + scope.row.code + ']' +  scope.row.name }}</span>
                 </template>
             </el-table-column>
             <el-table-column prop="orderNumber" label="顺序">
@@ -135,7 +135,7 @@
           >
             <el-table-column prop="name" label="存储分区">
                 <template slot-scope="scope">
-                     <span style="color:#409EFF">{{ scope.row.name }}</span>
+                     <span style="color:#409EFF">{{ '[' + scope.row.code + ']' + scope.row.name }}</span>
                 </template>
             </el-table-column>
             <el-table-column prop="orderNumber" label="顺序">
@@ -295,8 +295,8 @@ export default {
           code: '',
           name: '',
           binScope: '',
-          stockType: "",
-          putawayRule: "",
+          stockType: '',
+          putawayRule: '',
           storageList: []
         },
         suppliersInfo: {}, 
@@ -343,6 +343,7 @@ export default {
         if (this.storageListRead.length > 0) { 
           this.leftSelect.forEach((ele, idx) => {
             const storeObj = {};
+            storeObj.code = ele.code;
             storeObj.name = ele.name;
             storeObj.storageId = ele.id;
             storeObj.orderNumber = this.storageListReadLength + idx;
@@ -550,6 +551,24 @@ export default {
     },
      computed: {
        ...mapGetters(["hasPermission", "workingOrg"])
+    },
+    filters: {
+      stockTypeChange(type) {
+      switch (type) {
+        case "CASE":
+          return "整箱"
+        case "SPLIT":
+          return "拆零"
+      }
+      },
+      putawayRuleChange(status) {
+        switch (status) {
+          case "T":
+            return "T型"
+          case "STACK":
+            return "地堆"
+        }
+      }
     }
 };
 </script>
