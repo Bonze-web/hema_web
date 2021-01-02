@@ -11,13 +11,13 @@
           <el-input type="text" placeholder="请输入货位" v-model="form.containerBarcodeLike" class="input-width" ></el-input>
         </el-form-item>
 
-        <!-- 申请单状态等于：APPLYING申请中、PASS审核通过、NO_PASS审核拒绝 -->
+        <!-- 申请单状态等于：APPLYING申请中、PASS审核通过、NO_PASS作废 -->
         <el-form-item label="状态：">
           <el-select v-model="form.status" placeholder="请选择状态" class="input-width" >
             <el-option value="" label="全部"></el-option>
             <el-option value="APPLYING" label="申请中"></el-option>
             <el-option value="PASS" label="审核通过"></el-option>
-            <el-option value="NO_PASS" label="审核拒绝"></el-option>
+            <el-option value="NO_PASS" label="作废"></el-option>
           </el-select>
         </el-form-item>
 
@@ -215,41 +215,64 @@ export default {
       // 通过
       if (this.activeArr.length === 0) return;
 
-      const arrId = [];
-
-      this.activeArr.forEach(item => {
-        arrId.push(item.id)
+      this.$confirm('此操作将数据状态,是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
       })
+      .then(() => {
+        const arrId = [];
+        const _this = this;
 
-      DemolitionAndService.passUpdateInfoBill(arrId)
-      .then((res) => {
-        console.log(res)
-        // const records = res.records;
-        // this.totalCount = res.totalCount;
-        // _this.listData = records;
-      }).catch(err => {
-        this.$message.error("审核失败" + err.message)
-      });
+        this.activeArr.forEach(item => {
+          arrId.push(item.id)
+        })
+
+        DemolitionAndService.passUpdateInfoBill(arrId)
+        .then((res) => {
+          this.$message.success("操作成功")
+          _this.stockUpdateInfoBillQuery()
+        }).catch(err => {
+          this.$message.error("操作失败" + err.message)
+        });
+        })
+      .catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消'
+        })        
+      })
     },
     toVoid() {
       // 作废
       if (this.activeArr.length === 0) return;
-
       const arrId = [];
+      const _this = this;
 
-      this.activeArr.forEach(item => {
-        arrId.push(item.id)
+      this.$prompt('请输入作废备注', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消'
+        })
+        .then(({ value }) => {
+          this.activeArr.forEach(item => {
+            arrId.push(item.id)
+          })
+
+          DemolitionAndService.noPassUpdateInfoBill(arrId)
+          .then((res) => {
+            this.$message.success("操作成功")
+            _this.stockUpdateInfoBillQuery()
+          })
+          .catch(err => {
+            this.$message.error("操作失败" + err.message)
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消'
+        }); 
       })
-
-      DemolitionAndService.noPassUpdateInfoBill()
-      .then((res) => {
-        console.log(res)
-        // const records = res.records;
-        // this.totalCount = res.totalCount;
-        // _this.listData = records;
-      }).catch(err => {
-        this.$message.error("审核失败" + err.message)
-      });
     }
   },
   created() {
@@ -263,14 +286,14 @@ export default {
   },
   filters: {
     setStatus(type) {
-      // 申请单状态：APPLYING申请中、PASS审核通过、NO_PASS审核拒绝
+      // 申请单状态：APPLYING申请中、PASS审核通过、NO_PASS作废
       switch (type) {
         case 'APPLYING':
           return "申请中"
         case 'PASS':
           return "审核通过"
         case 'NO_PASS':
-          return "审核拒绝"
+          return "作废"
         default:
           return '未知';
       }

@@ -7,7 +7,7 @@
             <div>
                 <el-button @click="back">取消</el-button>
                 <el-button type="primary" @click="confirm">保存</el-button>
-                <el-button type="primary" @click="toExamine">保存并审核</el-button>
+                <el-button type="primary" @click="confirm('审核')">保存并审核</el-button>
             </div>
         </div>
         <div style="height:20px" />
@@ -236,15 +236,15 @@ export default {
         this.$store.dispatch("tagsView/delView", this.$route);
         this.$router.go(-1)
       },
-      confirm() {
+      confirm(toExamine) {
         // 保存
-        console.log(this.dataList)
         if (this.dataList.length === 0) {
           this.$message.error("没有数据可以保存")
           return
         }
 
         const arr = [];
+        const _this = this;
 
         this.dataList.forEach((item) => {
           const obj = {
@@ -268,11 +268,31 @@ export default {
 
         DemolitionAndService.createUpdateInfoBill(arr)
         .then(res => {
-          this.$message.success("保存成功")
+          this.$message.success("操作成功")
           this.$router.push('/wrhmanagement/adjustinfo')
+          _this.$store.state.adjustinfo.multipleSelection = [];
+          if (toExamine !== '审核') return;
+          // 审核通过========================================
+
+          setTimeout(() => {
+            const arrId = [];
+
+            arr.forEach(item => {
+              arrId.push(item.stockId)
+            })
+
+            DemolitionAndService.passUpdateInfoBill(arrId)
+            .then((res) => {
+              this.$message.success("操作成功")
+              _this.stockUpdateInfoBillQuery()
+            }).catch(err => {
+              this.$message.error("操作失败" + err.message)
+            });
+          }, 500)
+          // 审核通过========================================
         })
         .catch(err => {
-          this.$message.error("保存失败" + err.message)
+          this.$message.error("操作失败" + err.message)
         })
       },
       calcProduct: function(name, index) {
@@ -280,10 +300,6 @@ export default {
           this.$message.error('请输入正确数据')
           this.dataList[index][name] = 0;
         }
-      },
-      toExamine() {
-        // 保存并审核
-        // 
       },
       deleteProduct(index) {
         this.deleteSelection(index)

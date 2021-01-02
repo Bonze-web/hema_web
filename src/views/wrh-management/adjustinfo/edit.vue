@@ -2,413 +2,280 @@
     <div>
         <div class="head">
             <div class="head-title">
-                <div style="margin:8px">盘点单</div>
+                <div style="margin:8px">{{ '[' + dataList.wrhCode  +']' + dataList.wrhName  }}</div>
+                <div style="margin:11px 0 5px 0; font-size: 12px; color: #999">{{ dataList.status | setStatus }}</div>
             </div>
             <div>
                 <el-button @click="back">返回</el-button>
-                <el-button type="primary" @click="editSupplier" >编辑</el-button>
-                <el-button type="primary" @click="editSupplierStart" v-if="inventoryStatus === 'start'">开始盘点</el-button>
-                <el-button type="primary" @click="editSupplierEnd" v-if="inventoryStatus === 'end'">结束盘点</el-button>
-                <el-button type="primary" @click="leadingChange">导入实盘数</el-button>
-                <el-button type="primary" v-if="changeOne === 'INVENTORY_LOSS_SURPLUS'">转为损耗溢余</el-button>
-                <el-button type="primary" v-if="changeOne === 'MOVE_BILL'">转为移库单</el-button>
+                <!-- <el-button type="primary"  @click="printingBtn">打印</el-button> -->
             </div>
         </div>
         <div style="height:20px" />
-        <div class="info-content">
+
+        <!-- 编辑 -->
+        <!-- <div class="info-content" v-if="status === 'create' || status === 'edit'">
             <div>
                 <template>
                     <el-tabs v-model="tabActiveName">
-                        <el-tab-pane label="盘点单详情" name="suppliers">
-                            <div class="info-title">基本信息</div>
-                            <el-col :span="6" class="info-box">
-                                <div>盘点单号:</div>
-                                <div>{{ suppliersInfo.billNumber }}</div>
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>创建人:</div>
-                                <div>{{ suppliersInfo.creatorName }}</div>
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>创建时间:</div>
-                                <div>{{ suppliersInfo.createTime }}</div>
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>货位范围:</div>
-                                <div>{{ suppliersInfo.binRange }}</div>
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>货位用途:</div>
-                                <div>{{ suppliersInfo.binUsage }}</div>
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>操作方式:</div>
-                                <div>{{ suppliersInfo.operationMode | handleStatus}}</div>
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>实盘默认值:</div>
-                                <div>{{ suppliersInfo.realDefaultQuantity | planStatus}}</div>
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>状态:</div>
-                                <div>{{ suppliersInfo.status | showStatus}}</div>
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>修改时间:</div>
-                                <div>{{ suppliersInfo.updateTime}}</div>
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>修改人:</div>
-                                <div>{{ suppliersInfo.updatorName}}</div>
-                            </el-col>
+                        <el-tab-pane label="货位类型" name="category">
+                          <div class="info-title">基本信息</div>
+                            <el-form :model="form" :rules="createRules" ref="form" label-width="100px" class="demo-ruleForm">
+                                <el-row :gutter="20">
+                                    <el-col :span="6" class="info-box">
+                                        <el-form-item label="代码" prop="code">
+                                            <el-input v-model="form.code"></el-input>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="6" class="info-box">
+                                        <el-form-item label="名称" prop="name">
+                                            <el-input v-model="form.name"></el-input>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="6" class="info-box">
+                                      <el-form-item label="存储盘数" prop="storageNumber">
+                                          <el-input v-model="form.storageNumber"></el-input>
+                                      </el-form-item>
+                                    </el-col>
+                                </el-row>
+                                <el-form-item label="备注" prop="remark">
+                                    <textarea v-model="form.remark"></textarea>
+                                </el-form-item>
+
+                             <div class="info-title">规格信息</div>
+
+                                <el-row :gutter="20">
+                                    <el-col :span="6" class="info-box">
+                                        <el-form-item label="长度(cm)" prop="length">
+                                            <el-input v-model="form.length"></el-input>
+                                        </el-form-item>
+                                    </el-col>
+
+                                    <el-col :span="6" class="info-box">
+                                        <el-form-item label="宽度(cm)" prop="widht">
+                                            <el-input v-model="form.widht"></el-input>
+                                        </el-form-item>
+                                    </el-col>
+
+                                    <el-col :span="6" class="info-box">
+                                      <el-form-item label="高度(cm)" prop="height">
+                                          <el-input v-model="form.height"></el-input>
+                                      </el-form-item>
+                                    </el-col>
+
+                                    <el-col :span="6" class="info-box">
+                                      <el-form-item label="承重(kg)" prop="weight">
+                                          <el-input v-model="form.weight"></el-input>
+                                      </el-form-item>
+                                    </el-col>
+
+                                    <el-col :span="6" class="info-box">
+                                      <el-form-item label="容积率(%)" prop="plotRatio">
+                                          <el-input v-model="form.plotRatio"></el-input>
+                                      </el-form-item>
+                                    </el-col>
+                                </el-row>
+                            </el-form>
                         </el-tab-pane>
                     </el-tabs>
                 </template>
             </div>
-        </div>
-        <div style="height:20px;background:#fff" />
-        <div class="info-content">
+        </div> -->
+
+
+        <!-- 展示 -->
+        <div class="info-content table-index _table-index">
             <div>
                 <template>
-                    <el-tabs v-model="detailed">
-                          <el-tab-pane label="盘点行明细" name="suppliers">
-                            <div style="background:#fff" class="table-index">
-                            <!-- <el-row>
-                                <div style="padding:15px">
-                                  对应存储分区
-                                </div>
-                            </el-row> -->
-                            <el-table
-                                :data="storageList"
-                                style="width: 100%;text-align:center"
-                            >
-                             <el-table-column prop="lineNumber" label="行号">
-                                  <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.lineNumber}}</span>
-                                  </template>
+                    <el-tabs v-model="tabActiveName">
+                        <el-tab-pane label="收货装箱单" name="category">
+                            <div class="info-title">基本信息</div>
+                            <el-col :span="6" class="info-box">
+                                <div>供应商:</div>
+                                <div>{{ '[' + dataList.vendorCode + ']' + dataList.vendorName }}</div>
+                            </el-col>
+                            <el-col :span="6" class="info-box">
+                                <div>物流方式:</div>
+                                <div>{{ dataList.logisticMode | setLogisticMode }}</div>
+                            </el-col>
+
+                            <el-col :span="6" class="info-box">
+                                <div>到效日期:</div>
+                                <div>{{ dataList.endReceiveTime }}</div>
+                            </el-col>
+
+                            <el-col :span="6" class="info-box">
+                                <div>送达日期:</div>
+                                <div>{{ dataList.updateTime ? dataList.updateTime : "&lt;空&gt;" }}</div>
+                            </el-col>
+
+                            <el-col :span="6" class="info-box">
+                                <div>入库订单单号:</div>
+                                <div>{{dataList.orderBillNumber}}</div>
+                            </el-col>
+
+                            <el-col :span="6" class="info-box">
+                                <div>收货方式:</div>
+                                <div>{{ dataList.method | setMethod }}</div>
+                            </el-col>
+
+                            <el-col class="info-box">
+                                <div>备注:</div>
+                                <div>{{ dataList.remark ? dataList.remark : "&lt;空&gt;" }}</div>
+                            </el-col>
+
+
+                            <el-col>
+                                <div  class="info-title title">子容器</div>
+                            </el-col>
+                            <el-input type="text" v-model="iptVal" placeholder="请输入商品编号" class="input-width" ></el-input>
+                            <el-button type="primary" size="mini" @click="onSubmit" >立即搜索</el-button>
+
+                            <div style="height:20px" />
+
+                            <el-table :data="orderBillItems" style="width: 100%; text-align: center" :row-style="{ height: '16px', padding: '-4px' }" >
+                              <el-table-column type="index" label="序号"></el-table-column>
+
+                              <el-table-column prop="billNumber" label="商品编码" style="height: 20px"></el-table-column>
+                              <el-table-column prop="productName" label="商品名称" style="height: 20px"></el-table-column>
+                              <el-table-column prop="munit" label="单位" style="height: 20px"></el-table-column>
+                              <el-table-column prop="spec" label="规格" style="height: 20px"></el-table-column>
+
+                              <el-table-column prop="qtystr" label="收货件数" style="height: 20px"></el-table-column>
+ 
+                              <el-table-column prop="qty" label="收货数量" style="height: 20px"></el-table-column>
+
+                              <el-table-column prop="productDate" label="生产日期" style="height: 20px"></el-table-column>
+
+
+                              <el-table-column prop="validDate" label="到效日期" style="height: 20px"></el-table-column>
+
+                              <el-table-column prop="scope" label="保质天数" style="height: 20px">
+                                <template slot-scope="scope">
+                                  {{ scope.row.shelfLifeDays }}天
+                                </template>
                               </el-table-column>
-                              <el-table-column prop="vendorCode" label="供应商编号">
-                                  <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.binCode }}</span>
-                                  </template>
-                              </el-table-column>
-                              <el-table-column prop="vendorName" label="供应商名称">
-                                  <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.binCode }}</span>
-                                  </template>
-                              </el-table-column>
-                              <el-table-column prop="binUsage" label="货位用途">
-                                  <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.binUsage }}</span>
-                                  </template>
-                              </el-table-column>
-                              <el-table-column prop="containerBarcode" label="来源容器">
-                                  <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.containerBarcode }}</span>
-                                  </template>
-                              </el-table-column>
-                              <el-table-column prop="diversityQuantity" label="差异数量">
-                                  <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.diversityQuantity }}</span>
-                                  </template>
-                              </el-table-column>
-                              <el-table-column prop="diversityQuantityStr" label="差异件数">
-                                  <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.diversityQuantityStr }}</span>
-                                  </template>
-                              </el-table-column>
-                              <el-table-column prop="handleResult" label="处理结果">
-                                  <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.handleResult | showHandleResult}}</span>
-                                  </template>
-                              </el-table-column>
-                              <el-table-column prop="lineNumber" label="处理结果">
-                                  <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.lineNumber}}</span>
-                                  </template>
-                              </el-table-column>
-                              <el-table-column prop="productCode" label="商品代码">
-                                  <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.productCode}}</span>
-                                  </template>
-                              </el-table-column>
-                              <el-table-column prop="productName" label="商品名称">
-                                  <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.productName}}</span>
-                                  </template>
-                              </el-table-column>
-                              <el-table-column prop="productPrice" label="商品单件">
-                                  <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.productPrice}}</span>
-                                  </template>
-                              </el-table-column>
-                              <el-table-column prop="productSpec" label="商品规格">
-                                  <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.productSpec}}</span>
-                                  </template>
-                              </el-table-column>
-                              <el-table-column prop="productUnit" label="商品单位">
-                                  <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.productUnit}}</span>
-                                  </template>
-                              </el-table-column>
-                              <el-table-column prop="productVolume" label="商品体积">
-                                  <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.productVolume}}</span>
-                                  </template>
-                              </el-table-column>
-                              <el-table-column prop="productWeight" label="商品重量">
-                                  <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.productWeight}}</span>
-                                  </template>
-                              </el-table-column>
-                              <el-table-column prop="productionBatch" label="批号">
-                                  <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.productionBatch}}</span>
-                                  </template>
-                              </el-table-column>
-                              <el-table-column prop="stockBatch" label="批次">
-                                  <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.stockBatch}}</span>
-                                  </template>
-                              </el-table-column>
-                              <el-table-column prop="productionDate" label="生产日期">
-                                  <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.productionDate}}</span>
-                                  </template>
-                              </el-table-column>
-                              <el-table-column prop="validDate" label="到效日期">
-                                  <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.validDate}}</span>
-                                  </template>
-                              </el-table-column>
-                              <el-table-column prop="qpcStr" label="规格">
-                                  <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.qpcStr}}</span>
-                                  </template>
-                              </el-table-column>
-                              <el-table-column prop="quantity" label="数量">
-                                  <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.quantity}}</span>
-                                  </template>
-                              </el-table-column>
-                              <el-table-column prop="quantityStr" label="件量">
-                                  <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.quantityStr}}</span>
-                                  </template>
-                              </el-table-column>
-                              <el-table-column prop="snapQuantity" label="快照数量">
-                                  <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.snapQuantity}}</span>
-                                  </template>
-                              </el-table-column>
-                              <el-table-column prop="snapQuantity" label="快照数量">
-                                  <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.snapQuantity}}</span>
-                                  </template>
-                              </el-table-column>
-                              <el-table-column prop="status" label="状态">
-                                  <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.status | showStatusActive}}</span>
-                                  </template>
-                              </el-table-column>
+
                             </el-table>
-                            </div>
-                          </el-tab-pane>
-                          <el-tab-pane label="操作日志" name="operational">
-                                <system-log :modular="'PICKAREA'"></system-log>
-                          </el-tab-pane>
+                        </el-tab-pane>
+
+                        <!-- <el-tab-pane label="操作日志" name="active">
+                          <el-table :data="dataList.sonList" style="width: 100%; text-align: center" :row-style="{ height: '16px', padding: '-4px' }" >
+
+                            <el-table-column prop="a" label="操作时间" style="height: 20px">
+                              <template slot-scope="scope">
+                                  <span>条码{{ scope.row.a }}</span>
+                              </template>
+                            </el-table-column>
+
+                            <el-table-column prop="b" label="操作类型" style="height: 20px">
+                              <template slot-scope="scope">
+                                  <span>容器类型{{ scope.row.b }}</span>
+                            </el-table-column>
+
+                            <el-table-column prop="c" label="事件">
+                              <template slot-scope="scope">
+                                {{ scope.row.c }}
+                              </template>
+                            </el-table-column>
+
+                            <el-table-column prop="d" label="修改">
+                              <template slot-scope="scope">
+                                {{ scope.row.d }}
+                              </template>
+                            </el-table-column>
+
+                          </el-table>
+                        </el-tab-pane> -->
                     </el-tabs>
                 </template>
             </div>
         </div>
-        <el-dialog title="收货地址" :visible.sync="Actual">
-          <el-upload
-            ref="upload"
-            auto-upload="false"
-            class="upload-demo"
-            :on-preview="handlePreview"
-            action="/wms/api/sys/user/getLoginUser"
-            :on-remove="handleRemove"
-            :before-remove="beforeRemove"
-            multiple
-            :limit="3"
-            :on-exceed="handleExceed"
-            :file-list="fileList">
-            <el-button size="small" type="primary">点击上传</el-button>
-            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-          </el-upload>
-          <div style="padding-top: 20px;">
-            <el-link type="primary">下载模块</el-link>
-          </div>
-          <div slot="footer" class="dialog-footer">
-            <el-button @click="Actual = false">取 消</el-button>
-            <el-button type="primary" @click="upClick">确 定</el-button>
-          </div>
-        </el-dialog>
     </div>
 </template>
 
 <script>
-// import InventoryService from "@/api/service/InventoryService";
-import systemLog from "@/components/systemLog.vue"
-// import PermIds from "@/api/permissionIds";
-// import { mapGetters } from "vuex";
+import DemolitionAndService from "@/api/service/DemolitionAndService";
+
 export default {
   data() {
       return {
-        Actual: false,
-        inventoryStatus: "start",
-        tabActiveName: 'suppliers',
-        detailed: 'suppliers',
-        changeOne: 'INVENTORY_LOSS_SURPLUS',
-        changeTwo: '',
-        id: '',
-        suppliersInfo: {
-          billNumber: '',
-          binRange: '',
-          binUsage: '',
-          createTime: '',
-          creatorName: '',
-          operationMode: '',
-          planDate: '',
-          realDefaultQuantity: '',
-          status: ''
-
-        },
-        fileList: [],
-        storageList: []
-        // PermIds: PermIds,
+        tabActiveName: 'category', // tab栏名称
+        id: '', // 货位类别ID
+        iptVal: '', // 搜索
+        dataList: {}, // 详情数据
+        orderBillItems: []
       }
     },
+    computed: {
+    },
     methods: {
-      upClick() {
-        console.log(this.$refs.upload)
-      },
-      handleRemove(file, fileList) {
-        console.log(file, fileList);
-      },
-      handlePreview(file) {
-        console.log(file);
-      },
-      handleExceed(files, fileList) {
-        this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
-      },
-      beforeRemove(file, fileList) {
-        return this.$confirm(`确定移除 ${file.name}？`);
-      },
-      leadingChange() {
-        this.Actual = true;
-      },
-      editSupplier() {
-        this.$router.push({name: 'InventoryAdd', query: { suppliersInfo: this.suppliersInfo, status: 'edit'}});
-      },
-      editSupplierStart() {
-        this.inventoryStatus = "end";
-        // InventoryService.startInventory(this.id)
-        // .then((res) => {
-        //   this.$message.success("开始盘点");
-        // }).catch((err) => {
-        //   this.$message.error("开始盘点失败" + err.message)
-        // })
-        console.log("这里是开始盘点");
-      },
-      editSupplierEnd() {
-        this.inventoryStatus = "start";
-        // InventoryService.closeInventory(this.id)
-        // .then((res) => {
-        //   this.$message.success("结束盘点");
-        // }).catch((err) => {
-        //   this.$message.error("结束盘点失败" + err.message)
-        // })
-        // console.log("这里是结束盘点");
-      },
       back: function() {
         this.$store.dispatch("tagsView/delView", this.$route);
         this.$router.go(-1)
       },
-      // 弹出界面的方法
-      handleSizeChangeOne(e) {
-        this.mySelfPageSize = Number(e)
-        this.mySelfPage = 1
-      },
-      handleCurrentChangeOne(e) {
-        for (let i = 0; i < this.leftSelect.length; i++) {
-          this.leftSelected.push(this.leftSelect[i]);
+      onSubmit() {
+        if (this.iptVal === '') {
+          this.orderBillItems = this.dataList.items
+        } else {
+          this.orderBillItems = this.dataList.items.filter((item) => {
+            return item.billNumber.indexOf(this.iptVal) !== -1
+          })
         }
-        this.mySelfPage = Number(e);
       },
-      getDetail() {
-        // InventoryService.getLossBillDetail(this.id)
-        // .then((res) => {
-        //   console.log(res);
-        // }).catch((err) => {
-        //   this.$message.error("获取详情失败" + err.message)
-        // })
+      billUpdateInfoBill() {
+        this.id = this.$route.query.id;
+
+        DemolitionAndService.billUpdateInfoBill(this.id)
+        .then(res => {
+          console.log(res)
+          // this.dataList = res;
+          // this.orderBillItems = res.items;
+        })
+        .catch(err => {
+          this.$message.error("查询失败" + err.message)
+        });
+      },
+      printingBtn() {
+        this.$message.error("打印功能还未开通")
       }
     },
     created() {
-      this.id = this.$route.query.id;
-      // this.getDetail();
-    },
-    components: {
-      "system-log": systemLog
+      this.billUpdateInfoBill()
     },
     filters: {
-      handleStatus(status) {
-      switch (status) {
-        case "MANUALBILL":
-          return "手工单据"
-        case "HANDTERMINAL":
-          return "手持终端"
-      }
-      },
-      showStatus(status) {
+      setStatus(status) {
+        // 状态。INITIAL:初始，RECEIVED:暂存，PUTAWAY:上架完成
         switch (status) {
-          case "INITIAL":
+          case 'INITIAL':
             return "初始"
-          case "INPROGRESS":
-            return "进行中"
-          case "FINISHED":
-            return "已完成"
-          case "ABORTED":
-            return "已作废"
+          case 'RECEIVED':
+            return "暂存"
+          case 'PUTAWAY':
+            return "上架完成"
+          default:
+            return '未知';
         }
       },
-      showtakeSchema(status) {
-        switch (status) {
-          case "BLINDTAKE":
-            return "盲盘"
-          case "BRIGHTTAKE":
-            return "明盘"
+      // 收货方式，MANUAL：手工单据，RF：手持终端
+      setMethod(method) {
+        switch (method) {
+          case 'MANUAL':
+            return "手工单据"
+          case 'RF':
+            return "手持终端"
+          default:
+            return '未知';
         }
       },
-      planStatus(status) {
-        switch (status) {
-          case "ZERO":
-            return "按照0处理"
-          case "EQUAL_INVENTORY":
-            return "按照等同于库存处理"
-        }
-      },
-      showHandleResult(status) {
-        switch (status) {
-          case "INVENTORY_LOSS":
-            return "盘亏"
-          case "INVENTORY_PROFIT":
-            return "盘盈"
-          case "MOVE_BILL":
-            return "移库"
-        }
-      },
-      showStatusActive(status) {
-        switch (status) {
-          case "NORMAL":
-            return "正常"
-          case "HANDLED":
-            return "已处理"
-          case "UNHANDLED":
-            return "未处理"
+      // 物流模式，UNIFY：统配、CROSS：越库
+      setLogisticMode(logisticMode) {
+        switch (logisticMode) {
+          case 'UNIFY':
+            return "统配"
+          case 'CROSS':
+            return "越库"
+          default:
+            return '未知';
         }
       }
     }
@@ -417,50 +284,6 @@ export default {
 
 <style lang="scss" scoped>
 @import "src/styles/mixin.scss";
-.pop-up-pag {
-  position: absolute;
-  left: 50%;
-  margin-top: -300px;
-  transform: translateX(-50%);
-  background-color: skyblue;
-  width: 800px;
-  // height: 600px;
-  display: flex;
-  justify-content: space-between;
-  .right-popstorge,
-  .left-popstorge {
-    .count-tatle{
-      padding: 10px;
-      font-size: 12px;
-    }
-    .center-pag {
-      padding: 0 10px;
-    }
-    .list-pop-ui {
-      margin: 0;
-      li {
-        display: flex;
-        align-items: center;
-        padding: 20px;
-        .content-checked-one {
-          font-size: 12px;
-        }
-      }
-    }
-    border: #E4E7ED solid 1px;
-    width: 350px;
-    height: 600px;
-  }
-  .right-popstorge {
-    margin-left: 20px;
-  }
-  .left-popstorge {
-    margin-right: 20px;
-  }
-  ul {
-    list-style: none;
-  }
-}
 .head{
     background: #fff;
     padding: 15px 12px;
@@ -487,77 +310,14 @@ export default {
 .info-title{
     margin: 12px 0;
 }
-// 弹出框
-/deep/ .el-transfer-panel {
-  height : 100% !important;
-}
-/deep/ .el-transfer__buttons .el-button {
-  display: block;
-  margin: 10px auto;
-}
-/deep/ .el-transfer__buttons {
-  padding: 0 10px;
-}
 
-
-.shuttle-box {
-  margin-top: -10vh !important;
-  /deep/ .el-dialog {
-    min-width: 670px;
-    width: 70%;
-  }
-  .shuttle {
-    width: 100%;
-    height: 530px;
-    display: flex;
-    justify-content: space-between;
-    border: 1px solid #eee;
-    border-radius: 10px;
-    .shuttle-left {
-      border-radius: 10px;
-      // width: 250px;
-      flex: 1;
-      .shuttle-left-header {
-        text-align: left;
-        padding: 10px 20px 10px 20px;
-        border-bottom: 1px solid #eee;
-        margin-bottom: 10px;
-      }
-    }
-    .shuttle-center {
-      margin : 0 10px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
-    .shuttle-right {
-      border-radius: 10px;
-      .shuttle-right-header {
-        text-align: left;
-        padding: 10px 20px 10px 20px;
-        border-bottom: 1px solid #eee;
-        margin-bottom: 10px;
-      }
-      // width: 250px;
-      flex: 1;
-    }
-    /deep/ .block {
-      margin-top: 10px;
-    }
-    /deep/ .el-input__prefix {
-      width: 30px;
-      left: calc(100% - 30px);
-    }
-    /deep/ .el-input--prefix .el-input__inner {
-      padding-left: 20px;
-    }
-  }
-}
 </style>
 <style lang="scss">
-.table-index{
-@import "src/styles/mixin.scss";
-@include elTable;
+.table-index {
+  @import "src/styles/mixin.scss";
+  @include elTable;
+}
+._table-index .el-table .cell{
+  padding: 7px 0;
 }
 </style>

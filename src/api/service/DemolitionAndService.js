@@ -56,20 +56,34 @@ export default {
   /**
    * 审核通过
    */
-  passUpdateInfoBill(ids) {
-    return request.get('/stock/updateInfoBill/pass', { params: ids })
+  passUpdateInfoBill(arr) {
+    let list = '';
+    arr.forEach(item => {
+      list += `ids=${item}&`
+    });
+    return request.get('/stock/updateInfoBill/pass?' + list)
   },
   /**
    * 审核作废
    */
-  noPassUpdateInfoBill(opt) {
-    return request.get('/stock/updateInfoBill/noPass', { params: opt })
+  noPassUpdateInfoBill(arr) {
+    let list = '';
+    arr.forEach(item => {
+      list += `ids=${item}&`
+    });
+    return request.get('/stock/updateInfoBill/noPass?' + list)
   },
   /**
    * 查询供应商
    */
   productSupplierQuery(opt) {
     return request.get('/product/productSupplier/query', { params: opt })
+  },
+  /**
+   * 查询库存信息修改申请单详情
+   */
+  billUpdateInfoBill(id) {
+    return request.get('/stock/updateInfoBill/getById?id=' + id)
   }
 
   /**
