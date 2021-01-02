@@ -126,6 +126,16 @@ export default {
             return "未知"
         }
       }
+      // moveType(type) {
+      //   switch (type) {
+      //     case "SURPLUSSOW":
+      //       return ""
+      //       break;
+        
+      //     default:
+      //       break;
+      //   }
+      // }
     }
 };
 </script>
