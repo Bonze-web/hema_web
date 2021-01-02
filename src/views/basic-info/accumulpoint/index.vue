@@ -1,19 +1,23 @@
 <template>
-    <div class="table-index _table-index">        
+    <div class="table-index">        
         <div class="select-head">
-            <el-form ref="form" style="display:flex" :model="form" label-width="110px" label-position="right">
+            <el-form ref="form" style="display:flex; flex-wrap:wrap;" :model="form" label-width="110px" label-position="right">
                 <el-form-item label="团点">
                     <el-input type='text' placeholder="请输入代码/名称" v-model="form.codeOrNameEquals" class="input-width"></el-input>
                 </el-form-item>
+
                 <el-form-item label="联系人">
                     <el-input type='text' placeholder="请输入手机号/姓名" v-model="form.contactorNameOrMobileLikes" class="input-width"></el-input>
                 </el-form-item>
+
                 <el-form-item label="地址">
                     <el-input type='text' placeholder="请输入地址" v-model="form.addressLikes" class="input-width"></el-input>
                 </el-form-item>
+
                 <el-form-item label="网格仓">
                     <el-input type='text' placeholder="请输入网格仓" v-model="form.secondCodeOrNameLikes" class="input-width"></el-input>
                 </el-form-item>
+
                 <el-form-item label="来源">
                   <el-select v-model="form.sourceWayEquals" placeholder="请选择来源">
                     <el-option label="手工新建" value="MANUAL"></el-option>
@@ -21,19 +25,21 @@
                     <el-option label="文件导入" value="EXCEL"></el-option>
                   </el-select>
                 </el-form-item>
+
                 <el-form-item>
                     <el-button type="primary" size="mini" @click="onSubmit">查询</el-button>
                     <el-button size="mini"  @click="clearInput">重置</el-button>
                 </el-form-item>
+
             </el-form>
         </div>
-        <div style="height:20px" />
+        <div style="height:20px;background:#fff"/>
         <div style="background:#fff">
-          <el-row>
+          <!-- <el-row>
             <router-link :to="{ path: '/storageinfo/personnelbind/add', query:{ status: 'create'} }">
               <el-button style="margin:18px 10px" type="primary" size="mini" v-if="hasPermission(PermIds.WMS_USER_PICKAREA_CREATE) && workingOrg.type === 'DC'">新建</el-button>
             </router-link>
-          </el-row>
+          </el-row> -->
             <el-table
                 :data="suppliersData"
                 style="width: 100%;text-align:center"
@@ -42,55 +48,36 @@
                     type="selection"
                     width="55">
                 </el-table-column> -->
-                <el-table-column prop="code" label="用户代码">
+                <el-table-column prop="code" label="团点">
                     <template slot-scope="scope">
                         <span>{{ scope.row.userId }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="username" label="用户姓名">
+                <el-table-column prop="username" label="联系人">
                   <template slot-scope="scope">
                         {{ scope.row.username}}
                     </template>
                 </el-table-column>
-                <el-table-column label="主要拣货分区">
+                <el-table-column label="联系电话">
                     <template slot-scope="scope">
                         {{ '[' + scope.row.firstPickareaCode + ']' + scope.row.firstPickareaName}}
                     </template>
                 </el-table-column>
-                <el-table-column label="主要拣货范围">
+                <el-table-column label="地址">
                     <template slot-scope="scope">
                         {{ scope.row.firstBinscope }}
                     </template>
                 </el-table-column>
-                <el-table-column label="辅助拣货分区">
+                <el-table-column label="区块代码">
                     <template slot-scope="scope">
                         {{ '[' + scope.row.secondPickareaCode + ']' + scope.row.secondPickareaName }}
                     </template>
                 </el-table-column>
-                <el-table-column label="辅助拣货范围">
+                <el-table-column label="网格仓">
                     <template slot-scope="scope">
                         {{ scope.row.secondBinscope }}
                     </template>
                 </el-table-column>
-                <el-table-column
-                label="操作"
-                v-if="hasPermission(PermIds.WMS_USER_PICKAREA_UPDATE) && workingOrg.type === 'DC'"
-                >
-                  <template slot-scope="scope">
-                      <!-- <div style="color:#409EFF;cursor:pointer" @click="deleteChange(scope.row.id, scope.row.version)">编辑</div>
-                      <div style="color:#409EFF;cursor:pointer" @click="deleteChange(scope.row.id, scope.row.version)">删除</div> -->
-                    <el-button size="mini" type="text" v-if="hasPermission(PermIds.WMS_USER_PICKAREA_UPDATE)" @click="editChange(scope.row.id)">编辑</el-button>
-                    <el-button size="mini" type="text" v-if="hasPermission(PermIds.WMS_USER_PICKAREA_DELETE)" @click="deleteChange(scope.row.id)">删除</el-button>
-                  </template>
-                </el-table-column>
-                <!-- <el-table-column
-                label="编辑">
-                  <template slot-scope="scope">
-                      <router-link :to="{ path: '/storageinfo/wharf/edit', query:{ status: 'edit', id: scope.row.id} }">
-                            <el-button size="mini" type="text">编辑</el-button>
-                      </router-link>
-                  </template>
-                </el-table-column> -->
             </el-table>
             <!-- 下面这个是翻页 -->
             <el-pagination
@@ -129,46 +116,13 @@ export default {
           addressLikes: '',
           searchCount: true
         },
-        suppliersData: [],
-        multipleSelection: [] // 选择的列表
+        suppliersData: []
       }
   },
   computed: {
     ...mapGetters(["hasPermission", "workingOrg"])
   },
   methods: {
-      editChange(id) {
-       
-      },
-      // 删除按钮
-      deleteChange(id, version) {
-        const _this = this;
-        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning'
-          }).then(() => {
-              // 调用删除的接口,然后分页查询的接口重新渲染页面
-              AccumulpointService.deleteData(id)
-              .then((res) => {
-                _this.$message.success("删除成功")
-                _this.getSuppliersList();
-              }).catch((err) => {
-                console.log(err);
-                if (err === "") {
-                  _this.$message.success("删除成功")
-                } else {
-                  _this.$message.error("删除失败" + err.message)
-                }
-                _this.getSuppliersList();
-              })
-          }).catch(() => {
-            this.$message({
-              type: 'info',
-              message: '已取消删除'
-            });          
-          });
-      },
       // 搜索功能
       onSubmit: function() {
         this.page = 1;
@@ -180,9 +134,11 @@ export default {
       },
       clearInput: function() {
         this.form = {
-          usernameLikes: '',
-          firstCodeOrNameLikes: '',
-          secondCodeOrNameLikes: '',
+          codeOrNameEquals: '',
+          contactorNameOrMobileLikes: '',
+          frontCodeOrNameLikes: '',
+          sourceWayEquals: '',
+          addressLikes: '',
           searchCount: true
         }
       },

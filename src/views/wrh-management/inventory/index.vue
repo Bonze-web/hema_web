@@ -63,6 +63,11 @@
                         </router-link>
                     </template>
                 </el-table-column>
+                <el-table-column prop="operationMode" label="操作方式">
+                  <template slot-scope="scope">
+                    {{ scope.row.operationMode | handleStatus}}
+                  </template>
+                </el-table-column>
                 <el-table-column prop="creatorName" label="创建人">
                   <template slot-scope="scope">
                     {{ scope.row.creatorName }}
@@ -88,11 +93,6 @@
                     {{ scope.row.inventoryHandlingMethod }}
                   </template>
                 </el-table-column> -->
-                <el-table-column prop="operationMode" label="操作方式">
-                  <template slot-scope="scope">
-                    {{ scope.row.operationMode | handleStatus}}
-                  </template>
-                </el-table-column>
                 <el-table-column prop="operationMode" label="计划盘点">
                   <template slot-scope="scope">
                     {{ scope.row.operationMode}}
