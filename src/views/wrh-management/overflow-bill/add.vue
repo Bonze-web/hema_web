@@ -470,6 +470,10 @@ export default {
         }
         _this.$refs.form.validate(valid => {
           if (valid) {
+            if (reset) {
+              _this.form.realTotalAmount = _this.form.totalAmount
+              _this.form.realTotalProductCount = _this.form.totalProductCount
+            }
             BillService.createOverflowBill(this.form)
             .then((res) => {
               _this.$message.success('创建成功')
@@ -540,10 +544,10 @@ export default {
         let consumeQty = 0
         this.productList.forEach(item => {
           item.lineNum = this.productList.indexOf(item) + 1
-          item.consumeAmount = Number(item.consumeQtystr) * item.price + Number(item.consumeQty) * item.price 
+          item.consumeAmount = ((Number(item.consumeQtystr) * (item.price) * item.qpc ? Number(item.consumeQtystr) * (item.price) * item.qpc : 0) + (Number(item.consumeQty) * item.price ? Number(item.consumeQty) * item.price : 0)).toFixed(2) 
           this.form.realTotalAmount += item.consumeAmount
-          consumeQtystr = Number(consumeQtystr) + Number(item.consumeQtystr)
-          consumeQty = Number(consumeQty) + Number(item.consumeQty)
+          consumeQtystr = Number(consumeQtystr) + (Number(item.consumeQtystr) ? Number(item.consumeQtystr) : 0)
+          consumeQty = Number(consumeQty) + (Number(item.consumeQty) ? Number(item.consumeQty) : 0)
           if (Number(item.consumeQty) < 0 || Number(item.consumeQtystr) < 0) {
             this.$message.error('请输入正确的数据')
             consumeQtystr = Number(consumeQtystr) - Number(item.consumeQtystr)
@@ -553,7 +557,7 @@ export default {
           }
           console.log(consumeQty)
           this.form.totalQtystr = consumeQtystr + '+' + consumeQty
-          this.form.totalAmount = Number(this.form.totalAmount) + Number(item.consumeAmount)
+          this.form.totalAmount = (Number(this.form.totalAmount) + Number(item.consumeAmount)).toFixed(2)
           console.log(item)
         });
       },
