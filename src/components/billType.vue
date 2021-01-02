@@ -159,7 +159,7 @@ export default {
     cancelType() {
       this.dialogFormVisible = false
       this.form = {
-        lossType: this.lossType,
+        billType: this.lossType,
         remark: '',
         billName: ''
       }
@@ -175,7 +175,7 @@ export default {
             _this.dialogFormVisible = false
             _this.$message.success('新建成功')
             this.form = {
-              lossType: this.lossType,
+              billType: this.lossType,
               remark: '',
               billName: ''
             }
