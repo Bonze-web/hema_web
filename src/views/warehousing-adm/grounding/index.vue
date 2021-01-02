@@ -156,12 +156,12 @@ export default {
     },
     clearInput: function() {
       this.form = {
-        billNumberLike: '', // 单号
-        receiveBillNumberLike: '', 
-        status: '', // 状态等于
-        sourceContainerBarcodeEquals: '',
-        containerBarcodeEquals: "",
-        putawayerNameLike: "",
+        billNumberLike: '' || null, // 单号
+        receiveBillNumberLike: '' || null, 
+        status: '' || null, // 状态等于
+        sourceContainerBarcodeEquals: '' || null,
+        containerBarcodeEquals: "" || null,
+        putawayerNameLike: "" || null,
         searchCount: true
       };
       this.page = 1;
@@ -175,9 +175,9 @@ export default {
     queryOrderBill: function() {
       this.form.page = this.page;
       this.form.pageSize = this.pageSize;
-      this.form.beginPutawayTimeEnd = this.createTime[0];
-      this.form.beginPutawayTimeStart = this.createTime[1];
-
+      this.form.beginPutawayTimeEnd = this.createTime[0] || null;
+      this.form.beginPutawayTimeStart = this.createTime[1] || null;
+      console.log(this.createTime);
       GroundingService.putwayBillQuery(this.form).then((res) => {
         this.totalCount = res.pageCount;
         res.records.forEach((ele, idx) => {

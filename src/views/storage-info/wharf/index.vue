@@ -59,7 +59,9 @@
                   </template>
                 </el-table-column>
                 <el-table-column
-                label="操作">
+                label="操作"
+                v-if="hasPermission(PermIds.WMS_PICKAREA_UPDATE) && workingOrg.dcId === suppliersData.dcId"
+                >
                   <template slot-scope="scope">
                     <!-- <div class="status-chnage-box">
                         <el-button size="mini" type="text" @click="statusChange(scope.row.status, scope.row.id, scope.row.version)">修改状态</el-button>
@@ -238,7 +240,6 @@ export default {
           //     }]
           // }
           _this.totalCount = res.totalCount;
-          console.log(res.records);
           for (var i = 0; i < res.records.length; i++) {
             console.log(i);
             // 数组循环后,将过去到的值,全部放在suppliersData这个数组中,我要模拟数据也要使用这个数组
@@ -252,8 +253,8 @@ export default {
               version: res.records[i].version,
               // 用途
               usages: res.records[i].usages,
-              status: res.records[i].status
-              
+              status: res.records[i].status,
+              dcId: res.records[i].dcId
             }
             // if (obj.status === "IDLE") {
             //   obj.status = "空闲"
