@@ -3,29 +3,22 @@
     <div class="select-head">
       <el-form ref="form" style="display: flex;flex-wrap:wrap;" :model="form" label-width="180px" label-position="right" >
 
-        <el-form-item label="单号：">
-          <el-input type="text" placeholder="请输入单号" v-model="form.billNumberLike" class="input-width" ></el-input>
-        </el-form-item>
-
-        <el-form-item label="状态：">
-          <el-select v-model="form.statusIn" placeholder="请选择质检状态" class="input-width" >
-            <el-option value="" label="全部"></el-option>
-            <el-option value="INITIAL" label="初始"></el-option>
-            <el-option value="FINISHED" label="已完成"></el-option>
-          </el-select>
-        </el-form-item>
-        <!-- 状态。INITIAL：初始；FINISHED：已完成。 -->
-
         <el-form-item label="商品：">
-          <el-input type="text" placeholder="请输入商品代码/名称" v-model="form.productNameOrCodeLike" class="input-width" ></el-input>
+          <el-input type="text" placeholder="请输入商品或名称" v-model="form.productCodeEqualsOrNameLike" class="input-width" ></el-input>
         </el-form-item>
 
-        <el-form-item label="来源容器：">
-          <el-input type="text" placeholder="请输入容器代码" v-model="form.sourceCodeLike" class="input-width" ></el-input>
+        <el-form-item label="货位：">
+          <el-input type="text" placeholder="请输入货位" v-model="form.containerBarcodeLike" class="input-width" ></el-input>
         </el-form-item>
 
-        <el-form-item label="目标容器：">
-          <el-input type="text" placeholder="请输入容器代码" v-model="form.targetCodeLike" class="input-width" ></el-input>
+        <!-- 申请单状态等于：APPLYING申请中、PASS审核通过、NO_PASS审核拒绝 -->
+        <el-form-item label="状态：">
+          <el-select v-model="form.status" placeholder="请选择状态" class="input-width" >
+            <el-option value="" label="全部"></el-option>
+            <el-option value="APPLYING" label="申请中"></el-option>
+            <el-option value="PASS" label="审核通过"></el-option>
+            <el-option value="NO_PASS" label="审核拒绝"></el-option>
+          </el-select>
         </el-form-item>
 
         <el-form-item>
@@ -39,51 +32,67 @@
 
     <div style="background: #fff;">
       <el-row>
-        <!-- <router-link :to="{ path: '/basicinfo/container/add' }" >
+        <router-link :to="{ path: '/wrhmanagement/adjustinfo/batchAdd'}" >
           <el-button style="margin: 18px 10px" type="primary" size="mini" >新建</el-button>
         </router-link>
 
-        <el-button style="margin: 18px 10px" size="mini" @click="printingBtn" >打印</el-button> -->
-
-        <router-link  :to="{ path: '/wrhmanagement/demolition-and/edit', query:{ id: '20202020' } }" >
-          <el-button style="margin: 18px 10px" type="primary" size="mini" >测试跳往详情页面</el-button>
-        </router-link>
+        <el-button style="margin: 18px 10px" size="mini" @click="adopt" >审核通过</el-button>
+        <el-button style="margin: 18px 10px" size="mini" @click="toVoid" >作废</el-button>
       </el-row>
 
 
-      <el-table :data="listData" style="width: 100%; text-align: center" :row-style="{ height: '16px', padding: '-4px' }" >
-        <!-- <el-table-column type="selection" width="55"></el-table-column> -->
-        <!-- <el-table-column type="index" label="序号"></el-table-column> -->
+      <el-table :data="listData" style="width: 100%; text-align: center" @selection-change="handleSelectionChange" :row-style="{ height: '16px', padding: '-4px' }" >
+        <el-table-column type="selection" width="55"></el-table-column>
 
-        <el-table-column prop="scope" sortable label="单号" style="height: 20px">
+        <el-table-column prop="scope" label="调整单单号" style="height: 20px">
           <template slot-scope="scope">
-            <router-link style="color: #409eff" :to="{ path: '/wrhmanagement/demolition-and/edit', query:{ id: scope.row.id } }" >
-              <span>{{ scope.row.billNumber }}</span>
+            <router-link style="color: #409eff" :to="{ path: '/warehousing-adm/packing/edit', query:{ id: scope.row.id } }" >
+              <span>{{ scope.row.billNumber }}33333333333333</span>
             </router-link>
           </template>
         </el-table-column>
 
-        <el-table-column prop="scope" label="操作员">
+        <el-table-column prop="scope" label="操作人">
           <template slot-scope="scope">
-            {{ scope.row.billOperatorName }}
+            {{ scope.row.applyOptName }}
           </template>
         </el-table-column>
 
-        <el-table-column prop="scope" label="开始拆并时间">
+        <el-table-column prop="scope" label="操作时间">
           <template slot-scope="scope">
-            {{ scope.row.beginReceiveTime ? scope.row.beginReceiveTime : "&lt;空&gt;" }}
+            {{ scope.row.modifiedDate ? scope.row.modifiedDate : "&lt;空&gt;" }}
           </template>
         </el-table-column>
 
-        <el-table-column prop="scope" label="结束拆并时间">
+        <el-table-column prop="scope" label="货位">
           <template slot-scope="scope">
-            {{ scope.row.endReceiveTime ? scope.row.endReceiveTime : "&lt;空&gt;" }}
+            {{ scope.row.binCode ? scope.row.binCode : "&lt;空&gt;" }}
           </template>
         </el-table-column>
 
-        <el-table-column prop="scope" label="状态">
+        <el-table-column prop="scope" label="货位用途">
           <template slot-scope="scope">
-            {{ scope.row.status | setStatus }}
+            {{ scope.row.binUsage ? scope.row.binUsage : "&lt;空&gt;" }}
+          </template>
+        </el-table-column>
+
+        <el-table-column prop="productName" label="商品"></el-table-column>
+
+        <el-table-column prop="scope" label="供应商">
+          <template slot-scope="scope">
+            {{ scope.row.vendorName }}
+          </template>
+        </el-table-column>
+
+        <el-table-column prop="containerBarcode" label="容器条码"></el-table-column>
+
+        <el-table-column prop="scope" label="状态" style="height: 20px">
+          <template slot-scope="scope">{{ scope.row.status | setStatus }}</template>
+        </el-table-column>
+
+        <el-table-column prop="scope" label="规格描述">
+          <template slot-scope="scope">
+            {{ scope.row.updateProductSpec ? scope.row.updateProductSpec : "&lt;空&gt;" }}
           </template>
         </el-table-column>
 
@@ -112,12 +121,11 @@ export default {
   data() {
     return {
       listData: [], // 列表数据
+      activeArr: [], // 选中的数据
       form: {
-        billNumberLike: '', // 单号
-        productNameOrCodeLike: '', // 商品名称或代码
-        sourceCodeLike: '', // 来源容器代码
-        statusIn: '', // 状态在。。之内
-        targetCodeLike: '' // 目标容器代码
+        containerBarcodeLike: '', // 容器码
+        productCodeEqualsOrNameLike: '', // 商品或名称
+        status: '' // 状态
       },
       page: 1,
       pageSize: 10,
@@ -132,17 +140,18 @@ export default {
 
       this.$refs.form.validate((result) => {
         if (result) {
-          _this.queryContainerMergerBill();
+          _this.stockUpdateInfoBillQuery();
         }
       });
     },
+    handleSelectionChange(val) {
+      this.activeArr = val
+    },
     clearInput: function() {
       this.form = {
-        billNumberLike: '', // 单号
-        productNameOrCodeLike: '', // 商品名称或代码
-        sourceCodeLike: '', // 来源容器代码
-        statusIn: '', // 状态在。。之内
-        targetCodeLike: '' // 目标容器代码
+        containerBarcodeLike: '', // 容器码
+        productCodeEqualsOrNameLike: '', // 商品或名称
+        status: '' // 状态
       };
     },
     // putFinish(billNumber, version) {
@@ -157,10 +166,10 @@ export default {
     //       billNumber,
     //       version
     //     }
-    //     DemolitionAndService.finishOrderBill(obj)
+    //     DemolitionAndService.stockUpdateInfoBillQuery(obj)
     //     .then(res => {
     //       this.$message.success("收货成功")
-    //       _this.queryContainerMergerBill()
+    //       _this.stockUpdateInfoBillQuery()
     //     })
     //     .catch(err => {
     //       this.$message.error("收货失败" + err.message)
@@ -172,21 +181,20 @@ export default {
     //     })        
     //   })
     // },
-    queryContainerMergerBill: function() {
+    stockUpdateInfoBillQuery: function() {
       const _this = this;
 
       const data = {
         page: this.page,
         pageSize: this.pageSize,
-        billNumberLike: this.form.billNumberLike, // 单号
-        productNameOrCodeLike: this.form.productNameOrCodeLike, // 商品名称或代码
-        sourceCodeLike: this.form.sourceCodeLike, // 来源容器代码
-        statusIn: this.form.statusIn ? this.form.statusIn : null, // 状态在。。之内
-        targetCodeLike: this.form.targetCodeLike, // 目标容器代码
+        containerBarcodeLike: this.form.containerBarcodeLike, // 容器码
+        productCodeEqualsOrNameLike: this.form.productCodeEqualsOrNameLike, // 商品或名称
+        status: this.form.status ? this.form.status : null, // 状态
         searchCount: true
       };
 
-      DemolitionAndService.queryContainerMergerBill(data).then((res) => {
+      DemolitionAndService.stockUpdateInfoBillQuery(data).then((res) => {
+        console.log(res)
         const records = res.records;
         this.totalCount = res.totalCount;
         _this.listData = records;
@@ -196,34 +204,86 @@ export default {
     },
     handleCurrentChange: function(e) {
       this.page = Number(e);
-      this.queryContainerMergerBill();
+      this.stockUpdateInfoBillQuery(true);
     },
     handleSizeChange: function(e) {
       this.pageSize = Number(e);
       this.page = 1;
-      this.queryContainerMergerBill();
+      this.stockUpdateInfoBillQuery(true);
     },
-    printingBtn() {
-      // this.$message.error("打印功能还未开通")
+    adopt() {
+      // 通过
+      if (this.activeArr.length === 0) return;
+
+      const arrId = [];
+
+      this.activeArr.forEach(item => {
+        arrId.push(item.id)
+      })
+
+      DemolitionAndService.passUpdateInfoBill(arrId)
+      .then((res) => {
+        console.log(res)
+        // const records = res.records;
+        // this.totalCount = res.totalCount;
+        // _this.listData = records;
+      }).catch(err => {
+        this.$message.error("审核失败" + err.message)
+      });
+    },
+    toVoid() {
+      // 作废
+      if (this.activeArr.length === 0) return;
+
+      const arrId = [];
+
+      this.activeArr.forEach(item => {
+        arrId.push(item.id)
+      })
+
+      DemolitionAndService.noPassUpdateInfoBill()
+      .then((res) => {
+        console.log(res)
+        // const records = res.records;
+        // this.totalCount = res.totalCount;
+        // _this.listData = records;
+      }).catch(err => {
+        this.$message.error("审核失败" + err.message)
+      });
     }
   },
   created() {
-    this.queryContainerMergerBill();
+    this.stockUpdateInfoBillQuery();
   },
   beforeRouteEnter(to, from, next) {
     next(vm => {
       // 通过 `vm` 访问组件实例
-      vm.queryContainerMergerBill(0);
+      vm.stockUpdateInfoBillQuery(0);
     })
   },
   filters: {
-    setMethod(method) {
-    // 收货方式，MANUAL：手工单据，RF：手持终端
-      switch (method) {
-        case 'MANUAL':
-          return "手工单据"
-        case 'RF':
-          return "手持终端"
+    setStatus(type) {
+      // 申请单状态：APPLYING申请中、PASS审核通过、NO_PASS审核拒绝
+      switch (type) {
+        case 'APPLYING':
+          return "申请中"
+        case 'PASS':
+          return "审核通过"
+        case 'NO_PASS':
+          return "审核拒绝"
+        default:
+          return '未知';
+      }
+    },
+    setType(type) {
+      // 收货类型，FAST：快速收货，NORMAL：正常收货，TRUST：信任收货
+      switch (type) {
+        case 'FAST':
+          return "快速收货"
+        case 'NORMAL':
+          return "正常收货"
+        case 'TRUST':
+          return "信任收货"
         default:
           return '未知';
       }
@@ -234,13 +294,6 @@ export default {
 
 <style lang="scss" scoped>
 @import "src/styles/mixin.scss";
-.input-width{
-    width: 200px;
-
-    // &.picker-time{
-    //     width: 580px;
-    // }
-}
 </style>
 
 <style lang="scss">

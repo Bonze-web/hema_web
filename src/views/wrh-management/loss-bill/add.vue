@@ -60,6 +60,7 @@
                                         <div>总金额:{{ form.totalAmount ? form.totalAmount : 0 }}</div>
                                     </div>
                                 </div>
+
                                     <el-table
                                         :data="productList"
                                         style="width: 100%;text-align:center"
@@ -107,6 +108,7 @@
                                           </template>
                                         </el-table-column>
                                     </el-table>
+                                    
                             </el-form>      
                 </template>
             </div>

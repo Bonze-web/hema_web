@@ -1,79 +1,165 @@
 <template>
     <div>
         <div class="head">
-            <div style="margin-top:8px">新建盘点单</div>
+            <div class="head-title">
+                <div style="margin:8px">新建货库存信息调整单</div>
+            </div>
             <div>
                 <el-button @click="back">取消</el-button>
-                <el-button type="primary" @click="editInventory" v-if="status === 'edit'">编辑</el-button>
-                <el-button type="primary" @click="createInventory" v-if="status === 'create'">保存</el-button>
-                <el-button type="primary" @click="createInventoryAnd" v-if="status === 'create'">保存并创建</el-button>
+                <el-button type="primary" @click="confirm">保存</el-button>
+                <el-button type="primary" @click="toExamine">保存并审核</el-button>
             </div>
         </div>
         <div style="height:20px" />
+
         <div class="info-content">
             <div>
                 <template>
-                  <el-form :model="form" :rules="createRules" ref="form" label-width="110px" class="demo-ruleForm">
-                      <div class="info-title">基本信息</div>
-                      <el-row :gutter="20">
-                          <el-col :span="6" class="info-box">
-                              <el-form-item label="货位范围" prop="binRange">
-                                  <el-input type='text' placeholder="请输入单号编号" v-model="form.binRange" class="input-width"></el-input>
-                              </el-form-item>
-                          </el-col>
-                          <el-col :span="6" class="info-box">
-                              <el-form-item label="货位用途" prop="binUsage">
-                                <el-input type='text' placeholder="请输入货位用途" v-model="form.binUsage" class="input-width"></el-input>
-                              </el-form-item>
-                          </el-col>
-                          <!-- <el-col :span="6" class="info-box" >
-                            <el-form-item label="库存处理方式"  prop="binUsage">
-                              <el-select v-model="form.inventoryHandlingMethod" placeholder="请选择库存处理方式">
-                                <el-option label="损耗溢余" value="INVENTORY_LOSS_SURPLUS"></el-option>
-                                <el-option label="转为移库单" value="MOVE_BILL"></el-option>
-                              </el-select>
-                            </el-form-item>
-                          </el-col> -->
-                          <el-col :span="6" class="info-box">
-                            <el-form-item label="操作方式"  prop="binUsage">
-                              <el-select v-model="form.operationMode" placeholder="请选择操作方式">
-                                <el-option label="手工单据" value="MANUALBILL"></el-option>
-                                <el-option label="手持终端" value="HANDTERMINAL"></el-option>
-                              </el-select>
-                            </el-form-item>
-                          </el-col>
-                      </el-row>
-                      <el-row>
-                        <el-col :span="6" class="info-box">
-                            <el-form-item label="实盘模式"  prop="binUsage">
-                              <el-select v-model="form.takeSchema" placeholder="请选择实盘模式">
-                                <el-option label="盲盘" value="BLINDTAKE"></el-option>
-                                <el-option label="明盘" value="BRIGHTTAKE"></el-option>
-                              </el-select>
-                            </el-form-item>
-                          </el-col>
-                           <el-col :span="6" class="info-box">
-                            <el-form-item label="实盘默认值"  prop="binUsage">
-                              <el-select v-model="form.realDefaultQuantity" placeholder="请选择实盘默认值">
-                                <el-option label="按照0处理" value="ZERO"></el-option>
-                                <el-option label="按照等同于库存处理" value="EQUAL_INVENTORY"></el-option>
-                              </el-select>
-                            </el-form-item>
-                          </el-col>
-                          <el-col :span="6" class="info-box">
-                            <el-form-item label="计划盘点日期"  prop="binUsage">
-                              <el-date-picker
-                                v-model="form.planDate"
-                                type="date"
-                                placeholder="选择计划盘点日期">
-                              </el-date-picker>
-                            </el-form-item>
-                          </el-col>
-                      </el-row>
-                      <el-form-item label="备注">
-                          <textarea maxlength="200" v-model="form.remark"></textarea>
-                      </el-form-item>
-                  </el-form>      
+                    <el-tabs v-model="tabActiveName">
+                        <!-- <div class="info-title">基本信息</div> -->
+                          <el-form :model="form" :rules="createRules" ref="form" label-width="100px" class="demo-ruleForm">
+                              <!-- <el-row :gutter="20">
+                                  <el-col :span="6" class="info-box">
+                                      <el-form-item label="损耗类型" prop="code">
+                                          <el-input v-model="form.code"></el-input>
+                                      </el-form-item>
+                                  </el-col>
+                                  <el-col :span="6" class="info-box">
+                                      <el-form-item label="仓库" prop="name">
+                                          <el-input v-model="form.name"></el-input>
+                                      </el-form-item>
+                                  </el-col>
+                                  <el-col :span="6" class="info-box">
+                                      <el-form-item label="报损人" prop="name">
+                                          <el-input v-model="form.name"></el-input>
+                                      </el-form-item>
+                                  </el-col>
+                                  <el-col :span="6" class="info-box">
+                                    <el-form-item label="存储托盘数" prop="storageNumber">
+                                        <el-input v-model="form.storageNumber"></el-input>
+                                    </el-form-item>
+                                  </el-col>
+                              </el-row>
+
+                              <el-form-item label="备注" prop="remark">
+                                  <textarea v-model="form.remark"></textarea>
+                              </el-form-item> -->
+
+                               <div class="info-title">
+                                  <div>商品
+                                  <!-- <router-link style="color:#409EFF" :to="{ path: '/wrhmanagement/adjustinfo/batchAdd', query:{ id: this.id } }">
+                                      <el-button size="mini" type="text" >批量添加</el-button>
+                                  </router-link> -->
+                                  </div>
+                                  <!-- <div class="list-count">
+                                      <div>总数:{{ form.totalQtystr ? form.totalQtystr : 0 }},</div>
+                                      <div>总品相数:{{ form.totalProductCount ? form.totalProductCount : 0 }},</div>
+                                      <div>总金额:{{ form.totalAmount ? form.totalAmount : 0 }}</div>
+                                  </div> -->
+                              </div>
+
+                              <el-table :data="dataList" style="width: 100%;text-align:center">
+
+                                  <el-table-column fixed prop="scope" label="操作">
+                                    <template slot-scope="scope">
+                                      <el-button type="text" @click="deleteProduct(scope.$index)">删除</el-button>
+                                    </template>
+                                  </el-table-column>
+
+                                  <!-- 可以修改的字段：备注--，供应商(选)、生成批号、批次、生产日期、到效日期、计量单位、价格、规格描述、重量、体积、入库时间--、状态(选)。 -->
+
+                                  <!-- <el-table-column width="200" prop="scope" label="备注">
+                                    <template slot-scope="scope">
+                                      <el-input type="textarea" placeholder="请输入内容" v-model="scope.row.a"></el-input>
+                                    </template>
+                                  </el-table-column> -->
+
+                                  <el-table-column width="180" prop="scope" label="供应商">
+                                    <template slot-scope="scope">
+                                      <el-select v-model="scope.row.statusIn" placeholder="请选择状态" class="input-width" >
+                                        <el-option v-for="item in productSupplier" :key="item.id" :value="item.id" :label="item.name"></el-option>
+                                      </el-select>
+                                      <!-- <el-input type="text" size="mini" v-model="scope.row.vendorName"></el-input> -->
+                                    </template>
+                                  </el-table-column>
+
+                                  <el-table-column width="180" prop="scope" label="生成批号">
+                                    <template slot-scope="scope">
+                                      <el-input type="text"  size="mini" v-model="scope.row.productionBatch"></el-input>
+                                    </template>
+                                  </el-table-column>
+
+                                  <el-table-column width="180" prop="scope" label="批次">
+                                    <template slot-scope="scope">
+                                      <el-input type="text" size="mini" v-model="scope.row.batch"></el-input>
+                                    </template>
+                                  </el-table-column>
+
+                                  <el-table-column width="180" prop="scope" label="生产日期">
+                                    <template slot-scope="scope">
+                                      <el-input type="text" size="mini" v-model="scope.row.productionDate"></el-input>
+                                    </template>
+                                  </el-table-column>
+
+                                  <el-table-column width="180" prop="scope" label="到效日期">
+                                    <template slot-scope="scope">
+                                      <el-input type="text" size="mini" v-model="scope.row.validDate"></el-input>
+                                    </template>
+                                  </el-table-column>
+
+                                  <el-table-column width="180" prop="scope" label="计量单位">
+                                    <template slot-scope="scope">
+                                      <el-input type="text" size="mini" v-model="scope.row.munit"></el-input>
+                                    </template>
+                                  </el-table-column>
+
+                                  <el-table-column width="180" prop="scope" label="价格">
+                                    <template slot-scope="scope">
+                                      <el-input type="text" size="mini" v-model="scope.row.price"></el-input>
+                                    </template>
+                                  </el-table-column>
+
+                                  <el-table-column width="180" prop="scope" label="规格描述">
+                                    <template slot-scope="scope">
+                                      <el-input type="text" size="mini" v-model="scope.row.productSpec"></el-input>
+                                    </template>
+                                  </el-table-column>
+
+                                  <el-table-column width="180" prop="scope" label="重量">
+                                    <template slot-scope="scope">
+                                      <el-input type="number" @change="calcProduct('qty', scope.$index)" size="mini" v-model="scope.row.qty"></el-input>
+                                    </template>
+                                  </el-table-column>
+
+                                  <el-table-column width="180" prop="scope" label="体积">
+                                    <template slot-scope="scope">
+                                      <el-input type="number" @change="calcProduct('volume', scope.$index)" size="mini" v-model="scope.row.volume"></el-input>
+                                    </template>
+                                  </el-table-column>
+
+                                  <el-table-column width="180" prop="scope" label="入库时间">
+                                    <template slot-scope="scope">
+                                      <el-input type="text" size="mini" v-model="scope.row.instockTime"></el-input>
+                                    </template>
+                                  </el-table-column>
+
+
+                                  <el-table-column width="200" prop="scope" label="状态">
+                                    <template slot-scope="scope">
+                                      <el-select v-model="scope.row.statusIn" placeholder="请选择状态" class="input-width" >
+                                        <el-option value="NORMAL" label="正常"></el-option>
+                                        <el-option value="LOCKED" label="锁定"></el-option>
+                                        <el-option value="FOR_MOVE_OUT" label="待移库出"></el-option>
+                                        <el-option value="FOR_MOVE_IN" label="待移库入"></el-option>
+                                        <el-option value="FOR_PICK" label="待拣货"></el-option>
+                                        <el-option value="FOR_RPL_OUT" label="待补货出"></el-option>
+                                        <el-option value="FOR_RPL_IN" label="待补货入"></el-option>
+                                      </el-select>
+                                    </template>
+                                  </el-table-column>
+                              </el-table>
+                          </el-form>
+                    </el-tabs>
                 </template>
             </div>
         </div>
@@ -81,101 +167,154 @@
 </template>
 
 <script>
-import InventoryService from "@/api/service/InventoryService";
-// import PermIds from "@/api/permissionIds";
-// import { mapGetters, mapActions } from "vuex";
+// import { mapGetters } from "vuex";
+import { mapActions } from "vuex";
+import DemolitionAndService from "@/api/service/DemolitionAndService"
 
 export default {
   data() {
       return {
-        dcList: [], // 中心仓列表
-        status: '', // 页面状态
+        dataList: [],
+        productSupplier: [], // 供应商
+        tabActiveName: 'category',
         form: {
-          binRange: "",
-          binUsage: "",
-          // inventoryHandlingMethod: "",
-          operationMode: "",
-          planDate: "",
-          realDefaultQuantity: "",
-          takeSchema: ""
+          code: '',
+          name: '',
+          storageNumber: '',
+          remark: '',
+          length: '',
+          width: '',
+          height: '',
+          weight: '',
+          plotRatio: ''
         },
         createRules: {
-          binRange: [
-            { required: true, message: '请填写货位范围', trigger: 'blur'}
+          code: [
+            { required: true, message: '请输入类别代码', trigger: 'blur' },
+            { required: true, max: 16, message: '最多输入16位', trigger: 'change' }
           ],
-          binUsage: [
-            { required: true, message: '请填写货位用途', trigger: 'blur'}
+          name: [
+            { required: true, message: '请输入类别名称', trigger: 'blur' },
+            { required: true, max: 40, message: '最多输入40位', trigger: 'change' }
           ],
-          // inventoryHandlingMethod: [
-          //   { required: true, message: '请选择库存处理方式', trigger: 'blur'}
+          storageNumber: [
+            { required: true, message: '请输入存储托盘数量', trigger: 'blur' },
+            { pattern: /^[1-9]\d*$/, message: '请输入正整数', trigger: 'change' }
+          ],
+          // remark: [
+          //   { required: true, message: '请输入备注', trigger: 'blur' },
+          //   { required: true, max: 200, message: '最多输入200位', trigger: 'change' }
           // ],
-          operationMode: [
-            { required: true, message: '请选择操作方式', trigger: 'blur'}
+          length: [
+            { required: true, message: '请输入长度', trigger: 'blur' },
+            { pattern: /^\d{1,4}(\.\d+)?$/, message: '请输入1-9999之间的数字', trigger: 'change' }
           ],
-          planDate: [
-            { required: true, message: '请填写计划盘点日期', trigger: 'blur'}
+          width: [
+            { required: true, message: '请输入宽度', trigger: 'blur' },
+            { pattern: /^\d{1,4}(\.\d+)?$/, message: '请输入1-9999之间的数字', trigger: 'change' }
           ],
-          realDefaultQuantity: [
-            { required: true, message: '请选择实盘默认值', trigger: 'blur'}
+          height: [
+            { required: true, message: '请输入高度', trigger: 'blur' },
+            { pattern: /^\d{1,4}(\.\d+)?$/, message: '请输入1-9999之间的数字', trigger: 'change' }
           ],
-          takeSchema: [
-            { required: true, message: '请选择盘点模式', trigger: 'blur'}
+          weight: [
+            { required: true, message: '请输入承重', trigger: 'blur' },
+            { pattern: /^\d{1,4}(\.\d+)?$/, message: '请输入1-9999之间的数字', trigger: 'change' }
+          ],
+          plotRatio: [
+            { required: true, message: '请输入容积率', trigger: 'blur' },
+            { pattern: /^100$|^(\d|[1-9]\d)(\.\d+)*$/, message: '请输入1-100之间的数字', trigger: 'change' }
           ]
         }
       }
     },
+    computed: {
+    },
     methods: {
+      ...mapActions(["deleteSelection"]),
       back: function() {
         this.$store.dispatch("tagsView/delView", this.$route);
         this.$router.go(-1)
       },
-      createInventory() {
-        this.$router.push({name: 'InventoryEdit'});
-        InventoryService.createLossBill(this.form)
-        .then((res) => {
-          this.$message.success("创建成功");
-          this.$store.dispatch("tagsView/delView", this.$route);
-          // this.$router.go(-1)
-        }).catch((err) => {
-          this.$message.error("创建失败" + err.message)
-        })
-      },
-      createInventoryAnd() {
-        InventoryService.createLossBill(this.form)
-        .then((res) => {
-          this.$message.success("创建成功");
-          this.form = {
-            binRange: "",
-            binUsage: "",
-            // inventoryHandlingMethod: "",
-            operationMode: "",
-            planDate: "",
-            realDefaultQuantity: "",
-            takeSchema: ""
+      confirm() {
+        // 保存
+        console.log(this.dataList)
+        if (this.dataList.length === 0) {
+          this.$message.error("没有数据可以保存")
+          return
+        }
+
+        const arr = [];
+
+        this.dataList.forEach((item) => {
+          const obj = {
+            stockId: item.id, // 库存记录id
+            updateBatch: item.batch, // 批次
+            updateInstockTime: item.instockTime, // 入库时间
+            updateMunit: item.munit, // 计量单位
+            updatePrice: item.price, // 价格
+            updateProductSpec: item.productSpec, // 规格描述
+            updateProductionBatch: item.productionBatch, // 生产批号
+            updateProductionDate: item.productionDate, // 生产日期
+            updateStockStatus: item.statusIn ? item.statusIn : null, // 状态
+            updateValidDate: item.validDate, // 到效日期
+            updateVendorId: item.name ? item.name : null, // 供应商名字
+            updateVolume: item.volume, // 体积
+            updateWeight: item.qty // 重量
           }
-        }).catch((err) => {
-          this.$message.error("创建失败" + err.message)
+
+          arr.push(obj)
+        })
+
+        DemolitionAndService.createUpdateInfoBill(arr)
+        .then(res => {
+          this.$message.success("保存成功")
+          this.$router.push('/wrhmanagement/adjustinfo')
+        })
+        .catch(err => {
+          this.$message.error("保存失败" + err.message)
         })
       },
-      editInventory() {
-        InventoryService.updateLossBill(this.form)
-        .then((res) => {
-          this.$message.success("修改成功");
-        }).catch((err) => {
-          this.$message.error("创建失败" + err.message)
-        })
+      calcProduct: function(name, index) {
+        if (this.dataList[index][name] < 0) {
+          this.$message.error('请输入正确数据')
+          this.dataList[index][name] = 0;
+        }
+      },
+      toExamine() {
+        // 保存并审核
+        // 
+      },
+      deleteProduct(index) {
+        this.deleteSelection(index)
+        this.dataList.splice(index, 1)
       }
     },
     created() {
-        this.status = this.$route.query.status;
+      DemolitionAndService.productSupplierQuery({
+        page: 1,
+        pageSize: 0,
+        statusEquals: 'OPEN',
+        searchCount: true
+      })
+      .then(res => {
+        console.log(res)
+        this.$message.success("供应商查询成功")
+        this.productSupplier = res.records;
+      })
+      .catch(err => {
+        this.$message.error("供应商查询失败" + err.message)
+      })
     },
     beforeRouteEnter(to, from, next) {
       next(vm => {
-        
+        // 通过 `vm` 访问组件实例
+        vm.dataList = vm.$store.state.adjustinfo.multipleSelection
+        const arr = Array.from(new Set(vm.dataList))
+        vm.dataList = arr
       })
     },
-    filters: {
-    }
+    filters: {}
 };
 </script>
 

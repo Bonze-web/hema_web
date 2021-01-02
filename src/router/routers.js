@@ -1268,27 +1268,41 @@ const BillManagement = {
           title: '库存信息调整单',
           icon: 'table'
         }
-      }, {
+      },
+      {
         path: "edit",
         name: "AdjustinfoEdit",
         component: () =>
           import('@/views/wrh-management/adjustinfo/edit'),
         hidden: true,
         meta: {
-          title: '查看库存信息调整单',
+          title: '调整单详情',
           icon: 'table'
         }
-      }, {
+      },
+      {
         path: "add",
         name: "AdjustinfoAdd",
         component: () =>
           import('@/views/wrh-management/adjustinfo/add'),
         hidden: true,
         meta: {
+          title: '库存信息调整单',
+          icon: 'table'
+        }
+      },
+      {
+        path: "batchadd",
+        name: "AdjustinfoBatchAdd",
+        component: () =>
+          import('@/views/wrh-management/adjustinfo/batch-add'),
+        hidden: true,
+        meta: {
           title: '新建库存信息调整单',
           icon: 'table'
         }
-      }]
+      }
+    ]
     },
     {
       path: "demolition-and",

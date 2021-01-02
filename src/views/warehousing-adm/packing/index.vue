@@ -108,7 +108,7 @@
 
         <el-table-column prop="scope" label="操作人">
           <template slot-scope="scope">
-            {{ scope.row.creatorName }}
+            {{ scope.row.updatorName }}
           </template>
         </el-table-column>
 
