@@ -86,7 +86,6 @@ export default {
     created() {
       PersonnelbindService.getPickareaQuery()
       .then((res) => {
-        console.log(res.records);
           this.firstPickareaIdArr = res.records;
           this.secondPickareaIdArr = res.records;
       })
@@ -95,7 +94,6 @@ export default {
       });
       PersonnelbindService.userQuery()
       .then((res) => {
-        console.log(res);
           this.userAll = res.records;
       })
       .catch((err) => {

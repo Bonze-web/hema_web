@@ -70,6 +70,9 @@ export default {
     return request.get('/sys/user/query', {
       params: postData
     })
-  }
-
+  },
+  deleteData(id) {
+    return request.put('/wms/userpickarea/delete?id=' + id);
+  },
 }
+ 

@@ -431,7 +431,6 @@ export default {
         } else {
           _this.$refs.form.validate(valid => {
             if (valid) {
-              
               BillService.updateOverflowBill(this.form)
               .then((res) => {
                 _this.$message.success('更新成功')

@@ -139,13 +139,14 @@ export default {
             type: 'warning'
           }).then(() => {
               // 调用删除的接口,然后分页查询的接口重新渲染页面
-              PersonnelbindService.deleteData(id, version)
+              PersonnelbindService.deleteData(id)
               .then((res) => {
                 _this.$message.success("删除成功")
                 _this.getSuppliersList();
               }).catch((err) => {
+                console.log(err);
                 if (err === "") {
-                  _this.$message.success("删除成功" + err.message)
+                  _this.$message.success("删除成功")
                 } else {
                   _this.$message.error("删除失败" + err.message)
                 }
