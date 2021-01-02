@@ -35,8 +35,14 @@ export default {
   getItemById(id) {
     return request.get('/wms/pickOrder/getItemById?id=' + id);
   },
+  deleteGroupItem(itemData) {
+    return request.delete('/wms/pickOrder/deleteGrp?id=' + itemData.id + "&version=" + itemData.version);
+  },
+  deleteSchemeItem(itemData) {
+    return request.delete('/wms/pickOrder/delete?id=' + itemData.id + "&version=" + itemData.version);
+  },
   deleteItem(id, version) {
-    return request.delete('/wms/pickOrder/deleteItem?id=' + id + "&version" + version);
+    return request.delete('/wms/pickOrder/deleteItem?id=' + id + "&version=" + version);
   },
   // 修改调序
   postAdjustOrder(postData) {

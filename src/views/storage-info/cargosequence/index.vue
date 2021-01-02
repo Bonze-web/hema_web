@@ -24,6 +24,7 @@
                             size="mini"
                             type="text"
                             style="font-size:14px"
+                            @click.stop="deleteProjectsChange(ele.schemeList)"
                             >删除</el-button
                           >
                       </div>
@@ -42,6 +43,7 @@
                           <el-button
                             size="mini"
                             type="text"
+                            @click.stop="deleteGroupChange(item)"
                             >删除</el-button
                           >
                       </div>
@@ -170,7 +172,7 @@
             </el-form-item>
           </el-form>
           <div slot="footer" class="dialog-footer">
-            <el-button @click="newProjects = false">取 消</el-button>
+            <el-button @click="canNewProjects">取 消</el-button>
             <el-button type="primary" @click="newProjectsFlag">确 定</el-button>
           </div>
         </el-dialog>
@@ -192,7 +194,7 @@
             </el-form-item>
           </el-form>
           <div slot="footer" class="dialog-footer">
-            <el-button @click="dialogFormVisible = false">取 消</el-button>
+            <el-button @click.stop="setSchemeInfo">取 消</el-button>
             <el-button type="primary" @click="submitEditPro">确 定</el-button>
           </div>
         </el-dialog>
@@ -219,7 +221,7 @@
             </el-form-item>
           </el-form>
           <div slot="footer" class="dialog-footer">
-            <el-button @click="setStoreInfo">取 消</el-button>
+            <el-button @click="canNewStoreInfo">取 消</el-button>
             <el-button type="primary" @click="submintNewStoreInfo">确 定</el-button>
           </div>
         </el-dialog>
@@ -246,8 +248,8 @@
             </el-form-item>
           </el-form>
           <div slot="footer" class="dialog-footer">
-            <el-button @click="dialogFormVisible = false">取 消</el-button>
-            <el-button type="primary" @click="submitEditStoreChange">确 定</el-button>
+            <el-button @click.stop="setStoreInfo">取 消</el-button>
+            <el-button type="primary" @click.stop="submitEditStoreChange">确 定</el-button>
           </div>
         </el-dialog>
         <el-dialog title="门店调序" :visible.sync="dialogFormVisible">
@@ -425,8 +427,27 @@ export default {
       this.$message.error("新建失败" + err.message)
     })
    },
+   canNewProjects() {
+      this.newProjects = false;
+      this.newProjectsList = {
+          code: "",
+          name: "",
+          remark: ""
+      }
+   },
+   canNewStoreInfo() {
+      this.newStore = false;
+      this.newStoreInfo = {
+            code: "",
+            name: "",
+            remark: ""
+      }
+   },
    setStoreInfo() {
-     this.newStore = false;
+      this.editStore = false;
+   },
+   setSchemeInfo() {
+      this.editProjects = false;
    },
    // 通过搜索接口来所有方案
    searchScheme() {
@@ -512,6 +533,47 @@ export default {
    editProjectsChange(obj) {
     this.editProjects = true;
     this.editProjectsInfo = obj;
+   },
+   deleteGroupChange(obj) {
+     this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+            CargosequenceService.deleteGroupItem(obj)
+            .then((res) => {
+              this.$message.success("删除成功");
+              this.getAllPickOrder();
+            }).catch((err) => {
+              this.$message.error("删除失败" + err.message)
+            })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });          
+        });
+   },
+   deleteProjectsChange(obj) {
+     this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          console.log(obj);
+            CargosequenceService.deleteSchemeItem(obj)
+            .then((res) => {
+              this.$message.success("删除成功");
+              this.getAllPickOrder();
+            }).catch((err) => {
+              this.$message.error("删除失败" + err.message)
+            })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });          
+        });
    },
    submitEditPro() {
       this.editProjects = false;

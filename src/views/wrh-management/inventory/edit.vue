@@ -10,7 +10,7 @@
                 <el-button type="primary" @click="editSupplierStart" v-if="inventoryStatus === 'start'">开始盘点</el-button>
                 <el-button type="primary" @click="editSupplierEnd" v-if="inventoryStatus === 'end'">结束盘点</el-button>
                 <el-button type="primary" @click="leadingChange">导入实盘数</el-button>
-                <el-button type="primary" v-if="changeOne === 'INVENTORY_LOSS_SURPLUS'">转为损耗溢余</el-button>
+                <el-button type="primary" v-if="changeOne === 'INVENTORY_LOSS_SURPLUS'">盘亏</el-button>
                 <el-button type="primary" v-if="changeOne === 'MOVE_BILL'">转为移库单</el-button>
             </div>
         </div>
@@ -274,7 +274,6 @@ export default {
           planDate: '',
           realDefaultQuantity: '',
           status: ''
-
         },
         fileList: [],
         storageList: []
@@ -304,7 +303,8 @@ export default {
         this.Actual = true;
       },
       editSupplier() {
-        this.$router.push({name: 'InventoryAdd', query: { suppliersInfo: this.suppliersInfo, status: 'edit'}});
+        const obj = JSON.stringify(this.suppliersInfo);
+        this.$router.push({name: 'InventoryAdd', query: { suppliersInfo: encodeURIComponent(obj), status: 'edit'}});
       },
       editSupplierStart() {
         this.inventoryStatus = "end";
@@ -342,6 +342,50 @@ export default {
         this.mySelfPage = Number(e);
       },
       getDetail() {
+        this.suppliersInfo = {
+          billNumber: 'string',
+          binRange: 'string',
+          binUsage: 'string',
+          createTime: 'string',
+          creatorName: 'string',
+          operationMode: 'string',
+          planDate: 'string',
+          realDefaultQuantity: 'string',
+          status: 'string'
+        }
+        this.storageList = [
+          {
+            "binCode": "string",
+            "binUsage": "string",
+            "containerBarcode": "string",
+            "diversityQuantity": 0,
+            "diversityQuantityStr": "string",
+            "handleResult": "string",
+            "id": "string",
+            "lineNumber": "string",
+            "productCode": "string",
+            "productName": "string",
+            "productPrice": 0,
+            "productSpec": "string",
+            "productUnit": "string",
+            "productVolume": 0,
+            "productWeight": 0,
+            "productionBatch": "string",
+            "productionDate": "string",
+            "qpc": 0,
+            "qpcStr": "string",
+            "quantity": 0,
+            "quantityStr": "string",
+            "snapQuantity": 0,
+            "snapQuantityStr": "string",
+            "status": "string",
+            "stockBatch": "string",
+            "validDate": "string",
+            "vendorCode": "string",
+            "vendorName": "string",
+            "version": "string"
+          }
+        ]
         // InventoryService.getLossBillDetail(this.id)
         // .then((res) => {
         //   console.log(res);
@@ -352,7 +396,7 @@ export default {
     },
     created() {
       this.id = this.$route.query.id;
-      // this.getDetail();
+      this.getDetail();
     },
     components: {
       "system-log": systemLog

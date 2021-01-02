@@ -1289,6 +1289,46 @@ const BillManagement = {
           icon: 'table'
         }
       }]
+    },
+    {
+      path: "inventory",
+      name: "Inventory",
+      component: AModule,
+      meta: {
+        title: '盘点单',
+        icon: 'table'
+      },
+      children: [{
+        path: "",
+        name: "InventoryView",
+        component: () =>
+          import('@/views/wrh-management/inventory/index'),
+        hidden: true,
+        meta: {
+          title: '盘点单',
+          icon: 'table'
+        }
+      }, {
+        path: "edit",
+        name: "InventoryEdit",
+        component: () =>
+          import('@/views/wrh-management/inventory/edit'),
+        hidden: true,
+        meta: {
+          title: '查看盘点单',
+          icon: 'table'
+        }
+      }, {
+        path: "add",
+        name: "InventoryAdd",
+        component: () =>
+          import('@/views/wrh-management/inventory/add'),
+        hidden: true,
+        meta: {
+          title: '新建盘点单',
+          icon: 'table'
+        }
+      }]
     }]
   }
 

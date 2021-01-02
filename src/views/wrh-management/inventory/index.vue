@@ -1,5 +1,5 @@
 <template>
-    <div class="table-index">
+    <div class="table-index _table-index">
       <div class="select-head">
             <el-form ref="form" style="display:flex;flex-wrap:wrap" :model="form" label-width="110px" label-position="right">
                 <el-form-item label="单号">
@@ -58,8 +58,8 @@
             >
                 <el-table-column  prop="billNumber" label="单号">
                     <template slot-scope="scope">
-                        <router-link style="color:#409EFF" :to="{ path: '/wrhmanagement/lossbill/edit', query:{ status: 'read', id: scope.row.id} }">
-                            <span>{{ scope.row.billNumber }}</span>
+                        <router-link style="color:#409EFF" :to="{ path: '/wrhmanagement/inventory/edit', query:{ status: 'read', id: scope.row.id} }">
+                            <span style="padding:7px 0;">{{ scope.row.billNumber }}</span>
                         </router-link>
                     </template>
                 </el-table-column>
@@ -79,23 +79,9 @@
                   </template>
                 </el-table-column>
                 <el-table-column prop="binUsage" label="货位用途">
-                  <el-select v-model="form.binUsage" placeholder="请选择实盘默认值">
-                      <el-option label="统配收货暂存位" value="UNIFYRECEIVE"></el-option>
-                      <el-option label="上架中转位" value="PUTAWAY"></el-option>
-                      <el-option label="拣货位" value="PICK"></el-option>
-                      <el-option label="存储位" value="STORAGE"></el-option>
-                      <el-option label="拣货存储位" value="PICK_STORAGE"></el-option>
-                      <el-option label="统配拣货暂存位" value="UNIFYPICK"></el-option>
-                      <el-option label="统配集货存储位" value="UNIFYCOLLECT"></el-option>
-                      <el-option label="补货暂存位" value="RPL"></el-option>
-                      <el-option label="中转收货暂存位" value="TRANSFERRECEIVE"></el-option>
-                      <el-option label="中转集货暂存位" value="TRANSFERCOLLECT"></el-option>
-                      <el-option label="直通收货暂存位" value="DIRECTRECEIVE"></el-option>
-                      <el-option label="门店分拨位" value="STORECROSSALLOCATE"></el-option>
-                      <el-option label="门店退货收货暂存位" value="STORERTN"></el-option>
-                      <el-option label="供应商退货位" value="VENDORRTN"></el-option>
-                      <el-option label="供应商集货位" value="VENDORCOLLECT"></el-option>
-                    </el-select>
+                  <template slot-scope="scope">
+                    {{ scope.row.binUsage }}
+                  </template>
                 </el-table-column>
                 <!-- <el-table-column prop="inventoryHandlingMethod" label="库存方式">
                   <template slot-scope="scope">
@@ -144,7 +130,7 @@
 </template>
 
 <script>
-import InventoryService from "@/api/service/InventoryService";
+// import InventoryService from "@/api/service/InventoryService";
 import PermIds from "@/api/permissionIds";
 import { mapGetters, mapActions } from "vuex";
 
@@ -180,15 +166,11 @@ export default {
       this.table = false
     },
     onSelect: function() {
-     if (this.form.beginAndEndDate.length > 0) {
-        this.form.beginTime = this.form.beginAndEndDate[0]
-        this.form.endTime = this.form.beginAndEndDate[1]
-      }
       this.getBillList()
     },
     clearInput: function() {
       this.form = {
-          billNumber: null, // 盘点单号
+         billNumber: null, // 盘点单号
           // inventoryHandlingMethod: null,
           planDate: [], // 盘点日期
           productInfo: null,
@@ -202,16 +184,52 @@ export default {
     },
     getBillList: function() {
       const _this = this
-      _this.form.page = 1
-      _this.form.pageSize = 10
-      InventoryService.getBillList(_this.form)
-      .then((res) => {
-        _this.lossBill = res.records;
-        _this.totalCount = res.totalCount;
-      })
-      .catch((err) => {
-        _this.$message.error('获取单据列表失败' + err.message)
-      })
+      _this.lossBill = [
+        {
+          "billNumber": "string",
+          "binRange": "string",
+          "binUsage": "string",
+          "createTime": "2020-12-31T08:56:09.001Z",
+          "creatorName": "string",
+          "id": "string",
+          "operationMode": "string",
+          "planDate": "string",
+          "realDefaultQuantity": "string",
+          "status": "string",
+          "takeSchema": "string",
+          "updateTime": "2020-12-31T08:56:09.001Z",
+          "updatorName": "string",
+          "version": "string"
+        },
+        {
+          "billNumber": "string",
+          "binRange": "string",
+          "binUsage": "string",
+          "createTime": "2020-12-31T08:56:09.001Z",
+          "creatorName": "string",
+          "id": "string",
+          "operationMode": "string",
+          "planDate": "string",
+          "realDefaultQuantity": "string",
+          "status": "string",
+          "takeSchema": "string",
+          "updateTime": "2020-12-31T08:56:09.001Z",
+          "updatorName": "string",
+          "version": "string"
+        }
+      ];
+      _this.totalCount = 10;
+      // const _this = this
+      // _this.form.page = 1
+      // _this.form.pageSize = 10
+      // InventoryService.getBillList(_this.form)
+      // .then((res) => {
+      //   _this.lossBill = res.records;
+      //   _this.totalCount = res.totalCount;
+      // })
+      // .catch((err) => {
+      //   _this.$message.error('获取单据列表失败' + err.message)
+      // })
     },
     // 这里是修改当前值的地方
     handleCurrentChange: function(e) {
@@ -225,14 +243,11 @@ export default {
     }
   },
   created() {
-    // this.getAlllossType()
-    // this.getBillList()
+    this.getBillList()
   },
   beforeRouteEnter(to, from, next) {
       next(vm => {
-        // 通过 `vm` 访问组件实例
-        // vm.getBillList();
-        // vm.getAlllossType()
+        vm.getBillList();
       })
     },
   filters: {
@@ -288,9 +303,15 @@ export default {
   height: 24px;
 }
 </style>
+<style lang="scss" scoped>
+@import "src/styles/mixin.scss";
+</style>
 <style lang="scss">
 .table-index{
 @import "src/styles/mixin.scss";
 @include elTable;
+}
+._table-index .el-table .cell{
+  height:  auto;
 }
 </style>

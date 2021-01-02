@@ -23,7 +23,23 @@
                           </el-col>
                           <el-col :span="6" class="info-box">
                               <el-form-item label="货位用途" prop="binUsage">
-                                <el-input type='text' placeholder="请输入货位用途" v-model="form.binUsage" class="input-width"></el-input>
+                                    <el-select v-model="form.binUsage" placeholder="请选择实盘默认值">
+                                    <el-option label="统配收货暂存位" value="UNIFYRECEIVE"></el-option>
+                                    <el-option label="上架中转位" value="PUTAWAY"></el-option>
+                                    <el-option label="拣货位" value="PICK"></el-option>
+                                    <el-option label="存储位" value="STORAGE"></el-option>
+                                    <el-option label="拣货存储位" value="PICK_STORAGE"></el-option>
+                                    <el-option label="统配拣货暂存位" value="UNIFYPICK"></el-option>
+                                    <el-option label="统配集货存储位" value="UNIFYCOLLECT"></el-option>
+                                    <el-option label="补货暂存位" value="RPL"></el-option>
+                                    <el-option label="中转收货暂存位" value="TRANSFERRECEIVE"></el-option>
+                                    <el-option label="中转集货暂存位" value="TRANSFERCOLLECT"></el-option>
+                                    <el-option label="直通收货暂存位" value="DIRECTRECEIVE"></el-option>
+                                    <el-option label="门店分拨位" value="STORECROSSALLOCATE"></el-option>
+                                    <el-option label="门店退货收货暂存位" value="STORERTN"></el-option>
+                                    <el-option label="供应商退货位" value="VENDORRTN"></el-option>
+                                    <el-option label="供应商集货位" value="VENDORCOLLECT"></el-option>
+                                  </el-select>
                               </el-form-item>
                           </el-col>
                           <!-- <el-col :span="6" class="info-box" >
@@ -131,14 +147,14 @@ export default {
       },
       createInventory() {
         this.$router.push({name: 'InventoryEdit'});
-        InventoryService.createLossBill(this.form)
-        .then((res) => {
-          this.$message.success("创建成功");
-          this.$store.dispatch("tagsView/delView", this.$route);
-          // this.$router.go(-1)
-        }).catch((err) => {
-          this.$message.error("创建失败" + err.message)
-        })
+        // InventoryService.createLossBill(this.form)
+        // .then((res) => {
+        //   this.$message.success("创建成功");
+        //   this.$store.dispatch("tagsView/delView", this.$route);
+        //   this.$router.push({name: 'InventoryEdit', query: {id: res.id}});
+        // }).catch((err) => {
+        //   this.$message.error("创建失败" + err.message)
+        // })
       },
       createInventoryAnd() {
         InventoryService.createLossBill(this.form)
@@ -158,6 +174,8 @@ export default {
         })
       },
       editInventory() {
+        this.form.id = this.$route.query.id;
+        this.form.version = this.$route.query.version;
         InventoryService.updateLossBill(this.form)
         .then((res) => {
           this.$message.success("修改成功");
@@ -168,6 +186,11 @@ export default {
     },
     created() {
         this.status = this.$route.query.status;
+        if (this.status === 'edit') {
+          var list = decodeURIComponent(this.$route.query.suppliersInfo);
+          this.form = JSON.parse(list);
+          console.log(this.form);
+        }
     },
     beforeRouteEnter(to, from, next) {
       next(vm => {

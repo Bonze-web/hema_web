@@ -120,7 +120,7 @@
 </template>
 
 <script>
-// import GroundingService from "@/api/service/GroundingService";
+import GroundingService from "@/api/service/GroundingService";
 
 export default {
   data() {
@@ -173,63 +173,21 @@ export default {
       this.$router.push({name: 'GroundingEdit', query: {id: obj.id}})
     },
     queryOrderBill: function() {
-      // const _this = this;
-      this.listData = [
-        {"idx": 1,
-        "beginPutawayTime": "2020-12-28T12:26:05.514Z",
-        "billNumber": "string",
-        "containerBarcode": "string",
-        "createTime": "2020-12-28T12:26:05.514Z",
-        "creatorId": "string",
-        "creatorName": "string",
-        "endPutawayTime": "2020-12-28T12:26:05.514Z",
-        "id": "string",
-        "orgId": "string",
-        "putawayerName": "string",
-        "receiveBillNumber": "string",
-        "sourceContainerBarcode": "string",
-        "status": "INITIAL",
-        "updateTime": "2020-12-28T12:26:05.514Z",
-        "updatorId": "string",
-        "updatorName": "string",
-        "version": "string"
-      },
-      {
-        "idx": 2,
-        "beginPutawayTime": "2020-12-28T12:26:05.514Z",
-        "billNumber": "string",
-        "containerBarcode": "string",
-        "createTime": "2020-12-28T12:26:05.514Z",
-        "creatorId": "string",
-        "creatorName": "string",
-        "endPutawayTime": "2020-12-28T12:26:05.514Z",
-        "id": "string",
-        "orgId": "string",
-        "putawayerName": "string",
-        "receiveBillNumber": "string",
-        "sourceContainerBarcode": "string",
-        "status": "INITIAL",
-        "updateTime": "2020-12-28T12:26:05.514Z",
-        "updatorId": "string",
-        "updatorName": "string",
-        "version": "string"
-      }
-      ]
-      // this.form.page = this.page;
-      // this.form.pageSize = this.pageSize;
-      // this.form.beginPutawayTimeEnd = this.createTime[0];
-      // this.form.beginPutawayTimeStart = this.createTime[1];
+      this.form.page = this.page;
+      this.form.pageSize = this.pageSize;
+      this.form.beginPutawayTimeEnd = this.createTime[0];
+      this.form.beginPutawayTimeStart = this.createTime[1];
 
-      // GroundingService.putwayBillQuery(this.form).then((res) => {
-      //   this.totalCount = res.pageCount;
-      //   res.records.forEach((ele, idx) => {
-      //       ele.idx = idx + 1;
-      //       this.listData.push(ele);
-      //   })
-      //   // this.listData = res.records;
-      // }).catch(err => {
-      //   this.$message.error("数据请求失败" + err.message)
-      // });
+      GroundingService.putwayBillQuery(this.form).then((res) => {
+        this.totalCount = res.pageCount;
+        res.records.forEach((ele, idx) => {
+            ele.idx = idx + 1;
+            this.listData.push(ele);
+        })
+        // this.listData = res.records;
+      }).catch(err => {
+        this.$message.error("数据请求失败" + err.message)
+      });
     },
     handleCurrentChange: function(e) {
       this.page = Number(e);
