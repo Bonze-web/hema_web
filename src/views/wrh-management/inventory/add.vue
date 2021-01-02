@@ -51,7 +51,7 @@
                             </el-form-item>
                           </el-col> -->
                           <el-col :span="6" class="info-box">
-                            <el-form-item label="操作方式"  prop="binUsage">
+                            <el-form-item label="操作方式"  prop="operationMode">
                               <el-select v-model="form.operationMode" placeholder="请选择操作方式">
                                 <el-option label="手工单据" value="MANUALBILL"></el-option>
                                 <el-option label="手持终端" value="HANDTERMINAL"></el-option>
@@ -61,7 +61,7 @@
                       </el-row>
                       <el-row>
                         <el-col :span="6" class="info-box">
-                            <el-form-item label="实盘模式"  prop="binUsage">
+                            <el-form-item label="实盘模式"  prop="takeSchema">
                               <el-select v-model="form.takeSchema" placeholder="请选择实盘模式">
                                 <el-option label="盲盘" value="BLINDTAKE"></el-option>
                                 <el-option label="明盘" value="BRIGHTTAKE"></el-option>
@@ -69,7 +69,7 @@
                             </el-form-item>
                           </el-col>
                            <el-col :span="6" class="info-box">
-                            <el-form-item label="实盘默认值"  prop="binUsage">
+                            <el-form-item label="实盘默认值"  prop="realDefaultQuantity">
                               <el-select v-model="form.realDefaultQuantity" placeholder="请选择实盘默认值">
                                 <el-option label="按照0处理" value="ZERO"></el-option>
                                 <el-option label="按照等同于库存处理" value="EQUAL_INVENTORY"></el-option>
@@ -77,7 +77,7 @@
                             </el-form-item>
                           </el-col>
                           <el-col :span="6" class="info-box">
-                            <el-form-item label="计划盘点日期"  prop="binUsage">
+                            <el-form-item label="计划盘点日期"  prop="planDate">
                               <el-date-picker
                                 v-model="form.planDate"
                                 type="date"
@@ -109,7 +109,6 @@ export default {
         form: {
           binRange: "",
           binUsage: "",
-          // inventoryHandlingMethod: "",
           operationMode: "",
           planDate: "",
           realDefaultQuantity: "",
@@ -141,20 +140,32 @@ export default {
       }
     },
     methods: {
+      geshiChange(date) {
+        var d = new Date(date);
+        var realMonth = d.getMonth() + 1;
+        var h = d.getHours() < 10 ? ('0' + d.getHours()) : d.getHours();
+        var m = d.getMinutes() < 10 ? ('0' + d.getMinutes()) : d.getMinutes();
+        var s = d.getSeconds() < 10 ? ('0' + d.getSeconds()) : d.getSeconds();
+        var M = realMonth < 10 ? ('0' + realMonth) : realMonth;
+        var D = d.getDate() < 10 ? ('0' + d.getDate()) : d.getDate();
+        var datetime = d.getFullYear() + '-' + M + '-' + D + ' ' + h + ':' + m + ':' + s;
+        return datetime;
+      },
       back: function() {
         this.$store.dispatch("tagsView/delView", this.$route);
         this.$router.go(-1)
       },
       createInventory() {
-        this.$router.push({name: 'InventoryEdit'});
-        // InventoryService.createLossBill(this.form)
-        // .then((res) => {
-        //   this.$message.success("创建成功");
-        //   this.$store.dispatch("tagsView/delView", this.$route);
-        //   this.$router.push({name: 'InventoryEdit', query: {id: res.id}});
-        // }).catch((err) => {
-        //   this.$message.error("创建失败" + err.message)
-        // })
+        // this.$router.push({name: 'InventoryEdit'});
+        this.form.planDate = this.geshiChange(this.form.planDate);
+        InventoryService.createLossBill(this.form)
+        .then((res) => {
+          this.$message.success("创建成功");
+          this.$store.dispatch("tagsView/delView", this.$route);
+          this.$router.push({name: 'InventoryEdit', query: {id: res.id}});
+        }).catch((err) => {
+          this.$message.error("创建失败" + err.message)
+        })
       },
       createInventoryAnd() {
         InventoryService.createLossBill(this.form)
@@ -174,8 +185,7 @@ export default {
         })
       },
       editInventory() {
-        this.form.id = this.$route.query.id;
-        this.form.version = this.$route.query.version;
+        console.log(this.form);
         InventoryService.updateLossBill(this.form)
         .then((res) => {
           this.$message.success("修改成功");
@@ -189,7 +199,6 @@ export default {
         if (this.status === 'edit') {
           var list = decodeURIComponent(this.$route.query.suppliersInfo);
           this.form = JSON.parse(list);
-          console.log(this.form);
         }
     },
     beforeRouteEnter(to, from, next) {

@@ -9,9 +9,9 @@
                 <el-button type="primary" @click="editSupplier" >编辑</el-button>
                 <el-button type="primary" @click="editSupplierStart" v-if="inventoryStatus === 'start'">开始盘点</el-button>
                 <el-button type="primary" @click="editSupplierEnd" v-if="inventoryStatus === 'end'">结束盘点</el-button>
-                <el-button type="primary" @click="leadingChange">导入实盘数</el-button>
-                <el-button type="primary" v-if="changeOne === 'INVENTORY_LOSS_SURPLUS'">盘亏</el-button>
-                <el-button type="primary" v-if="changeOne === 'MOVE_BILL'">转为移库单</el-button>
+                <el-button type="primary" @click="leadingChange" v-if="inventoryStatus === 'end'">导入实盘数</el-button>
+                <el-button type="primary" v-if="inventoryStatus === 'end'" @click="spoilageChange">转为损耗单</el-button>
+                <el-button type="primary" v-if="inventoryStatus === 'end'" @click="moveChange">转为移库单</el-button>
             </div>
         </div>
         <div style="height:20px" />
@@ -51,7 +51,7 @@
                             </el-col>
                             <el-col :span="6" class="info-box">
                                 <div>状态:</div>
-                                <div>{{ suppliersInfo.status | showStatus}}</div>
+                                <div>{{ suppliersInfo.status | showStatusActive}}</div>
                             </el-col>
                             <el-col :span="6" class="info-box">
                                 <div>修改时间:</div>
@@ -87,6 +87,11 @@
                                       <span style="color:#409EFF">{{ scope.row.lineNumber}}</span>
                                   </template>
                               </el-table-column>
+                              <el-table-column prop="status" label="状态">
+                                  <template slot-scope="scope">
+                                      <span style="color:#409EFF">{{ scope.row.status | showStatusActive}}</span>
+                                  </template>
+                              </el-table-column>
                               <el-table-column prop="vendorCode" label="供应商编号">
                                   <template slot-scope="scope">
                                       <span style="color:#409EFF">{{ scope.row.binCode }}</span>
@@ -105,26 +110,6 @@
                               <el-table-column prop="containerBarcode" label="来源容器">
                                   <template slot-scope="scope">
                                       <span style="color:#409EFF">{{ scope.row.containerBarcode }}</span>
-                                  </template>
-                              </el-table-column>
-                              <el-table-column prop="diversityQuantity" label="差异数量">
-                                  <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.diversityQuantity }}</span>
-                                  </template>
-                              </el-table-column>
-                              <el-table-column prop="diversityQuantityStr" label="差异件数">
-                                  <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.diversityQuantityStr }}</span>
-                                  </template>
-                              </el-table-column>
-                              <el-table-column prop="handleResult" label="处理结果">
-                                  <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.handleResult | showHandleResult}}</span>
-                                  </template>
-                              </el-table-column>
-                              <el-table-column prop="lineNumber" label="处理结果">
-                                  <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.lineNumber}}</span>
                                   </template>
                               </el-table-column>
                               <el-table-column prop="productCode" label="商品代码">
@@ -207,9 +192,19 @@
                                       <span style="color:#409EFF">{{ scope.row.snapQuantity}}</span>
                                   </template>
                               </el-table-column>
-                              <el-table-column prop="status" label="状态">
+                               <el-table-column prop="diversityQuantity" label="差异数量">
                                   <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.status | showStatusActive}}</span>
+                                      <span style="color:#409EFF">{{ scope.row.diversityQuantity }}</span>
+                                  </template>
+                              </el-table-column>
+                              <el-table-column prop="diversityQuantityStr" label="差异件数">
+                                  <template slot-scope="scope">
+                                      <span style="color:#409EFF">{{ scope.row.diversityQuantityStr }}</span>
+                                  </template>
+                              </el-table-column>
+                              <el-table-column prop="handleResult" label="处理结果">
+                                  <template slot-scope="scope">
+                                      <span style="color:#409EFF">{{ scope.row.handleResult | showHandleResult}}</span>
                                   </template>
                               </el-table-column>
                             </el-table>
@@ -228,7 +223,7 @@
             :auto-upload="false"
             class="upload-demo"
             :on-preview="handlePreview"
-            action=""
+            :action="checkUrl"
             :before-upload="handel"
             :on-remove="handleRemove"
             :before-remove="beforeRemove"
@@ -250,7 +245,7 @@
 </template>
 
 <script>
-// import InventoryService from "@/api/service/InventoryService";
+import InventoryService from "@/api/service/InventoryService";
 import systemLog from "@/components/systemLog.vue"
 // import PermIds from "@/api/permissionIds";
 // import { mapGetters } from "vuex";
@@ -276,8 +271,9 @@ export default {
           status: ''
         },
         fileList: [],
-        storageList: []
+        storageList: [],
         // PermIds: PermIds,
+        checkUrl: ''
       }
     },
     methods: {
@@ -308,23 +304,37 @@ export default {
       },
       editSupplierStart() {
         this.inventoryStatus = "end";
-        // InventoryService.startInventory(this.id)
-        // .then((res) => {
-        //   this.$message.success("开始盘点");
-        // }).catch((err) => {
-        //   this.$message.error("开始盘点失败" + err.message)
-        // })
-        console.log("这里是开始盘点");
+        InventoryService.startInventory(this.id)
+        .then((res) => {
+          this.$message.success("开始盘点");
+        }).catch((err) => {
+          this.$message.error("开始盘点失败" + err.message)
+        })
       },
       editSupplierEnd() {
         this.inventoryStatus = "start";
-        // InventoryService.closeInventory(this.id)
-        // .then((res) => {
-        //   this.$message.success("结束盘点");
-        // }).catch((err) => {
-        //   this.$message.error("结束盘点失败" + err.message)
-        // })
-        // console.log("这里是结束盘点");
+        InventoryService.closeInventory(this.id)
+        .then((res) => {
+          this.$message.success("结束盘点");
+        }).catch((err) => {
+          this.$message.error("结束盘点失败" + err.message)
+        })
+      },
+      spoilageChange() {
+        InventoryService.updateOverflowBill(this.id)
+        .then((res) => {
+          this.$message.success("转为损耗单成功");
+        }).catch((err) => {
+          this.$message.error("转为损耗单失败" + err.message)
+        })
+      },
+      moveChange() {
+        InventoryService.updatemove(this.id)
+        .then((res) => {
+          this.$message.success("转为移库单成功");
+        }).catch((err) => {
+          this.$message.error("转为移库单失败" + err.message)
+        })
       },
       back: function() {
         this.$store.dispatch("tagsView/delView", this.$route);
@@ -348,10 +358,14 @@ export default {
           binUsage: 'string',
           createTime: 'string',
           creatorName: 'string',
-          operationMode: 'string',
-          planDate: 'string',
-          realDefaultQuantity: 'string',
-          status: 'string'
+          operationMode: 'MANUALBILL',
+          planDate: 'ZERO',
+          realDefaultQuantity: 'ZERO',
+          status: 'NORMAL',
+          "takeSchema": "string",
+          "updateTime": "2021-01-02T12:38:41.064Z",
+          "updatorName": "string",
+          "version": "string"
         }
         this.storageList = [
           {
@@ -360,7 +374,7 @@ export default {
             "containerBarcode": "string",
             "diversityQuantity": 0,
             "diversityQuantityStr": "string",
-            "handleResult": "string",
+            "handleResult": "INVENTORY_LOSS",
             "id": "string",
             "lineNumber": "string",
             "productCode": "string",
@@ -378,7 +392,7 @@ export default {
             "quantityStr": "string",
             "snapQuantity": 0,
             "snapQuantityStr": "string",
-            "status": "string",
+            "status": "NORMAL",
             "stockBatch": "string",
             "validDate": "string",
             "vendorCode": "string",
@@ -396,6 +410,7 @@ export default {
     },
     created() {
       this.id = this.$route.query.id;
+      this.checkUrl = '/stock-take-bill-item-check/' + this.id + '/import';
       this.getDetail();
     },
     components: {

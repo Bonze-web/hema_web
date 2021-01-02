@@ -8,49 +8,41 @@ export default {
      * 请求盘点单列表
      */
     getBillList(data) {
-        return request.get('/stock/stock-take-bill', {params: data})
+        return request.get('/stock-take-bill', {params: data})
     },
     /**
      * 新建
      */
     createLossBill(postData) {
-        return request.post('/stock/stock-take-bill', postData)
+        return request.post('/stock-take-bill', postData)
     },
     /**
      * 修改
      */
     updateLossBill(postData) {
-        return request.put('/stock/stock-take-bill', postData)
+        return request.put('/stock-take-bill' + postData.id, postData)
     },
     /**
      * 请求详情
      */
     getLossBillDetail(id) {
-        return request.get('/stock/stock-take-bill/' + id)
+        return request.get('/stock-take-bill/' + id)
     },
     closeInventory(id) {
-        return request.put('/stock/stock-take-bill/' + id + '/close')
+        return request.put('/stock-take-bill/' + id + '/close')
     },
     startInventory(id) {
-        return request.put('/stock/stock-take-bill/' + id + '/start')
+        return request.put('/stock-take-bill/' + id + '/start')
     },
     /**
-     * 请求溢余单列表
+     * 转为损耗单
      */
-    getOverflowBillList(data) {
-        return request.get('/wms/incinv/query', {params: data})
+    updateOverflowBill(id) {
+        return request.put('/stock-take-bill/' + id + '/transfer-inventory-loss')
     },
-    /**
-     * 新建溢余单
-     */
-    createOverflowBill(postData) {
-        return request.post('/wms/incinv/create', postData)
-    },
-    /**
-     * 修改溢余单
-     */
-    updateOverflowBill(postData) {
-        return request.post('/wms/incinv/update', postData)
+    // 转为移库单
+    updatemove(id) {
+        return request.put('/stock-take-bill/' + id + '/transfer-move-bill')
     },
     /**
      * 请求溢余单详情

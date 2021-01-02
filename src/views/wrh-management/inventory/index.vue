@@ -63,19 +63,19 @@
                         </router-link>
                     </template>
                 </el-table-column>
+                <el-table-column prop="status" label="状态">
+                  <template slot-scope="scope">
+                    {{ scope.row.status | showStatus}}
+                  </template>
+                </el-table-column>
+                <el-table-column prop="operationMode" label="计划盘点">
+                  <template slot-scope="scope">
+                    {{ scope.row.operationMode}}
+                  </template>
+                </el-table-column>
                 <el-table-column prop="operationMode" label="操作方式">
                   <template slot-scope="scope">
                     {{ scope.row.operationMode | handleStatus}}
-                  </template>
-                </el-table-column>
-                <el-table-column prop="creatorName" label="创建人">
-                  <template slot-scope="scope">
-                    {{ scope.row.creatorName }}
-                  </template>
-                </el-table-column>
-                <el-table-column prop="createTime" label="创建时间">
-                  <template slot-scope="scope">
-                    {{ scope.row.createTime }}
                   </template>
                 </el-table-column>
                   <el-table-column prop="binRange" label="货位范围">
@@ -93,24 +93,24 @@
                     {{ scope.row.inventoryHandlingMethod }}
                   </template>
                 </el-table-column> -->
-                <el-table-column prop="operationMode" label="计划盘点">
-                  <template slot-scope="scope">
-                    {{ scope.row.operationMode}}
-                  </template>
-                </el-table-column>
                 <el-table-column prop="realDefaultQuantity" label="实盘默认值">
                   <template slot-scope="scope">
                     {{ scope.row.realDefaultQuantity | planStatus}}
                   </template>
                 </el-table-column>
-                <el-table-column prop="status" label="状态">
-                  <template slot-scope="scope">
-                    {{ scope.row.status | showStatus}}
-                  </template>
-                </el-table-column>
                 <el-table-column prop="takeSchema" label="盘点模式">
                   <template slot-scope="scope">
                     {{ scope.row.takeSchema | showtakeSchema}}
+                  </template>
+                </el-table-column>
+                <el-table-column prop="creatorName" label="创建人">
+                  <template slot-scope="scope">
+                    {{ scope.row.creatorName }}
+                  </template>
+                </el-table-column>
+                <el-table-column prop="createTime" label="创建时间">
+                  <template slot-scope="scope">
+                    {{ scope.row.createTime }}
                   </template>
                 </el-table-column>
           </el-table>
@@ -130,7 +130,7 @@
 </template>
 
 <script>
-// import InventoryService from "@/api/service/InventoryService";
+import InventoryService from "@/api/service/InventoryService";
 import PermIds from "@/api/permissionIds";
 import { mapGetters, mapActions } from "vuex";
 
@@ -139,13 +139,13 @@ export default {
       return {
         PermIds: PermIds,
         table: false,
-        billList: [],
+        billList: '',
         page: 1,
         pageSize: 10,
         form: {
           billNumber: null, // 盘点单号
           // inventoryHandlingMethod: null,
-          planDate: [], // 盘点日期
+          planDate: '', // 盘点日期
           productInfo: null,
           searchCount: true,
           status: null
@@ -170,66 +170,78 @@ export default {
     },
     clearInput: function() {
       this.form = {
-         billNumber: null, // 盘点单号
-          // inventoryHandlingMethod: null,
-          planDate: [], // 盘点日期
-          productInfo: null,
-          searchCount: true,
-          status: null
-        }
+        planDate: '', // 盘点日期
+        billNumber: null, // 盘点单号
+        productInfo: null,
+        searchCount: true,
+        status: null
+      }
       this.getBillList()
     },
     getAlllossType: function() {
      
     },
+    geshiChange(date) {
+      var d = new Date(date);
+      var realMonth = d.getMonth() + 1;
+      var h = d.getHours() < 10 ? ('0' + d.getHours()) : d.getHours();
+      var m = d.getMinutes() < 10 ? ('0' + d.getMinutes()) : d.getMinutes();
+      var s = d.getSeconds() < 10 ? ('0' + d.getSeconds()) : d.getSeconds();
+      var M = realMonth < 10 ? ('0' + realMonth) : realMonth;
+      var D = d.getDate() < 10 ? ('0' + d.getDate()) : d.getDate();
+      var datetime = d.getFullYear() + '-' + M + '-' + D + ' ' + h + ':' + m + ':' + s;
+      return datetime;
+    },
     getBillList: function() {
-      const _this = this
-      _this.lossBill = [
-        {
-          "billNumber": "string",
-          "binRange": "string",
-          "binUsage": "string",
-          "createTime": "2020-12-31T08:56:09.001Z",
-          "creatorName": "string",
-          "id": "string",
-          "operationMode": "string",
-          "planDate": "string",
-          "realDefaultQuantity": "string",
-          "status": "string",
-          "takeSchema": "string",
-          "updateTime": "2020-12-31T08:56:09.001Z",
-          "updatorName": "string",
-          "version": "string"
-        },
-        {
-          "billNumber": "string",
-          "binRange": "string",
-          "binUsage": "string",
-          "createTime": "2020-12-31T08:56:09.001Z",
-          "creatorName": "string",
-          "id": "string",
-          "operationMode": "string",
-          "planDate": "string",
-          "realDefaultQuantity": "string",
-          "status": "string",
-          "takeSchema": "string",
-          "updateTime": "2020-12-31T08:56:09.001Z",
-          "updatorName": "string",
-          "version": "string"
-        }
-      ];
-      _this.totalCount = 10;
       // const _this = this
-      // _this.form.page = 1
-      // _this.form.pageSize = 10
-      // InventoryService.getBillList(_this.form)
-      // .then((res) => {
-      //   _this.lossBill = res.records;
-      //   _this.totalCount = res.totalCount;
-      // })
-      // .catch((err) => {
-      //   _this.$message.error('获取单据列表失败' + err.message)
-      // })
+      // _this.lossBill = [
+      //   {
+      //     "billNumber": "string",
+      //     "binRange": "string",
+      //     "binUsage": "string",
+      //     "createTime": "2020-12-31T08:56:09.001Z",
+      //     "creatorName": "string",
+      //     "id": "string",
+      //     "operationMode": "string",
+      //     "planDate": "string",
+      //     "realDefaultQuantity": "string",
+      //     "status": "string",
+      //     "takeSchema": "string",
+      //     "updateTime": "2020-12-31T08:56:09.001Z",
+      //     "updatorName": "string",
+      //     "version": "string"
+      //   },
+      //   {
+      //     "billNumber": "string",
+      //     "binRange": "string",
+      //     "binUsage": "string",
+      //     "createTime": "2020-12-31T08:56:09.001Z",
+      //     "creatorName": "string",
+      //     "id": "string",
+      //     "operationMode": "string",
+      //     "planDate": "string",
+      //     "realDefaultQuantity": "string",
+      //     "status": "string",
+      //     "takeSchema": "string",
+      //     "updateTime": "2020-12-31T08:56:09.001Z",
+      //     "updatorName": "string",
+      //     "version": "string"
+      //   }
+      // ];
+      // _this.totalCount = 10;
+      const _this = this
+      _this.form.page = 1
+      _this.form.pageSize = 10;
+      _this.form.planDateStart = _this.geshiChange(_this.form.planDate[0]);
+      _this.form.planDateEnd = _this.geshiChange(_this.form.planDate[1])
+      InventoryService.getBillList(_this.form)
+      .then((res) => {
+        _this.lossBill = res.records;
+        _this.totalCount = res.totalCount;
+      })
+      .catch((err) => {
+        _this.$message.error('获取单据列表失败' + err.message)
+      })
     },
     // 这里是修改当前值的地方
     handleCurrentChange: function(e) {
