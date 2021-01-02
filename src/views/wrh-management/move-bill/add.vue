@@ -393,13 +393,6 @@ export default {
         // 通过 `vm` 访问组件实例
         vm.productList = vm.$store.state.bill.moveSelection
         const arr = Array.from(new Set(vm.productList))
-        // for (const item in arr) {
-        //   arr[item].consumeAmount = 0
-        //   arr[item].lineNum = Number(item) + 1
-        //   arr[item].consumeQty = 0
-        //   arr[item].consumeQtystr = 0
-        //   arr[item].stockId = arr[item].id
-        // }
         vm.productList = arr
         vm.form.totalProductCount = arr.length
       })

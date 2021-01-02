@@ -14,7 +14,7 @@
             <div>
                 <template>
                     <el-tabs v-model="tabActiveName" @tab-click="tabClick">
-                        <el-tab-pane label="供应商" name="containerType">
+                        <el-tab-pane label="容器类型" name="containerType">
                             <el-form :model="form" :rules="createRules" ref="form" label-width="100px" class="demo-ruleForm">
                                 <div class="info-title">基本信息</div>
                                 <el-row :gutter="20">
@@ -28,13 +28,13 @@
                                             <el-input v-model="form.name"></el-input>
                                         </el-form-item>
                                     </el-col>
-                                    <el-col :span="6" class="info-box">
+                                    <!-- <el-col :span="6" class="info-box">
                                         <el-form-item label="所属仓库" prop="wrhId">
                                             <el-select v-model="form.wrhId" placeholder="请选择所属仓库">
                                               <el-option v-for="item in wrhList" :key="item.id" :label="item.name" :value="item.id"></el-option>
                                             </el-select>
                                         </el-form-item>
-                                    </el-col>
+                                    </el-col> -->
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="条码前缀" prop="barcodeprefix">
                                             <el-input :disabled="containerTypeInfo.barcodeprefix" v-model="form.barcodeprefix"></el-input>
@@ -180,8 +180,8 @@ export default {
           plotratio: '', // 容积率
           weight: '', // 自重
           remark: '',
-          version: '',
-          wrhId: ''
+          version: ''
+          // wrhId: ''
         },
         containerTypeInfo: {}, // 供应商信息
         createRules: {
@@ -193,9 +193,9 @@ export default {
             { required: true, message: '请输入名称', trigger: 'blur' },
             { required: true, max: 32, message: '最多输入32位', trigger: 'change' }
           ],
-          wrhId: [
-            { required: true, message: '请选择所属仓库', trigger: 'blur' }
-          ],
+          // wrhId: [
+          //   { required: true, message: '请选择所属仓库', trigger: 'blur' }
+          // ],
           barcodeprefix: [
             { required: true, message: '请输入条码前缀', trigger: 'blur' },
             { required: true, pattern: /^[A-Z0-9]{0,2}$/, message: '请输入最多两位的数字和大写字母的组合', trigger: 'change' }

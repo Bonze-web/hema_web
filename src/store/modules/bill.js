@@ -5,7 +5,7 @@ const state = {
 
 const mutations = {
     ADD_SELECTION: (state, list) => {
-        state.multipleSelection = state.multipleSelection.concat(list)
+        state.multipleSelection = list
     },
     CLEAR_SELECTION: (state, list) => {
         state.multipleSelection = []

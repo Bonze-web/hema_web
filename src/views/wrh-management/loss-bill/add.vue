@@ -98,12 +98,12 @@
                                         </el-table-column>
                                         <el-table-column width="100" prop="amount" label="损耗金额">
                                           <template slot-scope="scope">
-                                            {{ (Number(scope.row.consumeQtystr) + Number(scope.row.consumeQty)) * scope.row.price ? (Number(scope.row.consumeQtystr) + Number(scope.row.consumeQty)) * scope.row.price : 0 }}
+                                            {{ ((Number(scope.row.consumeQtystr) * (scope.row.qpc) ? Number(scope.row.consumeQtystr) * (scope.row.qpc) : 0)  + (Number(scope.row.consumeQty) ? Number(scope.row.consumeQty) : 0)) * scope.row.price ? ((Number(scope.row.consumeQtystr) * (scope.row.qpc) ? Number(scope.row.consumeQtystr) * (scope.row.qpc) : 0)  + (Number(scope.row.consumeQty) ? Number(scope.row.consumeQty) : 0)) * scope.row.price : 0 }}
                                           </template>
                                         </el-table-column>
-                                        <el-table-column width="100" prop="remark" label="备注">
+                                        <el-table-column width="100" prop="itemRemark" label="备注">
                                           <template slot-scope="scope">
-                                            <textarea v-model="scope.row.remark"></textarea>
+                                            <textarea v-model="scope.row.itemRemark"></textarea>
                                           </template>
                                         </el-table-column>
                                     </el-table>
@@ -143,11 +143,11 @@ export default {
           billTypeId: '', // 损耗类型
           expireDate: '', // 到效期
           isTest: false, // 是否现场测试
-          // realTotalAmount: '', // 实际总金额
-          // realTotalProductCount: '', // 实际总品项数
-          // realTotalQtystr: '', // 实际总件数
-          // realTotalVolume: '', // 实际总体积
-          // realTotalWeight: '', // 实际总质量
+          realTotalAmount: '', // 实际总金额
+          realTotalProductCount: '', // 实际总品项数
+          realTotalQtystr: '', // 实际总件数
+          realTotalVolume: '', // 实际总体积
+          realTotalWeight: '', // 实际总质量
           srcBillId: '', // 来源单据
           srcBillNumber: '', // 来源单号
           srcBillType: '', // 来源单据类型
@@ -180,7 +180,7 @@ export default {
     methods: {
       ...mapActions(["deleteSelection", "clearSelection"]),
       selectWrh: function(e) {
-        if (e && this.form.wrhId) {
+        if (e && this.form.wrhId && this.productList.length > 0) {
           this.$confirm('更换仓库将会清空商品明细, 是否继续?', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
@@ -229,13 +229,15 @@ export default {
           _this.$message.error('请至少添加一个商品')
           return
         } else {
+          this.form.stockList = []
           this.productList.forEach((item) => {
             this.form.stockList.push({
               consumeAmount: item.consumeAmount,
               lineNum: item.lineNum,
-              consumeQty: item.consumeQty,
-              consumeQtystr: item.consumeQtystr,
-              stockId: item.id
+              consumeQty: item.consumeQty ? item.consumeQty : 0,
+              consumeQtystr: item.consumeQtystr ? item.consumeQtystr : 0,
+              stockId: item.id,
+              itemRemark: item.itemRemark
             })
           })
         }
@@ -245,6 +247,10 @@ export default {
         }
         _this.$refs.form.validate(valid => {
           if (valid) {
+            if (reset) {
+              _this.form.realTotalAmount = _this.form.totalAmount
+              _this.form.realTotalProductCount = _this.form.totalProductCount
+            }
             BillService.createLossBill(this.form)
             .then((res) => {
               _this.$message.success('创建成功')
@@ -316,13 +322,16 @@ export default {
         this.form.totalQtystr = ''
         let consumeQtystr = ''
         let consumeQty = ''
+        console.log(this.productList)
         this.productList.forEach(item => {
+          // item.consumeQtystr = item.consumeQtystr ? item.consumeQtystr : 0
+          // item.consumeQty = item.consumeQty ? item.consumeQty : 0
           item.lineNum = this.productList.indexOf(item) + 1
-          item.consumeAmount = Number(item.consumeQtystr) * (item.price) * Number(item.qpc) + Number(item.consumeQty) * item.price 
-          this.form.realTotalAmount += item.consumeAmount
-          consumeQtystr = Number(consumeQtystr) + Number(item.consumeQtystr)
-          consumeQty = Number(consumeQty) + Number(item.consumeQty)
-          if (Number(item.consumeQty) * Number(item.qpc) + Number(item.consumeQtystr) > Number(item.qty) || Number(item.consumeQty) < 0 || Number(item.consumeQtystr) < 0) {
+          item.consumeAmount = ((Number(item.consumeQtystr) * (item.price) * item.qpc ? Number(item.consumeQtystr) * (item.price) * item.qpc : 0) + (Number(item.consumeQty) * item.price ? Number(item.consumeQty) * item.price : 0)).toFixed(2) 
+          // this.form.realTotalAmount += item.consumeAmount
+          consumeQtystr = Number(consumeQtystr) + (Number(item.consumeQtystr) ? Number(item.consumeQtystr) : 0)
+          consumeQty = Number(consumeQty) + (Number(item.consumeQty) ? Number(item.consumeQty) : 0)
+          if (Number(item.consumeQty) * item.qpc + Number(item.consumeQtystr) > Number(item.qty) || Number(item.consumeQty) < 0 || Number(item.consumeQtystr) < 0) {
             this.$message.error('请输入正确数据')
             consumeQtystr = Number(consumeQtystr) - Number(item.consumeQtystr)
             consumeQty = Number(consumeQty) - Number(item.consumeQty)
@@ -355,7 +364,6 @@ export default {
       this.getQueryStatus()
       this.getWrhList()
       this.getUsers()
-      this.productList = this.$store.state.bill.multipleSelection
       for (const item in this.productList) {
         this.productList[item].consumeAmount = 0
         this.productList[item].lineNum = Number(item) + 1

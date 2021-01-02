@@ -154,13 +154,11 @@ export default {
     handleCurrentChange: function(e) {
         this.page = Number(e)
         this.onSelect()
-        this.toggleSelection()
       },
       handleSizeChange: function(e) {
         this.pageSize = Number(e)
         this.page = 1
         this.onSelect()
-        this.toggleSelection()
       }
   },
   created() {
