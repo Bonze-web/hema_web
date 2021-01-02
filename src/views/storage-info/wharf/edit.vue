@@ -5,7 +5,7 @@
             <div style="margin-top:8px" v-else>编辑码头</div>
             <div>
                 <el-button @click="back">取消</el-button>
-                <el-button type="primary" @click="createSuppliers">确认</el-button>
+                <el-button type="primary" @click="createSuppliers"  v-if="hasPermission(PermIds.WMS_DOCK_UPDATE) && workingOrg.type === 'DC'">确认</el-button>
                 <!-- <el-button type="primary" v-if="status === 'create'">确认并创建</el-button> -->
             </div>
         </div>
@@ -19,7 +19,7 @@
             </div>
             <div>
                 <el-button @click="back">返回</el-button>
-                <el-button type="primary" v-if="hasPermission(PermIds.WMS_STORAGEAREA_CREATE)"  @click="editSupplier">编辑</el-button>
+                <el-button type="primary" v-if="hasPermission(PermIds.WMS_DOCK_UPDATE) && workingOrg.type === 'DC'"  @click="editSupplier">编辑</el-button>
             </div>
         </div>
         <div style="height:20px" />

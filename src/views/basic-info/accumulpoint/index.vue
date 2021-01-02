@@ -186,6 +186,7 @@ export default {
         // 获取数据,然后将自己组件中的数据发送到后台
         PersonnelbindService.getSuppliersList(this.form)
         .then((res) => {
+          console.log(res);
           // 初始化自己定义的数据
           _this.suppliersData = res.records;
           _this.totalCount = res.totalCount;

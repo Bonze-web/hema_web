@@ -28,7 +28,7 @@
           <el-row>
             <router-link :to="{ path: '/storageinfo/wharf/add', query:{ status: 'create'} }">
             <!-- <span v-if="child.meta&&child.meta.title" :title="child.meta.title">{{child.meta.title}}</span> -->
-            <el-button style="margin:18px 10px" type="primary" size="mini" v-if="hasPermission(PermIds.WMS_PICKAREA_CREATE) && workingOrg.type === 'DC'">新建</el-button>
+            <el-button style="margin:18px 10px" type="primary" size="mini"  v-if="hasPermission(PermIds.WMS_DOCK_CREATE) && workingOrg.type === 'DC'">新建</el-button>
             </router-link>
           </el-row>
             <el-table
@@ -60,7 +60,7 @@
                 </el-table-column>
                 <el-table-column
                 label="操作"
-                v-if="hasPermission(PermIds.WMS_PICKAREA_UPDATE) && workingOrg.dcId === suppliersData.dcId"
+                v-if="hasPermission(PermIds.WMS_DOCK_UPDATE) && workingOrg.type === 'DC'"
                 >
                   <template slot-scope="scope">
                     <!-- <div class="status-chnage-box">
@@ -164,7 +164,7 @@ export default {
             if (err === "") {
               _this.$message.success("休闲状态修改成功")
             } else {
-              _this.$message.error("休闲状态修改失败" + err)
+              _this.$message.error("休闲状态修改失败" + err.message)
             }
             _this.getSuppliersList();
           })
@@ -177,7 +177,7 @@ export default {
               if (err === "") {
                 _this.$message.success("使用中状态修改成功")
               } else {
-                _this.$message.error("使用中状态修改失败" + err)
+                _this.$message.error("使用中状态修改失败" + err.message)
               }
               _this.getSuppliersList();
             })
@@ -191,7 +191,7 @@ export default {
               if (err === "") {
                 _this.$message.success("停用状态修改成功")
               } else {
-                _this.$message.error("停用状态修改失败" + err)
+                _this.$message.error("停用状态修改失败" + err.message)
               }
               _this.getSuppliersList();
           })
