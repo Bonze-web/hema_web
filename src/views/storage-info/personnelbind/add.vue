@@ -27,7 +27,7 @@
                   </el-select>
                 </el-form-item>
                 <el-form-item label="首先拣货任务类型">
-                  <el-select v-model="form.first_task_type" placeholder="请选择首先拣货任务类型">
+                  <el-select v-model="form.firstTaskType" placeholder="请选择首先拣货任务类型">
                     <el-option label="整箱" value="CASE"></el-option>
                     <el-option label="拆零" value="SPLIT"></el-option>
                   </el-select>
@@ -56,7 +56,7 @@ export default {
           firstPickareaId: "",
           secondPickareaId: "",
           userId: '',
-          first_task_type: ""
+          firstTaskType: ""
         }
       }
     },

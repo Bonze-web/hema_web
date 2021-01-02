@@ -65,7 +65,7 @@
                 </el-table-column>
                 <el-table-column label="首选拣货任务类型">
                     <template slot-scope="scope">
-                        {{ scope.row.first_task_type | stockTypeChange }}
+                        {{ scope.row.firstTaskType | stockTypeChange }}
                     </template>
                 </el-table-column>
                 <el-table-column
