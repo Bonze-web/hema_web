@@ -513,7 +513,7 @@ export default {
         let consumeQty = ''
         this.productList.forEach(item => {
           item.lineNum = this.productList.indexOf(item) + 1
-          item.consumeAmount = ((Number(item.consumeQtystr) * item.price * Number(item.qpc) ? Number(item.consumeQtystr) * item.price * Number(item.qpc) : 0) + (Number(item.consumeQty) * item.price ?Number(item.consumeQty) * item.price : 0)).toFixed(2) 
+          item.consumeAmount = ((Number(item.consumeQtystr) * item.price * Number(item.qpc) ? Number(item.consumeQtystr) * item.price * Number(item.qpc) : 0) + (Number(item.consumeQty) * item.price ? Number(item.consumeQty) * item.price : 0)).toFixed(2) 
           // this.form.realTotalAmount += item.consumeAmount
           consumeQtystr = Number(consumeQtystr) + (Number(item.consumeQtystr) ? Number(item.consumeQtystr) : 0)
           consumeQty = Number(consumeQty) + (Number(item.consumeQty) ? Number(item.consumeQty) : 0)

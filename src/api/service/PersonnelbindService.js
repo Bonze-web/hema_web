@@ -73,6 +73,5 @@ export default {
   },
   deleteData(id) {
     return request.put('/wms/userpickarea/delete?id=' + id);
-  },
+  }
 }
- 
