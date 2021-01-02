@@ -76,5 +76,17 @@ export default {
      */
     getMovebillList(data) {
         return request.get('/wms/move-bill', {params: data})
+    },
+    /**
+     * 新建移库单
+     */
+    createMoveBill(data) {
+        return request.put('/wms/move-bill', data)
+    },
+    /**
+     * 查询移库单详情
+     */
+    getMovebillDetail(id) {
+        return request.get('/wms/move-bill?id=' + id)
     }
 }

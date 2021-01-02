@@ -14,7 +14,7 @@ const mutations = {
         state.multipleSelection.splice(index, 1)
     },
     ADD_MOVE: (state, list) => {
-        state.moveSelection = state.moveSelection.concat(list)
+        state.moveSelection = list
     },
     CLEAR_MOVE: (state, list) => {
         state.moveSelection = []

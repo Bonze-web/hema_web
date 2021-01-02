@@ -1291,6 +1291,36 @@ const BillManagement = {
       }]
     },
     {
+      path: "demolition-and",
+      name: "AemolitionAnd",
+      component: AModule,
+      meta: {
+        title: '容器拆并单',
+        icon: 'table'
+      },
+      children: [{
+        path: "",
+        name: "AemolitionAndView",
+        component: () =>
+          import('@/views/wrh-management/demolition-and/index'),
+        hidden: true,
+        meta: {
+          title: '容器拆并单',
+          icon: 'table'
+        }
+      }, {
+        path: "edit",
+        name: "AemolitionAndEdit",
+        component: () =>
+          import('@/views/wrh-management/demolition-and/edit'),
+        hidden: true,
+        meta: {
+          title: '查看容器拆并单',
+          icon: 'table'
+        }
+      }]
+    },
+    {
       path: "inventory",
       name: "Inventory",
       component: AModule,
@@ -1329,8 +1359,9 @@ const BillManagement = {
           icon: 'table'
         }
       }]
-    }]
-  }
+    }
+  ]
+}
 
 /**
  * 动态路由

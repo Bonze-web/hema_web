@@ -30,10 +30,9 @@
         <div style="background:#fff;">
           <div class="btn">
             <el-row>
-              <router-link :to="{ path: '/wrhmanagement/movebill/add', query:{ status: 'create'} }">
-                  <!-- <span v-if="child.meta&&child.meta.title" :title="child.meta.title">{{child.meta.title}}</span> -->
-                  <el-button type="primary" size="mini" v-if="hasPermission(PermIds.WMS_INCINVBILL_CREATE)">新建</el-button>
-              </router-link>
+              <!-- <router-link :to="{ path: '/wrhmanagement/movebill/add', query:{ status: 'create'} }"> -->
+                  <el-button type="primary" @click="createNew" size="mini" v-if="hasPermission(PermIds.WMS_INCINVBILL_CREATE)">新建</el-button>
+              <!-- </router-link> -->
             </el-row>
             <el-row style="margin-left:12px">
               <el-button type="primary" size="mini" @click="table = true">管理移库类型</el-button>
@@ -104,7 +103,7 @@ import billType from '../../../components/billType.vue';
 import BillTypeService from '@/api/service/BillTypeService'
 import BillService from "@/api/service/BillService";
 import PermIds from "@/api/permissionIds";
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   data() {
@@ -133,8 +132,13 @@ export default {
     ...mapGetters(["hasPermission"])
   },
   methods: {
+    ...mapActions(["addMove", "clearMove"]),
     goBack: function() {
       this.table = false
+    },
+    createNew: function() {
+      this.clearMove()
+      this.$router.push({path: '/wrhmanagement/movebill/add', query: {status: 'create'}})
     },
     handleCurrentChange: function(e) {
       this.page = Number(e)
