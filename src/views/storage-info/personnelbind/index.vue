@@ -63,6 +63,11 @@
                         {{ scope.row.secondBinscope }}
                     </template>
                 </el-table-column>
+                <el-table-column label="首选拣货任务类型">
+                    <template slot-scope="scope">
+                        {{ scope.row.first_task_type | stockTypeChange }}
+                    </template>
+                </el-table-column>
                 <el-table-column
                 label="操作"
                 v-if="hasPermission(PermIds.WMS_USER_PICKAREA_UPDATE) && workingOrg.type === 'DC'"
@@ -209,6 +214,14 @@ export default {
     this.getSuppliersList();
   },
   filters: {
+    stockTypeChange(type) {
+      switch (type) {
+        case "CASE":
+          return "整箱"
+        case "SPLIT":
+          return "拆零"
+      }
+    },
     sourceType(type) {
       switch (type) {
         case "HAND":

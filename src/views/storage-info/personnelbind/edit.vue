@@ -10,7 +10,7 @@
         </div>
         <div style="height:20px" />
         <div class="info-content">
-              <el-form label-width="110px" :model="form">
+              <el-form label-width="125px" :model="form">
                 <el-form-item label="用户">
                   <el-select v-model="form.userId" placeholder="请选择用户">
                     <el-option v-for="(ele, idx) in userAll" :key="idx" :disabled="ele.disabled" :label="ele.username" :value="ele.id"></el-option>
@@ -24,6 +24,12 @@
                 <el-form-item label="辅助拣货分区">
                   <el-select v-model="form.secondPickareaId" placeholder="请选择主要拣货分区">
                     <el-option v-for="(ele, idx) in secondPickareaIdArr" :key="idx" :label="'['+ ele.code + ']' + ele.name" :value="ele.id"></el-option>
+                  </el-select>
+                </el-form-item>
+                 <el-form-item label="首先拣货任务类型">
+                  <el-select v-model="form.first_task_type" placeholder="请选择首先拣货任务类型">
+                    <el-option label="整箱" value="CASE"></el-option>
+                    <el-option label="拆零" value="SPLIT"></el-option>
                   </el-select>
                 </el-form-item>
               </el-form>
@@ -50,7 +56,8 @@ export default {
           firstPickareaId: "",
           secondPickareaId: "",
           userId: '',
-          id: ''
+          id: '',
+          first_task_type: ''
         },
         editData: []
       }
@@ -61,7 +68,6 @@ export default {
     methods: {
       createSuppliers() {
         this.form.id = this.$route.query.id;
-        console.log(this.form);
         PersonnelbindService.updateSupplier(this.form)
         .then((res) => {
           this.$message.success("更新成功");
@@ -73,8 +79,8 @@ export default {
         })
       },
       back: function() {
-        this.$router.go(-1);
         this.$store.dispatch("tagsView/delView", this.$route);
+        this.$router.go(-1);
       },
       getDetail() {
         const id = this.$route.query.id;
@@ -82,6 +88,7 @@ export default {
         .then((res) => {
             this.form.firstPickareaId = res.firstPickarea.id;
             this.form.secondPickareaId = res.secondPickarea.id;
+            // this.form.first_task_type = res.first_task_type;
             this.form.userId = res.userId;
         })
         .catch((err) => {

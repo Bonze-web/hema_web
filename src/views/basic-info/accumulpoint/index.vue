@@ -2,14 +2,24 @@
     <div class="table-index _table-index">        
         <div class="select-head">
             <el-form ref="form" style="display:flex" :model="form" label-width="110px" label-position="right">
-                <el-form-item label="用户">
-                    <el-input type='text' placeholder="请输入代码/名称" v-model="form.usernameLikes" class="input-width"></el-input>
+                <el-form-item label="团点">
+                    <el-input type='text' placeholder="请输入代码/名称" v-model="form.codeOrNameEquals" class="input-width"></el-input>
                 </el-form-item>
-                <el-form-item label="主要拣货分区">
-                    <el-input type='text' placeholder="请输入代码/名称" v-model="form.firstCodeOrNameLikes" class="input-width"></el-input>
+                <el-form-item label="联系人">
+                    <el-input type='text' placeholder="请输入手机号/姓名" v-model="form.contactorNameOrMobileLikes" class="input-width"></el-input>
                 </el-form-item>
-                <el-form-item label="辅助拣货分区">
-                    <el-input type='text' placeholder="请输入代码/名称" v-model="form.secondCodeOrNameLikes" class="input-width"></el-input>
+                <el-form-item label="地址">
+                    <el-input type='text' placeholder="请输入地址" v-model="form.addressLikes" class="input-width"></el-input>
+                </el-form-item>
+                <el-form-item label="网格仓">
+                    <el-input type='text' placeholder="请输入网格仓" v-model="form.secondCodeOrNameLikes" class="input-width"></el-input>
+                </el-form-item>
+                <el-form-item label="来源">
+                  <el-select v-model="form.sourceWayEquals" placeholder="请选择来源">
+                    <el-option label="手工新建" value="MANUAL"></el-option>
+                    <el-option label="接口导入" value="API"></el-option>
+                    <el-option label="文件导入" value="EXCEL"></el-option>
+                  </el-select>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" size="mini" @click="onSubmit">查询</el-button>
@@ -21,7 +31,6 @@
         <div style="background:#fff">
           <el-row>
             <router-link :to="{ path: '/storageinfo/personnelbind/add', query:{ status: 'create'} }">
-              <!-- <span v-if="child.meta&&child.meta.title" :title="child.meta.title">{{child.meta.title}}</span> -->
               <el-button style="margin:18px 10px" type="primary" size="mini" v-if="hasPermission(PermIds.WMS_USER_PICKAREA_CREATE) && workingOrg.type === 'DC'">新建</el-button>
             </router-link>
           </el-row>
@@ -100,7 +109,7 @@
 
 <script>
 // 引入公共模块
-import PersonnelbindService from "@/api/service/PersonnelbindService";
+import AccumulpointService from "@/api/service/AccumulpointService";
 import PermIds from "@/api/permissionIds";
 import { mapGetters } from "vuex";
 
@@ -113,9 +122,11 @@ export default {
         pageSize: 10,
         totalCount: 0,
         form: {
-          usernameLikes: '',
-          firstCodeOrNameLikes: '',
-          secondCodeOrNameLikes: '',
+          codeOrNameEquals: '',
+          contactorNameOrMobileLikes: '',
+          frontCodeOrNameLikes: '',
+          sourceWayEquals: '',
+          addressLikes: '',
           searchCount: true
         },
         suppliersData: [],
@@ -127,8 +138,7 @@ export default {
   },
   methods: {
       editChange(id) {
-        const arr = JSON.stringify(this.suppliersData);
-        this.$router.push({name: 'PersonnelbindEdit', query: {id: id, editData: encodeURIComponent(arr)}});
+       
       },
       // 删除按钮
       deleteChange(id, version) {
@@ -139,7 +149,7 @@ export default {
             type: 'warning'
           }).then(() => {
               // 调用删除的接口,然后分页查询的接口重新渲染页面
-              PersonnelbindService.deleteData(id)
+              AccumulpointService.deleteData(id)
               .then((res) => {
                 _this.$message.success("删除成功")
                 _this.getSuppliersList();
@@ -184,9 +194,8 @@ export default {
         this.form.page = this.page;
         this.form.pageSize = this.pageSize;
         // 获取数据,然后将自己组件中的数据发送到后台
-        PersonnelbindService.getSuppliersList(this.form)
+        AccumulpointService.getStoreQuery(this.form)
         .then((res) => {
-          console.log(res);
           // 初始化自己定义的数据
           _this.suppliersData = res.records;
           _this.totalCount = res.totalCount;
