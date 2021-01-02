@@ -488,6 +488,26 @@ const BasicInfoPackage = {
           permission: PermIds.PRODUCT_PRODUCT_CREATE
         }
       }] 
+    }, {
+      path: "accumulpoint",
+      name: "Accumulpoint",
+      component: AModule,
+      meta: {
+        title: '团点',
+        icon: 'table'
+      },
+      children: [
+        {
+        path: "",
+        name: "accumulpointView",
+        component: () =>
+          import('@/views/basic-info/accumulpoint/index'),
+        hidden: true,
+        meta: {
+          title: '团点',
+          icon: 'table'
+        }
+      }] 
     }
   ]
 }
@@ -748,7 +768,7 @@ const StorageInfoPackage = {
       meta: {
         title: '拣货顺序',
         icon: 'table',
-        permission: PermIds.WMS_PICKORDER_VIEW
+        permission: PermIds.WMS_PICKORDER_VIEW 
       }
     }, {
       path: "edit",

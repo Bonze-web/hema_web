@@ -84,16 +84,8 @@
                                         <el-table-column width="100" prop="batch" label="批次"></el-table-column>
                                         <el-table-column width="100" prop="consumeQtystr" label="损耗件数"></el-table-column>
                                         <el-table-column width="100" prop="consumeQty" label="损耗数量"></el-table-column>
-                                        <el-table-column width="100" prop="realQtystr" label="实际件数" v-if="form.status === 'AUDITED'">
-                                          <template slot-scope="scope">
-                                            {{ scope.row.realQtystr }}
-                                          </template>
-                                        </el-table-column>
-                                        <el-table-column width="100" prop="realQty" label="实际数量"  v-if="form.status === 'AUDITED'">
-                                          <template slot-scope="scope">
-                                            {{ scope.row.realQty }}
-                                          </template>
-                                        </el-table-column>
+                                        <el-table-column width="100" prop="realQtystr" label="实际件数" v-if="form.status === 'AUDITED'"></el-table-column>
+                                        <el-table-column width="100" prop="realQty" label="实际数量"  v-if="form.status === 'AUDITED'"></el-table-column>
                                         <el-table-column width="100" prop="realQtystr" label="实际件数" v-if="check">
                                           <template slot-scope="scope">
                                             <el-input type="number" max="100" @input="calcProduct" size="mini" v-model="scope.row.realQtystr"></el-input>
@@ -107,7 +99,7 @@
                                         <el-table-column width="100" prop="price" label="单价"></el-table-column>
                                         <el-table-column width="100" prop="consumeAmount" label="损耗金额"></el-table-column>
                                         <el-table-column width="100" prop="realAmount" label="实际损耗金额"></el-table-column>
-                                        <el-table-column width="100" prop="remark" label="备注"></el-table-column>
+                                        <el-table-column width="100" prop="itemRemark" label="备注"></el-table-column>
                                     </el-table>
                         </el-tab-pane>
                         <!-- <el-tab-pane label="配送中心范围" name="range">配置管理</el-tab-pane> -->
@@ -226,9 +218,9 @@
                                             {{ (Number(scope.row.consumeQtystr) + Number(scope.row.consumeQty)) * scope.row.price ? (Number(scope.row.consumeQtystr) + Number(scope.row.consumeQty)) * scope.row.price : 0 }}
                                           </template>
                                         </el-table-column>
-                                        <el-table-column width="100" prop="remark" label="备注">
+                                        <el-table-column width="100" prop="itemRemark" label="备注">
                                           <template slot-scope="scope">
-                                            <textarea v-model="scope.row.remark"></textarea>
+                                            <textarea v-model="scope.row.itemRemark"></textarea>
                                           </template>
                                         </el-table-column>
                                     </el-table>
@@ -405,14 +397,18 @@ export default {
             this.form.stockList.push({
               consumeAmount: item.consumeAmount,
               lineNum: item.lineNum,
-              consumeQty: item.consumeQty,
-              consumeQtystr: item.consumeQtystr,
+              consumeQty: item.consumeQty ? item.consumeQty : 0,
+              consumeQtystr: item.consumeQtystr ? item.consumeQtystr : 0,
               stockId: item.stockId ? item.stockId : item.id,
-              realQty: item.realQty,
-              realQtystr: item.realQtystr,
+              realQty: item.realQty ? item.realQty : 0,
+              realQtystr: item.realQtystr ? item.realQtystr : 0,
               realAmount: item.realAmount
             })
           })
+        }
+        if (reset) {
+          _this.form.realTotalAmount = _this.form.totalAmount
+          _this.form.realTotalProductCount = _this.form.totalProductCount
         }
         if (this.check) {
           BillService.updateLossBill(this.form)
@@ -491,11 +487,10 @@ export default {
         this.productList.forEach(item => {
           console.log(item)
           item.lineNum = this.productList.indexOf(item) + 1
-          item.realAmount = Number(item.realQtystr) * item.price * Number(item.qpc) + Number(item.realQty) * item.price 
-          this.form.realTotalAmount += item.realAmount
-          realQtystr = Number(realQtystr) + Number(item.realQtystr)
-          realQty = Number(realQty) + Number(item.realQty)
-          console.log(realQty)
+          item.realAmount = ((Number(item.realQtystr) * item.price * Number(item.qpc) ? Number(item.realQtystr) * item.price * Number(item.qpc) : 0) + (Number(item.realQty) * item.price ? Number(item.realQty) * item.price : 0)).toFixed(2) 
+          // this.form.realTotalAmount += item.realAmount
+          realQtystr = Number(realQtystr) + (Number(item.realQtystr) ? Number(item.realQtystr) : 0)
+          realQty = Number(realQty) + (Number(item.realQty) ? Number(item.realQty) : 0)
           this.form.realTotalQtystr = realQtystr + '+' + realQty
           this.form.realTotalAmount = (Number(this.form.totalAmount) + Number(item.realAmount)).toFixed(2)
         });
@@ -507,10 +502,10 @@ export default {
         let consumeQty = ''
         this.productList.forEach(item => {
           item.lineNum = this.productList.indexOf(item) + 1
-          item.consumeAmount = Number(item.consumeQtystr) * item.price * Number(item.qpc) + Number(item.consumeQty) * item.price 
-          this.form.realTotalAmount += item.consumeAmount
-          consumeQtystr = Number(consumeQtystr) + Number(item.consumeQtystr)
-          consumeQty = Number(consumeQty) + Number(item.consumeQty)
+          item.consumeAmount = ((Number(item.consumeQtystr) * item.price * Number(item.qpc) ? Number(item.consumeQtystr) * item.price * Number(item.qpc) : 0) + (Number(item.consumeQty) * item.price ? Number(item.consumeQty) * item.price : 0)).toFixed(2) 
+          // this.form.realTotalAmount += item.consumeAmount
+          consumeQtystr = Number(consumeQtystr) + (Number(item.consumeQtystr) ? Number(item.consumeQtystr) : 0)
+          consumeQty = Number(consumeQty) + (Number(item.consumeQty) ? Number(item.consumeQty) : 0)
           if (Number(item.consumeQty) + Number(item.consumeQtystr) > Number(item.qty) || Number(item.consumeQty) < 0 || Number(item.consumeQtystr) < 0) {
             this.$message.error('请输入正确数据')
             consumeQtystr = 0
@@ -548,8 +543,8 @@ export default {
           for (const item in this.productList) {
             this.productList[item].realAmount = result.status === "AUDITED" ? this.productList[item].realAmount : this.productList[item].consumeAmount
             this.productList[item].lineNum = Number(item) + 1
-            this.productList[item].realQty = this.productList[item].consumeQty
-            this.productList[item].realQtystr = this.productList[item].consumeQtystr
+            this.productList[item].realQty = this.productList[item].realQty ? this.productList[item].realQty : this.productList[item].consumeQty
+            this.productList[item].realQtystr = this.productList[item].realQtystr ? this.productList[item].realQtystr : this.productList[item].consumeQtystr
             this.productList[item].stockId = this.productList[item].stockId ? this.productList[item].stockId : this.productList[item].id
           }
           this.form.totalAmount = result.totalAmount

@@ -221,11 +221,16 @@ export default {
         this.binList.forEach(item => {
           this.productList.forEach(value => {
             if (item.id === value.toBinId) {
-              value.toBinCode = item.binCode
-              value.toBinUsage = item.toBinUsage
+              console.log(value)
+              value.toBinCode = item.code
+              value.toBinUsage = item.binusage
               value.toWarehouseId = item.wrhId
               value.toWarehouseName = item.wrhName
               value.toWarehouseCode = item.wrhCode
+              value.fromBinId = value.binId
+              value.fromBinCode = value.binCode
+              value.fromBinUsage = value.binUsage
+              value.stockBatchList = value.batch
             }
           })
         })
@@ -361,45 +366,28 @@ export default {
       this.getAllBillType()
       this.getQueryStatus()
       this.getWrhList()
-      this.productList.forEach(item => {
-        item.fromBinId = item.binId
-        item.fromBinCode = item.binCode
-        item.fromBinUsage = item.binUsage
-        item.fromContainerId = item.containerId
-        item.fromContainerBarcode = item.containerBarcode
-        item.qty = 0
-        item.consumeQty = 0
-        item.consumeQtystr = 0
-        item.toBinCode = ''
-        item.toBinUsage = ''
-        item.toContainerId = ''
-        item.toContainerId = ''
-        item.toContainerBarcode = ''
-        item.toWarehouseId = ''
-        item.toWarehouseName = ''
-        item.toWarehouseCode = ''
-        item.stockBatchList = item.batch
-        delete item.binId
-        delete item.binCode
-        delete item.binUsage
-        delete item.containerId
-        delete item.containerBarcode
-        delete item.batch
-      })
-      this.calcProduct(this.productList)
+      // this.productList.forEach(item => {
+        
+      //   item.qty = 0
+      //   item.consumeQty = 0
+      //   item.consumeQtystr = 0
+      //   item.toBinCode = ''
+      //   item.toBinUsage = ''
+      //   item.toContainerId = ''
+      //   item.toContainerId = ''
+      //   item.toContainerBarcode = ''
+      //   item.toWarehouseId = ''
+      //   item.toWarehouseName = ''
+      //   item.toWarehouseCode = ''        
+        
+      // })
+      // this.calcProduct(this.productList)
     },
     beforeRouteEnter(to, from, next) {
       next(vm => {
         // 通过 `vm` 访问组件实例
         vm.productList = vm.$store.state.bill.moveSelection
         const arr = Array.from(new Set(vm.productList))
-        // for (const item in arr) {
-        //   arr[item].consumeAmount = 0
-        //   arr[item].lineNum = Number(item) + 1
-        //   arr[item].consumeQty = 0
-        //   arr[item].consumeQtystr = 0
-        //   arr[item].stockId = arr[item].id
-        // }
         vm.productList = arr
         vm.form.totalProductCount = arr.length
       })

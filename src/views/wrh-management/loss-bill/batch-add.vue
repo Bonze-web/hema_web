@@ -128,7 +128,7 @@ export default {
       // }
       this.addSelection(this.multipleSelection)
       console.log(this.multipleSelection)
-      // this.$store.dispatch("tagsView/delView", this.$route);
+      this.$store.dispatch("tagsView/delView", this.$route);
       this.$router.go(-1)
     },
     handleSelectionChange(val) {
@@ -144,11 +144,20 @@ export default {
         .then((result) => {
           this.productList = result.records
           this.totalCount = result.totalCount
+          this.toggleSelection(this.multipleSelection)
         }).catch((err) => {
           this.$message.error('获取商品列表失败' + err.message)
         });
       } else {
         this.$message.error('请至少填写一项以进行筛选搜索')
+      }
+    },
+    toggleSelection(rows) {
+      if (rows) {
+        console.log(rows, 'rows')
+        rows.forEach(row => {
+            this.$refs.multipleTable.toggleRowSelection(row);
+        });
       }
     },
     handleCurrentChange: function(e) {
@@ -163,16 +172,8 @@ export default {
   },
   created() {
     this.multipleSelection = this.$store.state.bill.multipleSelection
-    this.handleSelectionChange(this.multipleSelection)
-    // this.clearSelection()
-    // this.getRowKeys()
+    this.toggleSelection(this.moveSelection)
   },
-  // beforeRouteEnter(to, from, next) {
-  //     next(vm => {
-  //       // 通过 `vm` 访问组件实例
-  //       vm.multipleSelection = vm.$store.state.bill.multipleSelection
-  //     })
-  //   },
   filters: {
   }
 };

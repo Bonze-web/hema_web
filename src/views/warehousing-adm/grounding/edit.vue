@@ -13,9 +13,11 @@
         <!-- <div style="height: 20px; background: #fff;" /> -->
         <div class="header-ground" >
             <div class="title-store" style="width: 150px">商品编码or条码: </div>
-            <el-input type="text" placeholder="请输入商品编码or条码" v-model="productCodeOrProductName" class="input-width" style="width: 200px"></el-input>
+            <el-input type="text" placeholder="请输入商品编码or条码" v-model="productCodeOrProductName" class="input-width" style="width: 200px" @change="getByIdOrderBill"></el-input>
         </div>
-
+        <div style="display: flex;justify-content: flex-end;font-size:12px; color: #909399;padding:20px;">
+          <span>共{{totalCount}}条数据</span>
+        </div>
         <el-table :data="listData" style="width: 100%; text-align: center" :row-style="{ height: '16px', padding: '-4px' }" >
           <!-- <el-table-column prop="idx" label="序号">
             <template slot-scope="scope">{{ scope.row.idx}}</template>
@@ -26,44 +28,143 @@
               {{scope.row.productCode}}
           </el-table-column> -->
 
-          <el-table-column prop="productName" label="商品名称">
-            <template slot-scope="scope">{{ scope.row.productName}}</template>
+          <el-table-column prop="line" label="行号">
+            <template slot-scope="scope">{{ scope.row.line}}</template>
           </el-table-column>
 
-          <el-table-column prop="munit" label="单位" style="height: 20px">
-            <template slot-scope="scope">{{ scope.row.munit }}</template>
+          <el-table-column prop="billNumber" label="单号" style="height: 20px">
+            <template slot-scope="scope">{{ scope.row.billNumber }}</template>
           </el-table-column>
 
-          <el-table-column prop="spec" label="规格">
+          <el-table-column prop="amount" label="金额">
             <template slot-scope="scope">
-              {{ scope.row.spec }}
+              {{ scope.row.amount }}
             </template>
           </el-table-column>
 
-          <el-table-column prop="targetBinCode" label="应上货位">
+          <el-table-column prop="binCode" label="上架货位">
             <template slot-scope="scope">
-              {{ scope.row.targetBinCode }} 
+              {{ scope.row.binCode }} 
             </template>
           </el-table-column>
 
-          <el-table-column prop="binCode" label="实上货位">
+          <el-table-column prop="binUsage" label="上架货位用途">
             <template slot-scope="scope">
-              {{ scope.row.binCode ? scope.row.binCode : "&lt;空&gt;" }}
+              {{ scope.row.binUsage ? scope.row.binUsage : "&lt;空&gt;" }}
             </template>
           </el-table-column>
 
-          <el-table-column prop="productDate" label="生产日期">
+          <el-table-column prop="munit" label="计量单位">
+            <template slot-scope="scope">
+              {{ scope.row.munit }}
+            </template>
+          </el-table-column>
+
+          <el-table-column prop="productName" label="商品名">
+            <template slot-scope="scope">
+              {{ scope.row.productName }}
+            </template>
+          </el-table-column>
+          <el-table-column prop="price" label="商品单价">
+            <template slot-scope="scope">
+              {{ scope.row.price }}
+            </template>
+          </el-table-column>
+          <el-table-column prop="productCode" label="商品编码">
+            <template slot-scope="scope">
+              {{ scope.row.productCode }}
+            </template>
+          </el-table-column>
+          <el-table-column prop="productDate" label="商品生产日期">
             <template slot-scope="scope">
               {{ scope.row.productDate }}
             </template>
           </el-table-column>
-
-          <el-table-column prop="validDate" label="到效日期">
+          <el-table-column prop="productionBatch" label="批号">
+            <template slot-scope="scope">
+              {{ scope.row.productionBatch }}
+            </template>
+          </el-table-column>
+          <el-table-column prop="putawayTime" label="上架时间">
+            <template slot-scope="scope">
+              {{ scope.row.putawayTime }}
+            </template>
+          </el-table-column>
+          <el-table-column prop="qpcStr" label="规格">
+            <template slot-scope="scope">
+              {{ scope.row.qpcStr }}
+            </template>
+          </el-table-column>
+          <el-table-column prop="spec" label="商品规格描述">
+            <template slot-scope="scope">
+              {{ scope.row.spec }}
+            </template>
+          </el-table-column>
+          <el-table-column prop="qty" label="数量">
+            <template slot-scope="scope">
+              {{ scope.row.qty }}
+            </template>
+          </el-table-column>
+          <el-table-column prop="qtyStr" label="件数">
+            <template slot-scope="scope">
+              {{ scope.row.qtyStr }}
+            </template>
+          </el-table-column>
+          <el-table-column prop="volume" label="体积">
+            <template slot-scope="scope">
+              {{ scope.row.volume }}
+            </template>
+          </el-table-column>
+          <el-table-column prop="weight" label="重量">
+            <template slot-scope="scope">
+              {{ scope.row.weight }}
+            </template>
+          </el-table-column>
+          <el-table-column prop="sourceBinCode" label="来源货位编码">
+            <template slot-scope="scope">
+              {{ scope.row.sourceBinCode }}
+            </template>
+          </el-table-column>
+          <el-table-column prop="sourceBinUsage" label="来源货位用途">
+            <template slot-scope="scope">
+              {{ scope.row.sourceBinUsage }}
+            </template>
+          </el-table-column>
+          <el-table-column prop="stockBatch" label="批次">
+            <template slot-scope="scope">
+              {{ scope.row.stockBatch }}
+            </template>
+          </el-table-column>
+          <el-table-column prop="targetBinCode" label="目标货位编码">
+            <template slot-scope="scope">
+              {{ scope.row.targetBinCode }}
+            </template>
+          </el-table-column>
+          <el-table-column prop="targetBinUsage" label="目标货位用途">
+            <template slot-scope="scope">
+              {{ scope.row.targetBinUsage }}
+            </template>
+          </el-table-column>
+          <el-table-column prop="validDate" label="商品到效期">
             <template slot-scope="scope">
               {{ scope.row.validDate }}
             </template>
           </el-table-column>
-
+          <el-table-column prop="vendorCode" label="供应商编码">
+            <template slot-scope="scope">
+              {{ scope.row.vendorCode }}
+            </template>
+          </el-table-column>
+          <el-table-column prop="vendorName" label="供应商名字">
+            <template slot-scope="scope">
+              {{ scope.row.vendorName }}
+            </template>
+          </el-table-column>
+          <el-table-column prop="remark" label="备注">
+            <template slot-scope="scope">
+              {{ scope.row.remark }}
+            </template>
+          </el-table-column>
         </el-table>
 
         <!-- <el-pagination
@@ -80,7 +181,7 @@
 </template>
 
 <script>
-// import GroundingService from "@/api/service/GroundingService";
+import GroundingService from "@/api/service/GroundingService";
 
 export default {
   data() {
@@ -109,69 +210,69 @@ export default {
         // }
       },
       getByIdOrderBill() {
-        this.listData = [
-            {
-              "amount": 0,
-              "billId": "string",
-              "billNumber": "string",
-              "binCode": "string",
-              "binId": "string",
-              "binUsage": "string",
-              "dcId": "string",
-              "id": "string",
-              "line": 0,
-              "munit": "string",
-              "price": 0,
-              "productCode": "string",
-              "productDate": "2020-12-28T12:37:48.834Z",
-              "productId": "string",
-              "productName": "string",
-              "productionBatch": "string",
-              "putawayTime": "2020-12-28T12:37:48.834Z",
-              "qpc": 0,
-              "qpcStr": "string",
-              "qty": 0,
-              "qtyStr": "string",
-              "remark": "string",
-              "sourceBinCode": "string",
-              "sourceBinId": "string",
-              "sourceBinUsage": "string",
-              "spec": "string",
-              "stockBatch": "string",
-              "targetBinCode": "string",
-              "targetBinId": "string",
-              "targetBinUsage": "string",
-              "validDate": "2020-12-28T12:37:48.834Z",
-              "vendorCode": "string",
-              "vendorId": "string",
-              "vendorName": "string",
-              "version": "string",
-              "volume": 0,
-              "weight": 0
-          }
-      ]
-        // const data = {
-        //   billIdEquals : this.$route.query.id,
-        //   page : this.page,
-        //   pageSize: this.pageSize,
-        //   productCodeOrProductName: this.productCodeOrProductName,
-        //   searchCount : true
-        // }
-        // WarehousingAdmServers.putwayBillQueryItems(this.id)
-        // .then(res => {
-        //   res.records.forEach((ele, idx) => {
-        //       ele.idx = idx + 1;
-        //       this.listData.push(ele);
-        //   })
-        //   this.totalCount = res.pageCount;
-        // })
-        // .catch(err => {
-        //   this.$message.error("查询失败" + err.message)
-        // });
+      //   this.listData = [
+      //       {
+      //         "amount": 0,
+      //         "billId": "string",
+      //         "billNumber": "string",
+      //         "binCode": "string",
+      //         "binId": "string",
+      //         "binUsage": "string",
+      //         "dcId": "string",
+      //         "id": "string",
+      //         "line": 0,
+      //         "munit": "string",
+      //         "price": 0,
+      //         "productCode": "string",
+      //         "productDate": "2020-12-28T12:37:48.834Z",
+      //         "productId": "string",
+      //         "productName": "string",
+      //         "productionBatch": "string",
+      //         "putawayTime": "2020-12-28T12:37:48.834Z",
+      //         "qpc": 0,
+      //         "qpcStr": "string",
+      //         "qty": 0,
+      //         "qtyStr": "string",
+      //         "remark": "string",
+      //         "sourceBinCode": "string",
+      //         "sourceBinId": "string",
+      //         "sourceBinUsage": "string",
+      //         "spec": "string",
+      //         "stockBatch": "string",
+      //         "targetBinCode": "string",
+      //         "targetBinId": "string",
+      //         "targetBinUsage": "string",
+      //         "validDate": "2020-12-28T12:37:48.834Z",
+      //         "vendorCode": "string",
+      //         "vendorId": "string",
+      //         "vendorName": "string",
+      //         "version": "string",
+      //         "volume": 0,
+      //         "weight": 0
+      //     }
+      // ]
+        const data = {
+          billIdEquals: this.$route.query.id,
+          page: this.page,
+          pageSize: this.pageSize,
+          productCodeOrProductName: this.productCodeOrProductName || null,
+          searchCount: true
+        }
+        GroundingService.putwayBillQueryItems(data)
+        .then(res => {
+          res.records.forEach((ele, idx) => {
+              ele.idx = idx + 1;
+              this.listData.push(ele);
+          })
+          this.totalCount = res.totalCount;
+        })
+        .catch(err => {
+          this.$message.error("查询失败" + err.message)
+        });
       },
       handleCurrentChange: function(e) {
-      this.page = Number(e);
-      this.getByIdOrderBill(true);
+        this.page = Number(e);
+        this.getByIdOrderBill(true);
       },
       handleSizeChange: function(e) {
         this.pageSize = Number(e);

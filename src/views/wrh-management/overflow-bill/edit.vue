@@ -415,6 +415,10 @@ export default {
             })
           })
         }
+        if (reset) {
+          _this.form.realTotalAmount = _this.form.totalAmount
+          _this.form.realTotalProductCount = _this.form.totalProductCount
+        }
         if (this.check) {
           BillService.updateOverflowBill(this.form)
           .then((result) => {
@@ -492,10 +496,10 @@ export default {
         this.productList.forEach(item => {
           console.log(item)
           item.lineNum = this.productList.indexOf(item) + 1
-          item.realAmount = Number(item.realQtystr) * item.price + Number(item.realQty) * item.price 
-          this.form.realTotalAmount += item.realAmount
-          realQtystr = Number(realQtystr) + Number(item.realQtystr)
-          realQty = Number(realQty) + Number(item.realQty)
+          item.realAmount = ((Number(item.realQtystr) * item.price * Number(item.qpc) ? Number(item.realQtystr) * item.price * Number(item.qpc) : 0) + (Number(item.realQty) * item.price ? Number(item.realQty) * item.price : 0)).toFixed(2) 
+          // this.form.realTotalAmount += item.realAmount
+          realQtystr = Number(realQtystr) + (Number(item.realQtystr) ? Number(item.realQtystr) : 0)
+          realQty = Number(realQty) + (Number(item.realQty) ? Number(item.realQty) : 0)
           console.log(realQty)
           this.form.realTotalQtystr = realQtystr + '+' + realQty
           this.form.realTotalAmount = Number(this.form.totalAmount) + Number(item.realAmount)
@@ -509,10 +513,10 @@ export default {
         let consumeQty = ''
         this.productList.forEach(item => {
           item.lineNum = this.productList.indexOf(item) + 1
-          item.consumeAmount = Number(item.consumeQtystr) * item.price + Number(item.consumeQty) * item.price 
-          this.form.realTotalAmount += item.consumeAmount
-          consumeQtystr = Number(consumeQtystr) + Number(item.consumeQtystr)
-          consumeQty = Number(consumeQty) + Number(item.consumeQty)
+          item.consumeAmount = ((Number(item.consumeQtystr) * item.price * Number(item.qpc) ? Number(item.consumeQtystr) * item.price * Number(item.qpc) : 0) + (Number(item.consumeQty) * item.price ? Number(item.consumeQty) * item.price : 0)).toFixed(2) 
+          // this.form.realTotalAmount += item.consumeAmount
+          consumeQtystr = Number(consumeQtystr) + (Number(item.consumeQtystr) ? Number(item.consumeQtystr) : 0)
+          consumeQty = Number(consumeQty) + (Number(item.consumeQty) ? Number(item.consumeQty) : 0)
           if (Number(item.consumeQty) < 0 || Number(item.consumeQtystr) < 0) {
             this.$message.error('请输入正确的数据')
             consumeQtystr = 0
@@ -550,8 +554,8 @@ export default {
           for (const item in this.productList) {
             this.productList[item].realAmount = result.status === "AUDITED" ? this.productList[item].realAmount : this.productList[item].consumeAmount
             this.productList[item].lineNum = 0
-            this.productList[item].realQty = this.productList[item].consumeQty
-            this.productList[item].realQtystr = this.productList[item].consumeQtystr
+            this.productList[item].realQty = this.productList[item].realQty ? this.productList[item].realQty : this.productList[item].consumeQty
+            this.productList[item].realQtystr = this.productList[item].realQtystr ? this.productList[item].realQtystr : this.productList[item].consumeQtystr
             this.productList[item].stockId = this.productList[item].stockId ? this.productList[item].stockId : this.productList[item].id
           }
           this.form.totalAmount = result.totalAmount

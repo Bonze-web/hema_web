@@ -51,15 +51,15 @@
                         </router-link>
                     </template>
                 </el-table-column>
-                <el-table-column prop="billType" label="移库类型"></el-table-column>
-                <el-table-column prop="wrhCode" label="仓库">
+                <el-table-column prop="moveType" label="移库类型"></el-table-column>
+                <!-- <el-table-column prop="wrhCode" label="仓库">
                   <template slot-scope="scope">
                     {{ '[' + scope.row.wrhCode + ']' + scope.row.wrhName }}
                   </template>
-                </el-table-column>
-                <el-table-column prop="decerCode" label="报告员">
+                </el-table-column> -->
+                <el-table-column prop="moverName" label="报告员">
                   <template slot-scope="scope">
-                    {{ scope.row.decerName }}
+                    {{ scope.row.moverName }}
                   </template>
                 </el-table-column>
                 <el-table-column prop="createTime" label="创建时间"></el-table-column>
@@ -113,6 +113,7 @@ export default {
         table: false,
         billList: [],
         form: {
+          searchCount: true,
           moveType: '',
           billNumber: '', // 单据号
           decerNameLikes: '', // 报告员
@@ -174,6 +175,7 @@ export default {
     },
     clearInput: function() {
       this.form = {
+          searchCount: true,
           moveType: '',
           billNumber: '', // 单据号
           decerNameLikes: '', // 报告员
@@ -198,7 +200,7 @@ export default {
       const _this = this
       _this.form.page = this.page
       _this.form.pageSize = this.pageSize
-      BillService.getMovebillList(_this.form)
+      BillService.getMovebillList({page: 1, pageSize: 10})
       .then((res) => {
         _this.lossBill = res.records
       })
@@ -235,17 +237,17 @@ export default {
     },
   filters: {
     billStatus(status) {
-      switch (status) {
-        case "SAVED":
-          return "已保存"
-        case "APPROVED":
-          return "已批准"
-        case "AUDITED":
-          return "已审核"
-        default:
-          return "未知"
+        switch (status) {
+          case "INITIAL":
+            return "初始状态"
+          case "INPROGRESS":
+            return "移库中"
+          case "AUDITED":
+            return "已完成"
+          default:
+            return "未知"
+        }
       }
-    }
   }
 };
 </script>
@@ -259,7 +261,7 @@ export default {
   padding:18px 10px
 }
 /deep/ .el-table .cell{
-  height: 24px;
+  line-height: 16px;
 }
 </style>
 <style lang="scss">

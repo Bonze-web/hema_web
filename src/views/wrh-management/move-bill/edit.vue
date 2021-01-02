@@ -86,6 +86,7 @@ import BillService from "@/api/service/BillService";
 export default {
   data() {
       return {
+        tabActiveName: 'containerType',
         id: '', // 移库单ID
         moveBillDetail: {},
         productList: []
@@ -125,6 +126,16 @@ export default {
             return "未知"
         }
       }
+      // moveType(type) {
+      //   switch (type) {
+      //     case "SURPLUSSOW":
+      //       return ""
+      //       break;
+        
+      //     default:
+      //       break;
+      //   }
+      // }
     }
 };
 </script>

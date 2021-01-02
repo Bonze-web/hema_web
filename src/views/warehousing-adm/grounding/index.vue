@@ -30,7 +30,7 @@
            <el-input type="text" placeholder="操作人" v-model="form.putawayerNameLike" class="input-width" maxlength="50"></el-input>
         </el-form-item>
 
-        <el-form-item label="创建日期：">
+        <el-form-item label="创建日期: ">
           <el-date-picker class="input-width" v-model="createTime" type="datetimerange" format="yyyy-MM-dd" value-format="yyyy-MM-dd HH:mm:ss" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期" ></el-date-picker>
         </el-form-item>
         <!-- <el-form-item label="入库订单号/外部单号：">
@@ -51,6 +51,9 @@
           <div class="title-store">商品编码or条码</div>
           <el-input type="text" placeholder="请输入商品编码or条码" v-model="form.billNumberLike" class="input-width" ></el-input>
       </div> -->
+      <div style="display: flex;justify-content: flex-end;font-size:12px; color: #909399;padding:20px;">
+        <span>共{{totalCount}}条数据</span>
+      </div>
       <el-table :data="listData" style="width: 100%; text-align: center" :row-style="{ height: '16px', padding: '-4px' }" >
         <!-- <el-table-column type="selection" width="55"></el-table-column> -->
         <el-table-column prop="idx" label="序号">
@@ -127,19 +130,19 @@ export default {
     return {
       listData: [], // 列表数据
       form: {
-        billNumberLike: '', // 单号
+        billNumberLike: '' || null, // 单号
         receiveBillNumberLike: '', 
         status: '', // 状态等于
-        sourceContainerBarcodeEquals: '',
-        containerBarcodeEquals: "",
-        putawayerNameLike: "",
+        sourceContainerBarcodeEquals: '' || null,
+        containerBarcodeEquals: "" || null,
+        putawayerNameLike: "" || null,
         searchCount: true
       },
-      createTime: "", // 创建日期
+      createTime: '' || null, // 创建日期
       page: 1,
       pageSize: 10,
       totalCount: 0,
-      downList: ''
+      downList: '' || null
     };
   },
   computed: {},
@@ -156,12 +159,12 @@ export default {
     },
     clearInput: function() {
       this.form = {
-        billNumberLike: '', // 单号
-        receiveBillNumberLike: '', 
-        status: '', // 状态等于
-        sourceContainerBarcodeEquals: '',
-        containerBarcodeEquals: "",
-        putawayerNameLike: "",
+        billNumberLike: '' || null, // 单号
+        receiveBillNumberLike: '' || null, 
+        status: '' || null, // 状态等于
+        sourceContainerBarcodeEquals: '' || null,
+        containerBarcodeEquals: '' || null,
+        putawayerNameLike: '' || null,
         searchCount: true
       };
       this.page = 1;
@@ -175,9 +178,8 @@ export default {
     queryOrderBill: function() {
       this.form.page = this.page;
       this.form.pageSize = this.pageSize;
-      this.form.beginPutawayTimeEnd = this.createTime[0];
-      this.form.beginPutawayTimeStart = this.createTime[1];
-
+      this.form.beginPutawayTimeEnd = null || (this.createTime && this.createTime[0])
+      this.form.beginPutawayTimeStart = null || (this.createTime && this.createTime[1]);
       GroundingService.putwayBillQuery(this.form).then((res) => {
         this.totalCount = res.pageCount;
         res.records.forEach((ele, idx) => {
@@ -188,6 +190,48 @@ export default {
       }).catch(err => {
         this.$message.error("数据请求失败" + err.message)
       });
+      //  this.listData = [
+      //   {
+      //   idx: 1,
+      //   "beginPutawayTime": "2021-01-02T07:09:22.818Z",
+      //   "billNumber": "string",
+      //   "containerBarcode": "string",
+      //   "createTime": "2021-01-02T07:09:22.818Z",
+      //   "creatorId": "string",
+      //   "creatorName": "string",
+      //   "endPutawayTime": "2021-01-02T07:09:22.818Z",
+      //   "id": "string",
+      //   "orgId": "string",
+      //   "putawayerName": "string",
+      //   "receiveBillNumber": "string",
+      //   "sourceContainerBarcode": "string",
+      //   "status": "INITIAL",
+      //   "updateTime": "2021-01-02T07:09:22.818Z",
+      //   "updatorId": "string",
+      //   "updatorName": "string",
+      //   "version": "string"
+      // },
+      // {
+      //   idx: 2,
+      //   "beginPutawayTime": "2021-01-02T07:09:22.818Z",
+      //   "billNumber": "string",
+      //   "containerBarcode": "string",
+      //   "createTime": "2021-01-02T07:09:22.818Z",
+      //   "creatorId": "string",
+      //   "creatorName": "string",
+      //   "endPutawayTime": "2021-01-02T07:09:22.818Z",
+      //   "id": "string",
+      //   "orgId": "string",
+      //   "putawayerName": "string",
+      //   "receiveBillNumber": "string",
+      //   "sourceContainerBarcode": "string",
+      //   "status": "INITIAL",
+      //   "updateTime": "2021-01-02T07:09:22.818Z",
+      //   "updatorId": "string",
+      //   "updatorName": "string",
+      //   "version": "string"
+      // }
+      // ]
     },
     handleCurrentChange: function(e) {
       this.page = Number(e);
@@ -201,40 +245,6 @@ export default {
   },
   created() {
     this.queryOrderBill();
-    // GroundingService.createTestOrderBill({
-    //         description: '1',
-    //         arrivalDate: '2020-11-11',
-    //         beginReceiveTime: '2020-11-15',
-    //         dcId: '000001',
-    //         endReceiveTime: '2020-12-11',
-    //         expireDate: '2020-12-11',
-    //         inputTime: '2020-12-11',
-    //         isLogisticMode: '越库',
-    //         isTest: '1',
-    //         remark: '111',
-    //         srcApi: '来源',
-    //         status: 'MANUAL',
-    //         totalAmount: '11111',
-    //         totalPdtCount: '1',
-    //         totalQty: '1',
-    //         totalQtystr: '1',
-    //         totalReceivedAmount: '1',
-    //         totalReceivedPdtCount: '1',
-    //         totalReceivedQty: '1',
-    //         totalReceivedQtystr: '1',
-    //         totalReceivedVolume: '1',
-    //         totalReceivedWeight: '1',
-    //         totalVolume: '1',
-    //         totalWeight: '1',
-    //         trustType: 'TRUST',
-    //         uploadTime: '2020-11-11',
-    //         vendorCode: '111',
-    //         vendorId: '1111',
-    //         vendorName: '名称',
-    //         wrhCode: '仓库代码',
-    //         wrhId: '2002',
-    //         wrhName: '13号仓库'
-    // })
   },
   beforeRouteEnter(to, from, next) {
     next(vm => {

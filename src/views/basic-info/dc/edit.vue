@@ -185,7 +185,9 @@
                             </el-col>
                         </el-tab-pane>
                         <!-- <el-tab-pane label="配送中心范围" name="range">配置管理</el-tab-pane> -->
-                        <el-tab-pane label="操作日志" name="log">角色管理</el-tab-pane>
+                        <el-tab-pane label="操作日志" name="log">
+                          <system-log modular="CONTAINERTYPE"></system-log>
+                        </el-tab-pane>
                     </el-tabs>
                 </template>
             </div>
@@ -197,6 +199,7 @@
 import PermIds from "@/api/permissionIds";
 import { mapGetters } from "vuex";
 import BasicService from "@/api/service/BasicService";
+import systemLog from "@/components/systemLog.vue";
 
 export default {
   data() {
@@ -250,6 +253,9 @@ export default {
           ]
         }
       }
+    },
+    components: {
+      systemLog
     },
     computed: {
       ...mapGetters(["hasPermission"])
