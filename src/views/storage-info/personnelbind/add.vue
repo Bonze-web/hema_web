@@ -95,6 +95,7 @@ export default {
       });
       PersonnelbindService.userQuery()
       .then((res) => {
+        console.log(res);
           this.userAll = res.records;
       })
       .catch((err) => {

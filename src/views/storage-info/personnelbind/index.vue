@@ -22,7 +22,7 @@
           <el-row>
             <router-link :to="{ path: '/storageinfo/personnelbind/add', query:{ status: 'create'} }">
               <!-- <span v-if="child.meta&&child.meta.title" :title="child.meta.title">{{child.meta.title}}</span> -->
-              <el-button style="margin:18px 10px" type="primary" size="mini" v-if="hasPermission(PermIds.WMS_USER_PICKAREA_CREATE)">新建</el-button>
+              <el-button style="margin:18px 10px" type="primary" size="mini" v-if="hasPermission(PermIds.WMS_USER_PICKAREA_CREATE) && workingOrg.type === 'DC'">新建</el-button>
             </router-link>
           </el-row>
             <el-table
@@ -64,7 +64,9 @@
                     </template>
                 </el-table-column>
                 <el-table-column
-                label="操作">
+                label="操作"
+                v-if="hasPermission(PermIds.WMS_USER_PICKAREA_UPDATE) && workingOrg.type === 'DC'"
+                >
                   <template slot-scope="scope">
                       <!-- <div style="color:#409EFF;cursor:pointer" @click="deleteChange(scope.row.id, scope.row.version)">编辑</div>
                       <div style="color:#409EFF;cursor:pointer" @click="deleteChange(scope.row.id, scope.row.version)">删除</div> -->
@@ -125,7 +127,8 @@ export default {
   },
   methods: {
       editChange(id) {
-        this.$router.push({name: 'PersonnelbindEdit', query: {id: id}});
+        const arr = JSON.stringify(this.suppliersData);
+        this.$router.push({name: 'PersonnelbindEdit', query: {id: id, editData: encodeURIComponent(arr)}});
       },
       // 删除按钮
       deleteChange(id, version) {

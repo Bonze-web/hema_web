@@ -13,7 +13,7 @@
               <el-form label-width="110px" :model="form">
                 <el-form-item label="用户">
                   <el-select v-model="form.userId" placeholder="请选择用户">
-                    <el-option v-for="(ele, idx) in userAll" :key="idx" :label="ele.username" :value="ele.id"></el-option>
+                    <el-option v-for="(ele, idx) in userAll" :key="idx" :disabled="ele.disabled" :label="ele.username" :value="ele.id"></el-option>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="主要拣货分区">
@@ -51,7 +51,8 @@ export default {
           secondPickareaId: "",
           userId: '',
           id: ''
-        }
+        },
+        editData: []
       }
     },
     computed: {
@@ -79,7 +80,6 @@ export default {
         const id = this.$route.query.id;
         PersonnelbindService.getSuppliersDetail(id)
         .then((res) => {
-          console.log(res);
             this.form.firstPickareaId = res.firstPickarea.id;
             this.form.secondPickareaId = res.secondPickarea.id;
             this.form.userId = res.userId;
@@ -90,6 +90,7 @@ export default {
       }
     },
     created() {
+      this.editData = JSON.parse(decodeURIComponent(this.$route.query.editData));
       this.getDetail();
       PersonnelbindService.getPickareaQuery()
       .then((res) => {
@@ -101,7 +102,14 @@ export default {
       });
       PersonnelbindService.userQuery()
       .then((res) => {
-          this.userAll = res.records;
+        res.records.forEach((ele, idx) => {
+            this.editData.forEach((item, index) => {
+                if (ele.id === item.userId) {
+                    ele.disabled = true;
+                }
+            })
+        })
+        this.userAll = res.records;
       })
       .catch((err) => {
         if (err) this.$message.error("获取所有用户失败" + err.message);
