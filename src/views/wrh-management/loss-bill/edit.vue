@@ -373,7 +373,9 @@ export default {
         this.form.decerId = e.id
       },
       deleteProduct: function(index) {
-        this.deleteSelection(index)
+        if (index !== 0) {
+          this.deleteSelection(index)
+        }
         this.productList.splice(index, 1)
         const arr = Array.from(new Set(this.productList))
         this.form.totalProductCount = arr.length
