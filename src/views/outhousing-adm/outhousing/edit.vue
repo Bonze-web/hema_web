@@ -1,11 +1,11 @@
 <template>
     <div>
         <div class="head" v-if="status === 'create' || status === 'edit'">
-            <div style="margin-top:8px" v-if="status === 'create'">新建</div>
-            <div style="margin-top:8px" v-else>编辑码头</div>
+            <!-- <div style="margin-top:8px" v-if="status === 'create'">新建</div>
+            <div style="margin-top:8px" v-else>编辑码头</div> -->
             <div>
                 <el-button @click="back">取消</el-button>
-                <el-button type="primary" @click="createSuppliers"  v-if="hasPermission(PermIds.WMS_DOCK_UPDATE) && workingOrg.type === 'DC'">确认</el-button>
+                <!-- <el-button type="primary" @click="createSuppliers"  v-if="hasPermission(PermIds.WMS_DOCK_UPDATE) && workingOrg.type === 'DC'">确认</el-button> -->
                 <!-- <el-button type="primary" v-if="status === 'create'">确认并创建</el-button> -->
             </div>
         </div>
@@ -23,61 +23,27 @@
             </div>
         </div>
         <div style="height:20px" />
-        <div class="info-content" v-if="status === 'create' || status === 'edit'">
-            <div>
-                <template>
-                    <el-tabs v-model="tabActiveNameOne">
-                        <el-tab-pane label="码头" name="suppliers">
-                            <div class="info-title">基本信息</div>
-                            <el-form :model="form" :rules="createRules" ref="form" label-width="100px" class="demo-ruleForm">
-                                <el-row :gutter="20">
-                                    <el-col :span="6" class="info-box">
-                                        <el-form-item label="代码" prop="code">
-                                            <el-input disabled="disabled" v-model="form.code" maxlength="16"></el-input>
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col :span="6" class="info-box">
-                                        <el-form-item label="名称" prop="name">
-                                            <el-input v-model="form.name" maxlength="40"></el-input>
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col :span="6" class="info-box">
-                                        <el-form-item label="用途" prop="usages">
-                                          <el-select v-model="form.usages" multiple placeholder="请选择用途">
-                                            <el-option label="收货" value="RECEIVE"></el-option>
-                                            <el-option label="出货" value="OUT"></el-option>
-                                            <el-option label="退货" value="RETURN"></el-option>
-                                          </el-select>
-                                        </el-form-item>
-                                    </el-col>
-
-                                </el-row>
-                                <el-form-item label="备注">
-                                    <textarea v-model="form.remark" maxlength="200"></textarea>
-                                </el-form-item>
-                            </el-form>
-                        </el-tab-pane>
-                    </el-tabs>
-                </template>
-            </div>
-        </div>
         <div class="info-content" v-if="status === 'read'">
             <div>
                 <template>
                     <el-tabs v-model="tabActiveName">
-                        <el-tab-pane label="码头" name="suppliers">
+                        <el-tab-pane label="仓库作业单" name="suppliers">
                             <div class="info-title">基本信息</div>
                             <el-col :span="6" class="info-box">
-                                <div>代码:</div>
-                                <div>{{ suppliersInfo.code }}</div>
+                                <div>盘点单号:</div>
+                                <div>{{ suppliersInfo.billNumber }}</div>
                             </el-col>
                             <el-col :span="6" class="info-box">
-                                <div>名称:</div>
-                                <div>{{ suppliersInfo.name }}</div>
+                                <div>所属区块编码:</div>
+                                <div>{{ suppliersInfo.blockCode }}</div>
                             </el-col>
                             <el-col :span="6" class="info-box">
-                                <div>用途:</div>
-                                <div>{{ suppliersInfo.usages | purposeChange}}</div>
+                                <div>所属网格仓:</div>
+                                <div>{{ '[' + suppliersInfo.frontDcCode + ']' + suppliersInfo.frontDcName }}</div>
+                            </el-col>
+                            <el-col :span="6" class="info-box">
+                                <div>是否测试单:</div>
+                                <div>{{ suppliersInfo.isTest }}</div>
                             </el-col>
                             <el-col class="info-box">
                                 <div>备注:</div>

@@ -33,7 +33,7 @@
                   type="selection"
                   width="55">
               </el-table-column> -->
-              <el-table-column prop="code" label="用户代码">
+              <el-table-column prop="code" label="用户代码" sortable>
                   <template slot-scope="scope">
                       <span>{{ scope.row.userId }}</span>
                   </template>

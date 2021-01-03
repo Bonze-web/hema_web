@@ -1,18 +1,38 @@
 <template>
     <div class="table-index _table-index">        
         <div class="select-head">
-            <el-form ref="form" style="display:flex" :model="form" label-width="60px" label-position="right">
-                <el-form-item label="码头">
-                    <!-- 输入码头的id,方便后面的查找,查找和一开始获取数据的接口是同一个 -->
-                    <el-input type='text' placeholder="请输入代码/名称" v-model="form.codeEqOrNameLike" class="input-width"></el-input>
+            <el-form ref="form" style="display:flex;flex-wrap:wrap;" :model="form" label-width="100px" label-position="right">
+                <el-form-item label="仓库作业单">
+                    <!-- 输入仓库作业单的id,方便后面的查找,查找和一开始获取数据的接口是同一个 -->
+                    <el-input type='text' placeholder="请输入代码/名称" v-model="form.billNumber" class="input-width"></el-input>
                     <!-- <el-input type='text' placeholder="请输入名称" v-model="form.name" class="input-width"></el-input> -->
+                </el-form-item>
+                <el-form-item label="所属区域编码">
+                    <el-input type='text' placeholder="请输入所属区域编码" v-model="form.blockCode" class="input-width"></el-input>
+                </el-form-item>
+                <el-form-item label="所属网格仓">
+                    <el-input type='text' placeholder="请输入所属网格仓" v-model="form.frontDcInfo" class="input-width"></el-input>
+                </el-form-item>
+                <el-form-item label="门店信息">
+                    <el-input type='text' placeholder="请输入门店信息" v-model="form.storeInfo" class="input-width"></el-input>
+                </el-form-item>
+                <el-form-item label="仓库信息">
+                    <el-input type='text' placeholder="请输入仓库信息" v-model="form.wrhInfo" class="input-width"></el-input>
+                </el-form-item>
+                <el-form-item label="外部单号">
+                    <el-input type='text' placeholder="请输入外部单号" v-model="form.sourceSubBillId" class="input-width"></el-input>
+                </el-form-item>
+                <el-form-item label="是否测试单">
+                    <el-select v-model="form.status" placeholder="请选择状态">
+                      <el-option label="是" :value="true"></el-option>
+                      <el-option label="否" :value="false"></el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item label="状态">
                     <el-select v-model="form.status" placeholder="请选择状态">
-                    <el-option label="全部" value=""></el-option>
-                    <el-option label="空闲" value="IDLE"></el-option>
-                    <el-option label="使用中" value="USING"></el-option>
-                    <el-option label="停用" value="STOP"></el-option>
+                    <el-option label="初始" value="INITIAL"></el-option>
+                    <el-option label="进行中" value="RUNNING"></el-option>
+                    <el-option label="已完成" value="FINISHED"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item>
@@ -35,62 +55,50 @@
                 :data="suppliersData"
                 style="width: 100%"
             >
-                <!-- <el-table-column
-                    type="selection"
-                    width="55">
-                </el-table-column> -->
-                <el-table-column prop="code" label="代码">
+                <el-table-column prop="billNumber" label="盘点单号">
                     <template slot-scope="scope">
                         <router-link style="color:#409EFF" :to="{ path: '/storageinfo/wharf/edit', query:{ status: 'read', id: scope.row.id} }">
-                            <span>{{ scope.row.code }}</span>
+                            <span>{{ scope.row.billNumber }}111</span>
                         </router-link>
                     </template>
                 </el-table-column>
-                <el-table-column prop="name" label="名称"></el-table-column>
-                <el-table-column prop="usages" label="用途">
+                <el-table-column prop="sourceSubBillId" label="外部单号">
                     <template slot-scope="scope">
-                        {{ scope.row.usages | purposeChange}}
+                        <router-link style="color:#409EFF" :to="{ path: '/storageinfo/wharf/edit', query:{ status: 'read', id: scope.row.id} }">
+                            <span>{{ scope.row.sourceSubBillId }}</span>
+                        </router-link>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="blockCode" label="所属区块编码">
+                   <template slot-scope="scope">
+                        {{ scope.row.blockCode }}
+                    </template>
+                </el-table-column>
+                <el-table-column prop="frontDcCode" label="所属网格仓">
+                    <template slot-scope="scope">
+                        {{ '[' + scope.row.frontDcCode + ']' + scope.row.frontDcName }}
+                    </template>
+                </el-table-column>
+                <el-table-column prop="frontDcCode" label="门店">
+                    <template slot-scope="scope">
+                        {{ '[' + scope.row.storeCode + ']' + scope.row.storeName }}
+                    </template>
+                </el-table-column>
+                <el-table-column prop="isTest" label="是否测试单">
+                    <template slot-scope="scope">
+                        {{ scope.row.isTest }}
+                    </template>
+                </el-table-column>
+                <el-table-column prop="wrhCode" label="仓库">
+                    <template slot-scope="scope">
+                        {{ '[' + scope.row.wrhCode + ']' + scope.row.wrhName }}
                     </template>
                 </el-table-column>
                 <el-table-column prop="status" label="状态" >
                   <template slot-scope="scope">
-                    <!-- {{scope.row.status}} -->
                     {{ scope.row.status | suppliersStatus }}
                   </template>
                 </el-table-column>
-                <el-table-column
-                label="操作"
-                v-if="hasPermission(PermIds.WMS_DOCK_UPDATE) && workingOrg.type === 'DC'"
-                >
-                  <template slot-scope="scope">
-                    <!-- <div class="status-chnage-box">
-                        <el-button size="mini" type="text" @click="statusChange(scope.row.status, scope.row.id, scope.row.version)">修改状态</el-button>
-                        
-                    </div> -->
-                    
-                    <!-- <el-button :disabled="scope.row.status" size="mini" type="text" @click="statusChange(scope.row.status, scope.row.id, scope.row.version)">休闲</el-button>
-                    <el-button :disabled="!scope.row.status" size="mini" type="text" @click="statusChange(scope.row.status, scope.row.id, scope.row.version)">使用中</el-button>
-                    <el-button :disabled="!scope.row.status" size="mini" type="text" @click="statusChange(scope.row.status, scope.row.id, scope.row.version)">停用</el-button> -->
-                    <el-dropdown :hide-on-click="true" trigger="click" @command="statusChange" placement="bottom">
-                      <span class="el-dropdown-link" style="color:#409EFF; font-size:12px;padding:7px 0;">
-                        设置状态
-                      </span>
-                      <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item :disabled="scope.row.status=='IDLE'" :command="[scope.row.id, scope.row.version, 'IDLE']">休闲</el-dropdown-item>
-                        <el-dropdown-item :disabled="scope.row.status=='USING'" :command="[scope.row.id, scope.row.version, 'USING']">使用中</el-dropdown-item>
-                        <el-dropdown-item :disabled="scope.row.status=='STOP'" :command="[scope.row.id, scope.row.version, 'STOP']">停用</el-dropdown-item>
-                      </el-dropdown-menu>
-                    </el-dropdown>
-                  </template>
-                </el-table-column>
-                <!-- <el-table-column
-                label="编辑">
-                  <template slot-scope="scope">
-                      <router-link :to="{ path: '/storageinfo/wharf/edit', query:{ status: 'edit', id: scope.row.id} }">
-                            <el-button size="mini" type="text">编辑</el-button>
-                      </router-link>
-                  </template>
-                </el-table-column> -->
             </el-table>
             <!-- 下面这个是翻页 -->
             <el-pagination
@@ -122,10 +130,17 @@ export default {
         pageSize: 10,
         totalCount: 0,
         form: {
-          // code: '',
-          // name: '',
-          codeEqOrNameLike: '',
-          status: ''
+          billNumber: '',
+          blockCode: '',
+          status: '',
+          distDateEnd: '',
+          distDateStart: '',
+          frontDcInfo: '',
+          isTest: '',
+          searchCount: true,
+          sourceSubBillId: '',
+          storeInfo: '',
+          wrhInfo: ''
         },
         suppliersData: [],
         multipleSelection: [] // 选择的列表
@@ -147,7 +162,7 @@ export default {
       statusChange: function(command) {
       // 修改仓库状态
       const _this = this;
-      this.$confirm('此操作将改变码头状态,是否继续?', '提示', {
+      this.$confirm('此操作将改变仓库作业单状态,是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -211,7 +226,7 @@ export default {
       },
       // 向后台请求数据,这里是查询功能和一开始就调取数据列表
       getSuppliersList: function() {
-       // 请求码头的数据
+       // 请求仓库作业单的数据
         const _this = this;    
         // 将当前组件的实例记录起来，这些都是我在data中自己写的数据
         const data = {
@@ -244,7 +259,7 @@ export default {
             console.log(i);
             // 数组循环后,将过去到的值,全部放在suppliersData这个数组中,我要模拟数据也要使用这个数组
             const obj = {
-              // 码头的id
+              // 仓库作业单的id
               id: res.records[i].id,
               // 代码
               code: res.records[i].code,
