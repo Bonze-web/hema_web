@@ -21,7 +21,7 @@ export default {
      * 修改
      */
     updateLossBill(postData) {
-        return request.put('/stock-take-bill' + postData.id, postData)
+        return request.put('/stock-take-bill/' + postData.id, postData)
     },
     /**
      * 请求详情

@@ -1090,7 +1090,56 @@ const warehousingAdm = {
         }
       ]
     }
-  ]}
+]}
+// /**
+//  * 出库管理
+//  */
+// const outhousingAdm = {
+//   path: '/outhousing-adm',
+//   component: Layout,
+//   name: 'outhousingAdm',
+//   alwaysShow: true,
+//   meta: {
+//     title: '出库管理',
+//     icon: 'wrhing'
+//   },
+//   children: [
+//     {
+//     path: "outhousing",
+//     name: "Outhousing",
+//     component: AModule,
+//     meta: {
+//       title: '出库订单',
+//       icon: 'table',
+//       permission: PermIds.WMS_ORDERBILL
+//     },
+//     children: [
+//       {
+//       path: "",
+//       name: "OuthousingView",
+//       component: () =>
+//         import('@/views/outhousing-adm/outhousing/index'),
+//       hidden: true,
+//       meta: {
+//         title: '出库订单列表',
+//         icon: 'table',
+//         permission: PermIds.WMS_ORDERBILL_VIEW
+//       }
+//       }, {
+//         path: "edit",
+//         name: "出库订单详情",
+//         component: () =>
+//           import('@/views/outhousing-adm/outhousing/edit'),
+//         hidden: true,
+//         meta: {
+//           title: '出库订单详情',
+//           icon: 'table',
+//           permission: PermIds.WMS_ORDERBILL_VIEW
+//         }
+//       }
+//     ]
+//   }
+// ]}
   
   /*
  * 单据管理包

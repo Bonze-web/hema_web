@@ -183,7 +183,7 @@ export default {
         })
       },
       editInventory() {
-        console.log(this.form);
+        this.form.planDate = this.geshiChange(this.form.planDate);
         InventoryService.updateLossBill(this.form)
         .then((res) => {
           this.$message.success("修改成功");
@@ -196,7 +196,9 @@ export default {
         this.status = this.$route.query.status;
         if (this.status === 'edit') {
           var list = decodeURIComponent(this.$route.query.suppliersInfo);
+          console.log(list);
           this.form = JSON.parse(list);
+          console.log(this.form);
         }
     },
     beforeRouteEnter(to, from, next) {

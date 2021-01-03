@@ -10,6 +10,15 @@ export default {
    */
   // 一开始我就要请求的接口
   // 分页的接口请求
+  getSuppliersListAll() {
+    const postData = {
+      page: 1,
+      pageSize: 0
+    }
+    return request.get('/wms/userpickarea/query', {
+      params: postData
+    })
+  },
   getSuppliersList(postData) {
     // return request.post('/wms/storagearea/query', param)
     // return request.get('/wms/storagearea/query', param)

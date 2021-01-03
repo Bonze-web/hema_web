@@ -10,23 +10,23 @@
         </div>
         <div style="height:20px" />
         <div class="info-content">
-              <el-form label-width="125px" :model="form">
-                <el-form-item label="用户">
+              <el-form label-width="125px" :model="form" ref="formName" :rules="createRules">
+                <el-form-item label="用户" prop="userId">
                   <el-select v-model="form.userId" placeholder="请选择用户">
                     <el-option v-for="(ele, idx) in userAll" :key="idx" :disabled="ele.disabled" :label="ele.username" :value="ele.id"></el-option>
                   </el-select>
                 </el-form-item>
-                <el-form-item label="主要拣货分区">
+                <el-form-item label="主要拣货分区" prop="firstPickareaId">
                     <el-select v-model="form.firstPickareaId" placeholder="请选择主要拣货分区">
                       <el-option v-for="(ele, idx) in firstPickareaIdArr" :key="idx" :label="'['+ ele.code + ']' + ele.name" :value="ele.id"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="辅助拣货分区">
+                <el-form-item label="辅助拣货分区" prop="secondPickareaId">
                   <el-select v-model="form.secondPickareaId" placeholder="请选择主要拣货分区">
                     <el-option v-for="(ele, idx) in secondPickareaIdArr" :key="idx" :label="'['+ ele.code + ']' + ele.name" :value="ele.id"></el-option>
                   </el-select>
                 </el-form-item>
-                <el-form-item label="首先拣货任务类型">
+                <el-form-item label="首先拣货任务类型" prop="firstTaskType">
                   <el-select v-model="form.firstTaskType" placeholder="请选择首先拣货任务类型">
                     <el-option label="整箱" value="CASE"></el-option>
                     <el-option label="拆零" value="SPLIT"></el-option>
@@ -65,7 +65,21 @@ export default {
           firstTaskType: "",
           secondTaskType: ""
         },
-        editData: []
+        editData: [],
+        createRules: {
+          userId: [
+            { required: true, message: '请选择用户', trigger: 'blur' }
+          ],
+          firstPickareaId: [
+            { required: true, message: '请选择主要拣货分区', trigger: 'blur' }
+          ],
+          secondPickareaId: [
+            { required: true, message: '请选择辅助拣货分区', trigger: 'blur' }
+          ],
+          firstTaskType: [
+            { required: true, message: '请选择首要任务类型', trigger: 'blur' }
+          ]
+        }
       }
     },
     computed: {
@@ -73,19 +87,23 @@ export default {
     },
     methods: {
       createSuppliers() {
-        if (this.form.firstTaskType === 'CASE') {
-          this.form.secondTaskType = 'SPLIT';
-        } else if (this.form.firstTaskType === 'SPLIT') {
-          this.form.secondTaskType = 'CASE'
-        }
-        PersonnelbindService.createSuppliers(this.form)
-        .then((res) => {
-            this.$message.success("创建成功");
-            this.$store.dispatch("tagsView/delView", this.$route);
-            this.$router.go(-1);
-        })
-        .catch((err) => {
-          if (err) this.$message.error("获取信息失败" + err.message)
+        this.$refs['formName'].validate((valid) => {
+          if (valid) {
+              if (this.form.firstTaskType === 'CASE') {
+                this.form.secondTaskType = 'SPLIT';
+              } else if (this.form.firstTaskType === 'SPLIT') {
+                this.form.secondTaskType = 'CASE'
+              }
+              PersonnelbindService.createSuppliers(this.form)
+              .then((res) => {
+                  this.$message.success("创建成功");
+                  this.$store.dispatch("tagsView/delView", this.$route);
+                  this.$router.go(-1);
+              })
+              .catch((err) => {
+                if (err) this.$message.error("获取信息失败" + err.message)
+              })
+          }
         })
       },
       back: function() {
@@ -106,6 +124,7 @@ export default {
     },
     created() {
       this.editData = JSON.parse(decodeURIComponent(this.$route.query.addData));
+      console.log(this.editData);
       PersonnelbindService.getPickareaQuery()
       .then((res) => {
           this.firstPickareaIdArr = res.records;

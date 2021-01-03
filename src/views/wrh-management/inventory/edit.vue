@@ -21,7 +21,7 @@
                     <el-tabs v-model="tabActiveName">
                         <el-tab-pane label="盘点单详情" name="suppliers">
                             <div class="info-title">基本信息</div>
-                            <el-col :span="6" class="info-box">
+                            <el-col :span="12" class="info-box">
                                 <div>盘点单号:</div>
                                 <div>{{ suppliersInfo.billNumber }}</div>
                             </el-col>
@@ -30,10 +30,10 @@
                                 <div>{{ suppliersInfo.creatorName }}</div>
                             </el-col>
                             <el-col :span="6" class="info-box">
-                                <div>创建时间:</div>
-                                <div>{{ suppliersInfo.createTime }}</div>
+                                <div>修改人:</div>
+                                <div>{{ suppliersInfo.updatorName}}</div>
                             </el-col>
-                            <el-col :span="6" class="info-box">
+                            <el-col :span="12" class="info-box">
                                 <div>货位范围:</div>
                                 <div>{{ suppliersInfo.binRange }}</div>
                             </el-col>
@@ -51,15 +51,15 @@
                             </el-col>
                             <el-col :span="6" class="info-box">
                                 <div>状态:</div>
-                                <div>{{ suppliersInfo.status | showStatusActive}}</div>
+                                <div>{{ suppliersInfo.status | showStatus}}</div>
                             </el-col>
                             <el-col :span="6" class="info-box">
                                 <div>修改时间:</div>
-                                <div>{{ suppliersInfo.updateTime}}</div>
+                                <div>{{ suppliersInfo.updateTime | timeChange}}</div>
                             </el-col>
                             <el-col :span="6" class="info-box">
-                                <div>修改人:</div>
-                                <div>{{ suppliersInfo.updatorName}}</div>
+                              <div>创建时间:</div>
+                              <div>{{ suppliersInfo.createTime | timeChange }}</div>
                             </el-col>
                         </el-tab-pane>
                     </el-tabs>
@@ -67,7 +67,7 @@
             </div>
         </div>
         <div style="height:20px;background:#fff" />
-        <div class="info-content">
+        <div class="info-content _info-content">
             <div>
                 <template>
                     <el-tabs v-model="detailed">
@@ -80,7 +80,7 @@
                             </el-row> -->
                             <el-table
                                 :data="storageList"
-                                style="width: 100%;text-align:center"
+                                style="width: 100%;text-align:center;height:'500px'"
                             >
                              <el-table-column prop="lineNumber" label="行号">
                                   <template slot-scope="scope">
@@ -384,7 +384,7 @@ export default {
       },
       back: function() {
         this.$store.dispatch("tagsView/delView", this.$route);
-        this.$router.go(-1)
+        this.$router.push({name: "InventoryView"});
       },
       // 弹出界面的方法
       handleSizeChangeOne(e) {
@@ -469,6 +469,40 @@ export default {
       } 
     },
     filters: {
+      binUsageChange(status) {
+        switch (status) {
+        case "UNIFYRECEIVE":
+          return "统配收货暂存位"
+        case "PUTAWAY":
+          return "上架中转位"
+        case "PICK":
+          return "拣货位"
+        case "STORAGE":
+          return "存储位"
+        case "PICK_STORAGE":
+          return "拣货存储位"
+        case "UNIFYPICK":
+          return "统配拣货暂存位"
+        case "UNIFYCOLLECT":
+          return "统配集货存储位"
+        case "RPL":
+          return "补货暂存位"
+        case "TRANSFERRECEIVE":
+          return "中转收货暂存位"
+        case "TRANSFERCOLLECT":
+          return "中转集货暂存位"
+        case "DIRECTRECEIVE":
+          return "直通收货暂存位"
+        case "STORECROSSALLOCATE":
+          return "门店分拨位"
+        case "STORERTN":
+          return "门店退货收货暂存位"
+        case "VENDORRTN":
+          return "供应商退货位"
+        case "VENDORCOLLECT":
+          return "供应商集货位"
+        }
+      },
       handleStatus(status) {
       switch (status) {
         case "MANUALBILL":
@@ -524,6 +558,9 @@ export default {
           case "UNHANDLED":
             return "未处理"
         }
+      },
+      timeChange(val) {
+        console.log(val);
       }
     }
 };
@@ -600,6 +637,12 @@ export default {
 }
 .info-title{
     margin: 12px 0;
+}
+._info-content {
+  /deep/ .el-tabs__content  {
+    height: 300px;
+    overflow-y: scroll;
+  }
 }
 // 弹出框
 /deep/ .el-transfer-panel {

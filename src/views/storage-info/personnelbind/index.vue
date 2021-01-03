@@ -141,8 +141,8 @@ export default {
   },
   methods: {
       editChange(id) {
-        const arr = JSON.stringify(this.suppliersData);
-        this.$router.push({name: 'PersonnelbindEdit', query: {id: id, editData: encodeURIComponent(arr)}});
+        // const arr = JSON.stringify(this.addData);
+        this.$router.push({name: 'PersonnelbindEdit', query: {id: id, addData: this.addData}});
       },
       // 删除按钮
       deleteChange(id, version) {
@@ -158,7 +158,6 @@ export default {
                 _this.$message.success("删除成功")
                 _this.getSuppliersList();
               }).catch((err) => {
-                console.log(err);
                 if (err === "") {
                   _this.$message.success("删除成功")
                 } else {
@@ -189,6 +188,7 @@ export default {
           secondCodeOrNameLikes: '',
           searchCount: true
         }
+        this.getSuppliersList();
       },
       // 向后台请求数据,这里是查询功能和一开始就调取数据列表
       getSuppliersList: function(reset) {
@@ -203,7 +203,6 @@ export default {
           // 初始化自己定义的数据
           _this.suppliersData = res.records;
           _this.totalCount = res.totalCount;
-          _this.addData = encodeURIComponent(JSON.stringify(_this.suppliersData));
         })
         .catch((err) => {
           if (err) _this.$message.error("获取信息失败" + err.message)
@@ -224,6 +223,13 @@ export default {
     "system-log": systemLog
   },
   created() {
+    PersonnelbindService.getSuppliersListAll()
+    .then((res) => {
+      this.addData = encodeURIComponent(JSON.stringify(res.records));
+    })
+    .catch((err) => {
+      if (err) this.$message.error("获取信息失败" + err.message)
+    })
     this.getSuppliersList();
   },
   filters: {

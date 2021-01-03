@@ -103,7 +103,8 @@ export default {
       }
     },
     created() {
-      this.editData = JSON.parse(decodeURIComponent(this.$route.query.editData));
+      this.editData = JSON.parse(decodeURIComponent(this.$route.query.addData));
+      console.log(this.editData);
       this.getDetail();
       PersonnelbindService.getPickareaQuery()
       .then((res) => {
@@ -115,6 +116,7 @@ export default {
       });
       PersonnelbindService.userQuery()
       .then((res) => {
+        console.log(res);
         res.records.forEach((ele, idx) => {
             this.editData.forEach((item, index) => {
                 if (ele.id === item.userId) {
