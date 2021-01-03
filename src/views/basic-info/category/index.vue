@@ -3,10 +3,10 @@
         <div class="select-head">
             <el-form ref="form" style="display:flex" :model="form" label-width="80px" label-position="right">
                 <el-form-item label="类别">
-                    <el-input type='text' placeholder="请输入类别编号/名称" v-model="form.nameOrCode" class="input-width"></el-input>
+                    <el-input type='text' clearable placeholder="请输入类别编号/名称" v-model="form.nameOrCode" class="input-width"></el-input>
                 </el-form-item>
                 <el-form-item label="上级类别">
-                    <el-input type='text' placeholder="请输入上级类别编号/名称" v-model="form.parentCodeEqualsOrNameLike" class="input-width"></el-input>
+                    <el-input type='text' clearable placeholder="请输入上级类别编号/名称" v-model="form.parentCodeEqualsOrNameLike" class="input-width"></el-input>
                 </el-form-item>
                 <el-form-item label="状态">
                     <el-select v-model="form.status" placeholder="请选择状态">
@@ -64,8 +64,8 @@
                 <el-table-column
                 label="操作">
                 <template slot-scope="scope">
-                  <el-button :OFF="scope.row.status" size="mini" type="text" @click="statusChange(scope.row.status, scope.row.id, scope.row.version)">启用</el-button>
-                  <el-button :OFF="!scope.row.status" size="mini" type="text" @click="statusChange(scope.row.status, scope.row.id, scope.row.version)">禁用</el-button>
+                  <el-button :disabled="scope.row.status" size="mini" type="text" @click="statusChange(scope.row.status, scope.row.id, scope.row.version)">启用</el-button>
+                  <el-button :disabled="!scope.row.status" size="mini" type="text" @click="statusChange(scope.row.status, scope.row.id, scope.row.version)">禁用</el-button>
                 </template>
                 </el-table-column>
             </el-table>
