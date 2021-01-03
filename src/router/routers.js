@@ -228,7 +228,7 @@ const BasicInfoPackage = {
     icon: 'basic-info'
   },
   children: [
-    , {
+     {
       path: "dc",
       name: "Dc",
       component: AModule,
