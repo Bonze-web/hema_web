@@ -1393,6 +1393,60 @@ const BillManagement = {
           icon: 'table'
         }
       }]
+    },
+    {
+      path: "lockandunlock",
+      name: "LockAndUnlock",
+      component: AModule,
+      meta: {
+        title: '锁定解锁单',
+        icon: 'table'
+      },
+      children: [{
+        path: "",
+        name: "LockAndUnlockView",
+        component: () =>
+          import('@/views/wrh-management/lockandunlock/index'),
+        hidden: true,
+        meta: {
+          title: '锁定解锁单',
+          icon: 'table'
+        }
+      },
+      {
+        path: "edit",
+        name: "LockAndUnlockEdit",
+        component: () =>
+          import('@/views/wrh-management/lockandunlock/edit'),
+        hidden: true,
+        meta: {
+          title: '锁定解锁单详情',
+          icon: 'table'
+        }
+      },
+      {
+        path: "add",
+        name: "LockAndUnlockAdd",
+        component: () =>
+          import('@/views/wrh-management/lockandunlock/add'),
+        hidden: true,
+        meta: {
+          title: '新建锁定解锁单',
+          icon: 'table'
+        }
+      },
+      {
+        path: "batchadd",
+        name: "LockAndUnlockBatchAdd",
+        component: () =>
+          import('@/views/wrh-management/lockandunlock/batch-add'),
+        hidden: true,
+        meta: {
+          title: '新建锁定解锁单',
+          icon: 'table'
+        }
+      }
+    ]
     }
   ]
 }

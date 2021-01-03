@@ -2,8 +2,8 @@
     <div>
         <div class="head">
             <div class="head-title">
-                <div class="status">{{ dataList.status | setStatus }}</div>
-                <div style="margin:8px">{{ '拆并单：' + dataList.billNumber }}</div>
+                <div style="margin:8px">{{ '[' + dataList.wrhCode  +']' + dataList.wrhName  }}</div>
+                <div style="margin:11px 0 5px 0; font-size: 12px; color: #999">{{ dataList.status | setStatus }}</div>
             </div>
             <div>
                 <el-button @click="back">返回</el-button>
@@ -87,66 +87,104 @@
             <div>
                 <template>
                     <el-tabs v-model="tabActiveName">
-                        <el-tab-pane label="拆并单详情" name="category">
+                        <el-tab-pane label="收货装箱单" name="category">
                             <div class="info-title">基本信息</div>
-
                             <el-col :span="6" class="info-box">
-                                <div>操作员:</div>
-                                <div>{{ dataList.billOperatorName ? dataList.billOperatorName : "&lt;空&gt;" }}</div>
+                                <div>供应商:</div>
+                                <div>{{ '[' + dataList.vendorCode + ']' + dataList.vendorName }}</div>
+                            </el-col>
+                            <el-col :span="6" class="info-box">
+                                <div>物流方式:</div>
+                                <div>{{ dataList.logisticMode | setLogisticMode }}</div>
                             </el-col>
 
                             <el-col :span="6" class="info-box">
-                                <div>创建日期:</div>
-                                <div>{{ dataList.createTime ? dataList.createTime : "&lt;空&gt;" }}</div>
+                                <div>到效日期:</div>
+                                <div>{{ dataList.endReceiveTime }}</div>
                             </el-col>
 
                             <el-col :span="6" class="info-box">
-                                <div>创建人名称:</div>
-                                <div>{{ dataList.creatorName ? dataList.creatorName : "&lt;空&gt;" }}</div>
-                            </el-col>
-
-      
-                            <el-col :span="6" class="info-box">
-                                <div>结束拆并时间:</div>
-                                <div>{{ dataList.endReceiveTime ? dataList.endReceiveTime : "&lt;空&gt;" }}</div>
+                                <div>送达日期:</div>
+                                <div>{{ dataList.updateTime ? dataList.updateTime : "&lt;空&gt;" }}</div>
                             </el-col>
 
                             <el-col :span="6" class="info-box">
+                                <div>入库订单单号:</div>
+                                <div>{{dataList.orderBillNumber}}</div>
+                            </el-col>
+
+                            <el-col :span="6" class="info-box">
+                                <div>收货方式:</div>
+                                <div>{{ dataList.method | setMethod }}</div>
+                            </el-col>
+
+                            <el-col class="info-box">
                                 <div>备注:</div>
                                 <div>{{ dataList.remark ? dataList.remark : "&lt;空&gt;" }}</div>
                             </el-col>
 
-      
+
                             <el-col>
-                                <div  class="info-title title">拆并单</div>
+                                <div  class="info-title title">子容器</div>
                             </el-col>
-                            <el-input type="text" v-model="iptVal" placeholder="请输入商品编码" class="input-width" ></el-input>
+                            <el-input type="text" v-model="iptVal" placeholder="请输入商品编号" class="input-width" ></el-input>
                             <el-button type="primary" size="mini" @click="onSubmit" >立即搜索</el-button>
 
                             <div style="height:20px" />
 
-                            <el-table :data="items" style="width: 100%; text-align: center" :row-style="{ height: '16px', padding: '-4px' }" >
+                            <el-table :data="orderBillItems" style="width: 100%; text-align: center" :row-style="{ height: '16px', padding: '-4px' }" >
                               <el-table-column type="index" label="序号"></el-table-column>
 
-                              <el-table-column prop="productCode" label="商品编码" style="height: 20px"></el-table-column>
+                              <el-table-column prop="billNumber" label="商品编码" style="height: 20px"></el-table-column>
+                              <el-table-column prop="productName" label="商品名称" style="height: 20px"></el-table-column>
+                              <el-table-column prop="munit" label="单位" style="height: 20px"></el-table-column>
+                              <el-table-column prop="spec" label="规格" style="height: 20px"></el-table-column>
 
-                              <!-- <el-table-column prop="createTime" label="创建时间" style="height: 20px"></el-table-column>
-                              <el-table-column prop="creatorName" label="创建人名称" style="height: 20px"></el-table-column> -->
+                              <el-table-column prop="qtystr" label="收货件数" style="height: 20px"></el-table-column>
+ 
+                              <el-table-column prop="qty" label="收货数量" style="height: 20px"></el-table-column>
 
-                              <el-table-column prop="munit" label="计量单位" style="height: 20px"></el-table-column>
-                              <el-table-column prop="price" label="库存单价" style="height: 20px"></el-table-column>
-                              <el-table-column prop="productDate" label="商品生产日期" style="height: 20px"></el-table-column>
-                              <el-table-column prop="productName" label="商品名" style="height: 20px"></el-table-column>
+                              <el-table-column prop="productDate" label="生产日期" style="height: 20px"></el-table-column>
 
-                              <el-table-column prop="qty" label="拆并数量" style="height: 20px"></el-table-column>
-                              <el-table-column prop="qtystr" label="拆并件数" style="height: 20px"></el-table-column>
 
+                              <el-table-column prop="validDate" label="到效日期" style="height: 20px"></el-table-column>
+
+                              <el-table-column prop="scope" label="保质天数" style="height: 20px">
+                                <template slot-scope="scope">
+                                  {{ scope.row.shelfLifeDays }}天
+                                </template>
+                              </el-table-column>
 
                             </el-table>
                         </el-tab-pane>
-                        <!-- USER, DOCK, Inbound_Outbound, PRETYPE, PICK_ORDER, USER_PICKAREA, OTHER, SUPPLIER, CONTAINER, CONTAINERTYPE, DECINVBILL, INCINVBILL, PICKAREA, STORAGEAREA, PRODUCT, PRODUCTCATEGORY, BINTYPE, ZONE, PATH, SHELF, BIN, QUALITY, MOVESTOCK, LOCKSTOCK, VENDORRETURNBILL, ORDERBILL -->
-                        <!-- <el-tab-pane label="操作日志" name="log">
-                          <system-log modular="CONTAINER"></system-log>
+
+                        <!-- <el-tab-pane label="操作日志" name="active">
+                          <el-table :data="dataList.sonList" style="width: 100%; text-align: center" :row-style="{ height: '16px', padding: '-4px' }" >
+
+                            <el-table-column prop="a" label="操作时间" style="height: 20px">
+                              <template slot-scope="scope">
+                                  <span>条码{{ scope.row.a }}</span>
+                              </template>
+                            </el-table-column>
+
+                            <el-table-column prop="b" label="操作类型" style="height: 20px">
+                              <template slot-scope="scope">
+                                  <span>容器类型{{ scope.row.b }}</span>
+                            </el-table-column>
+
+                            <el-table-column prop="c" label="事件">
+                              <template slot-scope="scope">
+                                {{ scope.row.c }}
+                              </template>
+                            </el-table-column>
+
+                            <el-table-column prop="d" label="修改">
+                              <template slot-scope="scope">
+                                {{ scope.row.d }}
+                              </template>
+                            </el-table-column>
+
+                          </el-table>
                         </el-tab-pane> -->
                     </el-tabs>
                 </template>
@@ -156,7 +194,6 @@
 </template>
 
 <script>
-import systemLog from "@/components/systemLog.vue";
 import DemolitionAndService from "@/api/service/DemolitionAndService";
 
 export default {
@@ -166,13 +203,10 @@ export default {
         id: '', // 货位类别ID
         iptVal: '', // 搜索
         dataList: {}, // 详情数据
-        items: []
+        orderBillItems: []
       }
     },
     computed: {
-    },
-    components: {
-      systemLog
     },
     methods: {
       back: function() {
@@ -181,21 +215,21 @@ export default {
       },
       onSubmit() {
         if (this.iptVal === '') {
-          this.items = this.dataList.items
+          this.orderBillItems = this.dataList.items
         } else {
-          this.items = this.dataList.items.filter((item) => {
-            return item.productCode.indexOf(this.iptVal) !== -1
+          this.orderBillItems = this.dataList.items.filter((item) => {
+            return item.billNumber.indexOf(this.iptVal) !== -1
           })
         }
       },
-      getByIdContainerMergerBill() {
+      billUpdateInfoBill() {
         this.id = this.$route.query.id;
 
-        DemolitionAndService.getByIdContainerMergerBill(this.id)
+        DemolitionAndService.billUpdateInfoBill(this.id)
         .then(res => {
           console.log(res)
-          this.dataList = res;
-          this.items = res.items;
+          // this.dataList = res;
+          // this.orderBillItems = res.items;
         })
         .catch(err => {
           this.$message.error("查询失败" + err.message)
@@ -206,57 +240,40 @@ export default {
       }
     },
     created() {
-      this.getByIdContainerMergerBill()
+      this.billUpdateInfoBill()
     },
     filters: {
       setStatus(status) {
-      // 状态。INITIAL：初始；FINISHED：已完成。
+        // 状态。INITIAL:初始，RECEIVED:暂存，PUTAWAY:上架完成
         switch (status) {
           case 'INITIAL':
             return "初始"
-          case 'FINISHED':
-            return "已完成"
+          case 'RECEIVED':
+            return "暂存"
+          case 'PUTAWAY':
+            return "上架完成"
           default:
             return '未知';
         }
       },
-      setSonStatus(status) {
-      // 质检列表 PENDING_QUALITY_INSPECTION：待质检，QUALIFIED：合格，UNQUALIFIED：不合格
-        switch (status) {
-          case '质检单状态，PENDING_QUALITY_INSPECTION':
-            return "待质检"
-          case 'QUALIFIED':
-            return "合格"
-          case 'UNQUALIFIED':
-            return "不合格"
+      // 收货方式，MANUAL：手工单据，RF：手持终端
+      setMethod(method) {
+        switch (method) {
+          case 'MANUAL':
+            return "手工单据"
+          case 'RF':
+            return "手持终端"
           default:
             return '未知';
         }
       },
-      setQualityInspectionType(type) {
-      // --质检项类型：1运输条件，2农残药残，3破坏检测，4外观检测，5食安检测
-        switch (type) {
-          case '1':
-            return "运输条件"
-          case '2':
-            return "农残药残"
-          case '3':
-            return "破坏检测"
-          case '4':
-            return "外观检测"
-          case '5':
-            return "食安检测"
-          default:
-            return '未知';
-        }
-      },
-      setOrderbillType(type) {
-      // 收货方式，NOTTRUST：清点收货；TRUST：信任收货
-        switch (type) {
-          case 'NOTTRUST':
-            return "清点收货"
-          case 'TRUST':
-            return "信任收货"
+      // 物流模式，UNIFY：统配、CROSS：越库
+      setLogisticMode(logisticMode) {
+        switch (logisticMode) {
+          case 'UNIFY':
+            return "统配"
+          case 'CROSS':
+            return "越库"
           default:
             return '未知';
         }
@@ -267,13 +284,6 @@ export default {
 
 <style lang="scss" scoped>
 @import "src/styles/mixin.scss";
-.status{
-  background: #008000;
-  border-radius: 8px;
-  padding: 4px;
-  height: 32px;
-  line-height: 26px;
-}
 .head{
     background: #fff;
     padding: 15px 12px;

@@ -18,7 +18,12 @@ export default {
   queryContainerMergerBill(opt) {
     return request.get('/wms/containerMergerBill/query', { params: opt });
   },
-
+  /**
+  * 容器拆并单详情
+  */
+  getByIdContainerMergerBill(id) {
+    return request.get('/wms/containerMergerBill/getById?id=' + id);
+  },
   /**
   * 
   * 
@@ -84,13 +89,36 @@ export default {
    */
   billUpdateInfoBill(id) {
     return request.get('/stock/updateInfoBill/getById?id=' + id)
-  }
+  },
 
   /**
-  * 
-  * 
   * 库存信息调整单接口结束
-  * 
-  * 
+  */
+
+  /**
+  * 锁定解锁单开始
+  */
+  stockLocjBill(opt) {
+    // 锁定解锁单分页查询
+    return request.get('/stock/lock-bill', { params: opt })
+  },
+  deleteStockLocjBill(id) {
+    // 锁定解锁单  删除接口
+    return request.delete('/stock/lock-bill/' + id)
+  },
+  detailsStockLocjBill(id) {
+    // 锁定解锁单 详情接口
+    return request.get('/stock/lock-bill/' + id)
+  },
+  newStockLocjBill(opt) {
+    // 锁定解锁单 新增接口
+    return request.put('/stock/lock-bill', { params: opt })
+  },
+  nauditStockLocjBill(opt) {
+    // 锁定解锁单 审核接口
+    return request.post('/stock/lock-bill/audit', opt)
+  }
+  /**
+  * 锁定解锁单结束
   */
 }

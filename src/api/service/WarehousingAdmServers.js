@@ -13,8 +13,8 @@ export default {
     /**
      * 编号查询订单详情
      */
-    getByBillNumberOrderBill(billNumber) {
-        return request.get('/wms/orderBill/getByBillNumber?billNumber=' + billNumber)
+    getBySrcBillNumberOrderBill(srcBillNumber) {
+        return request.get('/wms/orderBill/getBySrcBillNumber?srcBillNumber=' + srcBillNumber)
     },
     /**
      * 入库订单接收完成
