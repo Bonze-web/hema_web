@@ -13,7 +13,7 @@
               <el-form label-width="125px" :model="form">
                 <el-form-item label="用户">
                   <el-select v-model="form.userId" placeholder="请选择用户">
-                    <el-option v-for="(ele, idx) in userAll" :key="idx" :label="ele.username" :value="ele.id"></el-option>
+                    <el-option v-for="(ele, idx) in userAll" :key="idx" :disabled="ele.disabled" :label="ele.username" :value="ele.id"></el-option>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="主要拣货分区">
@@ -28,6 +28,12 @@
                 </el-form-item>
                 <el-form-item label="首先拣货任务类型">
                   <el-select v-model="form.firstTaskType" placeholder="请选择首先拣货任务类型">
+                    <el-option label="整箱" value="CASE"></el-option>
+                    <el-option label="拆零" value="SPLIT"></el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item label="辅助拣货任务类型">
+                  <el-select v-model="form.secondTaskType" placeholder="请选择辅助拣货任务类型">
                     <el-option label="整箱" value="CASE"></el-option>
                     <el-option label="拆零" value="SPLIT"></el-option>
                   </el-select>
@@ -56,8 +62,10 @@ export default {
           firstPickareaId: "",
           secondPickareaId: "",
           userId: '',
-          firstTaskType: ""
-        }
+          firstTaskType: "",
+          secondTaskType: ""
+        },
+        editData: []
       }
     },
     computed: {
@@ -69,7 +77,7 @@ export default {
         .then((res) => {
             this.$message.success("创建成功");
             this.$store.dispatch("tagsView/delView", this.$route);
-            this.$router.go(-1)
+            this.$router.go(-1);
         })
         .catch((err) => {
           if (err) this.$message.error("获取信息失败" + err.message)
@@ -92,6 +100,7 @@ export default {
       }
     },
     created() {
+      this.editData = JSON.parse(decodeURIComponent(this.$route.query.addData));
       PersonnelbindService.getPickareaQuery()
       .then((res) => {
           this.firstPickareaIdArr = res.records;
@@ -101,12 +110,20 @@ export default {
         if (err) this.$message.error("获取信息失败" + err.message);
       });
       PersonnelbindService.userQuery()
-      .then((res) => {
+        .then((res) => {
+          console.log(res);
+          res.records.forEach((ele, idx) => {
+              this.editData.forEach((item, index) => {
+                  if (ele.id === item.userId) {
+                      ele.disabled = true;
+                  }
+              })
+          })
           this.userAll = res.records;
-      })
-      .catch((err) => {
-        if (err) this.$message.error("获取所有用户失败" + err.message);
-      });
+        })
+        .catch((err) => {
+          if (err) this.$message.error("获取所有用户失败" + err.message);
+        });
     },
     filters: {
         showFirstPickareaId(val) {

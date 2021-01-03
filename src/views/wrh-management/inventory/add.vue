@@ -121,9 +121,6 @@ export default {
           binUsage: [
             { required: true, message: '请填写货位用途', trigger: 'blur'}
           ],
-          // inventoryHandlingMethod: [
-          //   { required: true, message: '请选择库存处理方式', trigger: 'blur'}
-          // ],
           operationMode: [
             { required: true, message: '请选择操作方式', trigger: 'blur'}
           ],

@@ -19,51 +19,51 @@
               <el-button style="margin:18px 10px" type="primary" size="mini" v-if="hasPermission(PermIds.WMS_PICKAREA_CREATE) && workingOrg.type === 'DC'">新建</el-button>
             </router-link>
           </el-row>
-            <el-table
-                :data="suppliersData"
-                style="width: 100%;text-align:center"
-            >
-                <el-table-column prop="code" label="代码">
-                    <template slot-scope="scope">
-                        <router-link style="color:#409EFF" :to="{ path: '/storageinfo/sortdivision/edit', query:{ status: 'read', id: scope.row.id} }">
-                            <span>{{ scope.row.code }}</span>
-                        </router-link>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="name" label="名称"></el-table-column>
-                <el-table-column prop="binScope" label="货位范围">
-                    <template slot-scope="scope">
-                        {{ scope.row.binScope }}
-                    </template>
-                </el-table-column>
-                <el-table-column prop="stockType" label="存储类型">
-                    <template slot-scope="scope">
-                        {{ scope.row.stockType | stockTypeChange}}
-                    </template>
-                </el-table-column>
-                <el-table-column prop="putawayRule" label="上架规则">
-                    <template slot-scope="scope">
-                        {{ scope.row.putawayRule | putawayRuleChange}}
-                    </template>
-                </el-table-column>
-                <el-table-column
-                label="操作">
+          <el-table
+              :data="suppliersData"
+              style="width: 100%;text-align:center"
+          >
+              <el-table-column prop="code" label="代码">
                   <template slot-scope="scope">
-                      <div style="color:#409EFF;cursor:pointer" @click="deleteChange(scope.row.id, scope.row.version)">删除</div>
+                      <router-link style="color:#409EFF" :to="{ path: '/storageinfo/sortdivision/edit', query:{ status: 'read', id: scope.row.id} }">
+                          <span>{{ scope.row.code }}</span>
+                      </router-link>
                   </template>
-                </el-table-column>
-            </el-table>
-            <!-- 下面这个是翻页 -->
-            <el-pagination
-                style="float:right"
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :current-page="1"
-                :page-sizes="[10, 20, 30, 50]"
-                :page-size="pageSize"
-                layout="total, sizes, prev, pager, next, jumper"
-                :total="totalCount">
-            </el-pagination>
+              </el-table-column>
+              <el-table-column prop="name" label="名称"></el-table-column>
+              <el-table-column prop="binScope" label="货位范围">
+                  <template slot-scope="scope">
+                      {{ scope.row.binScope }}
+                  </template>
+              </el-table-column>
+              <el-table-column prop="stockType" label="存储类型">
+                  <template slot-scope="scope">
+                      {{ scope.row.stockType | stockTypeChange}}
+                  </template>
+              </el-table-column>
+              <el-table-column prop="putawayRule" label="上架规则">
+                  <template slot-scope="scope">
+                      {{ scope.row.putawayRule | putawayRuleChange}}
+                  </template>
+              </el-table-column>
+              <el-table-column
+              label="操作">
+                <template slot-scope="scope">
+                    <div style="color:#409EFF;cursor:pointer" @click="deleteChange(scope.row.id, scope.row.version)">删除</div>
+                </template>
+              </el-table-column>
+          </el-table>
+          <!-- 下面这个是翻页 -->
+          <el-pagination
+              style="float:right"
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page="1"
+              :page-sizes="[10, 20, 30, 50]"
+              :page-size="pageSize"
+              layout="total, sizes, prev, pager, next, jumper"
+              :total="totalCount">
+          </el-pagination>
         </div>
     </div>
 </template>

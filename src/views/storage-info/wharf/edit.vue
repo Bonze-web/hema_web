@@ -26,7 +26,7 @@
         <div class="info-content" v-if="status === 'create' || status === 'edit'">
             <div>
                 <template>
-                    <el-tabs v-model="tabActiveName">
+                    <el-tabs v-model="tabActiveNameOne">
                         <el-tab-pane label="码头" name="suppliers">
                             <div class="info-title">基本信息</div>
                             <el-form :model="form" :rules="createRules" ref="form" label-width="100px" class="demo-ruleForm">
@@ -57,8 +57,6 @@
                                 </el-form-item>
                             </el-form>
                         </el-tab-pane>
-                        <!-- <el-tab-pane label="配送中心范围" name="range">配置管理</el-tab-pane>
-                        <el-tab-pane label="操作日志" name="log">角色管理</el-tab-pane> -->
                     </el-tabs>
                 </template>
             </div>
@@ -86,6 +84,9 @@
                                 <div>{{ suppliersInfo.remark ? suppliersInfo.remark : "&lt;空&gt;" }}</div>
                             </el-col>
                         </el-tab-pane>
+                        <el-tab-pane label="操作日志" name="operational">
+                          <system-log :modular="'DOCK'"></system-log>
+                        </el-tab-pane>
                     </el-tabs>
                 </template>
             </div>
@@ -97,12 +98,14 @@
 import { mapGetters } from "vuex";
 import WharfService from "@/api/service/WharfService";
 import PermIds from "@/api/permissionIds";
+import systemLog from "@/components/systemLog.vue"
 export default {
   data() {
       return {
         PermIds: PermIds,
         status: '', // 页面状态
         id: '', 
+        tabActiveNameOne: 'suppliers',
         tabActiveName: 'suppliers', // tab栏名称
         // dcId: '',
         form: {
@@ -242,6 +245,9 @@ export default {
         this.form.id = this.id;
         this.form = Object.assign(this.form, this.suppliersInfo)
       }
+    },
+    components: {
+      "system-log": systemLog
     },
     created() {
       this.getQueryStatus()

@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="head" v-if="status === 'create' || status === 'edit'">
-            <div style="margin-top:8px" v-if="status === 'create'">新建类别</div>
+            <div style="margin-top:8px" v-if="status === 'create'">新建商品类别</div>
             <div style="margin-top:8px" v-else>编辑</div>
             <div>
                 <el-button @click="back">取消</el-button>
@@ -47,7 +47,7 @@
                                     </el-col>
                                 </el-row>
                                 <el-form-item label="备注">
-                                    <textarea v-model="form.remark"></textarea>
+                                    <textarea maxlength="150" v-model="form.remark"></textarea>
                                 </el-form-item>
                             </el-form>
                         </el-tab-pane>
@@ -170,9 +170,9 @@ export default {
               })
             } else {
               if (this.form.status) {
-                this.form.status = "enabled"
+                this.form.status = "ON"
               } else {
-                this.form.status = "disabled"
+                this.form.status = "OFF"
               }
               BasicService.updateCategory(this.form)
               .then(res => {
@@ -202,7 +202,8 @@ export default {
         const data = {
           page: this.page,
           pageSize: 0,
-          lowerLevelEquals: this.form.level
+          lowerLevelEquals: this.form.level,
+          statusEquals: 'ON'
         }
         BasicService.getCateGoryQuery(data)
         .then((res) => {

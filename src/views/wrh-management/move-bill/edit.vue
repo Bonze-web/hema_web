@@ -11,7 +11,7 @@
         <div class="info-content" v-if="status === 'read'">
             <div>
                 <template>
-                    <el-tabs v-model="tabActiveName" @tab-click="tabClick">
+                    <el-tabs v-model="tabActiveName">
                         <el-tab-pane label="移库单" name="containerType">
                             <div class="info-title">概要</div>
                             <el-col :span="6" class="info-box">
@@ -82,6 +82,7 @@
 
 <script>
 import BillService from "@/api/service/BillService";
+import systemLog from "@/components/systemLog.vue";
 
 export default {
   data() {
@@ -91,6 +92,9 @@ export default {
         moveBillDetail: {},
         productList: []
       }
+    },
+    components: {
+      systemLog
     },
     methods: {
       getQueryStatus: function() {

@@ -27,7 +27,7 @@
             </div>
             <div>
                 <el-button @click="back">返回</el-button>
-                <el-button type="primary" @click="editDc" v-if="hasPermission(PermIds.SYS_DC_UPDATE)">编辑</el-button>
+                <el-button type="primary" @click="editDc" v-if="hasPermission(PermIds.SYS_DC_UPDATE) && dcInfo.status">编辑</el-button>
             </div>
         </div>
         <div style="height:20px" />

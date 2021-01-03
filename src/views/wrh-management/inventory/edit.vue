@@ -84,127 +84,127 @@
                             >
                              <el-table-column prop="lineNumber" label="行号">
                                   <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.lineNumber}}</span>
+                                      <span>{{ scope.row.lineNumber}}</span>
                                   </template>
                               </el-table-column>
                               <el-table-column prop="status" label="状态">
                                   <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.status | showStatusActive}}</span>
+                                      <span>{{ scope.row.status | showStatusActive}}</span>
                                   </template>
                               </el-table-column>
                               <el-table-column prop="vendorCode" label="供应商编号">
                                   <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.binCode }}</span>
+                                      <span>{{ scope.row.binCode }}</span>
                                   </template>
                               </el-table-column>
                               <el-table-column prop="vendorName" label="供应商名称">
                                   <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.binCode }}</span>
+                                      <span>{{ scope.row.binCode }}</span>
                                   </template>
                               </el-table-column>
                               <el-table-column prop="binUsage" label="货位用途">
                                   <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.binUsage }}</span>
+                                      <span>{{ scope.row.binUsage }}</span>
                                   </template>
                               </el-table-column>
                               <el-table-column prop="containerBarcode" label="来源容器">
                                   <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.containerBarcode }}</span>
+                                      <span>{{ scope.row.containerBarcode }}</span>
                                   </template>
                               </el-table-column>
                               <el-table-column prop="productCode" label="商品代码">
                                   <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.productCode}}</span>
+                                      <span>{{ scope.row.productCode}}</span>
                                   </template>
                               </el-table-column>
                               <el-table-column prop="productName" label="商品名称">
                                   <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.productName}}</span>
+                                      <span>{{ scope.row.productName}}</span>
                                   </template>
                               </el-table-column>
                               <el-table-column prop="productPrice" label="商品单件">
                                   <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.productPrice}}</span>
+                                      <span>{{ scope.row.productPrice}}</span>
                                   </template>
                               </el-table-column>
                               <el-table-column prop="productSpec" label="商品规格">
                                   <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.productSpec}}</span>
+                                      <span>{{ scope.row.productSpec}}</span>
                                   </template>
                               </el-table-column>
                               <el-table-column prop="productUnit" label="商品单位">
                                   <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.productUnit}}</span>
+                                      <span>{{ scope.row.productUnit}}</span>
                                   </template>
                               </el-table-column>
                               <el-table-column prop="productVolume" label="商品体积">
                                   <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.productVolume}}</span>
+                                      <span>{{ scope.row.productVolume}}</span>
                                   </template>
                               </el-table-column>
                               <el-table-column prop="productWeight" label="商品重量">
                                   <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.productWeight}}</span>
+                                      <span>{{ scope.row.productWeight}}</span>
                                   </template>
                               </el-table-column>
                               <el-table-column prop="productionBatch" label="批号">
                                   <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.productionBatch}}</span>
+                                      <span>{{ scope.row.productionBatch}}</span>
                                   </template>
                               </el-table-column>
                               <el-table-column prop="stockBatch" label="批次">
                                   <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.stockBatch}}</span>
+                                      <span>{{ scope.row.stockBatch}}</span>
                                   </template>
                               </el-table-column>
                               <el-table-column prop="productionDate" label="生产日期">
                                   <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.productionDate}}</span>
+                                      <span>{{ scope.row.productionDate}}</span>
                                   </template>
                               </el-table-column>
                               <el-table-column prop="validDate" label="到效日期">
                                   <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.validDate}}</span>
+                                      <span>{{ scope.row.validDate}}</span>
                                   </template>
                               </el-table-column>
                               <el-table-column prop="qpcStr" label="规格">
                                   <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.qpcStr}}</span>
+                                      <span>{{ scope.row.qpcStr}}</span>
                                   </template>
                               </el-table-column>
                               <el-table-column prop="quantity" label="数量">
                                   <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.quantity}}</span>
+                                      <span>{{ scope.row.quantity}}</span>
                                   </template>
                               </el-table-column>
                               <el-table-column prop="quantityStr" label="件量">
                                   <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.quantityStr}}</span>
+                                      <span>{{ scope.row.quantityStr}}</span>
                                   </template>
                               </el-table-column>
                               <el-table-column prop="snapQuantity" label="快照数量">
                                   <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.snapQuantity}}</span>
+                                      <span>{{ scope.row.snapQuantity}}</span>
                                   </template>
                               </el-table-column>
                               <el-table-column prop="snapQuantity" label="快照数量">
                                   <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.snapQuantity}}</span>
+                                      <span>{{ scope.row.snapQuantity}}</span>
                                   </template>
                               </el-table-column>
                                <el-table-column prop="diversityQuantity" label="差异数量">
                                   <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.diversityQuantity }}</span>
+                                      <span>{{ scope.row.diversityQuantity }}</span>
                                   </template>
                               </el-table-column>
                               <el-table-column prop="diversityQuantityStr" label="差异件数">
                                   <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.diversityQuantityStr }}</span>
+                                      <span>{{ scope.row.diversityQuantityStr }}</span>
                                   </template>
                               </el-table-column>
                               <el-table-column prop="handleResult" label="处理结果">
                                   <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.handleResult | showHandleResult}}</span>
+                                      <span>{{ scope.row.handleResult | showHandleResult}}</span>
                                   </template>
                               </el-table-column>
                             </el-table>
@@ -218,27 +218,16 @@
             </div>
         </div>
         <el-dialog title="收货地址" :visible.sync="Actual">
-          <el-upload
-            ref="upload"
-            :auto-upload="false"
-            class="upload-demo"
-            :on-preview="handlePreview"
-            :action="checkUrl"
-            :before-upload="handel"
-            :on-remove="handleRemove"
-            :before-remove="beforeRemove"
-            :limit="1"
-            accept=".xlsx"
-            :file-list="fileList">
-            <el-button size="small" type="primary">点击上传</el-button>
-            <div slot="tip" class="el-upload__tip">只能上传.xlsx文件</div>
+         <el-upload class="upload-demo" ref="upload" :auto-upload="false" :action="actionUrl" :on-preview="handlePreview" :on-remove="handleRemove" :before-remove="beforeRemove" multiple :limit="1" :on-exceed="handleExceed" :file-list="fileList" :on-success="handleSuccess">
+              <el-button size="small" type="primary">点击上传</el-button>
           </el-upload>
+          <!-- <input type="file" @change="getFile($event)" accept=".xlsx"> -->
           <div style="padding-top: 20px;">
             <el-link type="primary">下载模块</el-link>
           </div>
           <div slot="footer" class="dialog-footer">
             <el-button @click="Actual = false">取 消</el-button>
-            <el-button type="primary" @click="upClick">确 定</el-button>
+            <el-button type="primary" @click="submitAddFile">确 定</el-button>
           </div>
         </el-dialog>
     </div>
@@ -247,11 +236,16 @@
 <script>
 import InventoryService from "@/api/service/InventoryService";
 import systemLog from "@/components/systemLog.vue"
+import * as Utils from "@/utils/index";
 // import PermIds from "@/api/permissionIds";
 // import { mapGetters } from "vuex";
 export default {
   data() {
       return {
+        form: {
+          configure: []
+        },
+        addArr: [],
         Actual: false,
         inventoryStatus: "start",
         tabActiveName: 'suppliers',
@@ -277,20 +271,72 @@ export default {
       }
     },
     methods: {
+      handleSuccess() {
+        console.log(this.fileList);
+        this.$message.success("上传成功");
+      },
+      handlePreview(file) {
+        Utils.downloadFile(file.url, file.name);
+      },
+      handleRemove(file, fileList) {
+        console.log(file, fileList);
+        // // 修改对应项的数据
+        // this.form.configure.forEach(item => {
+        //   item.options.forEach(ele => {
+        //     // 有可选项
+        //     if (ele.id === this.selectItems.id) {
+        //       ele.value = ""
+        //     }
+        //   });
+        // });
+      },
+      getFile(event) {
+          var file = event.target.files;
+          for (let i = 0; i < file.length; i++) {
+             var imgName = file[i].name;
+              var idx = imgName.lastIndexOf(".");  
+              if (idx !== -1) {
+                  var ext = imgName.substr(idx + 1).toUpperCase();   
+                  ext = ext.toLowerCase(); 
+                  if (ext !== 'xlsx') {
+                      this.$message.warning(`只能选择xlsx文件`);
+                  } else {
+                    console.log(file[i]);
+                        this.addArr.push(file[i]);
+                  }   
+              } else {
+                  this.$message.warning(`请选择xlsx文件`);
+              }
+          }
+      },
+      submitAddFile() {
+        this.$refs.upload.submit();
+        this.Actual = false;
+        // if (this.addArr.length === 0) {
+        //   this.$message({
+        //     type: 'info',
+        //     message: '请选择要上传的文件'
+        //   });
+        //   return;
+        // }
+        // this.Actual = false;
+        // var formData = new FormData();
+        // formData.append('file', this.addArr);
+        // InventoryService.uploadFileData({formData: formData, urlApi: this.checkUrl})
+        // .then((res) => {
+        //     console.log(res);
+        // }).catch((err) => {
+        //   this.$message.error("上传失败" + err.message)
+        // })
+      },
       handel(data) {
         console.log(data);
       },
       upClick() {
         console.log(this.$refs.upload)
       },
-      handleRemove(file, fileList) {
-        console.log(file, fileList);
-      },
-      handlePreview(file) {
-        console.log(file);
-      },
       handleExceed(files, fileList) {
-        this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
+        this.$message.warning("请删除当前文件再上传~");
       },
       beforeRemove(file, fileList) {
         return this.$confirm(`确定移除 ${file.name}？`);
@@ -352,60 +398,61 @@ export default {
         this.mySelfPage = Number(e);
       },
       getDetail() {
-        this.suppliersInfo = {
-          billNumber: 'string',
-          binRange: 'string',
-          binUsage: 'string',
-          createTime: 'string',
-          creatorName: 'string',
-          operationMode: 'MANUALBILL',
-          planDate: 'ZERO',
-          realDefaultQuantity: 'ZERO',
-          status: 'NORMAL',
-          "takeSchema": "string",
-          "updateTime": "2021-01-02T12:38:41.064Z",
-          "updatorName": "string",
-          "version": "string"
-        }
-        this.storageList = [
-          {
-            "binCode": "string",
-            "binUsage": "string",
-            "containerBarcode": "string",
-            "diversityQuantity": 0,
-            "diversityQuantityStr": "string",
-            "handleResult": "INVENTORY_LOSS",
-            "id": "string",
-            "lineNumber": "string",
-            "productCode": "string",
-            "productName": "string",
-            "productPrice": 0,
-            "productSpec": "string",
-            "productUnit": "string",
-            "productVolume": 0,
-            "productWeight": 0,
-            "productionBatch": "string",
-            "productionDate": "string",
-            "qpc": 0,
-            "qpcStr": "string",
-            "quantity": 0,
-            "quantityStr": "string",
-            "snapQuantity": 0,
-            "snapQuantityStr": "string",
-            "status": "NORMAL",
-            "stockBatch": "string",
-            "validDate": "string",
-            "vendorCode": "string",
-            "vendorName": "string",
-            "version": "string"
-          }
-        ]
-        // InventoryService.getLossBillDetail(this.id)
-        // .then((res) => {
-        //   console.log(res);
-        // }).catch((err) => {
-        //   this.$message.error("获取详情失败" + err.message)
-        // })
+        // this.suppliersInfo = {
+        //   billNumber: 'string',
+        //   binRange: 'string',
+        //   binUsage: 'string',
+        //   createTime: 'string',
+        //   creatorName: 'string',
+        //   operationMode: 'MANUALBILL',
+        //   planDate: 'ZERO',
+        //   realDefaultQuantity: 'ZERO',
+        //   status: 'NORMAL',
+        //   "takeSchema": "string",
+        //   "updateTime": "2021-01-02T12:38:41.064Z",
+        //   "updatorName": "string",
+        //   "version": "string"
+        // }
+        // this.storageList = [
+        //   {
+        //     "binCode": "string",
+        //     "binUsage": "string",
+        //     "containerBarcode": "string",
+        //     "diversityQuantity": 0,
+        //     "diversityQuantityStr": "string",
+        //     "handleResult": "INVENTORY_LOSS",
+        //     "id": "string",
+        //     "lineNumber": "string",
+        //     "productCode": "string",
+        //     "productName": "string",
+        //     "productPrice": 0,
+        //     "productSpec": "string",
+        //     "productUnit": "string",
+        //     "productVolume": 0,
+        //     "productWeight": 0,
+        //     "productionBatch": "string",
+        //     "productionDate": "string",
+        //     "qpc": 0,
+        //     "qpcStr": "string",
+        //     "quantity": 0,
+        //     "quantityStr": "string",
+        //     "snapQuantity": 0,
+        //     "snapQuantityStr": "string",
+        //     "status": "NORMAL",
+        //     "stockBatch": "string",
+        //     "validDate": "string",
+        //     "vendorCode": "string",
+        //     "vendorName": "string",
+        //     "version": "string"
+        //   }
+        // ]
+        InventoryService.getLossBillDetail(this.id)
+        .then((res) => {
+          this.suppliersInfo = res;
+          this.storageList = res.stockTakeBillItemCheckDTOList;
+        }).catch((err) => {
+          this.$message.error("获取详情失败" + err.message)
+        })
       }
     },
     created() {
@@ -415,6 +462,11 @@ export default {
     },
     components: {
       "system-log": systemLog
+    },
+    computed: {
+      actionUrl() {
+        return process.env.BASE_API + "/stock-take-bill-item-check/" + this.id + "/import";
+      } 
     },
     filters: {
       handleStatus(status) {
