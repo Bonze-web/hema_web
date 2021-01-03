@@ -36,12 +36,13 @@
           <el-input type="text" placeholder="请输入当前位置" v-model="form.positionCodeOrNameEquals" class="input-width" ></el-input>
         </el-form-item>
 
-        <el-form-item label="父容器：">
+        <!-- <el-form-item label="父容器：">
           <el-input type="text" placeholder="请输入父容器" v-model="form.parentBarcodeLikes" class="input-width" ></el-input>
-        </el-form-item>
+        </el-form-item> -->
 
         <el-form-item label="容器类型：">
           <el-select v-model="form.containerTypeCodeEquals" placeholder="请选择容器类型">
+            <el-option label="全部" value=""></el-option>
             <el-option v-for="(item, index) in containerType" :key="index" :label="item.name" :value="item.code"></el-option>
           </el-select>
         </el-form-item>
@@ -86,9 +87,23 @@
           </template>
         </el-table-column>
   
-        <el-table-column prop="positionCode" label="当前位置"></el-table-column>
-        <el-table-column prop="toPositionCode" label="目标位置"></el-table-column>
-        <el-table-column prop="useId" label="使用对象"></el-table-column>
+        <el-table-column prop="scope" label="当前位置">
+          <template slot-scope="scope">
+            {{ scope.row.positionCode !== ' ' ? scope.row.positionCode : "&lt;空&gt;" }}
+          </template>
+        </el-table-column>
+        <el-table-column prop="scope" label="目标位置">
+          <template slot-scope="scope">
+            {{ scope.row.toPositionCode !== ' ' ? scope.row.toPositionCode : "&lt;空&gt;" }}
+          </template>
+        </el-table-column>
+
+        <el-table-column prop="scope" label="使用对象">
+          <template slot-scope="scope">
+            {{ scope.row.useId !== '0' ? scope.row.useId : "&lt;空&gt;" }}
+          </template>
+        </el-table-column>
+        
         <el-table-column prop="useStatus" label="状态">
           <template slot-scope="scope">
             {{ scope.row.useStatus | dcStatus }}
@@ -126,7 +141,7 @@ export default {
         barCodeLikes: '', // 条码
         useStatusEquals: '', // 状态
         positionCodeOrNameEquals: '', // 当前位置
-        parentBarcodeLikes: '', // 父容器
+        // parentBarcodeLikes: '', // 父容器
         containerTypeCodeEquals: '', // 容器类型code值
         useNameOrCodeLikes: '' // 使用对象名称或者代码的值
       },
@@ -180,10 +195,12 @@ export default {
         barCodeLikes: '',
         useStatusEquals: '',
         positionCodeOrNameEquals: '',
-        parentBarcodeLikes: '',
+        // parentBarcodeLikes: '',
         containerTypeCodeEquals: '',
         useNameOrCodeLikes: ''
       };
+
+      this.quertOcntainer();
     },
     quertOcntainer: function() {
       // 获取容器列表
@@ -197,7 +214,7 @@ export default {
         barCodeLikes: this.form.barCodeLikes,
         useStatusEquals: this.form.useStatusEquals.toUpperCase(),
         positionCodeOrNameEquals: this.form.positionCodeOrNameEquals,
-        parentBarcodeLikes: this.form.parentBarcodeLikes,
+        // parentBarcodeLikes: this.form.parentBarcodeLikes,
         containerTypeCodeEquals: this.form.containerTypeCodeEquals,
         useNameOrCodeLikes: this.form.useNameOrCodeLikes,
         searchCount: true

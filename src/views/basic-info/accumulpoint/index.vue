@@ -15,7 +15,7 @@
                 </el-form-item>
 
                 <el-form-item label="网格仓">
-                    <el-input type='text' placeholder="请输入网格仓" v-model="form.secondCodeOrNameLikes" class="input-width"></el-input>
+                    <el-input type='text' placeholder="请输入网格仓" v-model="form.frontCodeOrNameLikes" class="input-width"></el-input>
                 </el-form-item>
 
                 <el-form-item label="来源">
@@ -50,32 +50,67 @@
                 </el-table-column> -->
                 <el-table-column prop="code" label="团点">
                     <template slot-scope="scope">
-                        <span>{{ scope.row.userId }}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="username" label="联系人">
-                  <template slot-scope="scope">
-                        {{ scope.row.username}}
-                    </template>
-                </el-table-column>
-                <el-table-column label="联系电话">
-                    <template slot-scope="scope">
-                        {{ '[' + scope.row.firstPickareaCode + ']' + scope.row.firstPickareaName}}
+                        <span>{{ '[' + scope.row.code + ']' + scope.row.name }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="地址">
                     <template slot-scope="scope">
-                        {{ scope.row.firstBinscope }}
+                        {{ scope.row.address }}
                     </template>
                 </el-table-column>
-                <el-table-column label="区块代码">
+                <el-table-column label="所属区块编码">
                     <template slot-scope="scope">
-                        {{ '[' + scope.row.secondPickareaCode + ']' + scope.row.secondPickareaName }}
+                        {{ scope.row.blockCode }}
                     </template>
                 </el-table-column>
-                <el-table-column label="网格仓">
+                <el-table-column label="所属中心仓">
                     <template slot-scope="scope">
-                        {{ scope.row.secondBinscope }}
+                        {{ '[' + scope.row.centerDcCode + '' + scope.row.centerDcName }}
+                    </template>
+                </el-table-column>
+                <el-table-column label="联系人电话">
+                    <template slot-scope="scope">
+                        {{ scope.row.contactPhone }}
+                    </template>
+                </el-table-column>
+                <el-table-column label="联系人姓名">
+                    <template slot-scope="scope">
+                        {{ scope.row.contactor }}
+                    </template>
+                </el-table-column>
+                <el-table-column label="所属网格仓">
+                    <template slot-scope="scope">
+                        {{ '[' + scope.row.frontDcCode + ']' + scope.row.frontDcName }}
+                    </template>
+                </el-table-column>
+                <el-table-column label="纬度">
+                    <template slot-scope="scope">
+                        {{ scope.row.lat }}
+                    </template>
+                </el-table-column>
+                <el-table-column label="经度">
+                    <template slot-scope="scope">
+                        {{ scope.row.lng }}
+                    </template>
+                </el-table-column>
+                <el-table-column label="来源">
+                    <template slot-scope="scope">
+                        {{ scope.row.sourceWay | sourceType }}
+                    </template>
+                </el-table-column>
+                <el-table-column label="状态">
+                    <template slot-scope="scope">
+                        {{ scope.row.status | purposeChange }}
+                    </template>
+                </el-table-column>
+                <el-table-column label="邮编">
+                    <template slot-scope="scope">
+                        {{ scope.row.zipCode }}
+                    </template>
+                </el-table-column>
+                <el-table-column label="备注">
+                    <template slot-scope="scope">
+                        {{ scope.row.remark }}
                     </template>
                 </el-table-column>
             </el-table>
@@ -177,12 +212,12 @@ export default {
   filters: {
     sourceType(type) {
       switch (type) {
-        case "HAND":
-          return "手动创建"
-        case "IMPORT":
+        case "MANUAL":
+          return "手工新建"
+        case "API":
+          return "接口导入"
+        case "EXCEL":
           return "文件导入"
-        default:
-          return '未知';
       }
     },
     suppliersStatus(status) {
@@ -195,14 +230,14 @@ export default {
           return '未知';
       }
     },
-    purposeChange(val) {
-      if (!val) return false;
-      let str = '';
-      for (let i = 0; i < val.length; i++) {
-        str += val[i];
+    purposeChange(status) {
+      switch (status) {
+        case 'ON':
+          return "启用"
+        case 'OFF':
+          return "禁用";
       }
-        return str;
-      }
+    }
   },
   beforeRouteEnter(to, from, next) {
     next(vm => {

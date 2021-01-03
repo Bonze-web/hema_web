@@ -169,9 +169,9 @@ export default {
               })
             } else {
               if (this.form.status) {
-                this.form.status = "OPEN"
+                this.form.status = "ON"
               } else {
-                this.form.status = "CLOSED"
+                this.form.status = "OFF"
               }
               BasicService.updateSupplier(this.form)
               .then(res => {

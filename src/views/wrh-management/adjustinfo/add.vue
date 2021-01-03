@@ -76,7 +76,8 @@
 
                                   <el-table-column width="180" prop="scope" label="供应商">
                                     <template slot-scope="scope">
-                                      <el-select v-model="scope.row.statusIn" placeholder="请选择状态" class="input-width" >
+                                      <!-- vendorName -->
+                                      <el-select v-model="scope.row.vendorName" placeholder="请选择状态" class="input-width" >
                                         <el-option v-for="item in productSupplier" :key="item.id" :value="item.id" :label="item.name"></el-option>
                                       </el-select>
                                       <!-- <el-input type="text" size="mini" v-model="scope.row.vendorName"></el-input> -->

@@ -24,7 +24,6 @@
               <!-- <span v-if="child.meta&&child.meta.title" :title="child.meta.title">{{child.meta.title}}</span> -->
               <el-button style="margin:18px 10px" type="primary" size="mini" v-if="hasPermission(PermIds.WMS_USER_PICKAREA_CREATE) && workingOrg.type === 'DC'">新建</el-button>
             </router-link>
-            <el-button style="margin:18px 10px" type="primary" size="mini" @click="dailyRecord = true">工作日志</el-button>
           </el-row>
           <el-table
               :data="suppliersData"
@@ -91,7 +90,7 @@
           </el-table>
           <!-- 下面这个是翻页 -->
           <el-pagination
-              style="float:right:padding-bottom:10px;"
+              style="float:right;padding-bottom:10px;"
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
               :current-page="1"
