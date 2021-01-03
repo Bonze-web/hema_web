@@ -224,7 +224,7 @@ export default {
       const data = {
         page: this.page,
         pageSize: this.pageSize,
-        // billNumber: this.form.billNumber, // 质检单号
+        billNumber: this.form.billNumber, // 质检单号
         orderbillIdNumber: this.form.orderbillIdNumber, // 入库单号
         status: this.form.status ? this.form.status : null, // 质检状态
         orderTimeStart: this.qualityTime[0], // 质检开始时间

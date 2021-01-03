@@ -230,8 +230,8 @@ export default {
         if (_this.productList.length <= 0) {
           _this.$message.error('请至少添加一个商品')
           return
-        } else {
-          this.form.stockList = []
+        }
+        this.form.stockList = []
           this.productList.forEach((item) => {
             this.form.stockList.push({
               consumeAmount: item.consumeAmount,
@@ -242,11 +242,6 @@ export default {
               itemRemark: item.itemRemark
             })
           })
-        }
-        if (Number(_this.totalAmount)) {
-          _this.$message.error('请输入损耗商品数量')
-          return
-        }
         _this.$refs.form.validate(valid => {
           if (valid) {
             if (reset) {

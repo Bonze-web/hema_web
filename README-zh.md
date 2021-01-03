@@ -1,8 +1,8 @@
-# chinapride-backoffice
+# wms-admin
 
 > 盒马WMS
 
-[测试环境](http://chinapride.ngrok.gomoretech.com/chinapride-admin/)
+[测试环境](http://chinapride.ngrok.gomoretech.com/wms-admin/)
 
 ## Build Setup
 

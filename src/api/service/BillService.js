@@ -87,6 +87,6 @@ export default {
      * 查询移库单详情
      */
     getMovebillDetail(id) {
-        return request.get(`/wms/move-bill/${id}`)
+        return request.get(`/wms/move-bill/getById?id=${id}`)
     }
 }

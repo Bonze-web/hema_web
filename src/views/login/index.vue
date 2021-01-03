@@ -109,7 +109,7 @@ export default {
     this.prj = process.env.PRJ;
     if (this.prj === "SAAS") {
       var tenant = localStorage.getItem("_tenant_");
-      if (window.location.pathname !== "/chinapride-backoffice/") {
+      if (window.location.pathname !== "/wms-admin/") {
         var pathnameArr = window.location.pathname.split("/");
         if (pathnameArr.length > 1) {
           tenant = pathnameArr[1];

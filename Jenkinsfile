@@ -74,24 +74,24 @@ pipeline {
         
         stage('Archive') { 
             steps {                
-                echo "ready to achive coffee-admin-${PRJ_VERSION}.zip!"
-                sh "rm -rf coffee-admin*.zip"
-                zip zipFile: "coffee-admin-${PRJ_VERSION}.zip", archive: true, dir: './dist'
+                echo "ready to achive wms-admin-${PRJ_VERSION}.zip!"
+                sh "rm -rf wms-admin*.zip"
+                zip zipFile: "wms-admin-${PRJ_VERSION}.zip", archive: true, dir: './dist'
             } 
         }
 
         stage('Build images') {
             steps {
-                echo "ready to build coffee-admin:${PRJ_VERSION} image"
-                sh "docker build -t ${HARBOR}/newretail/coffee-admin:${PRJ_VERSION} -f ./docker/dockerfile ."
+                echo "ready to build wms-admin:${PRJ_VERSION} image"
+                sh "docker build -t ${HARBOR}/newretail/wms-admin:${PRJ_VERSION} -f ./docker/dockerfile ."
             }                
         }
 
         stage('Push images') { 
             steps {
-                echo "ready to push coffee-admin:${PRJ_VERSION} image to harbor"
+                echo "ready to push wms-admin:${PRJ_VERSION} image to harbor"
                 sh "docker login -u admin -p WMdigit123 http://${HARBOR}"
-                sh "docker push ${HARBOR}/newretail/coffee-admin:${PRJ_VERSION}"
+                sh "docker push ${HARBOR}/newretail/wms-admin:${PRJ_VERSION}"
                 }
             } 
     } 
