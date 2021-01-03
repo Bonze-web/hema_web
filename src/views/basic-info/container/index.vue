@@ -283,7 +283,7 @@ export default {
           return "已作废"
         case 'stacontainermovelocked':
           return "移库锁定"
-        case 'USING':
+        case 'using':
           return "已使用"
         case 'pickuping':
           return "拣货中"

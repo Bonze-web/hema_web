@@ -42,12 +42,13 @@
 
 
       <el-table :data="listData" style="width: 100%; text-align: center" @selection-change="handleSelectionChange" :row-style="{ height: '16px', padding: '-4px' }" >
-        <el-table-column type="selection" width="55"></el-table-column>
+
+        <el-table-column type="selection" :selectable='checkboxSelect' width="55"></el-table-column>
 
         <el-table-column prop="scope" label="调整单单号" style="height: 20px">
           <template slot-scope="scope">
-            <router-link style="color: #409eff" :to="{ path: '/warehousing-adm/packing/edit', query:{ id: scope.row.id } }" >
-              <span>{{ scope.row.billNumber }}33333333333333</span>
+            <router-link style="color: #409eff" :to="{ path: '/wrhmanagement/adjustinfo/edit', query:{ id: scope.row.id } }" >
+              <span>{{ scope.row.billNumber }}</span>
             </router-link>
           </template>
         </el-table-column>
@@ -211,6 +212,11 @@ export default {
       this.page = 1;
       this.stockUpdateInfoBillQuery(true);
     },
+    checkboxSelect(opt) {
+      if (opt.status === 'APPLYING') {
+        return true
+      }
+    },
     adopt() {
       // 通过
       if (this.activeArr.length === 0) return;
@@ -251,14 +257,21 @@ export default {
 
       this.$prompt('请输入作废备注', '提示', {
           confirmButtonText: '确定',
-          cancelButtonText: '取消'
+          cancelButtonText: '取消',
+          inputValidator(val) {
+            console.log(val)
+            if (val === null || val === '') {
+              return false
+            }
+          },
+          inputErrorMessage: '请输入作废原因'
         })
         .then(({ value }) => {
           this.activeArr.forEach(item => {
             arrId.push(item.id)
           })
 
-          DemolitionAndService.noPassUpdateInfoBill(arrId)
+          DemolitionAndService.noPassUpdateInfoBill(arrId, value)
           .then((res) => {
             this.$message.success("操作成功")
             _this.stockUpdateInfoBillQuery()

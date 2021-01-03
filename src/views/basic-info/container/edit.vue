@@ -4,8 +4,10 @@
             <div class="head-title">
                 <div style="margin:8px">{{ '[' + dataList.barcode  +']' + dataList.containerTypeName  }}</div>
                 <!-- <template> -->
-                  <div style="margin:11px 0 5px 0; font-size: 12px; color: #999">{{ state }}</div>
+                  <!-- <div style="margin:11px 0 5px 0; font-size: 12px; color: #999">{{ state }}</div> -->
                 <!-- </template> -->
+                <div style="margin:11px 0 5px 0; font-size: 12px; color: #999">{{ dataList.useStatus | dcStatus }}</div>
+                
             </div>
             <div>
                 <el-button @click="back">返回</el-button>
@@ -98,14 +100,29 @@
                             </el-col>
                             <el-col :span="6" class="info-box">
                                 <div>容器类型:</div>
-                                <!-- <router-link style="color: #409eff" :to="{ path: '/basicinfo/container/edit' }" > -->
-                                  {{ '[' + dataList.useStatus + ']' + dataList.containerTypeName }}
-                                <!-- </router-link> -->
+                                {{ '[' + dataList.containerTypeCode + ']' + dataList.containerTypeName }}
                             </el-col>
+
                             <el-col :span="6" class="info-box">
-                                <div>所属对象:</div>
-                                <div>{{ dataList.storageNumber }}</div>
+                                <div>创建时间:</div>
+                                {{ dataList.createTime }}
                             </el-col>
+
+                            <el-col :span="6" class="info-box">
+                                <div>创建人名称:</div>
+                                {{ dataList.creatorName }}
+                            </el-col>
+
+                            <el-col :span="6" class="info-box">
+                                <div>最后更新时间:</div>
+                                {{ dataList.updateTime }}
+                            </el-col>
+
+                            <el-col :span="6" class="info-box">
+                                <div>最后更新人名称:</div>
+                                {{ dataList.updatorName }}
+                            </el-col>
+
                             <el-col :span="6" class="info-box">
                                 <div>父容器:</div>
                                 <div>{{ dataList.parentId ? dataList.parentId : "&lt;空&gt;" }}</div>
@@ -113,7 +130,7 @@
 
                             <el-col :span="6" class="info-box">
                                 <div>当前位置:</div>
-                                <div>{{ dataList.positionCode }}</div>
+                                <div>{{ dataList.positionCode ? dataList.positionCode : "&lt;空&gt;" }}</div>
                             </el-col>
 
                             <el-col :span="6" class="info-box">
@@ -122,7 +139,7 @@
                             </el-col>
                             <br>
 
-                            <el-col>
+                            <!-- <el-col>
                                 <div  class="info-title title">子容器</div>
                             </el-col>
 
@@ -144,45 +161,20 @@
 
                             <el-table-column prop="c" label="状态">
                               <template slot-scope="scope">
-                                {{ scope.row.status | dcStatus }}
-                              </template>
-                            </el-table-column>
-
-                          </el-table>
-
-
-                        </el-tab-pane>
-
-                        <el-tab-pane label="操作日志" name="active">
-                          <el-table :data="dataList.sonList" style="width: 100%; text-align: center" :row-style="{ height: '16px', padding: '-4px' }" >
-                            操作日志
-
-                            <!-- <el-table-column prop="a" label="操作时间" style="height: 20px">
-                              <template slot-scope="scope">
-                                  <span>条码{{ scope.row.a }}</span>
-                              </template>
-                            </el-table-column>
-
-                            <el-table-column prop="b" label="操作类型" style="height: 20px">
-                              <template slot-scope="scope">
-                                  <span>容器类型{{ scope.row.b }}</span>
-                              </template>
-                            </el-table-column>
-
-                            <el-table-column prop="c" label="事件">
-                              <template slot-scope="scope">
-                                {{ scope.row.c }}
-                              </template>
-                            </el-table-column>
-
-                            <el-table-column prop="d" label="修改">
-                              <template slot-scope="scope">
-                                {{ scope.row.d }}
+                                {{ scope.row.useStatus | dcStatus }}
                               </template>
                             </el-table-column> -->
 
                           </el-table>
+
+
                         </el-tab-pane>
+
+                        <!-- <el-tab-pane label="操作日志" name="active">
+                          <el-table :data="dataList.sonList" style="width: 100%; text-align: center" :row-style="{ height: '16px', padding: '-4px' }" >
+                            操作日志
+                          </el-table>
+                        </el-tab-pane> -->
                     </el-tabs>
                 </template>
             </div>
@@ -196,7 +188,6 @@ import BasicService from "@/api/service/BasicService";
 export default {
   data() {
       return {
-        state: '', // 状态
         tabActiveName: 'category', // tab栏名称
         active: 'ccc',
         status: '', // 页面状态
@@ -218,21 +209,9 @@ export default {
       ocntainerOcntainer: function(id) {
         BasicService.ocntainerOcntainer(id)
         .then((res) => {
-          let state = '';
-
-          if (res.status === 'ON') {
-            state = '已使用'
-          } else if (res.status === 'OFF') {
-            state = '未使用'
-          } else {
-            state = '未知'
-          }
-
           this.dataList = res;
 
           console.log(this.dataList.sonList)
-
-          this.state = state
         })
         .catch((err) => {
           this.$message.error("获取详情失败" + err.message)
@@ -246,12 +225,49 @@ export default {
       this.getQueryStatus()
     },
     filters: {
-      dcStatus(status) {
-        switch (status) {
-          case 'ON':
+      dcStatus(useStatus) {
+        if (useStatus === undefined) return;
+        const useStatu = useStatus.toLowerCase();
+
+        switch (useStatu) {
+          case 'idle':
+            return "空闲"
+          case 'locked':
+            return "已锁定"
+          case 'receiving':
+            return "收货中"
+          case 'rtnwrhreceiving':
+            return "好退退仓收货中"
+          case 'rtnvendorreceiving':
+            return "返厂退仓收货中"
+          case 'moving':
+            return "平移中"
+          case 'allocating':
+            return "分播中"
+          case 'putawaying':
+            return "上架中"
+          case 'rtnputawaying':
+            return "退仓上架中"
+          case 'mergering':
+            return "拆并中"
+          case 'shifting':
+            return "移库中"
+          case 'aborted':
+            return "已作废"
+          case 'stacontainermovelocked':
+            return "移库锁定"
+          case 'using':
             return "已使用"
-          case 'OFF':
-            return "未使用"
+          case 'pickuping':
+            return "拣货中"
+          case 'handovering':
+            return "交接中"
+          case 'shiping':
+            return "装车中"
+          case 'shiped':
+            return "已装车"
+          case 'instore':
+            return "在门店"
           default:
             return '未知';
         }

@@ -66,12 +66,12 @@ export default {
   /**
    * 审核作废
    */
-  noPassUpdateInfoBill(arr) {
+  noPassUpdateInfoBill(arr, text) {
     let list = '';
     arr.forEach(item => {
       list += `ids=${item}&`
     });
-    return request.get('/stock/updateInfoBill/noPass?' + list)
+    return request.get('/stock/updateInfoBill/noPass?' + list + '&reason=' + text)
   },
   /**
    * 查询供应商
