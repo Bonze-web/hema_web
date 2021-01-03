@@ -156,7 +156,7 @@ export default {
         this.$router.go(-1)
       },
       createInventory() {
-        // this.$router.push({name: 'InventoryEdit'});
+        this.$router.push({name: 'InventoryEdit'});
         this.form.planDate = this.geshiChange(this.form.planDate);
         InventoryService.createLossBill(this.form)
         .then((res) => {

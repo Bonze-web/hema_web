@@ -218,27 +218,16 @@
             </div>
         </div>
         <el-dialog title="收货地址" :visible.sync="Actual">
-          <el-upload
-            ref="upload"
-            :auto-upload="false"
-            class="upload-demo"
-            :on-preview="handlePreview"
-            :action="checkUrl"
-            :before-upload="handel"
-            :on-remove="handleRemove"
-            :before-remove="beforeRemove"
-            :limit="1"
-            accept=".xlsx"
-            :file-list="fileList">
-            <el-button size="small" type="primary">点击上传</el-button>
-            <div slot="tip" class="el-upload__tip">只能上传.xlsx文件</div>
+         <el-upload class="upload-demo" ref="upload" :auto-upload="false" :action="actionUrl" :on-preview="handlePreview" :on-remove="handleRemove" :before-remove="beforeRemove" multiple :limit="1" :on-exceed="handleExceed" :file-list="fileList" :on-success="handleSuccess">
+              <el-button size="small" type="primary">点击上传</el-button>
           </el-upload>
+          <!-- <input type="file" @change="getFile($event)" accept=".xlsx"> -->
           <div style="padding-top: 20px;">
             <el-link type="primary">下载模块</el-link>
           </div>
           <div slot="footer" class="dialog-footer">
             <el-button @click="Actual = false">取 消</el-button>
-            <el-button type="primary" @click="upClick">确 定</el-button>
+            <el-button type="primary" @click="submitAddFile">确 定</el-button>
           </div>
         </el-dialog>
     </div>
@@ -247,11 +236,16 @@
 <script>
 import InventoryService from "@/api/service/InventoryService";
 import systemLog from "@/components/systemLog.vue"
+import * as Utils from "@/utils/index";
 // import PermIds from "@/api/permissionIds";
 // import { mapGetters } from "vuex";
 export default {
   data() {
       return {
+        form: {
+          configure: []
+        },
+        addArr: [],
         Actual: false,
         inventoryStatus: "start",
         tabActiveName: 'suppliers',
@@ -277,20 +271,72 @@ export default {
       }
     },
     methods: {
+      handleSuccess() {
+        console.log(this.fileList);
+        this.$message.success("上传成功");
+      },
+      handlePreview(file) {
+        Utils.downloadFile(file.url, file.name);
+      },
+      handleRemove(file, fileList) {
+        console.log(file, fileList);
+        // // 修改对应项的数据
+        // this.form.configure.forEach(item => {
+        //   item.options.forEach(ele => {
+        //     // 有可选项
+        //     if (ele.id === this.selectItems.id) {
+        //       ele.value = ""
+        //     }
+        //   });
+        // });
+      },
+      getFile(event) {
+          var file = event.target.files;
+          for (let i = 0; i < file.length; i++) {
+             var imgName = file[i].name;
+              var idx = imgName.lastIndexOf(".");  
+              if (idx !== -1) {
+                  var ext = imgName.substr(idx + 1).toUpperCase();   
+                  ext = ext.toLowerCase(); 
+                  if (ext !== 'xlsx') {
+                      this.$message.warning(`只能选择xlsx文件`);
+                  } else {
+                    console.log(file[i]);
+                        this.addArr.push(file[i]);
+                  }   
+              } else {
+                  this.$message.warning(`请选择xlsx文件`);
+              }
+          }
+      },
+      submitAddFile() {
+        this.$refs.upload.submit();
+        this.Actual = false;
+        // if (this.addArr.length === 0) {
+        //   this.$message({
+        //     type: 'info',
+        //     message: '请选择要上传的文件'
+        //   });
+        //   return;
+        // }
+        // this.Actual = false;
+        // var formData = new FormData();
+        // formData.append('file', this.addArr);
+        // InventoryService.uploadFileData({formData: formData, urlApi: this.checkUrl})
+        // .then((res) => {
+        //     console.log(res);
+        // }).catch((err) => {
+        //   this.$message.error("上传失败" + err.message)
+        // })
+      },
       handel(data) {
         console.log(data);
       },
       upClick() {
         console.log(this.$refs.upload)
       },
-      handleRemove(file, fileList) {
-        console.log(file, fileList);
-      },
-      handlePreview(file) {
-        console.log(file);
-      },
       handleExceed(files, fileList) {
-        this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
+        this.$message.warning("请删除当前文件再上传~");
       },
       beforeRemove(file, fileList) {
         return this.$confirm(`确定移除 ${file.name}？`);
@@ -415,6 +461,11 @@ export default {
     },
     components: {
       "system-log": systemLog
+    },
+    computed: {
+      actionUrl() {
+        return process.env.BASE_API + "/stock-take-bill-item-check/" + this.id + "/import";
+      } 
     },
     filters: {
       handleStatus(status) {
