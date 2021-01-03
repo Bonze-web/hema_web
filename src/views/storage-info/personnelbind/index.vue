@@ -1,7 +1,7 @@
 <template>
     <div class="table-index _table-index">        
         <div class="select-head">
-            <el-form ref="form" style="display:flex" :model="form" label-width="110px" label-position="right">
+            <el-form ref="form" style="display:flex;flex-wrap:wrap" :model="form" label-width="110px" label-position="right">
                 <el-form-item label="用户">
                     <el-input type='text' placeholder="请输入代码/名称" v-model="form.usernameLikes" class="input-width"></el-input>
                 </el-form-item>
@@ -20,7 +20,7 @@
         <div style="height:20px" />
         <div style="background:#fff">
           <el-row>
-            <router-link :to="{ path: '/storageinfo/personnelbind/add', query:{ status: 'create'} }">
+            <router-link :to="{ path: '/storageinfo/personnelbind/add', query:{ status: 'create', addData : addData} }">
               <!-- <span v-if="child.meta&&child.meta.title" :title="child.meta.title">{{child.meta.title}}</span> -->
               <el-button style="margin:18px 10px" type="primary" size="mini" v-if="hasPermission(PermIds.WMS_USER_PICKAREA_CREATE) && workingOrg.type === 'DC'">新建</el-button>
             </router-link>
@@ -124,7 +124,8 @@ export default {
           searchCount: true
         },
         suppliersData: [],
-        multipleSelection: [] // 选择的列表
+        multipleSelection: [], // 选择的列表
+        addData: []
       }
   },
   computed: {
@@ -194,6 +195,7 @@ export default {
           // 初始化自己定义的数据
           _this.suppliersData = res.records;
           _this.totalCount = res.totalCount;
+          _this.addData = encodeURIComponent(JSON.stringify(_this.suppliersData));
         })
         .catch((err) => {
           if (err) _this.$message.error("获取信息失败" + err.message)
