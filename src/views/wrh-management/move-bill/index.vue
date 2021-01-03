@@ -116,8 +116,6 @@ export default {
           searchCount: true,
           moveType: '',
           billNumber: '', // 单据号
-          decerNameLikes: '', // 报告员
-          binCode: '', // 货位
           moverId: '' // 报告员ID
         },
         lossBill: [],
@@ -167,10 +165,6 @@ export default {
         };
       },
     onSelect: function() {
-     if (this.form.beginAndEndDate.length > 0) {
-        this.form.beginTime = this.form.beginAndEndDate[0]
-        this.form.endTime = this.form.beginAndEndDate[1]
-      }
       this.getMovebillList()
     },
     clearInput: function() {
@@ -178,8 +172,6 @@ export default {
           searchCount: true,
           moveType: '',
           billNumber: '', // 单据号
-          decerNameLikes: '', // 报告员
-          binCode: '', // 货位
           moverId: '' // 报告员ID
         }
       this.getMovebillList()
@@ -198,9 +190,9 @@ export default {
     },
     getMovebillList: function() {
       const _this = this
-      _this.form.page = this.page
-      _this.form.pageSize = this.pageSize
-      BillService.getMovebillList({page: 1, pageSize: 10})
+      _this.form.page = _this.page
+      _this.form.pageSize = _this.pageSize
+      BillService.getMovebillList(_this.form)
       .then((res) => {
         _this.lossBill = res.records
       })
