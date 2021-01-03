@@ -126,7 +126,6 @@
         <div class="info-content">
             <div>
                 <template>
-                    
                             <el-form :model="form" :rules="createRules" ref="form" label-width="100px" class="demo-ruleForm">
                                 <div class="info-title">基本信息</div>
                                 <el-row :gutter="20">
@@ -215,7 +214,7 @@
                                         </el-table-column>
                                         <el-table-column width="100" prop="consumeAmount" label="损耗金额">
                                           <template slot-scope="scope">
-                                            {{ (Number(scope.row.consumeQtystr) + Number(scope.row.consumeQty)) * scope.row.price ? (Number(scope.row.consumeQtystr) + Number(scope.row.consumeQty)) * scope.row.price : 0 }}
+                                            {{ (Number(scope.row.consumeQtystr) * scope.row.qpc + Number(scope.row.consumeQty)) * scope.row.price ? ((Number(scope.row.consumeQtystr) * scope.row.qpc + Number(scope.row.consumeQty)) * scope.row.price).toFixed(2) : 0 }}
                                           </template>
                                         </el-table-column>
                                         <el-table-column width="100" prop="itemRemark" label="备注">
@@ -374,7 +373,9 @@ export default {
         this.form.decerId = e.id
       },
       deleteProduct: function(index) {
-        this.deleteSelection(index)
+        if (index !== 0) {
+          this.deleteSelection(index)
+        }
         this.productList.splice(index, 1)
         const arr = Array.from(new Set(this.productList))
         this.form.totalProductCount = arr.length

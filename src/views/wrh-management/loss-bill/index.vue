@@ -3,10 +3,10 @@
       <div class="select-head">
             <el-form ref="form" style="display:flex;flex-wrap:wrap" :model="form" label-width="80px" label-position="right">
                 <el-form-item label="单号">
-                    <el-input type='text' placeholder="请输入单号编号" v-model="form.billNumLikes" class="input-width"></el-input>
+                    <el-input type='text' clearable placeholder="请输入单号编号" v-model="form.billNumLikes" class="input-width"></el-input>
                 </el-form-item>
                 <el-form-item label="仓库">
-                    <el-input type='text' placeholder="请输入仓库编号" v-model="form.wareCodeOrNameLikes" class="input-width"></el-input>
+                    <el-input type='text' clearable placeholder="请输入仓库编号" v-model="form.wareCodeOrNameLikes" class="input-width"></el-input>
                 </el-form-item>
                 <el-form-item label="报损员">
                     <el-autocomplete
@@ -26,13 +26,13 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="商品">
-                    <el-input type='text' placeholder="请输入商品编号/名称" v-model="form.productCodeOrname" class="input-width"></el-input>
+                    <el-input type='text' clearable placeholder="请输入商品编号/名称" v-model="form.productCodeOrNameLikes" class="input-width"></el-input>
                 </el-form-item>
                 <el-form-item label="货位">
-                    <el-input type='text' placeholder="请输入货位编号/名称" v-model="form.binCode" class="input-width"></el-input>
+                    <el-input type='text' clearable placeholder="请输入货位编号/名称" v-model="form.binCodeEquals" class="input-width"></el-input>
                 </el-form-item>
                 <el-form-item label="容器">
-                    <el-input type='text' placeholder="请输入容器编号" v-model="form.containerCodeOrNameLikes" class="input-width"></el-input>
+                    <el-input type='text' clearable placeholder="请输入容器编号" v-model="form.containerCodeOrNameLikes" class="input-width"></el-input>
                 </el-form-item>
                 <el-form-item label="创建时间">
                     <el-date-picker
@@ -45,7 +45,7 @@
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="来源单号">
-                    <el-input type='text' placeholder="请输入来源单号" v-model="form.srcBillNumber" class="input-width"></el-input>
+                    <el-input type='text' clearable placeholder="请输入来源单号" v-model="form.srcBillNumber" class="input-width"></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" size="mini" @click="onSelect">立即搜索</el-button>
@@ -135,11 +135,10 @@ export default {
           wareCodeOrNameLikes: '',
           decerNameLikes: '', // 报损员
           statusEquals: '',
-          productCodeOrname: '', // 商品
+          productCodeOrNameLikes: '', // 商品
           containerBarcode: '', // 容器
-          binCode: '', // 货位
-          beginAndEndDate: [],
-          srcBillNumber: '' // 来源单号
+          binCodeEquals: '', // 货位
+          beginAndEndDate: []
         },
         lossBill: []
       }
@@ -176,7 +175,7 @@ export default {
     },
     onSelect: function() {
      if (this.form.beginAndEndDate.length > 0) {
-        this.form.beginTime = this.form.beginAndEndDate[0]
+        this.form.startTime = this.form.beginAndEndDate[0]
         this.form.endTime = this.form.beginAndEndDate[1]
       }
       this.getBillList()
@@ -187,11 +186,10 @@ export default {
           wrhCodeOrName: '',
           decerCodeOrName: '', // 报损员
           statusEquals: '',
-          productCodeOrname: '', // 商品
+          productCodeOrNameLikes: '', // 商品
           containerCodeOrNameLikes: '', // 容器
-          binCode: '', // 货位
-          beginAndEndDate: [],
-          srcBillNumber: '' // 来源单号
+          binCodeEquals: '', // 货位
+          beginAndEndDate: []
         }
       this.getBillList()
     },

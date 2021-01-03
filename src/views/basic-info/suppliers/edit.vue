@@ -284,7 +284,7 @@ export default {
         .then((res) => {
           this.suppliersInfo = res
           // 根据状态修改供应商开启switch
-          if (this.suppliersInfo.status === "OPEN") {
+          if (this.suppliersInfo.status === "ON") {
             this.suppliersInfo.status = true
           } else {
             this.suppliersInfo.status = false
@@ -313,9 +313,9 @@ export default {
               })
             } else {
               if (this.form.status) {
-                this.form.status = "OPEN"
+                this.form.status = "ON"
               } else {
-                this.form.status = "CLOSED"
+                this.form.status = "OFF"
               }
               BasicService.updateSupplier(this.form)
               .then(res => {

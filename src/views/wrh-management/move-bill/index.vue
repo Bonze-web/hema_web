@@ -3,7 +3,7 @@
       <div class="select-head">
             <el-form ref="form" style="display:flex;flex-wrap:wrap" :model="form" label-width="80px" label-position="right">
                 <el-form-item label="单号">
-                    <el-input type='text' placeholder="请输入类别编号/名称" v-model="form.billNumber" class="input-width"></el-input>
+                    <el-input type='text' clearable placeholder="请输入类别编号/名称" v-model="form.billNumber" class="input-width"></el-input>
                 </el-form-item>
                 <el-form-item label="移库员">
                     <el-autocomplete
@@ -190,8 +190,14 @@ export default {
     },
     getMovebillList: function() {
       const _this = this
-      _this.form.page = _this.page
-      _this.form.pageSize = _this.pageSize
+      _this.form = {
+        page: _this.page,
+        pageSize: _this.pageSize,
+        searchCount: true,
+        moveType: _this.form.moveType ? _this.form.moveType : null,
+        billNumber: _this.form.billNumber ? _this.form.billNumber : null, // 单据号
+        moverId:  _this.form.moverId ? _this.form.moverId : null // 报告员ID
+      }
       BillService.getMovebillList(_this.form)
       .then((res) => {
         _this.lossBill = res.records
