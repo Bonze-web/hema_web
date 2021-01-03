@@ -113,7 +113,7 @@ export default {
      */
 
     detailsqualityInspection(id) {
-        return request.get('/wms/quality-inspection-order/' + id)
+        return request.get('/wms/quality-inspection-order/getById?id=' + id)
     }
      /**
      * 
