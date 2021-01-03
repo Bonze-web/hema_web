@@ -196,7 +196,7 @@ export default {
         searchCount: true,
         moveType: _this.form.moveType ? _this.form.moveType : null,
         billNumber: _this.form.billNumber ? _this.form.billNumber : null, // 单据号
-        moverId:  _this.form.moverId ? _this.form.moverId : null // 报告员ID
+        moverId: _this.form.moverId ? _this.form.moverId : null // 报告员ID
       }
       BillService.getMovebillList(_this.form)
       .then((res) => {

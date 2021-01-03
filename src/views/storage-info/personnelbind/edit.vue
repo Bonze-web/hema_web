@@ -57,7 +57,8 @@ export default {
           secondPickareaId: "",
           userId: '',
           id: '',
-          firstTaskType: ''
+          firstTaskType: '',
+          secondTaskType: ''
         },
         editData: []
       }
@@ -68,6 +69,11 @@ export default {
     methods: {
       createSuppliers() {
         this.form.id = this.$route.query.id;
+        if (this.form.firstTaskType === 'CASE') {
+          this.form.secondTaskType = 'SPLIT';
+        } else if (this.form.firstTaskType === 'SPLIT') {
+          this.form.secondTaskType = 'CASE'
+        }
         PersonnelbindService.updateSupplier(this.form)
         .then((res) => {
           this.$message.success("更新成功");
