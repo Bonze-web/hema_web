@@ -104,9 +104,9 @@ export default {
           this.$message.error('添加数据不能为空')
           return
       }
-       console.log(this.multipleSelection)
+      console.log(this.multipleSelection)
       this.addSelection(this.multipleSelection)
-      this.$router.push('/wrhmanagement/adjustinfo/add')
+      this.$router.push('/wrhmanagement/lockandunlock/add')
     },
     handleSelectionChange(val) {
         console.log(val)
@@ -140,7 +140,7 @@ export default {
     }
   },
   created() {
-    this.multipleSelection = this.$store.state.adjustinfo.multipleSelection
+    this.multipleSelection = this.$store.state.lockandunlock.multipleSelection
     this.handleSelectionChange(this.multipleSelection)
     // this.clearSelection()
     // this.getRowKeys()

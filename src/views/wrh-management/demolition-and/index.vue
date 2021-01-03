@@ -44,10 +44,6 @@
         </router-link>
 
         <el-button style="margin: 18px 10px" size="mini" @click="printingBtn" >打印</el-button> -->
-
-        <router-link  :to="{ path: '/wrhmanagement/demolition-and/edit', query:{ id: '20202020' } }" >
-          <el-button style="margin: 18px 10px" type="primary" size="mini" >测试跳往详情页面</el-button>
-        </router-link>
       </el-row>
 
 
@@ -217,13 +213,13 @@ export default {
     })
   },
   filters: {
-    setMethod(method) {
-    // 收货方式，MANUAL：手工单据，RF：手持终端
-      switch (method) {
-        case 'MANUAL':
-          return "手工单据"
-        case 'RF':
-          return "手持终端"
+    setStatus(status) {
+      // 状态。INITIAL：初始；FINISHED：已完成。
+      switch (status) {
+        case 'INITIAL':
+          return "初始"
+        case 'FINISHED':
+          return "已完成"
         default:
           return '未知';
       }

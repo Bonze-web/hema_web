@@ -6,8 +6,8 @@
  
           <div class="item">
             <span>入库订单：</span>
-            <el-input ref="focusinput" v-model="billNumber" @blur="iptBlur"  type="text" placeholder="请输入入库订单"></el-input>
-          </div>
+            <el-input ref="focusinput" v-model="srcBillNumber" @blur="iptBlur"  type="text" placeholder="请输入入库订单"></el-input>
+          </div> 
           <div class="item">
             <span>司机联系方式：</span>
             <el-input type="tel" maxlength="11" v-model="objDate.driverPhone" placeholder="请输入司机联系方式"></el-input>
@@ -47,7 +47,7 @@ import WarehousingAdmServers from "@/api/service/WarehousingAdmServers";
 export default {
   data() {
     return {
-      billNumber: '', // 查询的入库订单编号
+      srcBillNumber: '', // 查询的入库订单编号
       objDate: {
         realArrivalDate: '',
         driverPhone: '',
@@ -65,12 +65,12 @@ export default {
   },
   methods: {
     iptBlur: function() {
-      if (this.billNumber === '') return;
+      if (this.srcBillNumber === '') return;
       // const _this = this;
 
-      console.log(this.billNumber)
+      console.log(this.srcBillNumber)
 
-      WarehousingAdmServers.getByBillNumberOrderBill(this.billNumber)
+      WarehousingAdmServers.getBySrcBillNumberOrderBill(this.srcBillNumber)
       .then((res) => {
         this.getData = res;
         console.log(res)
@@ -84,7 +84,7 @@ export default {
       // const data = Object.assign(this.getData, this.objDate)
       const data = this.objDate;
       data.version = this.getData.version;
-      data.billNumber = this.getData.billNumber;
+      data.srcBillNumber = this.getData.srcBillNumber;
       data.dcId = this.getData.dcId
 
       const cart = /(^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领A-Z]{1}[A-Z]{1}[A-Z0-9]{4}[A-Z0-9挂学警港澳]{1}$)/;

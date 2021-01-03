@@ -125,17 +125,17 @@
 
                             <el-col :span="6" class="info-box">
                                 <div>父容器:</div>
-                                <div>{{ dataList.parentId ? dataList.parentId : "&lt;空&gt;" }}</div>
+                                <div>{{ dataList.parentId !== '0' ? dataList.parentId : "&lt;空&gt;" }}</div>
                             </el-col>
 
                             <el-col :span="6" class="info-box">
                                 <div>当前位置:</div>
-                                <div>{{ dataList.positionCode ? dataList.positionCode : "&lt;空&gt;" }}</div>
+                                <div>{{ dataList.positionCode !== " " ? dataList.positionCode : "&lt;空&gt;" }}</div>
                             </el-col>
 
                             <el-col :span="6" class="info-box">
                                 <div>目标位置:</div>
-                                <div>{{ dataList.toPositionCode ? dataList.toPositionCode : "&lt;空&gt;" }}</div>
+                                <div>{{ dataList.toPositionCode !== " " ? dataList.toPositionCode : "&lt;空&gt;" }}</div>
                             </el-col>
                             <br>
 
@@ -163,18 +163,16 @@
                               <template slot-scope="scope">
                                 {{ scope.row.useStatus | dcStatus }}
                               </template>
-                            </el-table-column> -->
+                            </el-table-column>
 
-                          </el-table>
+                          </el-table> -->
 
 
                         </el-tab-pane>
-
-                        <!-- <el-tab-pane label="操作日志" name="active">
-                          <el-table :data="dataList.sonList" style="width: 100%; text-align: center" :row-style="{ height: '16px', padding: '-4px' }" >
-                            操作日志
-                          </el-table>
-                        </el-tab-pane> -->
+                        <!-- USER, DOCK, Inbound_Outbound, PRETYPE, PICK_ORDER, USER_PICKAREA, OTHER, SUPPLIER, CONTAINER, CONTAINERTYPE, DECINVBILL, INCINVBILL, PICKAREA, STORAGEAREA, PRODUCT, PRODUCTCATEGORY, BINTYPE, ZONE, PATH, SHELF, BIN, QUALITY, MOVESTOCK, LOCKSTOCK, VENDORRETURNBILL, ORDERBILL -->
+                        <el-tab-pane label="操作日志" name="log">
+                          <system-log modular="CONTAINER"></system-log>
+                        </el-tab-pane>
                     </el-tabs>
                 </template>
             </div>
@@ -183,6 +181,7 @@
 </template>
 
 <script>
+import systemLog from "@/components/systemLog.vue";
 import BasicService from "@/api/service/BasicService";
 
 export default {
@@ -196,6 +195,9 @@ export default {
       }
     },
     computed: {
+    },
+    components: {
+      systemLog
     },
     methods: {
       back: function() {
