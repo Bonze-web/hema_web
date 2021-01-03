@@ -195,6 +195,7 @@ export default {
       BillService.getMovebillList(_this.form)
       .then((res) => {
         _this.lossBill = res.records
+        _this.totalCount = res.totalCount
       })
       .catch((err) => {
         _this.$message.error('获取单据列表失败' + err.message)

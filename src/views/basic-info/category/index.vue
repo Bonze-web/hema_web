@@ -11,8 +11,8 @@
                 <el-form-item label="状态">
                     <el-select v-model="form.status" placeholder="请选择状态">
                       <el-option label="全部" value=""></el-option>
-                      <el-option label="启用" value="enabled"></el-option>
-                      <el-option label="禁用" value="disabled"></el-option>
+                      <el-option label="启用" value="ON"></el-option>
+                      <el-option label="禁用" value="OFF"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item>
@@ -64,8 +64,8 @@
                 <el-table-column
                 label="操作">
                 <template slot-scope="scope">
-                  <el-button :disabled="scope.row.status" size="mini" type="text" @click="statusChange(scope.row.status, scope.row.id, scope.row.version)">启用</el-button>
-                  <el-button :disabled="!scope.row.status" size="mini" type="text" @click="statusChange(scope.row.status, scope.row.id, scope.row.version)">禁用</el-button>
+                  <el-button :OFF="scope.row.status" size="mini" type="text" @click="statusChange(scope.row.status, scope.row.id, scope.row.version)">启用</el-button>
+                  <el-button :OFF="!scope.row.status" size="mini" type="text" @click="statusChange(scope.row.status, scope.row.id, scope.row.version)">禁用</el-button>
                 </template>
                 </el-table-column>
             </el-table>
@@ -98,7 +98,7 @@ export default {
         totalCount: 0,
         form: {
           nameOrCode: '',
-          status: '',
+          status: 'ON',
           parentCodeEqualsOrNameLike: ''
         },
         suppliersData: [],
@@ -155,8 +155,9 @@ export default {
       clearInput: function() {
         this.form = {
           nameOrCode: '',
-          status: ''
+          status: 'ON'
         }
+        this.getCateGoryQuery()
       },
       getCateGoryQuery: function(reset) {
         // 获取供应商列表
@@ -186,7 +187,7 @@ export default {
               parentName: res.records[item].parentName,
               parentCode: res.records[item].parentCode
             }
-            if (obj.status === "enabled") {
+            if (obj.status === "ON") {
               obj.status = true
             } else {
               obj.status = false
