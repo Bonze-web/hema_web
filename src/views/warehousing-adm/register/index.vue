@@ -3,7 +3,7 @@
     <div class="select-head">
       <h3>请扫描订单号码</h3>
       <div class="text-wrap">
- 
+        
           <div class="item">
             <span>入库订单：</span>
             <el-input ref="focusinput" v-model="srcBillNumber" @blur="iptBlur"  type="text" placeholder="请输入入库订单"></el-input>
@@ -85,7 +85,12 @@ export default {
       const data = this.objDate;
       data.version = this.getData.version;
       data.srcBillNumber = this.getData.srcBillNumber;
-      data.dcId = this.getData.dcId
+      data.dcId = this.getData.dcId;
+
+      if (new Date(this.getData.expireDate).getTime() - new Date(this.objDate.realArrivalDate).getTime() < 0) {
+        this.$message.error("已超过登记有效期")
+        return;
+      }
 
       const cart = /(^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领A-Z]{1}[A-Z]{1}[A-Z0-9]{4}[A-Z0-9挂学警港澳]{1}$)/;
         
@@ -100,7 +105,6 @@ export default {
         return false;
       }
 
-      // JSW0001OR141456234781
       WarehousingAdmServers.arriveOrderBill(data)
       .then((res) => {
         this.$message.success("入库单" + _this.billNumber + "到货登记成功")
