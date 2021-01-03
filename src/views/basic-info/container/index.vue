@@ -100,7 +100,7 @@
 
         <el-table-column prop="scope" label="使用对象">
           <template slot-scope="scope">
-            {{ scope.row.useName !== ' ' ? scope.row.useName : "&lt;空&gt;" }}
+            {{ scope.row.useId !== '0' ? scope.row.useId : "&lt;空&gt;" }}
           </template>
         </el-table-column>
         
