@@ -29,7 +29,8 @@
                                               filterable
                                               remote
                                               placeholder="请输入移库员名称"
-                                              :remote-method="getUsers">
+                                              :remote-method="getUsers"
+                                              @change="moverChange">
                                               <el-option
                                                 v-for="item in restaurants"
                                                 :key="item.id"
@@ -181,6 +182,13 @@ export default {
     },
     methods: {
       ...mapActions(["deleteMove", "clearMove"]),
+      moverChange() {
+        this.restaurants.forEach(item => {
+          if (item.id === this.form.moverId) {
+            this.form.moverName = item.username
+          }
+        })
+      },
       getContainerList: function(query) {
         const data = {
           barCodeLikes: query,
