@@ -3,8 +3,8 @@
         
         <div class="select-head">
             <el-form ref="form" style="display:flex" :model="form" label-width="80px" label-position="right">
-                <el-form-item label="配送中心">
-                    <el-input type='text' placeholder="请输入配送中心编号/名称" v-model="form.nameOrCode" class="input-width"></el-input>
+                <el-form-item label="物流中心">
+                    <el-input type='text' placeholder="请输入物流中心编号/名称" v-model="form.nameOrCode" class="input-width"></el-input>
                 </el-form-item>
                 <el-form-item label="状态">
                     <el-select v-model="form.status" placeholder="请选择状态">
@@ -97,7 +97,7 @@ export default {
         totalCount: 0,
         form: {
           nameOrCode: '',
-          status: '',
+          status: 'ON',
           type: ''
         },
         PermIds: PermIds,
@@ -157,12 +157,13 @@ export default {
       clearInput: function() {
         this.form = {
           nameOrCode: '',
-          status: '',
+          status: 'ON',
           type: ''
         }
+        this.getDcList()
       },
       getDcList: function(reset) {
-        // 获取配送中心列表
+        // 获取物流中心列表
         const _this = this
         const data = {
           page: this.page,
@@ -197,7 +198,7 @@ export default {
           }
         })
         .catch((err) => {
-          this.$message.error('获取配送中心列表失败' + err.message)
+          this.$message.error('获取物流中心列表失败' + err.message)
         })
       },
       handleCurrentChange: function(e) {

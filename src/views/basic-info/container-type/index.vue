@@ -153,8 +153,9 @@ export default {
       clearInput: function() {
         this.form = {
           nameOrCode: '',
-          status: ''
+          status: 'ON'
         }
+        this.getContainerTypeList()
       },
       getContainerTypeList: function(reset) {
         // 获取配送中心列表

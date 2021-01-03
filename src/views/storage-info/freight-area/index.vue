@@ -848,7 +848,7 @@ import PermIds from "@/api/permissionIds";
           return "拣货位"
         case "STORAGE":
           return "存储位"
-        case "PICK_STORAGE":
+        case "PICKSTORAGE":
           return "拣货存储位"
         case "UNIFYPICK":
           return "统配拣货暂存位"
