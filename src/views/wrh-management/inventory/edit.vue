@@ -84,127 +84,127 @@
                             >
                              <el-table-column prop="lineNumber" label="行号">
                                   <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.lineNumber}}</span>
+                                      <span>{{ scope.row.lineNumber}}</span>
                                   </template>
                               </el-table-column>
                               <el-table-column prop="status" label="状态">
                                   <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.status | showStatusActive}}</span>
+                                      <span>{{ scope.row.status | showStatusActive}}</span>
                                   </template>
                               </el-table-column>
                               <el-table-column prop="vendorCode" label="供应商编号">
                                   <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.binCode }}</span>
+                                      <span>{{ scope.row.binCode }}</span>
                                   </template>
                               </el-table-column>
                               <el-table-column prop="vendorName" label="供应商名称">
                                   <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.binCode }}</span>
+                                      <span>{{ scope.row.binCode }}</span>
                                   </template>
                               </el-table-column>
                               <el-table-column prop="binUsage" label="货位用途">
                                   <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.binUsage }}</span>
+                                      <span>{{ scope.row.binUsage }}</span>
                                   </template>
                               </el-table-column>
                               <el-table-column prop="containerBarcode" label="来源容器">
                                   <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.containerBarcode }}</span>
+                                      <span>{{ scope.row.containerBarcode }}</span>
                                   </template>
                               </el-table-column>
                               <el-table-column prop="productCode" label="商品代码">
                                   <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.productCode}}</span>
+                                      <span>{{ scope.row.productCode}}</span>
                                   </template>
                               </el-table-column>
                               <el-table-column prop="productName" label="商品名称">
                                   <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.productName}}</span>
+                                      <span>{{ scope.row.productName}}</span>
                                   </template>
                               </el-table-column>
                               <el-table-column prop="productPrice" label="商品单件">
                                   <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.productPrice}}</span>
+                                      <span>{{ scope.row.productPrice}}</span>
                                   </template>
                               </el-table-column>
                               <el-table-column prop="productSpec" label="商品规格">
                                   <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.productSpec}}</span>
+                                      <span>{{ scope.row.productSpec}}</span>
                                   </template>
                               </el-table-column>
                               <el-table-column prop="productUnit" label="商品单位">
                                   <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.productUnit}}</span>
+                                      <span>{{ scope.row.productUnit}}</span>
                                   </template>
                               </el-table-column>
                               <el-table-column prop="productVolume" label="商品体积">
                                   <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.productVolume}}</span>
+                                      <span>{{ scope.row.productVolume}}</span>
                                   </template>
                               </el-table-column>
                               <el-table-column prop="productWeight" label="商品重量">
                                   <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.productWeight}}</span>
+                                      <span>{{ scope.row.productWeight}}</span>
                                   </template>
                               </el-table-column>
                               <el-table-column prop="productionBatch" label="批号">
                                   <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.productionBatch}}</span>
+                                      <span>{{ scope.row.productionBatch}}</span>
                                   </template>
                               </el-table-column>
                               <el-table-column prop="stockBatch" label="批次">
                                   <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.stockBatch}}</span>
+                                      <span>{{ scope.row.stockBatch}}</span>
                                   </template>
                               </el-table-column>
                               <el-table-column prop="productionDate" label="生产日期">
                                   <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.productionDate}}</span>
+                                      <span>{{ scope.row.productionDate}}</span>
                                   </template>
                               </el-table-column>
                               <el-table-column prop="validDate" label="到效日期">
                                   <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.validDate}}</span>
+                                      <span>{{ scope.row.validDate}}</span>
                                   </template>
                               </el-table-column>
                               <el-table-column prop="qpcStr" label="规格">
                                   <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.qpcStr}}</span>
+                                      <span>{{ scope.row.qpcStr}}</span>
                                   </template>
                               </el-table-column>
                               <el-table-column prop="quantity" label="数量">
                                   <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.quantity}}</span>
+                                      <span>{{ scope.row.quantity}}</span>
                                   </template>
                               </el-table-column>
                               <el-table-column prop="quantityStr" label="件量">
                                   <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.quantityStr}}</span>
+                                      <span>{{ scope.row.quantityStr}}</span>
                                   </template>
                               </el-table-column>
                               <el-table-column prop="snapQuantity" label="快照数量">
                                   <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.snapQuantity}}</span>
+                                      <span>{{ scope.row.snapQuantity}}</span>
                                   </template>
                               </el-table-column>
                               <el-table-column prop="snapQuantity" label="快照数量">
                                   <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.snapQuantity}}</span>
+                                      <span>{{ scope.row.snapQuantity}}</span>
                                   </template>
                               </el-table-column>
                                <el-table-column prop="diversityQuantity" label="差异数量">
                                   <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.diversityQuantity }}</span>
+                                      <span>{{ scope.row.diversityQuantity }}</span>
                                   </template>
                               </el-table-column>
                               <el-table-column prop="diversityQuantityStr" label="差异件数">
                                   <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.diversityQuantityStr }}</span>
+                                      <span>{{ scope.row.diversityQuantityStr }}</span>
                                   </template>
                               </el-table-column>
                               <el-table-column prop="handleResult" label="处理结果">
                                   <template slot-scope="scope">
-                                      <span style="color:#409EFF">{{ scope.row.handleResult | showHandleResult}}</span>
+                                      <span>{{ scope.row.handleResult | showHandleResult}}</span>
                                   </template>
                               </el-table-column>
                             </el-table>
@@ -398,60 +398,61 @@ export default {
         this.mySelfPage = Number(e);
       },
       getDetail() {
-        this.suppliersInfo = {
-          billNumber: 'string',
-          binRange: 'string',
-          binUsage: 'string',
-          createTime: 'string',
-          creatorName: 'string',
-          operationMode: 'MANUALBILL',
-          planDate: 'ZERO',
-          realDefaultQuantity: 'ZERO',
-          status: 'NORMAL',
-          "takeSchema": "string",
-          "updateTime": "2021-01-02T12:38:41.064Z",
-          "updatorName": "string",
-          "version": "string"
-        }
-        this.storageList = [
-          {
-            "binCode": "string",
-            "binUsage": "string",
-            "containerBarcode": "string",
-            "diversityQuantity": 0,
-            "diversityQuantityStr": "string",
-            "handleResult": "INVENTORY_LOSS",
-            "id": "string",
-            "lineNumber": "string",
-            "productCode": "string",
-            "productName": "string",
-            "productPrice": 0,
-            "productSpec": "string",
-            "productUnit": "string",
-            "productVolume": 0,
-            "productWeight": 0,
-            "productionBatch": "string",
-            "productionDate": "string",
-            "qpc": 0,
-            "qpcStr": "string",
-            "quantity": 0,
-            "quantityStr": "string",
-            "snapQuantity": 0,
-            "snapQuantityStr": "string",
-            "status": "NORMAL",
-            "stockBatch": "string",
-            "validDate": "string",
-            "vendorCode": "string",
-            "vendorName": "string",
-            "version": "string"
-          }
-        ]
-        // InventoryService.getLossBillDetail(this.id)
-        // .then((res) => {
-        //   console.log(res);
-        // }).catch((err) => {
-        //   this.$message.error("获取详情失败" + err.message)
-        // })
+        // this.suppliersInfo = {
+        //   billNumber: 'string',
+        //   binRange: 'string',
+        //   binUsage: 'string',
+        //   createTime: 'string',
+        //   creatorName: 'string',
+        //   operationMode: 'MANUALBILL',
+        //   planDate: 'ZERO',
+        //   realDefaultQuantity: 'ZERO',
+        //   status: 'NORMAL',
+        //   "takeSchema": "string",
+        //   "updateTime": "2021-01-02T12:38:41.064Z",
+        //   "updatorName": "string",
+        //   "version": "string"
+        // }
+        // this.storageList = [
+        //   {
+        //     "binCode": "string",
+        //     "binUsage": "string",
+        //     "containerBarcode": "string",
+        //     "diversityQuantity": 0,
+        //     "diversityQuantityStr": "string",
+        //     "handleResult": "INVENTORY_LOSS",
+        //     "id": "string",
+        //     "lineNumber": "string",
+        //     "productCode": "string",
+        //     "productName": "string",
+        //     "productPrice": 0,
+        //     "productSpec": "string",
+        //     "productUnit": "string",
+        //     "productVolume": 0,
+        //     "productWeight": 0,
+        //     "productionBatch": "string",
+        //     "productionDate": "string",
+        //     "qpc": 0,
+        //     "qpcStr": "string",
+        //     "quantity": 0,
+        //     "quantityStr": "string",
+        //     "snapQuantity": 0,
+        //     "snapQuantityStr": "string",
+        //     "status": "NORMAL",
+        //     "stockBatch": "string",
+        //     "validDate": "string",
+        //     "vendorCode": "string",
+        //     "vendorName": "string",
+        //     "version": "string"
+        //   }
+        // ]
+        InventoryService.getLossBillDetail(this.id)
+        .then((res) => {
+          this.suppliersInfo = res;
+          this.storageList = res.stockTakeBillItemCheckDTOList;
+        }).catch((err) => {
+          this.$message.error("获取详情失败" + err.message)
+        })
       }
     },
     created() {

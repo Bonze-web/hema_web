@@ -121,9 +121,6 @@ export default {
           binUsage: [
             { required: true, message: '请填写货位用途', trigger: 'blur'}
           ],
-          // inventoryHandlingMethod: [
-          //   { required: true, message: '请选择库存处理方式', trigger: 'blur'}
-          // ],
           operationMode: [
             { required: true, message: '请选择操作方式', trigger: 'blur'}
           ],
@@ -156,7 +153,7 @@ export default {
         this.$router.go(-1)
       },
       createInventory() {
-        this.$router.push({name: 'InventoryEdit'});
+        // this.$router.push({name: 'InventoryEdit'});
         this.form.planDate = this.geshiChange(this.form.planDate);
         InventoryService.createLossBill(this.form)
         .then((res) => {
