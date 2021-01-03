@@ -126,7 +126,6 @@
         <div class="info-content">
             <div>
                 <template>
-                    
                             <el-form :model="form" :rules="createRules" ref="form" label-width="100px" class="demo-ruleForm">
                                 <div class="info-title">基本信息</div>
                                 <el-row :gutter="20">

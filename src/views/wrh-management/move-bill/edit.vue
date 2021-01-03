@@ -82,6 +82,7 @@
 
 <script>
 import BillService from "@/api/service/BillService";
+import systemLog from "@/components/systemLog.vue";
 
 export default {
   data() {
@@ -91,6 +92,9 @@ export default {
         moveBillDetail: {},
         productList: []
       }
+    },
+    components: {
+      systemLog
     },
     methods: {
       getQueryStatus: function() {

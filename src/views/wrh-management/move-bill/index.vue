@@ -190,8 +190,14 @@ export default {
     },
     getMovebillList: function() {
       const _this = this
-      _this.form.page = _this.page
-      _this.form.pageSize = _this.pageSize
+      _this.form = {
+        page: _this.page,
+        pageSize: _this.pageSize,
+        searchCount: true,
+        moveType: _this.form.moveType ? _this.form.moveType : null,
+        billNumber: _this.form.billNumber ? _this.form.billNumber : null, // 单据号
+        moverId:  _this.form.moverId ? _this.form.moverId : null // 报告员ID
+      }
       BillService.getMovebillList(_this.form)
       .then((res) => {
         _this.lossBill = res.records
