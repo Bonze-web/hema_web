@@ -3,7 +3,7 @@
       <div class="select-head">
             <el-form ref="form" style="display:flex;flex-wrap:wrap" :model="form" label-width="80px" label-position="right">
                 <el-form-item label="单号">
-                    <el-input type='text' placeholder="请输入类别编号/名称" v-model="form.billNumber" class="input-width"></el-input>
+                    <el-input type='text' clearable placeholder="请输入类别编号/名称" v-model="form.billNumber" class="input-width"></el-input>
                 </el-form-item>
                 <el-form-item label="移库员">
                     <el-autocomplete

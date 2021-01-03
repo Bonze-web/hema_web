@@ -215,7 +215,7 @@
                                         </el-table-column>
                                         <el-table-column width="100" prop="consumeAmount" label="损耗金额">
                                           <template slot-scope="scope">
-                                            {{ (Number(scope.row.consumeQtystr) + Number(scope.row.consumeQty)) * scope.row.price ? (Number(scope.row.consumeQtystr) + Number(scope.row.consumeQty)) * scope.row.price : 0 }}
+                                            {{ (Number(scope.row.consumeQtystr) * scope.row.qpc + Number(scope.row.consumeQty)) * scope.row.price ? ((Number(scope.row.consumeQtystr) * scope.row.qpc + Number(scope.row.consumeQty)) * scope.row.price).toFixed(2) : 0 }}
                                           </template>
                                         </el-table-column>
                                         <el-table-column width="100" prop="itemRemark" label="备注">
