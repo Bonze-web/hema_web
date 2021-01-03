@@ -24,82 +24,89 @@
               <!-- <span v-if="child.meta&&child.meta.title" :title="child.meta.title">{{child.meta.title}}</span> -->
               <el-button style="margin:18px 10px" type="primary" size="mini" v-if="hasPermission(PermIds.WMS_USER_PICKAREA_CREATE) && workingOrg.type === 'DC'">新建</el-button>
             </router-link>
+            <el-button style="margin:18px 10px" type="primary" size="mini" @click="dailyRecord = true">工作日志</el-button>
           </el-row>
-            <el-table
-                :data="suppliersData"
-                style="width: 100%;text-align:center"
-            >
-                <!-- <el-table-column
-                    type="selection"
-                    width="55">
-                </el-table-column> -->
-                <el-table-column prop="code" label="用户代码">
-                    <template slot-scope="scope">
-                        <span>{{ scope.row.userId }}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="username" label="用户姓名">
+          <el-table
+              :data="suppliersData"
+              style="width: 100%;text-align:center"
+          >
+              <!-- <el-table-column
+                  type="selection"
+                  width="55">
+              </el-table-column> -->
+              <el-table-column prop="code" label="用户代码">
                   <template slot-scope="scope">
-                        {{ scope.row.username}}
-                    </template>
-                </el-table-column>
-                <el-table-column label="主要拣货分区">
-                    <template slot-scope="scope">
-                        {{ '[' + scope.row.firstPickareaCode + ']' + scope.row.firstPickareaName}}
-                    </template>
-                </el-table-column>
-                <el-table-column label="主要拣货范围">
-                    <template slot-scope="scope">
-                        {{ scope.row.firstBinscope }}
-                    </template>
-                </el-table-column>
-                <el-table-column label="辅助拣货分区">
-                    <template slot-scope="scope">
-                        {{ '[' + scope.row.secondPickareaCode + ']' + scope.row.secondPickareaName }}
-                    </template>
-                </el-table-column>
-                <el-table-column label="辅助拣货范围">
-                    <template slot-scope="scope">
-                        {{ scope.row.secondBinscope }}
-                    </template>
-                </el-table-column>
-                <el-table-column label="首选拣货任务类型">
-                    <template slot-scope="scope">
-                        {{ scope.row.firstTaskType | stockTypeChange }}
-                    </template>
-                </el-table-column>
-                <el-table-column
-                label="操作"
-                v-if="hasPermission(PermIds.WMS_USER_PICKAREA_UPDATE) && workingOrg.type === 'DC'"
-                >
-                  <template slot-scope="scope">
-                      <!-- <div style="color:#409EFF;cursor:pointer" @click="deleteChange(scope.row.id, scope.row.version)">编辑</div>
-                      <div style="color:#409EFF;cursor:pointer" @click="deleteChange(scope.row.id, scope.row.version)">删除</div> -->
-                    <el-button size="mini" type="text" v-if="hasPermission(PermIds.WMS_USER_PICKAREA_UPDATE)" @click="editChange(scope.row.id)">编辑</el-button>
-                    <el-button size="mini" type="text" v-if="hasPermission(PermIds.WMS_USER_PICKAREA_DELETE)" @click="deleteChange(scope.row.id)">删除</el-button>
+                      <span>{{ scope.row.userId }}</span>
                   </template>
-                </el-table-column>
-                <!-- <el-table-column
-                label="编辑">
-                  <template slot-scope="scope">
-                      <router-link :to="{ path: '/storageinfo/wharf/edit', query:{ status: 'edit', id: scope.row.id} }">
-                            <el-button size="mini" type="text">编辑</el-button>
-                      </router-link>
+              </el-table-column>
+              <el-table-column prop="username" label="用户姓名">
+                <template slot-scope="scope">
+                      {{ scope.row.username}}
                   </template>
-                </el-table-column> -->
-            </el-table>
-            <!-- 下面这个是翻页 -->
-            <el-pagination
-                style="float:right"
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :current-page="1"
-                :page-sizes="[10, 20, 30, 50]"
-                :page-size="pageSize"
-                layout="total, sizes, prev, pager, next, jumper"
-                :total="totalCount">
-            </el-pagination>
+              </el-table-column>
+              <el-table-column label="主要拣货分区">
+                  <template slot-scope="scope">
+                      {{ '[' + scope.row.firstPickareaCode + ']' + scope.row.firstPickareaName}}
+                  </template>
+              </el-table-column>
+              <el-table-column label="主要拣货范围">
+                  <template slot-scope="scope">
+                      {{ scope.row.firstBinscope }}
+                  </template>
+              </el-table-column>
+              <el-table-column label="辅助拣货分区">
+                  <template slot-scope="scope">
+                      {{ '[' + scope.row.secondPickareaCode + ']' + scope.row.secondPickareaName }}
+                  </template>
+              </el-table-column>
+              <el-table-column label="辅助拣货范围">
+                  <template slot-scope="scope">
+                      {{ scope.row.secondBinscope }}
+                  </template>
+              </el-table-column>
+              <el-table-column label="首选拣货任务类型">
+                  <template slot-scope="scope">
+                      {{ scope.row.firstTaskType | stockTypeChange }}
+                  </template>
+              </el-table-column>
+              <el-table-column
+              label="操作"
+              v-if="hasPermission(PermIds.WMS_USER_PICKAREA_UPDATE) && workingOrg.type === 'DC'"
+              >
+                <template slot-scope="scope">
+                    <!-- <div style="color:#409EFF;cursor:pointer" @click="deleteChange(scope.row.id, scope.row.version)">编辑</div>
+                    <div style="color:#409EFF;cursor:pointer" @click="deleteChange(scope.row.id, scope.row.version)">删除</div> -->
+                  <el-button size="mini" type="text" v-if="hasPermission(PermIds.WMS_USER_PICKAREA_UPDATE)" @click="editChange(scope.row.id)">编辑</el-button>
+                  <el-button size="mini" type="text" v-if="hasPermission(PermIds.WMS_USER_PICKAREA_DELETE)" @click="deleteChange(scope.row.id)">删除</el-button>
+                </template>
+              </el-table-column>
+              <!-- <el-table-column
+              label="编辑">
+                <template slot-scope="scope">
+                    <router-link :to="{ path: '/storageinfo/wharf/edit', query:{ status: 'edit', id: scope.row.id} }">
+                          <el-button size="mini" type="text">编辑</el-button>
+                    </router-link>
+                </template>
+              </el-table-column> -->
+          </el-table>
+          <!-- 下面这个是翻页 -->
+          <el-pagination
+              style="float:right:padding-bottom:10px;"
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page="1"
+              :page-sizes="[10, 20, 30, 50]"
+              :page-size="pageSize"
+              layout="total, sizes, prev, pager, next, jumper"
+              :total="totalCount">
+          </el-pagination>
         </div>
+        <el-dialog title="工作日志" :visible.sync="dailyRecord" class="shuttle-box" style="margin-top: 7vh">
+          <system-log :modular="'USER_PICKAREA'"></system-log>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="dailyRecord = false">取 消</el-button>
+          </div>
+        </el-dialog>
     </div>
 </template>
 
@@ -108,10 +115,12 @@
 import PersonnelbindService from "@/api/service/PersonnelbindService";
 import PermIds from "@/api/permissionIds";
 import { mapGetters } from "vuex";
+import systemLog from "@/components/systemLog.vue"
 
 export default {
   data() {
       return {
+        dailyRecord: false,
         PermIds: PermIds,
         suppliersId: '',
         page: 1,
@@ -212,6 +221,9 @@ export default {
         this.getSuppliersList()
       }
   },
+  components: {
+    "system-log": systemLog
+  },
   created() {
     this.getSuppliersList();
   },
@@ -263,6 +275,13 @@ export default {
 
 <style lang="scss" scoped>
 @import "src/styles/mixin.scss";
+.shuttle-box {
+  margin-top: -10vh !important;
+  /deep/ .el-dialog {
+    min-width: 700px;
+    width: 70%;
+  }
+}
 </style>
 <style lang="scss">
 .table-index{

@@ -100,7 +100,7 @@
             </div>
         </div>
         <div style="height:20px;background:#fff" />
-        <div style="background:#fff" class="table-index" v-if="status === 'read' && tabActiveName === 'suppliers'">
+        <div style="background:#fff" class="table-index _table-index" v-if="status === 'read' && tabActiveName === 'suppliers'">
           <el-row>
               <div style="padding:15px">
                 对应存储分区
@@ -656,7 +656,9 @@ export default {
 /deep/ .el-transfer__buttons {
   padding: 0 10px;
 }
-
+/deep/ ._table-index .el-table .cell {
+  padding: 7px 0;
+}
 
 .shuttle-box {
   margin-top: -10vh !important;
