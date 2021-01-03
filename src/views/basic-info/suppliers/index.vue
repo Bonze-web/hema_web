@@ -3,13 +3,13 @@
         <div class="select-head">
             <el-form ref="form" style="display:flex" :model="form" label-width="60px" label-position="right">
                 <el-form-item label="供应商">
-                    <el-input type='text' placeholder="请输入供应商编号/名称" v-model="form.nameOrCode" class="input-width"></el-input>
+                    <el-input type='text' clearable placeholder="请输入供应商编号/名称" v-model="form.nameOrCode" class="input-width"></el-input>
                 </el-form-item>
                 <el-form-item label="状态">
                     <el-select v-model="form.status" placeholder="请选择状态">
                     <el-option label="全部" value=""></el-option>
-                    <el-option label="启用" value="OPEN"></el-option>
-                    <el-option label="禁用" value="CLOSED"></el-option>
+                    <el-option label="启用" value="ON"></el-option>
+                    <el-option label="禁用" value="OFF"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item>
@@ -181,7 +181,7 @@ export default {
               sourceType: res.records[item].sourceType,
               version: res.records[item].version
             }
-            if (obj.status === "OPEN") {
+            if (obj.status === "ON") {
               obj.status = true
             } else {
               obj.status = false

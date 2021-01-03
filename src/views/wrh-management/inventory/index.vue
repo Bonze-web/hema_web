@@ -68,11 +68,6 @@
                     {{ scope.row.status | showStatus}}
                   </template>
                 </el-table-column>
-                <el-table-column prop="operationMode" label="计划盘点">
-                  <template slot-scope="scope">
-                    {{ scope.row.operationMode}}
-                  </template>
-                </el-table-column>
                 <el-table-column prop="operationMode" label="操作方式">
                   <template slot-scope="scope">
                     {{ scope.row.operationMode | handleStatus}}
@@ -111,6 +106,11 @@
                 <el-table-column prop="createTime" label="创建时间">
                   <template slot-scope="scope">
                     {{ scope.row.createTime }}
+                  </template>
+                </el-table-column>
+                 <el-table-column prop="planDate" label="计划盘点">
+                  <template slot-scope="scope">
+                    {{ scope.row.planDate}}
                   </template>
                 </el-table-column>
           </el-table>

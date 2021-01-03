@@ -1264,8 +1264,17 @@ export default {
       console.log(index, val);
       this.specList[index].isEdit = true;
     },
+    qpcStrToNumber(qpcStr) {
+      const arr = qpcStr.split("*");
+      let res = 1;
+      for (let i = 0; i < arr.length; i++) {
+        const ele = arr[i];
+        res = res * Number(ele);
+      }
+      return res;
+    },
     checkSpecData(val) {
-      const reg = /^1\*(\d+(\.\d+)*)\*(\d+(\.\d+)*)$/;
+      const reg = /^(1\*(\d+(\.\d+)*)\*(\d+(\.\d+)*))|(1\*(\d+(\.\d+)*))$/;
       const regMN = /^(\d+(\.\d+)*)\*(\d+(\.\d+)*)$/;
 
       if (!val.qpcStr) {
@@ -1285,6 +1294,10 @@ export default {
         return false;
       } else if (!(Number(val.paq) >= 0)) {
         this.$message.error("包装件数为数字且不能小于0！");
+        return false;
+      } else if (this.qpcStrToNumber(val.qpcStr) !== Number(val.paq)) {
+        console.log(this.qpcStrToNumber(val.qpcStr), Number(val.paq));
+        this.$message.error("包装规格和包装件数不一致！");
         return false;
       } else if (!val.length) {
         this.$message.error("请填写商品包装的长！");

@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+console.dir(request);
 
 /**
  * 单据类型相关接口
@@ -55,5 +56,13 @@ export default {
      */
     getDeccer(data) {
         return request.get('', {params: data})
+    },
+    // 设置一个上传文件的接口
+    uploadFileData(postData) {
+        return request.post(postData.urlApi, postData.formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
     }
 }

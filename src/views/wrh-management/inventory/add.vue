@@ -121,9 +121,6 @@ export default {
           binUsage: [
             { required: true, message: '请填写货位用途', trigger: 'blur'}
           ],
-          // inventoryHandlingMethod: [
-          //   { required: true, message: '请选择库存处理方式', trigger: 'blur'}
-          // ],
           operationMode: [
             { required: true, message: '请选择操作方式', trigger: 'blur'}
           ],
@@ -162,7 +159,8 @@ export default {
         .then((res) => {
           this.$message.success("创建成功");
           this.$store.dispatch("tagsView/delView", this.$route);
-          this.$router.push({name: 'InventoryEdit', query: {id: res.id}});
+          console.log(res);
+          this.$router.push({name: 'InventoryEdit', query: {id: res}});
         }).catch((err) => {
           this.$message.error("创建失败" + err.message)
         })

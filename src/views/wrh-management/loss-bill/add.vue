@@ -341,7 +341,7 @@ export default {
             item.consumeQty = 0
           }
           console.log(consumeQty)
-          this.form.totalQtystr = consumeQtystr + '+' + consumeQty
+          this.form.totalQtystr = consumeQtystr * item.qpc + consumeQty
           this.form.totalAmount = (Number(this.form.totalAmount) + Number(item.consumeAmount)).toFixed(2)
           console.log(item)
         });

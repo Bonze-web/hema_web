@@ -228,7 +228,50 @@ const BasicInfoPackage = {
     icon: 'basic-info'
   },
   children: [
-    {
+     {
+      path: "dc",
+      name: "Dc",
+      component: AModule,
+      meta: {
+        title: '物流中心',
+        icon: 'table',
+        permission: PermIds.SYS_DC
+      },
+      children: [{
+        path: "",
+        name: "DcView",
+        component: () =>
+          import('@/views/basic-info/dc/index'),
+        hidden: true,
+        meta: {
+          title: '物流中心',
+          icon: 'table',
+          permission: PermIds.SYS_DC_VIEW
+        }
+      }, {
+        path: "edit",
+        name: "DcEdit",
+        component: () =>
+          import('@/views/basic-info/dc/edit'),
+        hidden: true,
+        meta: {
+          title: '查看物流中心',
+          icon: 'table',
+          permission: PermIds.SYS_DC_VIEW
+        }
+      }, {
+        path: "add",
+        name: "DcAdd",
+        component: () =>
+          import('@/views/basic-info/dc/edit'),
+        hidden: true,
+        meta: {
+          title: '新建物流中心',
+          icon: 'table',
+          permission: PermIds.SYS_DC_CREATE
+        }
+      }]
+    }, {
     path: "suppliers",
     name: "Suppliers",
     component: AModule,
@@ -315,6 +358,50 @@ const BasicInfoPackage = {
         }
       }]
     }, {
+      path: "product",
+      name: "Product",
+      component: AModule,
+      meta: {
+        title: '商品',
+        icon: 'table',
+        permission: PermIds.PRODUCT_PRODUCT
+      },
+      children: [
+        {
+        path: "",
+        name: "productView",
+        component: () =>
+          import('@/views/basic-info/product/index'),
+        hidden: true,
+        meta: {
+          title: '商品',
+          icon: 'table',
+          permission: PermIds.PRODUCT_PRODUCT
+        }
+      }, {
+        path: "edit",
+        name: "productEdit",
+        component: () =>
+          import('@/views/basic-info/product/edit'),
+        hidden: true,
+        meta: {
+          title: '查看商品',
+          icon: 'table',
+          permission: PermIds.PRODUCT_PRODUCT_VIEW
+        }
+      }, {
+        path: "add",
+        name: "productAdd",
+        component: () =>
+          import('@/views/basic-info/product/add'),
+        hidden: true,
+        meta: {
+          title: '新建商品',
+          icon: 'table',
+          permission: PermIds.PRODUCT_PRODUCT_CREATE
+        }
+      }] 
+    }, {
       path: "containertype",
       name: "ContainerType",
       component: AModule,
@@ -355,49 +442,6 @@ const BasicInfoPackage = {
           title: '新建容器类型',
           icon: 'table',
           permission: PermIds.WMS_CONTAINER_TYPE_CREATE
-        }
-      }]
-    }, {
-      path: "dc",
-      name: "Dc",
-      component: AModule,
-      meta: {
-        title: '物流中心',
-        icon: 'table',
-        permission: PermIds.SYS_DC
-      },
-      children: [{
-        path: "",
-        name: "DcView",
-        component: () =>
-          import('@/views/basic-info/dc/index'),
-        hidden: true,
-        meta: {
-          title: '物流中心',
-          icon: 'table',
-          permission: PermIds.SYS_DC_VIEW
-        }
-      }, {
-        path: "edit",
-        name: "DcEdit",
-        component: () =>
-          import('@/views/basic-info/dc/edit'),
-        hidden: true,
-        meta: {
-          title: '查看物流中心',
-          icon: 'table',
-          permission: PermIds.SYS_DC_VIEW
-        }
-      }, {
-        path: "add",
-        name: "DcAdd",
-        component: () =>
-          import('@/views/basic-info/dc/edit'),
-        hidden: true,
-        meta: {
-          title: '新建物流中心',
-          icon: 'table',
-          permission: PermIds.SYS_DC_CREATE
         }
       }]
     }, {
@@ -442,50 +486,6 @@ const BasicInfoPackage = {
           title: '新建容器',
           icon: 'table',
           permission: PermIds.WMS_CONTAINER_CREATE
-        }
-      }] 
-    }, {
-      path: "product",
-      name: "Product",
-      component: AModule,
-      meta: {
-        title: '商品',
-        icon: 'table',
-        permission: PermIds.PRODUCT_PRODUCT
-      },
-      children: [
-        {
-        path: "",
-        name: "productView",
-        component: () =>
-          import('@/views/basic-info/product/index'),
-        hidden: true,
-        meta: {
-          title: '商品',
-          icon: 'table',
-          permission: PermIds.PRODUCT_PRODUCT
-        }
-      }, {
-        path: "edit",
-        name: "productEdit",
-        component: () =>
-          import('@/views/basic-info/product/edit'),
-        hidden: true,
-        meta: {
-          title: '查看商品',
-          icon: 'table',
-          permission: PermIds.PRODUCT_PRODUCT_VIEW
-        }
-      }, {
-        path: "add",
-        name: "productAdd",
-        component: () =>
-          import('@/views/basic-info/product/add'),
-        hidden: true,
-        meta: {
-          title: '新建商品',
-          icon: 'table',
-          permission: PermIds.PRODUCT_PRODUCT_CREATE
         }
       }] 
     }, {

@@ -68,6 +68,9 @@
                                 <div>{{ suppliersInfo.binScope }}</div>
                             </el-col>
                         </el-tab-pane>
+                        <el-tab-pane label="操作日志" name="operational">
+                            <system-log :modular="'STORAGEAREA'"></system-log>
+                        </el-tab-pane>
                     </el-tabs>
                 </template>
             </div>
@@ -80,6 +83,7 @@
 import StorpartitionService from "@/api/service/StorpartitionService";
 import PermIds from "@/api/permissionIds";
 import { mapGetters } from "vuex";
+import systemLog from "@/components/systemLog.vue"
 
 export default {
   data() {
@@ -111,6 +115,9 @@ export default {
     },
     computed: {
       ...mapGetters(["hasPermission", "workingOrg"])
+    },
+    components: {
+      "system-log": systemLog
     },
     methods: {
       levelChange() {

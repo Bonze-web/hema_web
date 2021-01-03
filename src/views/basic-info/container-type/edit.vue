@@ -27,7 +27,7 @@
             </div>
             <div>
                 <el-button @click="back">返回</el-button>
-                <el-button type="primary" @click="editContainerType" :disabled="!containerTypeInfo.status" v-if="hasPermission(PermIds.WMS_CONTAINER_TYPE_UPDATE)">编辑</el-button>
+                <el-button type="primary" @click="editContainerType" v-if="hasPermission(PermIds.WMS_CONTAINER_TYPE_UPDATE) && containerTypeInfo.status">编辑</el-button>
             </div>
         </div>
         <div style="height:20px" />
@@ -35,7 +35,7 @@
             <div>
                 <template>
                     <el-tabs v-model="tabActiveName" @tab-click="tabClick">
-                        <el-tab-pane label="供应商" name="containerType">
+                        <el-tab-pane label="容器类型" name="containerType">
                             <el-form :model="form" :rules="createRules" ref="form" label-width="100px" class="demo-ruleForm">
                                 <div class="info-title">基本信息</div>
                                 <el-row :gutter="20">

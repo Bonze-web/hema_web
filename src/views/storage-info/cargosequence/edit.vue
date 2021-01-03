@@ -68,9 +68,9 @@
                                 <div>{{ suppliersInfo.binScope }}</div>
                             </el-col>
                         </el-tab-pane>
-                    <el-tab-pane label="操作日志" name="operational">
-                          <system-log :modular="'PICKAREA'"></system-log>
-                    </el-tab-pane>
+                        <el-tab-pane label="操作日志" name="operational">
+                              <system-log :modular="'PICK_ORDER'"></system-log>
+                        </el-tab-pane>
                     </el-tabs>
                 </template>
             </div>

@@ -27,7 +27,7 @@
             </div>
             <div>
                 <el-button @click="back">返回</el-button>
-                <el-button type="primary" @click="editCategory" v-if="hasPermission(PermIds.PRODUCT_CATEGORY_UPDATE)">编辑</el-button>
+                <el-button type="primary" @click="editCategory" v-if="hasPermission(PermIds.PRODUCT_CATEGORY_UPDATE) && categoryInfo.status">编辑</el-button>
             </div>
         </div>
         <div style="height:20px" />
@@ -68,7 +68,7 @@
                                     </el-col>
                                 </el-row>
                                 <el-form-item label="备注">
-                                    <textarea v-model="form.remark"></textarea>
+                                    <textarea maxlength="150" v-model="form.remark"></textarea>
                                 </el-form-item>
                             </el-form>
                         </el-tab-pane>
@@ -110,9 +110,9 @@
                             </el-col>
                         </el-tab-pane>
                         <!-- <el-tab-pane label="配送中心范围" name="range">配置管理</el-tab-pane> -->
-                        <!-- <el-tab-pane label="操作日志" name="log">
-                          <system-log modular="LOSSTYPE"></system-log>
-                        </el-tab-pane> -->
+                        <el-tab-pane label="操作日志" name="log">
+                          <system-log modular="PRODUCTCATEGORY"></system-log>
+                        </el-tab-pane>
                     </el-tabs>
                 </template>
             </div>
@@ -124,6 +124,7 @@
 import PermIds from "@/api/permissionIds";
 import { mapGetters } from "vuex";
 import BasicService from "@/api/service/BasicService";
+import systemLog from "@/components/systemLog.vue";
 
 export default {
   data() {
@@ -157,6 +158,9 @@ export default {
           ]
         }
       }
+    },
+    components: {
+      systemLog
     },
     computed: {
       ...mapGetters(["hasPermission"])
@@ -215,7 +219,7 @@ export default {
         .then((res) => {
           this.categoryInfo = res
           // 根据状态修改供应商开启switch
-          if (this.categoryInfo.status === "enabled") {
+          if (this.categoryInfo.status === "ON") {
             this.categoryInfo.status = true
           } else {
             this.categoryInfo.status = false
@@ -251,9 +255,9 @@ export default {
               })
             } else {
               if (this.form.status) {
-                this.form.status = "enabled"
+                this.form.status = "ON"
               } else {
-                this.form.status = "disabled"
+                this.form.status = "OFF"
               }
               BasicService.updateCategory(this.form)
               .then(res => {
