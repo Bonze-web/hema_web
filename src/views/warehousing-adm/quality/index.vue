@@ -3,12 +3,12 @@
     <div class="select-head">
       <el-form ref="form" style="display: flex;flex-wrap:wrap;" :model="form" label-width="180px" label-position="right" >
 
-        <el-form-item label="入库订单：">
-          <el-input type="text" placeholder="请输入入库订单" v-model="form.orderbillIdNumber" class="input-width" ></el-input>
-        </el-form-item>
-
         <el-form-item label="质检单单号：">
           <el-input type="text" placeholder="请输入质检单单号" v-model="form.billNumber" class="input-width" ></el-input>
+        </el-form-item>
+
+        <el-form-item label="入库订单：">
+          <el-input type="text" placeholder="请输入入库订单" v-model="form.orderbillIdNumber" class="input-width" ></el-input>
         </el-form-item>
 
         <el-form-item label="质检状态：">
@@ -51,17 +51,17 @@
         <!-- <el-table-column type="selection" width="55"></el-table-column> -->
         <!-- <el-table-column type="index" label="序号"></el-table-column> -->
 
-        <el-table-column prop="scope" label="入库单号" style="height: 20px">
+        <el-table-column prop="scope" label="质检单号" style="height: 20px">
           <template slot-scope="scope">
             <router-link style="color: #409eff" :to="{ path: '/warehousing-adm/quality/edit', query:{ id: scope.row.id } }" >
-              <span>{{ scope.row.orderbillIdNumber }}</span>
+              <span>{{ scope.row.billNumber }}</span>
             </router-link>
           </template>
         </el-table-column>
 
-        <el-table-column prop="scope" label="质检单号">
+        <el-table-column prop="scope" label="入库单号">
           <template slot-scope="scope">
-            {{ scope.row.billNumber }}
+            {{ scope.row.orderbillIdNumber }}
           </template>
         </el-table-column>
         
