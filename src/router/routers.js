@@ -1325,7 +1325,8 @@ const BillManagement = {
       component: AModule,
       meta: {
         title: '库存信息调整单',
-        icon: 'table'
+        icon: 'table',
+        permission: PermIds.STOCK_UPDATE_INFO_BILL
       },
       children: [{
         path: "",
@@ -1335,7 +1336,8 @@ const BillManagement = {
         hidden: true,
         meta: {
           title: '库存信息调整单',
-          icon: 'table'
+          icon: 'table',
+          permission: PermIds.STOCK_UPDATE_INFO_BILL_VIEW
         }
       },
       {
@@ -1346,7 +1348,8 @@ const BillManagement = {
         hidden: true,
         meta: {
           title: '调整单详情',
-          icon: 'table'
+          icon: 'table',
+          permission: PermIds.STOCK_UPDATE_INFO_BILL_VIEW
         }
       },
       {
@@ -1357,7 +1360,8 @@ const BillManagement = {
         hidden: true,
         meta: {
           title: '库存信息调整单',
-          icon: 'table'
+          icon: 'table',
+          permission: PermIds.STOCK_UPDATE_INFO_BILL_VIEW
         }
       },
       {
@@ -1368,7 +1372,8 @@ const BillManagement = {
         hidden: true,
         meta: {
           title: '新建库存信息调整单',
-          icon: 'table'
+          icon: 'table',
+          permission: PermIds.STOCK_UPDATE_INFO_BILL_VIEW
         }
       }
     ]
