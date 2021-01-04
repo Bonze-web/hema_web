@@ -131,8 +131,8 @@ export default {
       listData: [], // 列表数据
       form: {
         billNumberLike: '' || null, // 单号
-        receiveBillNumberLike: '', 
-        status: '', // 状态等于
+        receiveBillNumberLike: '' || null, 
+        status: '' || null, // 状态等于
         sourceContainerBarcodeEquals: '' || null,
         containerBarcodeEquals: "" || null,
         putawayerNameLike: "" || null,
@@ -180,8 +180,10 @@ export default {
       this.form.pageSize = this.pageSize;
       this.form.beginPutawayTimeEnd = null || (this.createTime && this.createTime[0])
       this.form.beginPutawayTimeStart = null || (this.createTime && this.createTime[1]);
+       console.log(this.form);
       GroundingService.putwayBillQuery(this.form).then((res) => {
-        this.totalCount = res.pageCount;
+        this.listData = [];
+        this.totalCount = res.totalCount;
         res.records.forEach((ele, idx) => {
             ele.idx = idx + 1;
             this.listData.push(ele);
@@ -244,7 +246,7 @@ export default {
     }
   },
   created() {
-    this.queryOrderBill();
+    // this.queryOrderBill();
   },
   beforeRouteEnter(to, from, next) {
     next(vm => {

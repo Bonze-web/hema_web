@@ -9,21 +9,17 @@
                 <!-- <el-button type="primary" v-if="status === 'create'">确认并创建</el-button> -->
             </div>
         </div>
-        <div class="head" v-if="status === 'read'">
-            <div class="head-title">
-                <div style="margin:8px">{{ '[' + suppliersInfo.code + ']' + suppliersInfo.name }}</div>
-                <!-- <template>
-                  <el-button type="text" @click="statusChange" v-if="suppliersInfo.status">禁用</el-button>
-                  <el-button type="text" @click="statusChange" v-if="!suppliersInfo.status">启用</el-button>
-                </template> -->
+        <div class="head">
+            <div class="head-title" style="display:flex;align-items: center;">
+                <!-- <div style="margin:8px">{{ '[' + suppliersInfo.code + ']' + suppliersInfo.name }}</div> -->
+                仓库作业单详情
             </div>
             <div>
                 <el-button @click="back">返回</el-button>
-                <el-button type="primary" v-if="hasPermission(PermIds.WMS_DOCK_UPDATE) && workingOrg.type === 'DC'"  @click="editSupplier">编辑</el-button>
             </div>
         </div>
         <div style="height:20px" />
-        <div class="info-content" v-if="status === 'read'">
+        <div class="info-content">
             <div>
                 <template>
                     <el-tabs v-model="tabActiveName">
@@ -43,26 +39,117 @@
                             </el-col>
                             <el-col :span="6" class="info-box">
                                 <div>是否测试单:</div>
-                                <div>{{ suppliersInfo.isTest }}</div>
+                                <div>{{ suppliersInfo.isTest | isTestType }}</div>
+                            </el-col>
+                            <el-col :span="6" class="info-box">
+                                <div>外部单号(物流单):</div>
+                                <div>{{ suppliersInfo.sourceOrderId }}</div>
+                            </el-col>
+                            <el-col :span="6" class="info-box">
+                                <div>外部单号(子物流单):</div>
+                                <div>{{ suppliersInfo.sourceSubBillId }}</div>
+                            </el-col>
+                            <el-col :span="6" class="info-box">
+                                <div>状态:</div>
+                                <div>{{ suppliersInfo.status | suppliersStatus}}</div>
+                            </el-col>
+                            <el-col :span="6" class="info-box">
+                                <div>门店:</div>
+                                <div>{{ '[' + suppliersInfo.storeCode + ']' + suppliersInfo.storeName }}</div>
                             </el-col>
                             <el-col class="info-box">
-                                <div>备注:</div>
-                                <div>{{ suppliersInfo.remark ? suppliersInfo.remark : "&lt;空&gt;" }}</div>
+                                <div>仓库:</div>
+                                <div>{{ '[' + suppliersInfo.wrhCode + ']' + suppliersInfo.wrhName }}</div>
                             </el-col>
-                        </el-tab-pane>
-                        <el-tab-pane label="操作日志" name="operational">
-                          <system-log :modular="'DOCK'"></system-log>
+                            <el-col class="info-box">
+                                <div>配送日期:</div>
+                                <div>{{ suppliersInfo.distDate }}</div>
+                            </el-col>
                         </el-tab-pane>
                     </el-tabs>
                 </template>
             </div>
+        </div>
+        <div style="height:20px;background:#fff" />
+        <div style="background:#fff" class="table-index">
+          <el-table
+              lable="仓库作业单"
+              :data="storageList"
+              style="width: 100%;text-align:center"
+          >
+            <el-table-column prop="name" label="商品">
+                <template slot-scope="scope">
+                     <span style="color:#409EFF">{{ '[' + scope.row.productCode + ']' + scope.row.productName }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column prop="canceledQty" label="已取消数量">
+                <template slot-scope="scope">
+                     <span style="color:#409EFF">{{ scope.row.canceledQty }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column prop="frozenQty" label="已占货数量">
+                <template slot-scope="scope">
+                    {{ scope.row.frozenQty}}
+                </template>
+            </el-table-column>
+            <el-table-column prop="frozenQty" label="缺货数量">
+                <template slot-scope="scope">
+                    {{ scope.row.lackQty}}
+                </template>
+            </el-table-column>
+            <el-table-column prop="pickedQty" label="已拣货数量">
+                <template slot-scope="scope">
+                    {{ scope.row.pickedQty}}
+                </template>
+            </el-table-column>
+            <el-table-column prop="qpc" label="规格数">
+                <template slot-scope="scope">
+                    {{ scope.row.qpc}}
+                </template>
+            </el-table-column>
+            <el-table-column prop="qpcStr" label="规格">
+                <template slot-scope="scope">
+                    {{ scope.row.qpcStr}}
+                </template>
+            </el-table-column>
+            <el-table-column prop="qty" label="数量">
+                <template slot-scope="scope">
+                    {{ scope.row.qpcStr}}
+                </template>
+            </el-table-column>
+            <el-table-column prop="qtyStr" label="件数">
+                <template slot-scope="scope">
+                    {{ scope.row.qtyStr }}
+                </template>
+            </el-table-column>
+            <el-table-column prop="sourceOrderId" label="外部单号(物流单)">
+                <template slot-scope="scope">
+                    {{ scope.row.sourceOrderId }}
+                </template>
+            </el-table-column>
+            <el-table-column prop="sourceSubOrderId" label="外部单号(子物流单)">
+                <template slot-scope="scope">
+                    {{ scope.row.sourceSubOrderId }}
+                </template>
+            </el-table-column>
+            <el-table-column prop="status" label="状态">
+                <template slot-scope="scope">
+                    {{ scope.row.status }}
+                </template>
+            </el-table-column>
+            <el-table-column prop="status" label="备注">
+                <template slot-scope="scope">
+                    {{ scope.row.remark }}
+                </template>
+            </el-table-column>
+          </el-table>
         </div>
     </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
-import WharfService from "@/api/service/WharfService";
+import OuthousingService from "@/api/service/OuthousingService";
 import PermIds from "@/api/permissionIds";
 import systemLog from "@/components/systemLog.vue"
 export default {
@@ -93,123 +180,35 @@ export default {
           usages: [
             { required: true, message: '请选择用途', trigger: 'blur' }
           ]
-        }
+        },
+        storageList: []
       }
     },
     computed: {
        ...mapGetters(["hasPermission", "workingOrg"])
     },
     methods: {
-      levelChange() {
-        // this.dc_id = this.form.dcId
-        console.log(this.form)
-      },
       back: function() {
+        this.$store.dispatch("tagsView/delView", this.$route);
         this.$router.go(-1)
-      },
-      statusChange: function() {
-        // 这个地方是已经点击了之后传过来的值,本来是打开的,点击之后已经成了false传递到这里,所以应该执行关闭键
-        // 当状态为关闭的时候,点击的时候应该是让它打开
-        if (!this.suppliersInfo.status) {
-          // 修改状态,将id传过去就可以
-          WharfService.closeSuppliers(this.id)      
-          .then((res) => {
-            this.getSuppliers(this.id)    
-          })
-          .catch((err) => {
-            this.$message.error("禁用失败" + err)
-            this.getSuppliers(this.id)
-          })
-        } else {
-           WharfService.openSuppliers(this.id)
-            .then((res) => {
-              this.getSuppliers(this.id)
-            })
-            .catch((err) => {
-              this.$message.error("启用失败" + err)
-              this.getSuppliers(this.id)
-            })
-        }
       },
       // 详情页面
       // 这个地方用来获取到之前那个页面传递过来的数据,也就是id和状态
       getQueryStatus: function() {
-        this.status = this.$route.query.status
-         console.log(this.id);
-        if (this.status === 'read') {
-          // 如果是编辑的话,还要将id传递过来
-          this.id = this.$route.query.id;
-          console.log(this.id);
-          this.getSuppliers(this.id)
-        }
+        this.id = this.$route.query.id;
+        this.getSuppliers(this.id)
       },
       // 渲染,下面这个也是修改禁用于开启的接口调用
       getSuppliers: function(id) {
         // 如果是只读的模式,就要调取后台的数据,将数据渲染到页面上
-        WharfService.getSuppliersDetail(id)
+        OuthousingService.getSuppliersDetail(id)
         .then((res) => {
-          console.log(res);
-          this.suppliersInfo = res
-          // 根据状态修改供应商开启switch
-          // 首先是根据数据去修改名字后面的两个按钮
-          // if (this.suppliersInfo.status === "OPEN") {
-          //   this.suppliersInfo.status = true
-          // } else {
-          //   this.suppliersInfo.status = false
-          // }
+          this.suppliersInfo = res;
+          this.storageList = res.operateBillItemDTOList;
         })
         .catch((err) => {
-          this.$message.error("获取详情失败" + err)
+          this.$message.error("获取详情失败" + err.message)
         })
-      },
-      // 创建码头
-      createSuppliers: function() {
-        // 创建新的码头的按钮
-        this.$refs.form.validate(valid => {
-          if (valid) {
-            if (this.status === 'create') {
-              // 创建新的码头的按钮
-              console.log(this.form);
-              WharfService.createSuppliers(this.form)
-              .then(res => {
-                this.$message.success("创建成功")
-                this.$router.go(-1)
-              })
-              .catch(err => {
-                this.$message.error("创建失败" + err.message)
-              })
-            } else {
-              console.log(this.form, this.form.status);
-              // 因为提交的时候,需要传递状态值,所以先转换一下,这里是编辑
-              // if (this.form.status) {
-              //   this.form.status = "OPEN"
-              // } else {
-              //   this.form.status = "CLOSED"
-              // }
-              this.form.id = this.id;
-              WharfService.updateSupplier(this.form)
-              .then(res => {
-                console.log(res)
-                this.$message.success("更新成功");
-                this.$store.dispatch("tagsView/delView", this.$route);
-                this.$router.go(-1)
-              })
-              .catch(err => {
-                this.$message.error("更新失败" + err.message)
-              })
-            }
-          } else {
-            console.log(2)
-          }
-        })
-      },
-      // 详情页面跳转到编辑页面
-      editSupplier() {
-        this.status = "edit"
-        // 这个form肯定就是编辑页面的数据,suppliersInfo是前一个页面传递过来的数据
-        // 传递的是form是用户填写的数据
-        this.form.id = this.id;
-        this.form = Object.assign(this.form, this.suppliersInfo)
       }
     },
     components: {
@@ -219,40 +218,24 @@ export default {
       this.getQueryStatus()
     },
     filters: {
-        purposeChange(val) {
-          if (!val) return false;
-          var str = "";
-          for (let i = 0; i < val.length; i++) {
-            console.log(val);
-            switch (val[i]) {
-              case "RECEIVE":
-               if (i < val.length - 1) {
-                  str += "收货,";
-                  break
-                } else {
-                  str += "收货";
-                  break
-                }
-              case "OUT":
-                if (i < val.length - 1) {
-                  str += "出货,";
-                  break
-                } else {
-                  str += "出货";
-                  break
-                }
-              case "RETURN":
-                if (i < val.length - 1) {
-                  str += "退货,";
-                  break
-                } else {
-                  str += "退货";
-                  break
-                }
-            }
-          }
-          return str;
-        }
+      isTestType(status) {
+      switch (status) {
+        case true:
+          return "是"
+        case false:
+          return "否"
+      }
+      },
+      suppliersStatus(status) {
+      switch (status) {
+        case "INITIAL":
+          return "初始"
+        case "RUNNING":
+          return "进行中"
+        case "FINISHED":
+          return '已完成';
+      }
+      }
     }
 };
 </script>

@@ -8,6 +8,7 @@ export default {
      *
      */
     putwayBillQuery(data) {
+        console.log(data);
         return request.get('/wms/putawayBill/query', {params: data})
     },
     putwayBillQueryItems(data) {

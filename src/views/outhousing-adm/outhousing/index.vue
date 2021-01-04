@@ -1,7 +1,7 @@
 <template>
     <div class="table-index _table-index">        
         <div class="select-head">
-            <el-form ref="form" style="display:flex;flex-wrap:wrap;" :model="form" label-width="100px" label-position="right">
+            <el-form ref="form" style="display:flex;flex-wrap:wrap;" :model="form" label-width="130px" label-position="right">
                 <el-form-item label="仓库作业单">
                     <!-- 输入仓库作业单的id,方便后面的查找,查找和一开始获取数据的接口是同一个 -->
                     <el-input type='text' placeholder="请输入代码/名称" v-model="form.billNumber" class="input-width"></el-input>
@@ -19,7 +19,10 @@
                 <el-form-item label="仓库信息">
                     <el-input type='text' placeholder="请输入仓库信息" v-model="form.wrhInfo" class="input-width"></el-input>
                 </el-form-item>
-                <el-form-item label="外部单号">
+                <el-form-item label="外部单号(物流号)">
+                    <el-input type='text' placeholder="请输入外部单号" v-model="form.sourceBillId" class="input-width"></el-input>
+                </el-form-item>
+                <el-form-item label="外部单号(子物流号)">
                     <el-input type='text' placeholder="请输入外部单号" v-model="form.sourceSubBillId" class="input-width"></el-input>
                 </el-form-item>
                 <el-form-item label="是否测试单">
@@ -30,9 +33,9 @@
                 </el-form-item>
                 <el-form-item label="状态">
                     <el-select v-model="form.status" placeholder="请选择状态">
-                    <el-option label="初始" value="INITIAL"></el-option>
-                    <el-option label="进行中" value="RUNNING"></el-option>
-                    <el-option label="已完成" value="FINISHED"></el-option>
+                      <el-option label="初始" value="INITIAL"></el-option>
+                      <el-option label="进行中" value="RUNNING"></el-option>
+                      <el-option label="已完成" value="FINISHED"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item>
@@ -45,28 +48,25 @@
         <div style="height:20px" />
 
         <div style="background:#fff">
-          <el-row>
-            <router-link :to="{ path: '/storageinfo/wharf/add', query:{ status: 'create'} }">
-            <!-- <span v-if="child.meta&&child.meta.title" :title="child.meta.title">{{child.meta.title}}</span> -->
-            <el-button style="margin:18px 10px" type="primary" size="mini"  v-if="hasPermission(PermIds.WMS_DOCK_CREATE) && workingOrg.type === 'DC'">新建</el-button>
-            </router-link>
-          </el-row>
             <el-table
                 :data="suppliersData"
                 style="width: 100%"
             >
                 <el-table-column prop="billNumber" label="盘点单号">
                     <template slot-scope="scope">
-                        <router-link style="color:#409EFF" :to="{ path: '/storageinfo/wharf/edit', query:{ status: 'read', id: scope.row.id} }">
-                            <span>{{ scope.row.billNumber }}111</span>
+                        <router-link style="color:#409EFF" :to="{ path: '/outhousing-adm/outhousing/edit', query:{ status: 'read', id: scope.row.id} }">
+                            <span>{{ scope.row.billNumber }}</span>
                         </router-link>
                     </template>
                 </el-table-column>
-                <el-table-column prop="sourceSubBillId" label="外部单号">
+                <el-table-column prop="sourceBillId" label="外部单号(物流)">
                     <template slot-scope="scope">
-                        <router-link style="color:#409EFF" :to="{ path: '/storageinfo/wharf/edit', query:{ status: 'read', id: scope.row.id} }">
-                            <span>{{ scope.row.sourceSubBillId }}</span>
-                        </router-link>
+                       <span>{{ scope.row.sourceBillId }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="sourceSubBillId" label="外部单号(子物流)">
+                    <template slot-scope="scope">
+                       <span>{{ scope.row.sourceSubBillId }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="blockCode" label="所属区块编码">
@@ -99,6 +99,11 @@
                     {{ scope.row.status | suppliersStatus }}
                   </template>
                 </el-table-column>
+                <el-table-column prop="distDate" label="配送日期" >
+                  <template slot-scope="scope">
+                    {{ scope.row.distDate }}
+                  </template>
+                </el-table-column>
             </el-table>
             <!-- 下面这个是翻页 -->
             <el-pagination
@@ -117,7 +122,7 @@
 
 <script>
 // 引入公共模块
-import WharfService from "@/api/service/WharfService";
+import OuthousingService from "@/api/service/OuthousingService";
 import PermIds from "@/api/permissionIds";
 import { mapGetters } from "vuex";
 
@@ -159,129 +164,38 @@ export default {
           }
         })
       },
-      statusChange: function(command) {
-      // 修改仓库状态
-      const _this = this;
-      this.$confirm('此操作将改变仓库作业单状态,是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        console.log(command);
-        if (command[2] === "IDLE") {
-          WharfService.openSuppliers(command[0], command[1], command[2])
-          .then((res) => {
-            console.log(res);
-            _this.$message.success("休闲状态修改成功")
-            _this.getSuppliersList();
-          })
-          .catch((err) => {
-            if (err === "") {
-              _this.$message.success("休闲状态修改成功")
-            } else {
-              _this.$message.error("休闲状态修改失败" + err.message)
-            }
-            _this.getSuppliersList();
-          })
-        } else if (command[2] === "USING") {
-            WharfService.openSuppliers(command[0], command[1], command[2])
-            .then((res) => {
-              _this.$message.success("使用中状态修改成功")
-              _this.getSuppliersList();
-            }).catch((err) => {
-              if (err === "") {
-                _this.$message.success("使用中状态修改成功")
-              } else {
-                _this.$message.error("使用中状态修改失败" + err.message)
-              }
-              _this.getSuppliersList();
-            })
-        } else if (command[2] === "STOP") {
-          WharfService.openSuppliers(command[0], command[1], command[2])
-          .then((res) => {
-            _this.$message.success("停用状态修改成功")
-            _this.getSuppliersList();
-          })
-          .catch((err) => {
-              if (err === "") {
-                _this.$message.success("停用状态修改成功")
-              } else {
-                _this.$message.error("停用状态修改失败" + err.message)
-              }
-              _this.getSuppliersList();
-          })
-        }
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消'
-          })        
-        })
-    },
       clearInput: function() {
         this.form = {
-          codeEqOrNameLike: '',
-          status: ''
-        }
+          billNumber: '',
+          blockCode: '',
+          status: '',
+          distDateEnd: '',
+          distDateStart: '',
+          frontDcInfo: '',
+          isTest: '',
+          searchCount: true,
+          sourceSubBillId: '',
+          storeInfo: '',
+          wrhInfo: ''
+        };
+        this.getSuppliersList();
       },
       // 向后台请求数据,这里是查询功能和一开始就调取数据列表
       getSuppliersList: function() {
        // 请求仓库作业单的数据
         const _this = this;    
         // 将当前组件的实例记录起来，这些都是我在data中自己写的数据
-        const data = {
-          codeEqOrNameLike: this.form.codeEqOrNameLike,
-          codeEquals: this.form.codeEqOrNameLike || null,
-          page: this.page,
-          pageSize: this.pageSize,
-          searchCount: true,
-          nameLike: this.form.nameOrCode || null,
-          statusEquals: this.form.status || null
-        }
+        this.form.page = this.page;
+        this.form.pageSize = this.pageSize;
         // 获取数据,然后将自己组件中的数据发送到后台
-        WharfService.getSuppliersList(data)
+        OuthousingService.getSuppliersList(this.form)
         .then((res) => {
           // 初始化自己定义的数据
-          _this.suppliersData = [];
-          // 将总数,赋值给自己定义的变量
-          // res = {
-          //   records: [{
-          //       totalCount: 10,
-          //       id: "1341338404906762241",
-          //       code: '0001',
-          //       name: 'yang',
-          //       version: 9999999999999,
-          //       usages: ['发货']
-          //     }]
-          // }
+          this.suppliersData = res.records;
           _this.totalCount = res.totalCount;
-          for (var i = 0; i < res.records.length; i++) {
-            console.log(i);
-            // 数组循环后,将过去到的值,全部放在suppliersData这个数组中,我要模拟数据也要使用这个数组
-            const obj = {
-              // 仓库作业单的id
-              id: res.records[i].id,
-              // 代码
-              code: res.records[i].code,
-              name: res.records[i].name,
-              // codeEqOrNameLike: res.records[i].codeEqOrNameLike,
-              version: res.records[i].version,
-              // 用途
-              usages: res.records[i].usages,
-              status: res.records[i].status,
-              dcId: res.records[i].dcId
-            }
-            // if (obj.status === "IDLE") {
-            //   obj.status = "空闲"
-            // } else if (obj.status === "USING") {
-            //   obj.status = "使用中"
-            // } else if(obj.status === "STOP") {
-            //   obj.status = "停用"
-            // }
-            // 获取数据后,存到自己的数组里面
-            _this.suppliersData.push(obj);
-            // 将数组反向
-          }
+        })
+        .catch((err) => {
+          this.$message.error("获取详情失败" + err.message)
         })
       },
       // 这里是修改当前值的地方
@@ -311,50 +225,18 @@ export default {
     },
     suppliersStatus(status) {
       switch (status) {
-        case "IDLE":
-          return "空闲"
-        case "USING":
-          return "使用中"
-        case "STOP":
-          return '停用';
+        case "INITIAL":
+          return "初始"
+        case "RUNNING":
+          return "进行中"
+        case "FINISHED":
+          return '已完成';
       }
-    },
-    purposeChange(val) {
-      var str = "";
-      for (let i = 0; i < val.length; i++) {
-        switch (val[i]) {
-          case "RECEIVE":
-            if (i < val.length - 1) {
-              str += "收货,";
-              break
-            } else {
-              str += "收货";
-              break
-            }
-          case "OUT":
-            if (i < val.length - 1) {
-              str += "出货,";
-              break
-            } else {
-              str += "出货";
-              break
-            }
-          case "RETURN":
-            if (i < val.length - 1) {
-              str += "退货,";
-              break
-            } else {
-              str += "退货";
-              break
-            }
-        }
-      }
-      return str;
     }
   },
   beforeRouteEnter(to, from, next) {
     next(vm => {
-      vm.getSuppliersList();
+      // vm.getSuppliersList();
     })
   }
 };

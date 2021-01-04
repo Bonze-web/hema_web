@@ -11,11 +11,11 @@
             </div>
         </div>
         <!-- <div style="height: 20px; background: #fff;" /> -->
-        <div class="header-ground" >
+        <div class="header-ground" style="background:#fff">
             <div class="title-store" style="width: 150px">商品编码or条码: </div>
-            <el-input type="text" placeholder="请输入商品编码or条码" v-model="productCodeOrProductName" class="input-width" style="width: 200px" @change="getByIdOrderBill"></el-input>
+            <el-input type="text" placeholder="请输入商品编码or条码" v-model="productCodeEquals" class="input-width" style="width: 200px" @change="getByIdOrderBill"></el-input>
         </div>
-        <div style="display: flex;justify-content: flex-end;font-size:12px; color: #909399;padding:20px;">
+        <div style="display: flex;justify-content: flex-end;font-size:12px; color: #909399;padding:20px;background:#fff">
           <span>共{{totalCount}}条数据</span>
         </div>
         <el-table :data="listData" style="width: 100%; text-align: center" :row-style="{ height: '16px', padding: '-4px' }" >
@@ -50,7 +50,7 @@
 
           <el-table-column prop="binUsage" label="上架货位用途">
             <template slot-scope="scope">
-              {{ scope.row.binUsage ? scope.row.binUsage : "&lt;空&gt;" }}
+              {{ scope.row.binUsage | binUsageChange }}
             </template>
           </el-table-column>
 
@@ -187,7 +187,7 @@ export default {
   data() {
       return {
         listData: [],
-        productCodeOrProductName: "",
+        productCodeEquals: "",
         page: 1,
         pageSize: 10,
         totalCount: 0
@@ -255,7 +255,7 @@ export default {
           billIdEquals: this.$route.query.id,
           page: this.page,
           pageSize: this.pageSize,
-          productCodeOrProductName: this.productCodeOrProductName || null,
+          productCodeEquals: this.productCodeEquals || null,
           searchCount: true
         }
         GroundingService.putwayBillQueryItems(data)
@@ -323,7 +323,41 @@ export default {
         default:
           return '未知';
       }
-    }
+      },
+      binUsageChange(status) {
+        switch (status) {
+        case "UNIFYRECEIVE":
+          return "统配收货暂存位"
+        case "PUTAWAY":
+          return "上架中转位"
+        case "PICK":
+          return "拣货位"
+        case "STORAGE":
+          return "存储位"
+        case "PICK_STORAGE":
+          return "拣货存储位"
+        case "UNIFYPICK":
+          return "统配拣货暂存位"
+        case "UNIFYCOLLECT":
+          return "统配集货存储位"
+        case "RPL":
+          return "补货暂存位"
+        case "TRANSFERRECEIVE":
+          return "中转收货暂存位"
+        case "TRANSFERCOLLECT":
+          return "中转集货暂存位"
+        case "DIRECTRECEIVE":
+          return "直通收货暂存位"
+        case "STORECROSSALLOCATE":
+          return "门店分拨位"
+        case "STORERTN":
+          return "门店退货收货暂存位"
+        case "VENDORRTN":
+          return "供应商退货位"
+        case "VENDORCOLLECT":
+          return "供应商集货位"
+        }
+      }
     }
 };
 </script>
