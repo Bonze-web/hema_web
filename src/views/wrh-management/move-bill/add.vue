@@ -287,9 +287,9 @@ export default {
           _this.$message.error('请至少添加一个商品')
           return
         } else {
-          this.productList.forEach((item) => {
+          // this.productList.forEach((item) => {
             
-          })
+          // })
           for (const item in this.productList) {
             if (!Number(this.productList[item].qty)) {
               this.$message.error(`请输入${this.productList[item].productName}的数量`)
