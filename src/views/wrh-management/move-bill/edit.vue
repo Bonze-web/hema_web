@@ -38,34 +38,42 @@
                                             {{ scope.$index + 1 }}
                                           </template>
                                         </el-table-column>
-                                        <el-table-column width="100" prop="productName" label="商品/商品规格"></el-table-column>
-                                        <el-table-column width="100" prop="qpcStr" label="规格/计量单位"></el-table-column>
-                                        <el-table-column width="100" prop="fromBinCode" label="来源货位">
+                                        <el-table-column width="120" prop="productName" label="商品/商品规格">
                                           <template slot-scope="scope">
-                                            {{ '[' + scope.row.fromBinCode + ']' + scope.row.fromBinUsage }}
+                                            {{ scope.row.productName + '/' + scope.row.productSpec }}
                                           </template>
                                         </el-table-column>
-                                        <el-table-column width="100" prop="fromContainerBarcode" label="来源容器"></el-table-column>
-                                        <el-table-column width="100" prop="toBinCode" label="目标货位">
+                                        <el-table-column width="120" prop="qpcStr" label="包装规格/计量单位">
                                           <template slot-scope="scope">
-                                            {{ '[' + scope.row.toBinCode + ']' + scope.row.toBinUsage }}
+                                            {{ scope.row.qpcStr + '/' + scope.row.productSpec }}
                                           </template>
                                         </el-table-column>
-                                        <el-table-column width="100" prop="validDate" label="目标容器">
+                                        <el-table-column width="120" prop="fromBinCode" label="来源货位">
+                                          <template slot-scope="scope">
+                                            {{ '[' + scope.row.fromBinCode + ']' }}{{ scope.row.fromBinUsage | binUsage }}
+                                          </template>
+                                        </el-table-column>
+                                        <el-table-column width="120" prop="fromContainerBarcode" label="来源容器"></el-table-column>
+                                        <el-table-column width="120" prop="toBinCode" label="目标货位">
+                                          <template slot-scope="scope">
+                                            {{ '[' + scope.row.toBinCode + ']' }}{{ scope.row.toBinUsage | binUsage }}
+                                          </template>
+                                        </el-table-column>
+                                        <el-table-column width="120" prop="validDate" label="目标容器">
                                           <template slot-scope="scope">
                                             {{ scope.row.toContainerBarcode ? scope.row.toContainerBarcode : '&lt;空&gt;' }}
                                           </template>
                                         </el-table-column>
-                                        <el-table-column width="100" prop="productionBatch" label="批号"></el-table-column>
-                                        <el-table-column width="100" prop="stockBatch" label="批次"></el-table-column>
-                                        <el-table-column width="100" prop="consumeQtystr" label="生产日期"></el-table-column>
-                                        <el-table-column width="100" prop="validDate" label="到效日期"></el-table-column>
-                                        <el-table-column width="100" prop="vendorCode" label="供应商">
+                                        <el-table-column width="120" prop="productionBatch" label="批号"></el-table-column>
+                                        <el-table-column width="120" prop="stockBatch" label="批次"></el-table-column>
+                                        <el-table-column width="120" prop="consumeQtystr" label="生产日期"></el-table-column>
+                                        <el-table-column width="120" prop="validDate" label="到效日期"></el-table-column>
+                                        <el-table-column width="120" prop="vendorCode" label="供应商">
                                           <template slot-scope="scope">
                                             {{ '[' + scope.row.vendorCode + ']' + scope.row.vendorName }}
                                           </template>
                                         </el-table-column>
-                                        <el-table-column width="100" prop="qty" label="件数"></el-table-column>
+                                        <el-table-column width="120" prop="qty" label="件数"></el-table-column>
                                     </el-table>
                         </el-tab-pane>
                         <!-- <el-tab-pane label="配送中心范围" name="range">配置管理</el-tab-pane> -->
@@ -129,7 +137,43 @@ export default {
           default:
             return "未知"
         }
+      },
+      binUsage(type) {
+      switch (type) {
+        case "UNIFYRECEIVE":
+          return "统配收货暂存位"
+        case "PUTAWAY":
+          return "上架中转位"
+        case "PICK":
+          return "拣货位"
+        case "STORAGE":
+          return "存储位"
+        case "PICKSTORAGE":
+          return "拣货存储位"
+        case "UNIFYPICK":
+          return "统配拣货暂存位"
+        case "UNIFYCOLLECT":
+          return "统配集货存储位"
+        case "RPL":
+          return "补货暂存位"
+        case "TRANSFERRECEIVE":
+          return "中转收货暂存位"
+        case "TRANSFERCOLLECT":
+          return "中转集货暂存位"
+        case "DIRECTRECEIVE":
+          return "直通收货暂存位"
+        case "STORECROSSALLOCATE":
+          return "门店分拨位"
+        case "STORERTN":
+          return "门店退货收货暂存位"
+        case "VENDORRTN":
+          return "供应商退货位"
+        case "VENDORCOLLECT":
+          return "供应商集货位"
+        default:
+          return "未知"
       }
+    }
       // moveType(type) {
       //   switch (type) {
       //     case "SURPLUSSOW":
