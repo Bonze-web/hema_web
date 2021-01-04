@@ -568,6 +568,8 @@ export default {
       },
       showStatusActive(status) {
         switch (status) {
+          case "SNAP":
+            return "快照"
           case "NORMAL":
             return "正常"
           case "HANDLED":

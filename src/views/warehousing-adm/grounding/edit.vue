@@ -12,8 +12,8 @@
         </div>
         <div style="height: 20px;" />
         <div class="header-ground" style="background:#fff">
-            <div class="title-store" style="width: 150px">商品编码or条码: </div>
-            <el-input type="text" placeholder="请输入商品编码or条码" v-model="productCodeEquals" class="input-width" style="width: 200px" @change="getByIdOrderBill"></el-input>
+            <div class="title-store" style="width: 150px">商品代码: </div>
+            <el-input type="text" placeholder="请输入商品代码" v-model="productCodeEquals" class="input-width" style="width: 200px" @change="getByIdOrderBill"></el-input>
         </div>
         <div style="display: flex;justify-content: flex-end;font-size:12px; color: #909399;padding:20px;background:#fff">
           <span>共{{totalCount}}条数据</span>
