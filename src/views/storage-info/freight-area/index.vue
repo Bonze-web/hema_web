@@ -217,9 +217,9 @@
       <el-dialog width="40%" title="修改" :visible.sync="editFormSpace">
         <el-form :model="formEditSpace" ref="formArea" :rules="editRules">
 
-          <el-form-item v-if="level === 4" label="货道" :label-width="formLabelWidth">
+          <!-- <el-form-item v-if="level === 4" label="货道" :label-width="formLabelWidth">
             {{ ShelfName }}
-          </el-form-item>
+          </el-form-item> -->
 
           <el-form-item v-if="level === 1" label="名称" :label-width="formLabelWidth" prop="name">
             <el-input v-model="formEditSpace.name" placeholder="请输入名称" ></el-input>
