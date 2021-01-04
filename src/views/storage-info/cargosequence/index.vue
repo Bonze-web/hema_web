@@ -711,13 +711,24 @@ export default {
     },
     leftHandleComfirm() {
       this.establish = false;
-      console.log(this.leftSelect);
-       CargosequenceService.addGrpItems(this.leftSelect)
-        .then((res) => {
-          this.$message.success("添加成功");
-        }).catch((err) => {
-          this.$message.error("添加失败" + err.message)
+      console.log(this.editProjectsInfo, this.storeArmy);
+      const postData = [];
+      this.leftSelect.forEach((ele, idx) => {
+        postData.push({
+          pickOrderId: this.editProjectsInfo.id,
+          grpId: this.storeArm.id,
+          storeCode: ele.code,
+          storeName: ele.name,
+          storeOrder: idx
         })
+      })
+      
+      CargosequenceService.addGrpItems(postData)
+      .then((res) => {
+        this.$message.success("添加成功");
+      }).catch((err) => {
+        this.$message.error("添加失败" + err.message)
+      })
       // const lenthRecodes = this.storageList.length;
       // if (this.storageList.length > 0) { 
       //   this.storageList.push(...this.leftSelect)

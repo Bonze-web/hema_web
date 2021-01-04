@@ -80,7 +80,7 @@
                 </el-table-column>
                 <el-table-column prop="binUsage" label="货位用途">
                   <template slot-scope="scope">
-                    {{ scope.row.binUsage }}
+                    {{ scope.row.binUsage | binUsageChange }}
                   </template>
                 </el-table-column>
                 <!-- <el-table-column prop="inventoryHandlingMethod" label="库存方式">
@@ -263,6 +263,42 @@ export default {
       })
   },
   filters: {
+    binUsageChange(status) {
+        switch (status) {
+        case "UNIFYRECEIVE":
+          return "统配收货暂存位"
+        case "PUTAWAY":
+          return "上架中转位"
+        case "PICK":
+          return "拣货位"
+        case "STORAGE":
+          return "存储位"
+        case "PICK_STORAGE":
+          return "拣货存储位"
+        case "UNIFYPICK":
+          return "统配拣货暂存位"
+        case "UNIFYCOLLECT":
+          return "统配集货存储位"
+        case "RPL":
+          return "补货暂存位"
+        case "TRANSFERRECEIVE":
+          return "中转收货暂存位"
+        case "TRANSFERCOLLECT":
+          return "中转集货暂存位"
+        case "DIRECTRECEIVE":
+          return "直通收货暂存位"
+        case "STORECROSSALLOCATE":
+          return "门店分拨位"
+        case "STORERTN":
+          return "门店退货收货暂存位"
+        case "VENDORRTN":
+          return "供应商退货位"
+        case "VENDORCOLLECT":
+          return "供应商集货位"
+        default :
+          return status
+        }
+    },
     handleStatus(status) {
       switch (status) {
         case "MANUALBILL":
