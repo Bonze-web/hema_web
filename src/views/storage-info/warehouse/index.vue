@@ -194,22 +194,13 @@ export default {
       console.log(this.form)
 
       StorageService.warehouseInit(data).then((res) => {
-        const records = res.records;
-        const listData = [];
         console.log(res)
+
+        const records = res.records;
+
         this.totalCount = res.totalCount;
-
-        records.forEach((item, index) => {
-          // if (item.status === 'OFF') {
-          //   item.status = true
-          // } else {
-          //   item.status = false
-          // }
-          listData.push(item)
-        })
-
-        _this.listData = listData;
-        console.log(_this.listData)
+        _this.listData = records;
+        this.changeTableSort()
       }).catch(err => {
         this.$message.error("数据请求失败" + err.message)
       });
@@ -226,11 +217,22 @@ export default {
     allSelectionChange(val) {
       console.log(val);
       this.multipleSelection = val;
+    },
+    // 初始化加载列表
+    changeTableSort() {
+      console.log(this.listData)
+      // 将“创建时间”转换为所需的时间格式
+      this.listData.sort((a, b) => {
+        return (new Date(b.updateTime).getTime() - new Date(a.updateTime).getTime())
+      })
+
+      console.log(this.listData)
     }
   },
   created() {
     this.warehouseInit();
   },
+
   beforeRouteEnter(to, from, next) {
     next(vm => {
       // 通过 `vm` 访问组件实例
