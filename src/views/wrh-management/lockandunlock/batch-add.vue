@@ -6,6 +6,14 @@
                 <el-form-item label="商品">
                     <el-input type='text' placeholder="请输入商品编号/名称" v-model="form.productNameOrCode" class="input-width"></el-input>
                 </el-form-item>
+
+                  <el-form-item label="锁定解锁" prop="billType">
+                    <el-select v-model="form.billType" placeholder="请选择锁定解锁类型">
+                      <el-option label="锁定" value="LOCK"></el-option>
+                      <el-option label="解锁" value="UNLOCK"></el-option>
+                    </el-select>
+                  </el-form-item>
+                
                 <el-form-item label="货位">
                     <el-input type='text' placeholder="请输入货位编号" v-model="form.binCode" class="input-width"></el-input>
                 </el-form-item>
@@ -65,6 +73,7 @@ export default {
         form: {
             productNameOrCode: '',
             binCode: '',
+            billType: '',
             containerBarcode: '',
             statusIn: 'NORMAL',
             searchCount: true
@@ -93,6 +102,7 @@ export default {
       this.form = {
         productNameOrCode: '',
         binCode: '',
+        billType: '',
         containerBarcode: '',
         statusIn: 'NORMAL',
         searchCount: true
@@ -108,16 +118,26 @@ export default {
       this.addSelection(this.multipleSelection)
       this.$router.push('/wrhmanagement/lockandunlock/add')
     },
-    handleSelectionChange(val) {
-        console.log(val)
+    handleSelectionChange(list) {
+        list.forEach((item, index) => {
+          list[index].stockBatch = item.batch
+        })
+
+        console.log(list)
       // 列表进行选择保存数据
-      this.multipleSelection = val;
+      this.multipleSelection = list;
     },
     onSelect: function() {
+      // if (!this.form.billType) {
+      //   this.$message.error('请选择解锁锁定类型')
+      //   return
+      // }
+
       if (this.form.productNameOrCode || this.form.binCode || this.form.containerBarcode) {
         console.log(this.multipleSelection)
         this.form.page = this.page
         this.form.pageSize = this.pageSize
+
         DemolitionAndService.getAllStock(this.form)
         .then((result) => {
           this.productList = result.records
@@ -142,15 +162,15 @@ export default {
   created() {
     this.multipleSelection = this.$store.state.lockandunlock.multipleSelection
     this.handleSelectionChange(this.multipleSelection)
-    // this.clearSelection()
-    // this.getRowKeys()
   },
   // beforeRouteEnter(to, from, next) {
-  //     next(vm => {
-  //       // 通过 `vm` 访问组件实例
-  //       vm.multipleSelection = vm.$store.state.bill.multipleSelection
-  //     })
-  //   },
+  //   next(vm => {
+  //     // // 通过 `vm` 访问组件实例
+  //     vm.multipleSelection = vm.$store.state.lockandunlock.multipleSelection
+  //     const arr = Array.from(new Set(vm.multipleSelection))
+  //     vm.multipleSelection = vm.multipleSelection
+  //   })
+  // },
   filters: {
   }
 };

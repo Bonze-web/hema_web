@@ -52,9 +52,9 @@
 
       <el-table :data="listData" style="width: 100%; text-align: center" @selection-change="handleSelectionChange" :row-style="{ height: '16px', padding: '-4px' }" >
 
-        <el-table-column type="selection" :selectable='checkboxSelect' width="55"></el-table-column>
+        <el-table-column type="selection" :selectable='checkboxSelect'  width="55"></el-table-column>
 
-        <el-table-column prop="scope" label="调整单单号" style="height: 20px">
+        <el-table-column prop="scope" label="单号" style="height: 20px">
           <template slot-scope="scope">
             <router-link style="color: #409eff" :to="{ path: '/wrhmanagement/lockandunlock/edit', query:{ id: scope.row.id } }" >
               <span>{{ scope.row.billNumber }}</span>
@@ -62,48 +62,26 @@
           </template>
         </el-table-column>
 
-        <el-table-column prop="scope" label="操作人">
+        <el-table-column prop="scope" label="单据类型">
           <template slot-scope="scope">
-            {{ scope.row.applyOptName }}
+            {{ scope.row.billType | setBillType }}
           </template>
         </el-table-column>
 
-        <el-table-column prop="scope" label="操作时间">
+
+        <el-table-column prop="scope" label="操作员">
           <template slot-scope="scope">
-            {{ scope.row.modifiedDate ? scope.row.modifiedDate : "&lt;空&gt;" }}
+            {{ scope.row.lockerName ? scope.row.lockerName : "&lt;空&gt;" }}
           </template>
         </el-table-column>
 
-        <el-table-column prop="scope" label="货位">
-          <template slot-scope="scope">
-            {{ scope.row.binCode ? scope.row.binCode : "&lt;空&gt;" }}
-          </template>
+        <el-table-column prop="scope" label="原因" style="height: 20px">
+          <template slot-scope="scope">{{ scope.row.reason | setReason }}</template>
         </el-table-column>
-
-        <el-table-column prop="scope" label="货位用途">
-          <template slot-scope="scope">
-            {{ scope.row.binUsage ? scope.row.binUsage : "&lt;空&gt;" }}
-          </template>
-        </el-table-column>
-
-        <el-table-column prop="productName" label="商品"></el-table-column>
-
-        <el-table-column prop="scope" label="供应商">
-          <template slot-scope="scope">
-            {{ scope.row.vendorName }}
-          </template>
-        </el-table-column>
-
-        <el-table-column prop="containerBarcode" label="容器条码"></el-table-column>
 
         <el-table-column prop="scope" label="状态" style="height: 20px">
+          
           <template slot-scope="scope">{{ scope.row.status | setStatus }}</template>
-        </el-table-column>
-
-        <el-table-column prop="scope" label="规格描述">
-          <template slot-scope="scope">
-            {{ scope.row.productSpec ? scope.row.productSpec : "&lt;空&gt;" }}
-          </template>
         </el-table-column>
 
       </el-table>
@@ -167,14 +145,12 @@ export default {
       };
     },
     stockLocjBill: function() {
-      const _this = this;
-
       const data = {
         page: this.page,
         pageSize: this.pageSize,
-        billNumber: this.form.containerBarcodeLike, // 单号
-        lockerId: this.form.productCodeEqualsOrNameLike, // 锁定人ID
-        billType: this.form.status ? this.form.status : null, // 单据类型
+        billNumber: this.form.billNumber, // 单号
+        lockerId: this.form.lockerId, // 锁定人ID
+        billType: this.form.billType ? this.form.billType : null, // 单据类型
         status: this.form.status ? this.form.status : null, // 状态
         searchCount: true
       };
@@ -183,7 +159,7 @@ export default {
         console.log(res)
         const records = res.records;
         this.totalCount = res.totalCount;
-        _this.listData = records;
+        this.listData = records;
       }).catch(err => {
         this.$message.error("数据请求失败" + err.message)
       });
@@ -198,35 +174,39 @@ export default {
       this.stockLocjBill(true);
     },
     checkboxSelect(opt) {
-      if (opt.status === 'APPLYING') {
+      // SAVED:已保存，AUDITED:已审核  已保存状态禁止选中
+      if (opt.status === 'SAVED') {
         return true
       }
     },
     adopt() {
-      // 通过
+      // 审核通过
       if (this.activeArr.length === 0) return;
 
-      this.$confirm('此操作将数据状态,是否继续?', '提示', {
+      const stockLockBillAuditFilter = {
+        ids: []
+      }
+
+      this.activeArr.forEach(item => {
+        stockLockBillAuditFilter.ids.push(item.id)
+      })
+
+      this.$confirm('是否审核锁定解锁单?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       })
       .then(() => {
-        const arrId = [];
-        const _this = this;
-
-        this.activeArr.forEach(item => {
-          arrId.push(item.id)
-        })
-
-        DemolitionAndService.passUpdateInfoBill(arrId)
-        .then((res) => {
+        DemolitionAndService.nauditStockLocjBill(stockLockBillAuditFilter)
+        .then(res => {
+          console.log(res)
           this.$message.success("操作成功")
-          _this.stockLocjBill()
-        }).catch(err => {
-          this.$message.error("操作失败" + err.message)
-        });
+          this.stockLocjBill();
         })
+        .catch(err => {
+          this.$message.error("审核失败" + err.message)
+        });
+      })
       .catch(() => {
         this.$message({
           type: 'info',
@@ -284,27 +264,32 @@ export default {
   },
   filters: {
     setStatus(type) {
-      // 申请单状态：APPLYING申请中、PASS审核通过、NO_PASS作废
+      // SAVED:已保存，AUDITED:已审核
       switch (type) {
-        case 'APPLYING':
-          return "申请中"
-        case 'PASS':
-          return "审核通过"
-        case 'NO_PASS':
-          return "作废"
+        case 'SAVED':
+          return "已保存"
+        case 'AUDITED':
+          return "已审核"
         default:
           return '未知';
       }
     },
-    setType(type) {
-      // 收货类型，FAST：快速收货，NORMAL：正常收货，TRUST：信任收货
+    setBillType(type) {
+      // LOCK:锁定 UNLOCK:解锁
       switch (type) {
-        case 'FAST':
-          return "快速收货"
-        case 'NORMAL':
-          return "正常收货"
-        case 'TRUST':
-          return "信任收货"
+        case 'LOCK':
+          return "锁定"
+        case 'UNLOCK':
+          return "解锁"
+        default:
+          return '未知';
+      }
+    },
+    setReason(type) {
+      // 锁定解锁原因 LOCKUNLOCK:锁定解锁
+      switch (type) {
+        case 'LOCKUNLOCK':
+          return "锁定解锁"
         default:
           return '未知';
       }

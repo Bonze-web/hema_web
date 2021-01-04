@@ -1,28 +1,16 @@
 // 锁定解锁管理
 const state = {
-    multipleSelection: [],
-    moveSelection: []
+    billType: '', // 解锁锁定类型
+    multipleSelection: []
 }
 
 const mutations = {
     ADD_SELECTION: (state, list) => {
         state.multipleSelection = state.multipleSelection.concat(list)
     },
-    // CLEAR_SELECTION: (state, list) => {
-    //     state.multipleSelection = []
-    // },
     DELETE_SELECTION: (state, index) => {
         state.multipleSelection.splice(index, 1)
     }
-    // ADD_MOVE: (state, list) => {
-    //     state.moveSelection = list
-    // },
-    // CLEAR_MOVE: (state, list) => {
-    //     state.moveSelection = []
-    // },
-    // DELETE_MOVE: (state, index) => {
-    //     state.moveSelection.splice(index, 1)
-    // }
 }
 
 const actions = {

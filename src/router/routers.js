@@ -610,7 +610,7 @@ const StorageInfoPackage = {
         import('@/views/storage-info/location-type/add'),
       hidden: true,
       meta: {
-        title: '新建货位',
+        title: '新建货位类型',
         icon: 'table',
         permission: PermIds.WMS_BINTYPE_CREATE
       }

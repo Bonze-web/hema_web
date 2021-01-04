@@ -21,13 +21,13 @@
                     </el-switch>
                 </template> -->
                 <template>
-                  <el-button type="text" @click="statusChange" v-if="warehouseInfo.status">禁用</el-button>
-                  <el-button type="text" @click="statusChange" v-if="!warehouseInfo.status">启用</el-button>
+                  <el-button type="text" @click="statusChange" v-if="warehouseInfo.status === 'ON'">禁用</el-button>
+                  <el-button type="text" @click="statusChange" v-else>启用</el-button>
                 </template>
             </div>
             <div>
                 <el-button @click="back">返回</el-button>
-                <el-button type="primary" @click="editCategory" v-if="hasPermission(PermIds.WMS_WAREHOUSE_UPDATE)">编辑</el-button>
+                <el-button type="primary" @click="editCategory" v-show="warehouseInfo.status === 'ON'" v-if="hasPermission(PermIds.WMS_WAREHOUSE_UPDATE)">编辑</el-button>
             </div>
         </div>
         <div style="height:20px" />
@@ -42,7 +42,7 @@
                                 <el-row :gutter="20">
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="代码" prop="code">
-                                            <el-input v-model="form.code"></el-input>
+                                            <el-input v-model="form.code" disabled></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
@@ -63,6 +63,7 @@
                                 </el-form-item>
                             </el-form>
                         </el-tab-pane>
+
                     </el-tabs>
                 </template>
             </div>
@@ -99,6 +100,11 @@
                                 <div>{{ warehouseInfo.remark ? warehouseInfo.remark : "&lt;空&gt;" }}</div>
                             </el-col>
                         </el-tab-pane>
+
+                        <!-- USER, DOCK, Inbound_Outbound, PRETYPE, PICK_ORDER, USER_PICKAREA, OTHER, SUPPLIER, CONTAINER, CONTAINERTYPE, DECINVBILL, INCINVBILL, PICKAREA, STORAGEAREA, PRODUCT, PRODUCTCATEGORY, BINTYPE, ZONE, PATH, SHELF, BIN, QUALITY, MOVESTOCK, LOCKSTOCK, VENDORRETURNBILL, ORDERBILL -->
+                        <el-tab-pane label="操作日志" name="log">
+                          <system-log modular="CONTAINER"></system-log>
+                        </el-tab-pane>
                         <!-- <el-tab-pane label="配送中心范围" name="range">配置管理</el-tab-pane>
                         <el-tab-pane label="操作日志" name="log">角色管理</el-tab-pane> -->
                     </el-tabs>
@@ -110,6 +116,7 @@
 
 <script>
 import StorageService from "@/api/service/StorageService";
+import systemLog from "@/components/systemLog.vue";
 import PermIds from "@/api/permissionIds";
 import { mapGetters } from "vuex";
 
@@ -142,14 +149,17 @@ export default {
           ],
           level: [
             { required: true, message: '请选择类别级别', trigger: 'blur' }
-          ],
-          remark: [
-            { required: true, message: '请输入备注', trigger: 'blur' },
-            { required: true, max: 200, message: '最多输入200位', trigger: 'change' }
           ]
+          // remark: [
+          //   { required: true, message: '请输入备注', trigger: 'blur' },
+          //   { required: true, max: 200, message: '最多输入200位', trigger: 'change' }
+          // ]
         },
         records: []
       }
+    },
+    components: {
+      systemLog
     },
     computed: {
       ...mapGetters(["hasPermission"])
@@ -167,7 +177,7 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          if (_this.warehouseInfo.status) {
+          if (_this.warehouseInfo.status === 'OFF') {
             // 禁用
             StorageService.closeWarehouse(_this.warehouseInfo.id, _this.warehouseInfo.version)
             .then((res) => {
@@ -212,11 +222,11 @@ export default {
           console.log(res)
           this.warehouseInfo = res;
           // 根据状态修改仓库开启switch
-          if (this.warehouseInfo.status === "OFF") {
-            this.warehouseInfo.status = true
-          } else {
-            this.warehouseInfo.status = false
-          }
+          // if (this.warehouseInfo.status === "ON") {
+          //   this.warehouseInfo.status = true
+          // } else {
+          //   this.warehouseInfo.status = false
+          // }
 
           this.form = this.warehouseInfo;
           // if (res.level !== "one") {
@@ -249,11 +259,11 @@ export default {
                 this.$message.error("创建失败" + err.message)
               })
             } else {
-              if (this.form.status) {
-                this.form.status = "NO"
-              } else {
-                this.form.status = "OFF"
-              }
+              // if (this.form.status) {
+              //   this.form.status = "ON"
+              // } else {
+              //   this.form.status = "OFF"
+              // }
               StorageService.updateWarehouse(this.form)
               .then(res => {
                 console.log(res)
@@ -316,6 +326,12 @@ export default {
     },
     created() {
       this.getQueryStatus()
+    },
+    beforeRouteEnter(to, from, next) {
+      next(vm => {
+        // 通过 `vm` 访问组件实例
+        vm.getQueryStatus();
+      })
     },
     filters: {
       categoryLevel(level) {

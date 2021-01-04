@@ -68,7 +68,7 @@
                                     </el-col>
                                 </el-row>
                                 <el-form-item label="备注">
-                                    <textarea maxlength="150" v-model="form.remark"></textarea>
+                                    <textarea maxlength="128" v-model="form.remark"></textarea>
                                 </el-form-item>
                             </el-form>
                         </el-tab-pane>
@@ -199,11 +199,6 @@ export default {
             _this.getCategory(_this.id)
           })
         }
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          })        
         })
       },
       getQueryStatus: function() {

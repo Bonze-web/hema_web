@@ -20,14 +20,36 @@
                           <el-form :model="form" :rules="createRules" ref="form" label-width="100px" class="demo-ruleForm">
                               <el-row :gutter="20">
                                   <el-col :span="6" class="info-box">
-
-                                      <el-form-item label="锁定解锁员" prop="moverId">
-                                          <el-select v-model="form.moverId" filterable remote placeholder="请输入锁定解锁名称" :remote-method="getUsers">
-                                            <el-option v-for="item in restaurants" :key="item.id" :label="item.username" :value="item.id"></el-option>
+                                      <el-form-item label="锁定解锁员" prop="lockerIndex">
+                                          <el-select v-model="form.lockerIndex" filterable remote :remote-method="getUsers" placeholder="请输入锁定解锁名称">
+                                            <el-option v-for="(item, index) in restaurants" :key="item.id" :label="item.username" :value="index"></el-option>
                                           </el-select>
                                       </el-form-item>
-
                                   </el-col>
+
+                                  <el-col :span="6" class="info-box">
+                                    <el-form-item label="锁定解锁" prop="billType">
+                                      <el-select v-model="form.billType" placeholder="请选择锁定解锁类型">
+                                        <el-option label="锁定" value="LOCK"></el-option>
+                                        <el-option label="解锁" value="UNLOCK"></el-option>
+                                      </el-select>
+                                    </el-form-item>
+                                  </el-col>
+
+                                  <el-col :span="6" class="info-box">
+                                    <el-form-item label="原因" prop="reason">
+                                      <el-select v-model="form.reason" placeholder="请选择原因">
+                                        <el-option label="锁定解锁" value="LOCKUNLOCK"></el-option>
+                                      </el-select>
+                                    </el-form-item>
+                                  </el-col>
+
+                                  <el-col>
+                                    <el-form-item label="备注" prop="note">
+                                      <textarea v-model="form.note"></textarea>
+                                    </el-form-item> 
+                                  </el-col>
+
                               </el-row>
 
                                <div class="info-title">商品</div>
@@ -75,52 +97,23 @@ export default {
         restaurants: [], // 锁定解锁员列表
         tabActiveName: 'category',
         form: {
-          code: '',
-          name: '',
-          storageNumber: '',
-          remark: '',
-          length: '',
-          width: '',
-          height: '',
-          weight: '',
-          plotRatio: ''
+          lockerIndex: '',
+          billType: '',
+          reason: '',
+          note: ''
         },
         createRules: {
-          code: [
-            { required: true, message: '请输入类别代码', trigger: 'blur' },
-            { required: true, max: 16, message: '最多输入16位', trigger: 'change' }
+          lockerIndex: [
+            { required: true, message: '请输入锁定解锁员', trigger: 'blur' }
           ],
-          name: [
-            { required: true, message: '请输入类别名称', trigger: 'blur' },
-            { required: true, max: 40, message: '最多输入40位', trigger: 'change' }
+          billType: [
+            { required: true, message: '请输选择类型', trigger: 'blur' }
           ],
-          storageNumber: [
-            { required: true, message: '请输入存储托盘数量', trigger: 'blur' },
-            { pattern: /^[1-9]\d*$/, message: '请输入正整数', trigger: 'change' }
+          reason: [
+            { required: true, message: '请输入锁定解锁原因', trigger: 'blur' }
           ],
-          // remark: [
-          //   { required: true, message: '请输入备注', trigger: 'blur' },
-          //   { required: true, max: 200, message: '最多输入200位', trigger: 'change' }
-          // ],
-          length: [
-            { required: true, message: '请输入长度', trigger: 'blur' },
-            { pattern: /^\d{1,4}(\.\d+)?$/, message: '请输入1-9999之间的数字', trigger: 'change' }
-          ],
-          width: [
-            { required: true, message: '请输入宽度', trigger: 'blur' },
-            { pattern: /^\d{1,4}(\.\d+)?$/, message: '请输入1-9999之间的数字', trigger: 'change' }
-          ],
-          height: [
-            { required: true, message: '请输入高度', trigger: 'blur' },
-            { pattern: /^\d{1,4}(\.\d+)?$/, message: '请输入1-9999之间的数字', trigger: 'change' }
-          ],
-          weight: [
-            { required: true, message: '请输入承重', trigger: 'blur' },
-            { pattern: /^\d{1,4}(\.\d+)?$/, message: '请输入1-9999之间的数字', trigger: 'change' }
-          ],
-          plotRatio: [
-            { required: true, message: '请输入容积率', trigger: 'blur' },
-            { pattern: /^100$|^(\d|[1-9]\d)(\.\d+)*$/, message: '请输入1-100之间的数字', trigger: 'change' }
+          note: [
+            { required: true, message: '请输入备注', trigger: 'blur' }
           ]
         }
       }
@@ -134,7 +127,6 @@ export default {
         this.$router.go(-1)
       },
       getUsers: function() {
-        this.restaurants = []
         MemberService.query(1, 0, {nameLike: this.form.decerName})
         .then((res) => {
           this.restaurants = res.records
@@ -143,44 +135,44 @@ export default {
         })
       },
       confirm(toExamine) {
-        // 保存
         if (this.dataList.length === 0) {
           this.$message.error("没有数据可以保存")
           return
         }
 
-        const arr = [];
         const _this = this;
+        const index = this.form.lockerIndex;
 
-        this.dataList.forEach((item) => {
-          const obj = {
-            stockId: item.id, // 库存记录id
-            updateBatch: item.batch, // 批次
-            updateInstockTime: item.instockTime, // 入库时间
-            updateMunit: item.munit, // 计量单位
-            updatePrice: item.price, // 价格
-            updateProductSpec: item.productSpec, // 规格描述
-            updateProductionBatch: item.productionBatch, // 生产批号
-            updateProductionDate: item.productionDate, // 生产日期
-            updateStockStatus: item.statusIn ? item.statusIn : null, // 状态
-            updateValidDate: item.validDate, // 到效日期
-            updateVendorId: item.name ? item.name : null, // 供应商名字
-            updateVolume: item.volume, // 体积
-            updateWeight: item.qty // 重量
+        this.$refs.form.validate(valid => {
+          if (valid) {
+            // lockerCode 锁定解锁人Code
+            // lockerId* 锁定解锁人ID
+            // lockerName	 锁定解锁人姓名
+            console.log(this.form.locker)
+
+            const addStockLockBillDTO = {
+              lockerId: this.restaurants[index].id,
+              lockerName: this.restaurants[index].username,
+              // lockerCode: this.restaurants[index].code,
+              billType: this.form.billType,
+              reason: this.form.reason,
+              note: this.form.note
+            };
+            
+            addStockLockBillDTO.addStockLockItemList = this.dataList
+
+            console.log(addStockLockBillDTO)
+
+            DemolitionAndService.newStockLocjBill(addStockLockBillDTO)
+            .then(res => {
+              this.$message.success("操作成功")
+              this.$router.push('/wrhmanagement/lockandunlock')
+              _this.$store.state.lockandunlock.multipleSelection = [];
+            })
+            .catch(err => {
+              this.$message.error("操作失败" + err.message)
+            })
           }
-
-          arr.push(obj)
-        })
-
-        DemolitionAndService.createUpdateInfoBill(arr)
-        .then(res => {
-          this.$message.success("操作成功")
-          this.$router.push('/wrhmanagement/lockandunlock')
-          _this.$store.state.lockandunlock.multipleSelection = [];
-          if (toExamine !== '审核') return;
-        })
-        .catch(err => {
-          this.$message.error("操作失败" + err.message)
         })
       },
       calcProduct: function(name, index) {
@@ -199,7 +191,6 @@ export default {
     beforeRouteEnter(to, from, next) {
       next(vm => {
         // 通过 `vm` 访问组件实例
-        console.log(vm.$store.state)
         vm.dataList = vm.$store.state.lockandunlock.multipleSelection
         const arr = Array.from(new Set(vm.dataList))
         vm.dataList = arr
