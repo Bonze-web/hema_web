@@ -515,7 +515,7 @@ export default {
           realQtystr = Number(realQtystr) + (Number(item.realQtystr) ? Number(item.realQtystr) : 0)
           realQty = Number(realQty) + (Number(item.realQty) ? Number(item.realQty) : 0)
           console.log(realQty)
-          this.form.realTotalQtystr = realQtystr + '+' + realQty
+          this.form.realTotalQtystr = realQtystr * item.qpc + realQty
           this.form.realTotalAmount = Number(this.form.totalAmount) + Number(item.realAmount)
           console.log(item)
         });
@@ -539,7 +539,7 @@ export default {
             item.consumeQty = 0
           }
           console.log(consumeQty)
-          this.form.totalQtystr = consumeQtystr + '+' + consumeQty
+          this.form.totalQtystr = consumeQtystr * item.qpc + consumeQty
           this.form.totalAmount = Number(this.form.totalAmount) + Number(item.consumeAmount)
           console.log(item)
         });

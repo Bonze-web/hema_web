@@ -352,7 +352,7 @@ export default {
           // this.form.realTotalAmount += item.consumeAmount
           consumeQtystr = Number(consumeQtystr) + (Number(item.consumeQtystr) ? Number(item.consumeQtystr) : 0)
           consumeQty = Number(consumeQty) + (Number(item.consumeQty) ? Number(item.consumeQty) : 0)
-          if (Number(item.consumeQty) * item.qpc + Number(item.consumeQtystr) > Number(item.qty) || Number(item.consumeQty) < 0 || Number(item.consumeQtystr) < 0) {
+          if (Number(item.consumeQty) + Number(item.consumeQtystr) * item.qpc > Number(item.qty) || Number(item.consumeQty) < 0 || Number(item.consumeQtystr) < 0) {
             this.$message.error('请输入正确数据')
             consumeQtystr = Number(consumeQtystr) - Number(item.consumeQtystr)
             consumeQty = Number(consumeQty) - Number(item.consumeQty)
