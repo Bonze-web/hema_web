@@ -32,6 +32,26 @@
             <template slot-scope="scope">{{ scope.row.line}}</template>
           </el-table-column>
 
+          <el-table-column prop="productName" label="商品名">
+          <template slot-scope="scope">
+            {{ scope.row.productName }}
+          </template>
+          </el-table-column>
+          <el-table-column prop="price" label="商品单价">
+            <template slot-scope="scope">
+              {{ scope.row.price }}
+            </template>
+          </el-table-column>
+          <el-table-column prop="productCode" label="商品编码">
+            <template slot-scope="scope">
+              {{ scope.row.productCode }}
+            </template>
+          </el-table-column>
+          <el-table-column prop="productDate" label="商品生产日期">
+            <template slot-scope="scope">
+              {{ scope.row.productDate }}
+            </template>
+          </el-table-column>
           <el-table-column prop="billNumber" label="单号" style="height: 20px">
             <template slot-scope="scope">{{ scope.row.billNumber }}</template>
           </el-table-column>
@@ -57,27 +77,6 @@
           <el-table-column prop="munit" label="计量单位">
             <template slot-scope="scope">
               {{ scope.row.munit }}
-            </template>
-          </el-table-column>
-
-          <el-table-column prop="productName" label="商品名">
-            <template slot-scope="scope">
-              {{ scope.row.productName }}
-            </template>
-          </el-table-column>
-          <el-table-column prop="price" label="商品单价">
-            <template slot-scope="scope">
-              {{ scope.row.price }}
-            </template>
-          </el-table-column>
-          <el-table-column prop="productCode" label="商品编码">
-            <template slot-scope="scope">
-              {{ scope.row.productCode }}
-            </template>
-          </el-table-column>
-          <el-table-column prop="productDate" label="商品生产日期">
-            <template slot-scope="scope">
-              {{ scope.row.productDate }}
             </template>
           </el-table-column>
           <el-table-column prop="productionBatch" label="批号">

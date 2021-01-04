@@ -86,7 +86,7 @@
                 </el-table-column>
                 <el-table-column prop="isTest" label="是否测试单">
                     <template slot-scope="scope">
-                        {{ scope.row.isTest }}
+                        {{ scope.row.isTest | isTestType }}
                     </template>
                 </el-table-column>
                 <el-table-column prop="wrhCode" label="仓库">
@@ -213,6 +213,14 @@ export default {
     this.getSuppliersList();
   },
   filters: {
+    isTestType(type) {
+      switch (type) {
+        case true:
+          return "是"
+        case false:
+          return "否"
+      }
+    },
     sourceType(type) {
       switch (type) {
         case "HAND":
