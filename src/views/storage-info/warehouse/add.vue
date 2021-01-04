@@ -234,7 +234,7 @@ export default {
               })
             } else {
               if (this.form.status) {
-                this.form.status = "NO"
+                this.form.status = "OFF"
               } else {
                 this.form.status = "OFF"
               }

@@ -42,7 +42,7 @@
                                 <el-row :gutter="20">
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="代码" prop="code">
-                                            <el-input v-model="form.code" disabled="true"></el-input>
+                                            <el-input v-model="form.code" disabled></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
@@ -73,7 +73,7 @@
             <div>
                 <template>
                     <el-tabs v-model="tabActiveName" @tab-click="tabClick">
-                        <el-tab-pane label="仓库" name="category">
+                        <el-tab-pane label="商品类别" name="category">
                             <div class="info-title">基本信息</div>
                             <el-col :span="6" class="info-box">
                                 <div>代码:</div>
@@ -127,7 +127,7 @@ export default {
         parentList: [], // 父级类别列表
         level: "one", // 新建类别级别
         status: '', // 页面状态
-        id: '', // 仓库ID
+        id: '', // 商品类别ID
         tabActiveName: 'category', // tab栏名称
         form: {
           code: '',
@@ -177,7 +177,7 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          if (_this.warehouseInfo.status) {
+          if (!_this.warehouseInfo.status) {
             // 禁用
             StorageService.closeWarehouse(_this.warehouseInfo.id, _this.warehouseInfo.version)
             .then((res) => {
@@ -222,7 +222,7 @@ export default {
           console.log(res)
           this.warehouseInfo = res;
           // 根据状态修改仓库开启switch
-          if (this.warehouseInfo.status === "OFF") {
+          if (this.warehouseInfo.status === "ON") {
             this.warehouseInfo.status = true
           } else {
             this.warehouseInfo.status = false
@@ -260,7 +260,7 @@ export default {
               })
             } else {
               if (this.form.status) {
-                this.form.status = "NO"
+                this.form.status = "ON"
               } else {
                 this.form.status = "OFF"
               }
