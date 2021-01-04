@@ -21,13 +21,13 @@
                     </el-switch>
                 </template> -->
                 <template>
-                  <el-button type="text" @click="statusChange" v-if="warehouseInfo.status">禁用</el-button>
-                  <el-button type="text" @click="statusChange" v-if="!warehouseInfo.status">启用</el-button>
+                  <el-button type="text" @click="statusChange" v-if="warehouseInfo.status === 'ON'">禁用</el-button>
+                  <el-button type="text" @click="statusChange" v-else>启用</el-button>
                 </template>
             </div>
             <div>
                 <el-button @click="back">返回</el-button>
-                <el-button type="primary" @click="editCategory" v-show="warehouseInfo.status" v-if="hasPermission(PermIds.WMS_WAREHOUSE_UPDATE)">编辑</el-button>
+                <el-button type="primary" @click="editCategory" v-show="warehouseInfo.status === 'ON'" v-if="hasPermission(PermIds.WMS_WAREHOUSE_UPDATE)">编辑</el-button>
             </div>
         </div>
         <div style="height:20px" />
@@ -177,7 +177,7 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          if (!_this.warehouseInfo.status) {
+          if (_this.warehouseInfo.status === 'OFF') {
             // 禁用
             StorageService.closeWarehouse(_this.warehouseInfo.id, _this.warehouseInfo.version)
             .then((res) => {
@@ -222,11 +222,11 @@ export default {
           console.log(res)
           this.warehouseInfo = res;
           // 根据状态修改仓库开启switch
-          if (this.warehouseInfo.status === "ON") {
-            this.warehouseInfo.status = true
-          } else {
-            this.warehouseInfo.status = false
-          }
+          // if (this.warehouseInfo.status === "ON") {
+          //   this.warehouseInfo.status = true
+          // } else {
+          //   this.warehouseInfo.status = false
+          // }
 
           this.form = this.warehouseInfo;
           // if (res.level !== "one") {
@@ -259,11 +259,11 @@ export default {
                 this.$message.error("创建失败" + err.message)
               })
             } else {
-              if (this.form.status) {
-                this.form.status = "ON"
-              } else {
-                this.form.status = "OFF"
-              }
+              // if (this.form.status) {
+              //   this.form.status = "ON"
+              // } else {
+              //   this.form.status = "OFF"
+              // }
               StorageService.updateWarehouse(this.form)
               .then(res => {
                 console.log(res)
@@ -326,6 +326,12 @@ export default {
     },
     created() {
       this.getQueryStatus()
+    },
+    beforeRouteEnter(to, from, next) {
+      next(vm => {
+        // 通过 `vm` 访问组件实例
+        vm.getQueryStatus();
+      })
     },
     filters: {
       categoryLevel(level) {

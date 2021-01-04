@@ -15,8 +15,8 @@
         <el-form-item label="状态">
           <el-select v-model="form.status" placeholder="请选择状态">
             <el-option label="全部" value=""></el-option>
-            <el-option label="启用" value="OFF"></el-option>
-            <el-option label="禁用" value="ON"></el-option>
+            <el-option label="启用" value="ON"></el-option>
+            <el-option label="禁用" value="OFF"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item>
@@ -63,7 +63,7 @@
         <el-table-column label="操作" width="200">
           <template slot-scope="scope">
             <el-button
-              :disabled="scope.row.status"
+              :disabled="scope.row.status === 'ON'"
               size="mini"
               type="text"
               @click="
@@ -72,7 +72,7 @@
               >启用</el-button
             >
             <el-button
-              :disabled="!scope.row.status"
+              :disabled="scope.row.status === 'OFF'"
               size="mini"
               type="text"
               @click="
@@ -141,7 +141,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        if (status) {
+        if (status === 'OFF') {
           // 禁用
           StorageService.closeWarehouse(id, version)
           .then((res) => {
@@ -200,11 +200,11 @@ export default {
         this.totalCount = res.totalCount;
 
         records.forEach((item, index) => {
-          if (item.status === 'OFF') {
-            item.status = true
-          } else {
-            item.status = false
-          }
+          // if (item.status === 'OFF') {
+          //   item.status = true
+          // } else {
+          //   item.status = false
+          // }
           listData.push(item)
         })
 
@@ -254,10 +254,10 @@ export default {
     },
     categoryStatus(status) {
       switch (status) {
-        case true:
-          return "启用";
-        case false:
+        case 'OFF':
           return "禁用";
+        case 'ON':
+          return "启用";
         default:
           return "未知";
       }
