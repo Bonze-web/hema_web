@@ -189,6 +189,7 @@
 
 <script>
 import BillService from "@/api/service/BillService";
+import UserService from "@/api/service/UserService";
 import BillTypeService from "@/api/service/BillTypeService"
 import MemberService from "@/api/service/MemberService"
 import StorageService from "@/api/service/StorageService"
@@ -574,9 +575,20 @@ export default {
         }).catch((err) => {
           this.$message.error('获取用户列表失败' + err.message)
         })
+      },
+      getLoginUser() {
+        UserService.getLoginUser()
+        .then((result) => {
+          console.log(result)
+          this.form.decerName = result.username
+          this.form.incerId = result.id
+        }).catch((err) => {
+          this.$message.error('获取当前用户失败' + err.message)
+        });
       }
     },
     created() {
+      this.getLoginUser()
       this.getAllBillType()
       this.getQueryStatus()
       this.getWrhList()

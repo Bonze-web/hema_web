@@ -18,14 +18,14 @@
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="移库类型" prop="moveType">
                                           <el-select v-model="form.moveType" placeholder="请选择移库类型">
-                                            <el-option v-for="item in billTypeList" :key="item.id" :label="item.typeName" :value="item.id"></el-option>
+                                            <el-option v-for="item in billTypeList" :key="item.id" :label="item.typeName" :value="item.typeName"></el-option>
                                           </el-select>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="移库员" prop="moverId">
                                              <el-select
-                                              v-model="form.moverId"
+                                              v-model="form.moverName"
                                               filterable
                                               remote
                                               placeholder="请输入移库员名称"
@@ -35,7 +35,7 @@
                                                 v-for="item in restaurants"
                                                 :key="item.id"
                                                 :label="item.username"
-                                                :value="item.id">
+                                                :value="item.username">
                                               </el-option>
                                             </el-select>
                                         </el-form-item>
@@ -137,6 +137,7 @@ import BillTypeService from "@/api/service/BillTypeService"
 import MemberService from "@/api/service/MemberService"
 import StorageService from "@/api/service/StorageService"
 // import ProductService from "@/api/service/ProductService"
+import UserService from "@/api/service/UserService";
 import BasicService from "@/api/service/BasicService"
 import PermIds from "@/api/permissionIds";
 import productSelect from '../../../components/productSelect.vue';
@@ -185,7 +186,7 @@ export default {
       moverChange() {
         this.restaurants.forEach(item => {
           if (item.id === this.form.moverId) {
-            this.form.moverName = item.username
+            this.form.moverId = item.id
           }
         })
       },
@@ -238,7 +239,9 @@ export default {
               value.fromBinId = value.binId
               value.fromBinCode = value.binCode
               value.fromBinUsage = value.binUsage
-              value.stockBatchList = value.batch
+              value.stockBatch = value.batch
+              value.fromContainerBarcode = value.containerBarcode
+              value.fromContainerId = value.containerId
             }
           })
         })
@@ -285,18 +288,21 @@ export default {
           return
         } else {
           this.productList.forEach((item) => {
-            if (Number(item.qty) <= 0) {
-              this.$message.error(`请输入${item.productName}的数量`)
-              this.form.moveBillItemList = []
-              return
-            }
-            if (!item.toBinId) {
-              this.$message.error(`请输入${item.productName}的目标货位`)
-              this.form.moveBillItemList = []
-              return
-            }
-            this.form.moveBillItemList.push(item)
+            
           })
+          for (const item in this.productList) {
+            if (!Number(this.productList[item].qty)) {
+              this.$message.error(`请输入${this.productList[item].productName}的数量`)
+              this.form.moveBillItemList = []
+              return
+            }
+            if (!this.productList[item].toBinId) {
+              this.$message.error(`请输入${this.productList[item].productName}的目标货位`)
+              this.form.moveBillItemList = []
+              return
+            }
+            this.form.moveBillItemList.push(this.productList[item])
+          }
         }
         _this.$refs.form.validate(valid => {
           if (valid) {
@@ -368,28 +374,23 @@ export default {
         }).catch((err) => {
           this.$message.error('获取用户列表失败' + err.message)
         })
+      },
+      getLoginUser() {
+        UserService.getLoginUser()
+        .then((result) => {
+          console.log(result)
+          this.form.moverName = result.username
+          this.form.moverId = result.id
+        }).catch((err) => {
+          this.$message.error('获取当前用户失败' + err.message)
+        });
       }
     },
     created() {
+      this.getLoginUser()
       this.getAllBillType()
       this.getQueryStatus()
       this.getWrhList()
-      // this.productList.forEach(item => {
-        
-      //   item.qty = 0
-      //   item.consumeQty = 0
-      //   item.consumeQtystr = 0
-      //   item.toBinCode = ''
-      //   item.toBinUsage = ''
-      //   item.toContainerId = ''
-      //   item.toContainerId = ''
-      //   item.toContainerBarcode = ''
-      //   item.toWarehouseId = ''
-      //   item.toWarehouseName = ''
-      //   item.toWarehouseCode = ''        
-        
-      // })
-      // this.calcProduct(this.productList)
     },
     beforeRouteEnter(to, from, next) {
       next(vm => {
