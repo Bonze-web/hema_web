@@ -510,8 +510,12 @@ export default {
             this.$message.error('请输入正确数据')
             consumeQtystr = 0
             consumeQty = 0
-            item.consumeQtystr = 0
-            item.consumeQty = 0
+            if ('consumeQtystr' in item) {
+              item.consumeQtystr = ''
+            }
+            if ('consumeQty' in item) {
+              item.consumeQty = ''
+            }
           }
           this.form.realTotalQtystr = realQtystr * item.qpc + realQty
           this.form.realTotalAmount = (Number(this.form.totalAmount) + Number(item.realAmount)).toFixed(2)
@@ -532,8 +536,12 @@ export default {
             this.$message.error('请输入正确数据')
             consumeQtystr = 0
             consumeQty = 0
-            item.consumeQtystr = 0
-            item.consumeQty = 0
+            if ('consumeQtystr' in item) {
+              item.consumeQtystr = ''
+            }
+            if ('consumeQty' in item) {
+              item.consumeQty = ''
+            }
           }
           console.log(consumeQty)
           this.form.totalQtystr = consumeQtystr * item.qpc + consumeQty

@@ -576,8 +576,12 @@ export default {
             this.$message.error('请输入正确的数据')
             consumeQtystr = Number(consumeQtystr) - Number(item.consumeQtystr)
             consumeQty = Number(consumeQty) - Number(item.consumeQty)
-            item.consumeQtystr = 0
-            item.consumeQty = 0
+            if ('consumeQtystr' in item) {
+              item.consumeQtystr = ''
+            }
+            if ('consumeQty' in item) {
+              item.consumeQty = ''
+            }
           }
           console.log(consumeQty)
           this.form.totalQtystr = consumeQtystr * item.qpc + consumeQty
