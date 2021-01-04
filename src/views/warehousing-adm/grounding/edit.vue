@@ -260,6 +260,7 @@ export default {
         }
         GroundingService.putwayBillQueryItems(data)
         .then(res => {
+          this.listData = [];
           res.records.forEach((ele, idx) => {
               ele.idx = idx + 1;
               this.listData.push(ele);
