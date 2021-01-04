@@ -27,7 +27,7 @@
             </div>
             <div>
                 <el-button @click="back">返回</el-button>
-                <el-button type="primary" @click="editCategory" v-if="hasPermission(PermIds.WMS_WAREHOUSE_UPDATE)">编辑</el-button>
+                <el-button type="primary" @click="editCategory" v-show="warehouseInfo.status" v-if="hasPermission(PermIds.WMS_WAREHOUSE_UPDATE)">编辑</el-button>
             </div>
         </div>
         <div style="height:20px" />
@@ -42,7 +42,7 @@
                                 <el-row :gutter="20">
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="代码" prop="code">
-                                            <el-input v-model="form.code"></el-input>
+                                            <el-input v-model="form.code" disabled="true"></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
@@ -63,6 +63,7 @@
                                 </el-form-item>
                             </el-form>
                         </el-tab-pane>
+
                     </el-tabs>
                 </template>
             </div>
@@ -72,7 +73,7 @@
             <div>
                 <template>
                     <el-tabs v-model="tabActiveName" @tab-click="tabClick">
-                        <el-tab-pane label="商品类别" name="category">
+                        <el-tab-pane label="仓库" name="category">
                             <div class="info-title">基本信息</div>
                             <el-col :span="6" class="info-box">
                                 <div>代码:</div>
@@ -99,6 +100,11 @@
                                 <div>{{ warehouseInfo.remark ? warehouseInfo.remark : "&lt;空&gt;" }}</div>
                             </el-col>
                         </el-tab-pane>
+
+                        <!-- USER, DOCK, Inbound_Outbound, PRETYPE, PICK_ORDER, USER_PICKAREA, OTHER, SUPPLIER, CONTAINER, CONTAINERTYPE, DECINVBILL, INCINVBILL, PICKAREA, STORAGEAREA, PRODUCT, PRODUCTCATEGORY, BINTYPE, ZONE, PATH, SHELF, BIN, QUALITY, MOVESTOCK, LOCKSTOCK, VENDORRETURNBILL, ORDERBILL -->
+                        <el-tab-pane label="操作日志" name="log">
+                          <system-log modular="CONTAINER"></system-log>
+                        </el-tab-pane>
                         <!-- <el-tab-pane label="配送中心范围" name="range">配置管理</el-tab-pane>
                         <el-tab-pane label="操作日志" name="log">角色管理</el-tab-pane> -->
                     </el-tabs>
@@ -110,6 +116,7 @@
 
 <script>
 import StorageService from "@/api/service/StorageService";
+import systemLog from "@/components/systemLog.vue";
 import PermIds from "@/api/permissionIds";
 import { mapGetters } from "vuex";
 
@@ -120,7 +127,7 @@ export default {
         parentList: [], // 父级类别列表
         level: "one", // 新建类别级别
         status: '', // 页面状态
-        id: '', // 商品类别ID
+        id: '', // 仓库ID
         tabActiveName: 'category', // tab栏名称
         form: {
           code: '',
@@ -142,14 +149,17 @@ export default {
           ],
           level: [
             { required: true, message: '请选择类别级别', trigger: 'blur' }
-          ],
-          remark: [
-            { required: true, message: '请输入备注', trigger: 'blur' },
-            { required: true, max: 200, message: '最多输入200位', trigger: 'change' }
           ]
+          // remark: [
+          //   { required: true, message: '请输入备注', trigger: 'blur' },
+          //   { required: true, max: 200, message: '最多输入200位', trigger: 'change' }
+          // ]
         },
         records: []
       }
+    },
+    components: {
+      systemLog
     },
     computed: {
       ...mapGetters(["hasPermission"])

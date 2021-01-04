@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="head" v-if="status === 'create' || status === 'edit'">
-            <div style="margin-top:8px" v-if="status === 'create'">新建类别</div>
+            <div style="margin-top:8px" v-if="status === 'create'">新建仓库</div>
             <div style="margin-top:8px" v-else>编辑</div>
             <div>
                 <el-button @click="back">取消</el-button>
@@ -36,7 +36,7 @@
             <div>
                 <template>
                     <el-tabs v-model="tabActiveName" @tab-click="tabClick">
-                        <el-tab-pane label="商品类别" name="category">
+                        <el-tab-pane label="仓库" name="category">
                             <div class="info-title">基本信息</div>
                             <el-form :model="form" :rules="createRules" ref="form" label-width="100px" class="demo-ruleForm">
                                 <el-row :gutter="20">
@@ -72,7 +72,7 @@
             <div>
                 <template>
                     <el-tabs v-model="tabActiveName" @tab-click="tabClick">
-                        <el-tab-pane label="商品类别" name="category">
+                        <el-tab-pane label="仓库" name="category">
                             <div class="info-title">基本信息</div>
                             <el-col :span="6" class="info-box">
                                 <div>代码:</div>
@@ -105,7 +105,7 @@ export default {
         parentList: [], // 父级类别列表
         level: "one", // 新建类别级别
         status: '', // 页面状态
-        id: '', // 商品类别ID
+        id: '', // 仓库ID
         tabActiveName: 'category', // tab栏名称
         form: {
           code: '',
@@ -127,11 +127,11 @@ export default {
           ],
           level: [
             { required: true, message: '请选择类别级别', trigger: 'blur' }
-          ],
-          remark: [
-            { required: true, message: '请输入备注', trigger: 'blur' },
-            { required: true, max: 200, message: '最多输入200位', trigger: 'change' }
           ]
+          // remark: [
+          //   { required: true, message: '请输入备注', trigger: 'blur' },
+          //   { required: true, max: 200, message: '最多输入200位', trigger: 'change' }
+          // ]
         },
         records: []
       }

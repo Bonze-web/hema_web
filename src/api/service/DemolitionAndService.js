@@ -103,21 +103,23 @@ export default {
     return request.get('/wms/lock-bill', { params: opt })
     // return request.get('/wms/stock/lock-bill', { params: opt })
   },
-  deleteStockLocjBill(id) {
-    // 锁定解锁单  删除接口
-    return request.delete('/wms/stock/lock-bill/' + id)
-  },
   detailsStockLocjBill(id) {
     // 锁定解锁单 详情接口
-    return request.get('/wms/stock/lock-bill/getById?id=' + id)
+    return request.get('/wms/lock-bill/getById?id=' + id)
   },
-  newStockLocjBill(opt) {
+  newStockLocjBill(addStockLockBillDTO) {
     // 锁定解锁单 新增接口
-    return request.put('/wms/stock/lock-bill', { params: opt })
+    return request.put('/wms/lock-bill', addStockLockBillDTO)
+  },
+  deleteStockLocjBill(opt) {
+    console.log(opt)
+    console.log('========================----------')
+    // 锁定解锁单  删除接口
+    return request.delete('/wms/lock-bill', opt)
   },
   nauditStockLocjBill(opt) {
     // 锁定解锁单 审核接口
-    return request.post('/wms/stock/lock-bill/audit', opt)
+    return request.post('/wms/lock-bill/audit', opt)
   }
   /**
   * 锁定解锁单结束

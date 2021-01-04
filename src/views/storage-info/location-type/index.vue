@@ -1,9 +1,9 @@
 <template>
   <div class="table-index">
     <div class="select-head">
-      <el-form ref="form" style="display: flex" :model="form" label-width="80px" label-position="right" >
+      <el-form ref="form" style="display: flex" :model="form" label-width="90px" label-position="right" >
 
-        <el-form-item label="代码：">
+        <el-form-item label="货位类型：">
           <el-input type="text" placeholder="请输入代码/名称" v-model="form.codeEqualsOrNameLike" class="input-width" ></el-input>
         </el-form-item>
 
