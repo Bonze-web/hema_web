@@ -484,20 +484,20 @@ export default {
               } else {
                 this.form.status = "OFF"
               }
-              BasicService.updateContainerType(this.form)
-              .then(res => {
-                if (!(this.form.inlength <= this.form.outlength)) {
-                  this.$message.error('容器内长需要小于外长，请检查')
+              if (!(this.form.inlength <= this.form.outlength)) {
+                  this.$message.error('容器内长需要小于等于外长，请检查')
                   return
                 }
                 if (!(this.form.inwidth <= this.form.outwidth)) {
-                  this.$message.error('容器内宽需要小于外宽，请检查')
+                  this.$message.error('容器内宽需要小于等于外宽，请检查')
                   return
                 }
                 if (!(this.form.inheight <= this.form.outheight)) {
-                  this.$message.error('容器内高需要小于外高，请检查')
+                  this.$message.error('容器内高需要小于等于外高，请检查')
                   return
                 }
+              BasicService.updateContainerType(this.form)
+              .then(res => {
                 console.log(res)
                 this.$message.success("更新成功")
                 this.$store.dispatch("tagsView/delView", this.$route);
