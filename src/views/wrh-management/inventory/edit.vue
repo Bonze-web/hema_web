@@ -276,7 +276,6 @@ export default {
     },
     methods: {
       handleSuccess() {
-        console.log(this.fileList);
         this.$message.success("上传成功");
       },
       handlePreview(file) {
