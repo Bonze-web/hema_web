@@ -955,8 +955,8 @@ const warehousingAdm = {
     component: AModule,
     meta: {
       title: '上架单',
-      icon: 'table'
-      // permission: PermIds.PRODUCT_SUPPLIER
+      icon: 'table',
+      permission: PermIds.WMS_PUTAWAY_BILL
     },
     children: [
       {
@@ -967,8 +967,8 @@ const warehousingAdm = {
       hidden: true,
       meta: {
         title: '上架单列表',
-        icon: 'table'
-        // permission: PermIds.PRODUCT_SUPPLIER_VIEW
+        icon: 'table',
+        permission: PermIds.WMS_PUTAWAY_BILL_VIEW
       }
     }, {
       path: "edit",
@@ -978,8 +978,8 @@ const warehousingAdm = {
       hidden: true,
       meta: {
         title: '上架单详情',
-        icon: 'table'
-        // permission: PermIds.PRODUCT_SUPPLIER_VIEW
+        icon: 'table',
+        permission: PermIds.WMS_PUTAWAY_BILL_VIEW
       }
     }, {
       path: "add",
@@ -989,8 +989,8 @@ const warehousingAdm = {
       hidden: true,
       meta: {
         title: '新建上架单',
-        icon: 'table'
-        // permission: PermIds.PRODUCT_SUPPLIER_CREATE
+        icon: 'table',
+        permission: PermIds.WMS_PUTAWAY_BILL_PUTAWAY
       }
     }]
     },
@@ -1111,7 +1111,7 @@ const outhousingAdm = {
     meta: {
       title: '仓库作业单',
       icon: 'table',
-      permission: PermIds.WMS_ORDERBILL
+      permission: PermIds.WMS_OPERATE_BILL
     },
     children: [
       {
@@ -1123,7 +1123,7 @@ const outhousingAdm = {
       meta: {
         title: '仓库作业单列表',
         icon: 'table',
-        permission: PermIds.WMS_ORDERBILL_VIEW
+        permission: PermIds.WMS_OPERATE_BILL_VIEW
       }
       }, {
         path: "edit",
@@ -1134,7 +1134,7 @@ const outhousingAdm = {
         meta: {
           title: '仓库作业单详情',
           icon: 'table',
-          permission: PermIds.WMS_ORDERBILL_VIEW
+          permission: PermIds.WMS_OPERATE_BILL_VIEW
         }
       }
     ]
