@@ -261,7 +261,7 @@ export default {
       next(vm => {
         vm.getBillList();
       })
-    },
+  },
   filters: {
     handleStatus(status) {
       switch (status) {

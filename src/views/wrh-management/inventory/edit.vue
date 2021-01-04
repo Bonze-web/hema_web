@@ -39,7 +39,7 @@
                             </el-col>
                             <el-col :span="6" class="info-box">
                                 <div>货位用途:</div>
-                                <div>{{ suppliersInfo.binUsage }}</div>
+                                <div>{{ suppliersInfo.binUsage | binUsageChange}}</div>
                             </el-col>
                             <el-col :span="6" class="info-box">
                                 <div>操作方式:</div>
@@ -177,7 +177,7 @@
                                       <span>{{ scope.row.quantity}}</span>
                                   </template>
                               </el-table-column>
-                              <el-table-column prop="quantityStr" label="件量">
+                              <el-table-column prop="quantityStr" label="件数">
                                   <template slot-scope="scope">
                                       <span>{{ scope.row.quantityStr}}</span>
                                   </template>
@@ -211,7 +211,7 @@
                             </div>
                           </el-tab-pane>
                           <el-tab-pane label="操作日志" name="operational">
-                                <system-log :modular="'Inbound_Outbound'"></system-log>
+                                <system-log :modular="'VENDORRETURNBILL'"></system-log>
                           </el-tab-pane>
                     </el-tabs>
                 </template>
@@ -350,6 +350,7 @@ export default {
       },
       editSupplier() {
         const obj = JSON.stringify(this.suppliersInfo);
+        this.$store.dispatch("tagsView/delView", this.$route);
         this.$router.push({name: 'InventoryAdd', query: { suppliersInfo: encodeURIComponent(obj), status: 'edit'}});
       },
       editSupplierStart() {
@@ -518,6 +519,8 @@ export default {
           return "供应商退货位"
         case "VENDORCOLLECT":
           return "供应商集货位"
+        default :
+          return status
         }
       },
       handleStatus(status) {
@@ -581,6 +584,11 @@ export default {
       timeChange(val) {
         console.log(val);
       }
+    },
+    beforeRouteEnter(to, from, next) {
+      next(vm => {
+        vm.getDetail();
+      })
     }
 };
 </script>

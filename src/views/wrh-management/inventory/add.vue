@@ -116,7 +116,8 @@ export default {
         },
         createRules: {
           binRange: [
-            { required: true, message: '请填写货位范围', trigger: 'blur'}
+            { required: true, message: '请填写货位范围', trigger: 'blur'},
+            { required: true, pattern: /^(([0-9a-zA-Z]+[-]+[0-9a-zA-Z]+){0,64}[0-9a-zA-Z]{0,64}([(]+[0-9]+\/[0-9]+[)]+)?[,]?[0-9a-zA-Z]{0,64}[,]?){0,64}$/, message: '格式10、10(1/2)、10-20，多个以逗号隔开', trigger: 'blur' }
           ],
           binUsage: [
             { required: true, message: '请填写货位用途', trigger: 'blur'}
@@ -153,32 +154,41 @@ export default {
         this.$router.go(-1)
       },
       createInventory() {
-        // this.$router.push({name: 'InventoryEdit'});
-        this.form.planDate = this.geshiChange(this.form.planDate);
-        InventoryService.createLossBill(this.form)
-        .then((res) => {
-          this.$message.success("创建成功");
-          this.$store.dispatch("tagsView/delView", this.$route);
-          this.$router.push({name: 'InventoryEdit', query: {id: res}});
-        }).catch((err) => {
-          this.$message.error("创建失败" + err.message)
+        this.$refs['form'].validate((valid) => {
+          if (valid) {
+            // this.$router.push({name: 'InventoryEdit'});
+            this.form.planDate = this.geshiChange(this.form.planDate);
+            InventoryService.createLossBill(this.form)
+            .then((res) => {
+              this.$message.success("创建成功");
+              this.$store.dispatch("tagsView/delView", this.$route);
+              this.$router.push({name: 'InventoryEdit', query: {id: res}});
+            }).catch((err) => {
+              this.$message.error("创建失败" + err.message)
+            })
+          }
         })
       },
       createInventoryAnd() {
-        InventoryService.createLossBill(this.form)
-        .then((res) => {
-          this.$message.success("创建成功");
-          this.form = {
-            binRange: "",
-            binUsage: "",
-            // inventoryHandlingMethod: "",
-            operationMode: "",
-            planDate: "",
-            realDefaultQuantity: "",
-            takeSchema: ""
+         this.$refs['form'].validate((valid) => {
+          if (valid) {
+            this.form.planDate = this.geshiChange(this.form.planDate);
+            InventoryService.createLossBill(this.form)
+            .then((res) => {
+              this.$message.success("创建成功");
+              this.form = {
+                binRange: "",
+                binUsage: "",
+                // inventoryHandlingMethod: "",
+                operationMode: "",
+                planDate: "",
+                realDefaultQuantity: "",
+                takeSchema: ""
+              }
+            }).catch((err) => {
+              this.$message.error("创建失败" + err.message)
+            })
           }
-        }).catch((err) => {
-          this.$message.error("创建失败" + err.message)
         })
       },
       editInventory() {
