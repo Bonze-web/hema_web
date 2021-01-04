@@ -295,7 +295,8 @@ export default {
         const data = {
           page: this.page,
           pageSize: 0,
-          lowerLevelEquals: this.form.level
+          lowerLevelEquals: this.form.level,
+          statusEquals: 'ON'
         }
         BasicService.getCateGoryQuery(data)
         .then((res) => {
