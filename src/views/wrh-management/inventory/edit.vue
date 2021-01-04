@@ -211,7 +211,7 @@
                             </div>
                           </el-tab-pane>
                           <el-tab-pane label="操作日志" name="operational">
-                                <system-log :modular="'PICKAREA'"></system-log>
+                                <system-log :modular="'Inbound_Outbound'"></system-log>
                           </el-tab-pane>
                     </el-tabs>
                 </template>
@@ -452,7 +452,14 @@ export default {
         // ]
         InventoryService.getLossBillDetail(this.id)
         .then((res) => {
-          console.log(res.stockTakeBillItemCheckDTOList);
+          if (res.status === 'INITIAL') {
+            this.inventoryStatus = "start";
+          } else if (res.status === 'INPROGRESS') {
+            this.inventoryStatus = "end";
+          } else if (res.status === 'FINISHED' || res.status === 'ABORTED') {
+            this.inventoryStatus = "null";
+          }
+
           this.suppliersInfo = res;
           this.storageList = res.stockTakeBillItemCheckDTOList;
         }).catch((err) => {

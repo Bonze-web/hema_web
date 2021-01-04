@@ -26,7 +26,7 @@
                     <el-input type='text' placeholder="请输入外部单号" v-model="form.sourceSubBillId" class="input-width"></el-input>
                 </el-form-item>
                 <el-form-item label="是否测试单">
-                    <el-select v-model="form.status" placeholder="请选择状态">
+                    <el-select v-model="form.isTest" placeholder="请选择状态">
                       <el-option label="是" :value="true"></el-option>
                       <el-option label="否" :value="false"></el-option>
                     </el-select>
