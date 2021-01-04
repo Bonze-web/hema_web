@@ -7,13 +7,14 @@
                     <el-input type='text' placeholder="请输入商品编号/名称" v-model="form.productNameOrCode" class="input-width"></el-input>
                 </el-form-item>
 
-                  <el-form-item label="锁定解锁" prop="billType">
-                    <el-select v-model="form.billType" placeholder="请选择锁定解锁类型">
-                      <el-option label="锁定" value="LOCK"></el-option>
-                      <el-option label="解锁" value="UNLOCK"></el-option>
+                  <el-form-item label="锁定解锁" prop="statusIn">
+                    <!-- NORMAL（正常）、LOCKED（锁定） -->
+                    <el-select v-model="form.statusIn" placeholder="请选择锁定解锁类型">
+                      <el-option label="锁定" value="NORMAL"></el-option>
+                      <el-option label="解锁" value="LOCKED"></el-option>
                     </el-select>
                   </el-form-item>
-                
+
                 <el-form-item label="货位">
                     <el-input type='text' placeholder="请输入货位编号" v-model="form.binCode" class="input-width"></el-input>
                 </el-form-item>
@@ -73,9 +74,9 @@ export default {
         form: {
             productNameOrCode: '',
             binCode: '',
-            billType: '',
+            // billType: '',
             containerBarcode: '',
-            statusIn: 'NORMAL',
+            statusIn: '',
             searchCount: true
         },
         page: 1,
@@ -89,7 +90,7 @@ export default {
   computed: {
   },
   methods: {
-    ...mapActions(["addSelection", "clearSelection"]),
+    ...mapActions(["addSelection", "clearSelection", 'setBillType']),
     getRowKeys(row) {
     //   console.log(row)
       return row.id
@@ -102,9 +103,9 @@ export default {
       this.form = {
         productNameOrCode: '',
         binCode: '',
-        billType: '',
+        // billType: '',
         containerBarcode: '',
-        statusIn: 'NORMAL',
+        statusIn: '',
         searchCount: true
       }
       this.onSelect()
@@ -114,13 +115,17 @@ export default {
           this.$message.error('添加数据不能为空')
           return
       }
+      // LOCK:锁定 UNLOCK:解锁            商品查询状态 NORMAL（正常）、LOCKED（锁定）
+      const billType = this.statusIn === 'LOCKED' ? 'UNLOCK' : 'LOCK';
       console.log(this.multipleSelection)
       this.addSelection(this.multipleSelection)
+      this.setBillType(billType)
       this.$router.push('/wrhmanagement/lockandunlock/add')
     },
     handleSelectionChange(list) {
         list.forEach((item, index) => {
           list[index].stockBatch = item.batch
+          list[index].stockId = item.id
         })
 
         console.log(list)
@@ -128,10 +133,10 @@ export default {
       this.multipleSelection = list;
     },
     onSelect: function() {
-      // if (!this.form.billType) {
-      //   this.$message.error('请选择解锁锁定类型')
-      //   return
-      // }
+      if (this.form.statusIn === '') {
+        this.$message.error('请选择解锁锁定类型')
+        return
+      }
 
       if (this.form.productNameOrCode || this.form.binCode || this.form.containerBarcode) {
         console.log(this.multipleSelection)
@@ -163,14 +168,15 @@ export default {
     this.multipleSelection = this.$store.state.lockandunlock.multipleSelection
     this.handleSelectionChange(this.multipleSelection)
   },
-  // beforeRouteEnter(to, from, next) {
-  //   next(vm => {
-  //     // // 通过 `vm` 访问组件实例
-  //     vm.multipleSelection = vm.$store.state.lockandunlock.multipleSelection
-  //     const arr = Array.from(new Set(vm.multipleSelection))
-  //     vm.multipleSelection = vm.multipleSelection
-  //   })
-  // },
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      // // 通过 `vm` 访问组件实例
+      vm.$store.state.lockandunlock.multipleSelection = []
+      // vm.multipleSelection = vm.$store.state.lockandunlock.multipleSelection
+      // const arr = Array.from(new Set(vm.multipleSelection))
+      // vm.multipleSelection = vm.multipleSelection
+    })
+  },
   filters: {
   }
 };

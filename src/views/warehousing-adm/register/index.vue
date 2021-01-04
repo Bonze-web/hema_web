@@ -88,7 +88,7 @@ export default {
       data.dcId = this.getData.dcId;
 
       if (new Date(this.getData.expireDate).getTime() - new Date(this.objDate.realArrivalDate).getTime() < 0) {
-        this.$message.error("已超过登记有效期")
+        this.$message.error("已超过登记有效期，不能登记")
         return;
       }
 

@@ -107,10 +107,10 @@
                                 <div>物流方式:</div>
                                 <div>{{ dataList.isLogisticMode | setIsLogisticMode }}</div>
                             </el-col>
-                            <el-col :span="6" class="info-box">
+                            <!-- <el-col :span="6" class="info-box">
                                 <div>入库仓库:</div>
                                 <div>{{ '[' + dataList.wrhId + ']' + dataList.wrhName }}</div>
-                            </el-col>
+                            </el-col> -->
 
                             <el-col :span="6" class="info-box">
                                 <div>到效日期:</div>

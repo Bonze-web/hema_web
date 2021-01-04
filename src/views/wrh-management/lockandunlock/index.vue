@@ -215,41 +215,34 @@ export default {
       })
     },
     toVoid() {
-      // 作废
+      // 删除
       if (this.activeArr.length === 0) return;
-      const arrId = [];
-      const _this = this;
 
-      this.$prompt('请输入作废备注', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          inputValidator(val) {
-            console.log(val)
-            if (val === null || val === '') {
-              return false
-            }
-          },
-          inputErrorMessage: '请输入作废原因'
-        })
-        .then(({ value }) => {
-          this.activeArr.forEach(item => {
-            arrId.push(item.id)
-          })
+      const stockLockBillAuditFilter = {
+        ids: []
+      }
 
-          DemolitionAndService.noPassUpdateInfoBill(arrId, value)
-          .then((res) => {
-            this.$message.success("操作成功")
-            _this.stockLocjBill()
-          })
-          .catch(err => {
-            this.$message.error("操作失败" + err.message)
-          });
+      this.activeArr.forEach(item => {
+        stockLockBillAuditFilter.ids.push(item.id)
+      })
+
+      this.$confirm('是否删除锁定解锁单?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        DemolitionAndService.deleteStockLocjBill(stockLockBillAuditFilter)
+        .then(res => {
+          this.$message.success("操作成功")
         })
-        .catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消'
-        }); 
+        .catch(err => {
+          this.$message.error("删除失败" + err.message)
+        });
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消'
+        })        
       })
     }
   },

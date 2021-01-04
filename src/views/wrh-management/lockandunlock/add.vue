@@ -28,15 +28,6 @@
                                   </el-col>
 
                                   <el-col :span="6" class="info-box">
-                                    <el-form-item label="锁定解锁" prop="billType">
-                                      <el-select v-model="form.billType" placeholder="请选择锁定解锁类型">
-                                        <el-option label="锁定" value="LOCK"></el-option>
-                                        <el-option label="解锁" value="UNLOCK"></el-option>
-                                      </el-select>
-                                    </el-form-item>
-                                  </el-col>
-
-                                  <el-col :span="6" class="info-box">
                                     <el-form-item label="原因" prop="reason">
                                       <el-select v-model="form.reason" placeholder="请选择原因">
                                         <el-option label="锁定解锁" value="LOCKUNLOCK"></el-option>
@@ -98,16 +89,12 @@ export default {
         tabActiveName: 'category',
         form: {
           lockerIndex: '',
-          billType: '',
           reason: '',
           note: ''
         },
         createRules: {
           lockerIndex: [
             { required: true, message: '请输入锁定解锁员', trigger: 'blur' }
-          ],
-          billType: [
-            { required: true, message: '请输选择类型', trigger: 'blur' }
           ],
           reason: [
             { required: true, message: '请输入锁定解锁原因', trigger: 'blur' }
@@ -140,7 +127,7 @@ export default {
           return
         }
 
-        const _this = this;
+        // const _this = this;
         const index = this.form.lockerIndex;
 
         this.$refs.form.validate(valid => {
@@ -148,29 +135,47 @@ export default {
             // lockerCode 锁定解锁人Code
             // lockerId* 锁定解锁人ID
             // lockerName	 锁定解锁人姓名
-            console.log(this.form.locker)
+            const billType = this.$store.state.lockandunlock.billType;
 
             const addStockLockBillDTO = {
               lockerId: this.restaurants[index].id,
               lockerName: this.restaurants[index].username,
               // lockerCode: this.restaurants[index].code,
-              billType: this.form.billType,
+              billType: billType,
               reason: this.form.reason,
               note: this.form.note
             };
             
             addStockLockBillDTO.addStockLockItemList = this.dataList
 
-            console.log(addStockLockBillDTO)
-
             DemolitionAndService.newStockLocjBill(addStockLockBillDTO)
             .then(res => {
-              this.$message.success("操作成功")
-              this.$router.push('/wrhmanagement/lockandunlock')
-              _this.$store.state.lockandunlock.multipleSelection = [];
+              console.log(res)
+              this.$message.success("保存成功")
+              if (toExamine === '审核') {
+                const stockLockBillAuditFilter = {
+                  ids: [this.id]
+                }
+
+                DemolitionAndService.nauditStockLocjBill(stockLockBillAuditFilter)
+                .then(res => {
+                  console.log(res)
+                  this.$message.success("审核成功")
+                  this.$store.dispatch("tagsView/delView", this.$route);
+                  this.$router.go(-1)
+                })
+                .catch(err => {
+                  this.$message.error("审核失败" + err.message)
+                });
+              } else {
+                this.$router.push('/wrhmanagement/lockandunlock')
+                this.$store.state.lockandunlock.multipleSelection = [];
+                this.$store.dispatch("tagsView/delView", this.$route);
+                this.$router.go(-1)
+              }
             })
             .catch(err => {
-              this.$message.error("操作失败" + err.message)
+              this.$message.error("保存失败" + err.message)
             })
           }
         })
