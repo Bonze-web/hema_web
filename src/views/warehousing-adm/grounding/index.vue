@@ -44,7 +44,7 @@
       </el-form>
     </div>
     
-    <div style="height: 20px; background: #fff;" />
+    <div style="height: 20px;" />
 
     <div style="background: #fff;">
       <!-- <div class="header-ground" >
@@ -170,6 +170,7 @@ export default {
       this.page = 1;
       this.pageSize = 10;
       this.createTime = "";
+      this.queryOrderBill();
     },
     putFinish(obj) {
       // const _this = this;

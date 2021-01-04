@@ -58,7 +58,7 @@ export default {
     return request.post('/wms/pickOrder/updateGrp', postData)
   },
   queryItem(postData) {
-    return request.post('/wms/pickOrder/queryItem', postData);
+    return request.get('/wms/store/query', {params: postData});
   },
   addGrpItems(postData) {
     return request.post('/wms/pickOrder/addGrpItems', postData)

@@ -233,7 +233,7 @@ export default {
       _this.form.page = 1
       _this.form.pageSize = 10;
       _this.form.planDateStart = _this.geshiChange(_this.form.planDate[0]);
-      _this.form.planDateEnd = _this.geshiChange(_this.form.planDate[1])
+      _this.form.planDateEnd = _this.geshiChange(_this.form.planDate[1]);
       InventoryService.getBillList(_this.form)
       .then((res) => {
         _this.lossBill = res.records;

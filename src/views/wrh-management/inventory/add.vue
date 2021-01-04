@@ -159,7 +159,6 @@ export default {
         .then((res) => {
           this.$message.success("创建成功");
           this.$store.dispatch("tagsView/delView", this.$route);
-          console.log(res);
           this.$router.push({name: 'InventoryEdit', query: {id: res}});
         }).catch((err) => {
           this.$message.error("创建失败" + err.message)
@@ -187,6 +186,7 @@ export default {
         InventoryService.updateLossBill(this.form)
         .then((res) => {
           this.$message.success("修改成功");
+          this.$router.push({name: 'InventoryEdit', query: {id: this.form.id}});
         }).catch((err) => {
           this.$message.error("创建失败" + err.message)
         })
@@ -196,7 +196,6 @@ export default {
         this.status = this.$route.query.status;
         if (this.status === 'edit') {
           var list = decodeURIComponent(this.$route.query.suppliersInfo);
-          console.log(list);
           this.form = JSON.parse(list);
           console.log(this.form);
         }

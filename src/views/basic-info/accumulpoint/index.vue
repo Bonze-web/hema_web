@@ -175,7 +175,8 @@ export default {
           sourceWayEquals: '',
           addressLikes: '',
           searchCount: true
-        }
+        };
+        this.getSuppliersList();
       },
       // 向后台请求数据,这里是查询功能和一开始就调取数据列表
       getSuppliersList: function(reset) {

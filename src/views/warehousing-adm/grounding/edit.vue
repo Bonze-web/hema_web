@@ -10,7 +10,7 @@
                 <!-- <el-button type="primary"  @click="printingBtn">打印</el-button> -->
             </div>
         </div>
-        <!-- <div style="height: 20px; background: #fff;" /> -->
+        <div style="height: 20px;" />
         <div class="header-ground" style="background:#fff">
             <div class="title-store" style="width: 150px">商品编码or条码: </div>
             <el-input type="text" placeholder="请输入商品编码or条码" v-model="productCodeEquals" class="input-width" style="width: 200px" @change="getByIdOrderBill"></el-input>
@@ -18,7 +18,7 @@
         <div style="display: flex;justify-content: flex-end;font-size:12px; color: #909399;padding:20px;background:#fff">
           <span>共{{totalCount}}条数据</span>
         </div>
-        <el-table :data="listData" style="width: 100%; text-align: center" :row-style="{ height: '16px', padding: '-4px' }" >
+        <el-table :data="listData" style="width: 100%; text-align: center" :row-style="{ height: '16px', padding: '-4px', textAlign: 'center'}" >
           <!-- <el-table-column prop="idx" label="序号">
             <template slot-scope="scope">{{ scope.row.idx}}</template>
           </el-table-column> -->
@@ -142,7 +142,7 @@
           </el-table-column>
           <el-table-column prop="targetBinUsage" label="目标货位用途">
             <template slot-scope="scope">
-              {{ scope.row.targetBinUsage }}
+              {{ scope.row.targetBinUsage | binUsageChange}}
             </template>
           </el-table-column>
           <el-table-column prop="validDate" label="商品到效期">
@@ -397,6 +397,9 @@ export default {
   .title-store {
     padding-right: 20px;
   }
+}
+/deep/ .el-table .cell {
+  text-align: center;
 }
 </style>
 <style lang="scss">

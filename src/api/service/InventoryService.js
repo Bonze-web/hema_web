@@ -1,5 +1,4 @@
 import request from '@/utils/request'
-console.dir(request);
 
 /**
  * 单据类型相关接口
@@ -9,41 +8,41 @@ export default {
      * 请求盘点单列表
      */
     getBillList(data) {
-        return request.get('/stock-take-bill', {params: data})
+        return request.get('/stock-take-bill/listByPage', {params: data})
     },
     /**
      * 新建
      */
     createLossBill(postData) {
-        return request.post('/stock-take-bill', postData)
+        return request.post('/stock-take-bill/add', postData)
     },
     /**
      * 修改
      */
     updateLossBill(postData) {
-        return request.put('/stock-take-bill/' + postData.id, postData)
+        return request.put('/stock-take-bill/updateById', postData)
     },
     /**
      * 请求详情
      */
     getLossBillDetail(id) {
-        return request.get('/stock-take-bill/' + id)
+        return request.get('/stock-take-bill/getById?id=' + id);
     },
     closeInventory(id) {
-        return request.put('/stock-take-bill/' + id + '/close')
+        return request.put('/stock-take-bill/closeCheckById?id=' + id);
     },
     startInventory(id) {
-        return request.put('/stock-take-bill/' + id + '/start')
+        return request.put('/stock-take-bill/startCheckById?id=' + id)
     },
     /**
      * 转为损耗单
      */
     updateOverflowBill(id) {
-        return request.put('/stock-take-bill/' + id + '/transfer-inventory-loss')
+        return request.put('/stock-take-bill/transferInventoryLossById?id=' + id);
     },
     // 转为移库单
     updatemove(id) {
-        return request.put('/stock-take-bill/' + id + '/transfer-move-bill')
+        return request.put('/stock-take-bill/transferMoveBillById?id=' + id);
     },
     /**
      * 请求溢余单详情

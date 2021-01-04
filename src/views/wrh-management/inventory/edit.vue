@@ -6,7 +6,7 @@
             </div>
             <div>
                 <el-button @click="back">返回</el-button>
-                <el-button type="primary" @click="editSupplier" >编辑</el-button>
+                <el-button type="primary" @click="editSupplier" v-if="inventoryStatus === 'start'" >编辑</el-button>
                 <el-button type="primary" @click="editSupplierStart" v-if="inventoryStatus === 'start'">开始盘点</el-button>
                 <el-button type="primary" @click="editSupplierEnd" v-if="inventoryStatus === 'end'">结束盘点</el-button>
                 <el-button type="primary" @click="leadingChange" v-if="inventoryStatus === 'end'">导入实盘数</el-button>
@@ -55,11 +55,11 @@
                             </el-col>
                             <el-col :span="6" class="info-box">
                                 <div>修改时间:</div>
-                                <div>{{ suppliersInfo.updateTime | timeChange}}</div>
+                                <div>{{ suppliersInfo.updateTime}}</div>
                             </el-col>
                             <el-col :span="6" class="info-box">
                               <div>创建时间:</div>
-                              <div>{{ suppliersInfo.createTime | timeChange }}</div>
+                              <div>{{ suppliersInfo.createTime}}</div>
                             </el-col>
                         </el-tab-pane>
                     </el-tabs>
@@ -94,17 +94,17 @@
                               </el-table-column>
                               <el-table-column prop="vendorCode" label="供应商编号">
                                   <template slot-scope="scope">
-                                      <span>{{ scope.row.binCode }}</span>
+                                      <span>{{ scope.row.vendorCode }}</span>
                                   </template>
                               </el-table-column>
                               <el-table-column prop="vendorName" label="供应商名称">
                                   <template slot-scope="scope">
-                                      <span>{{ scope.row.binCode }}</span>
+                                      <span>{{ scope.row.vendorName }}</span>
                                   </template>
                               </el-table-column>
                               <el-table-column prop="binUsage" label="货位用途">
                                   <template slot-scope="scope">
-                                      <span>{{ scope.row.binUsage }}</span>
+                                      <span>{{ scope.row.binUsage | binUsageChange }}</span>
                                   </template>
                               </el-table-column>
                               <el-table-column prop="containerBarcode" label="来源容器">
@@ -187,9 +187,9 @@
                                       <span>{{ scope.row.snapQuantity}}</span>
                                   </template>
                               </el-table-column>
-                              <el-table-column prop="snapQuantity" label="快照数量">
+                              <el-table-column prop="snapQuantityStr" label="快照数量">
                                   <template slot-scope="scope">
-                                      <span>{{ scope.row.snapQuantity}}</span>
+                                      <span>{{ scope.row.snapQuantityStr}}</span>
                                   </template>
                               </el-table-column>
                                <el-table-column prop="diversityQuantity" label="差异数量">
@@ -218,7 +218,7 @@
             </div>
         </div>
         <el-dialog title="收货地址" :visible.sync="Actual">
-         <el-upload class="upload-demo" ref="upload" :auto-upload="false" :action="actionUrl" :on-preview="handlePreview" :on-remove="handleRemove" :before-remove="beforeRemove" multiple :limit="1" :on-exceed="handleExceed" :file-list="fileList" :on-success="handleSuccess">
+         <el-upload class="upload-demo" ref="upload" :auto-upload="false" :headers="myHeaders" :action="actionUrl" :on-preview="handlePreview" :on-remove="handleRemove" :before-remove="beforeRemove" multiple :limit="1" :on-exceed="handleExceed" :file-list="fileList" :on-success="handleSuccess">
               <el-button size="small" type="primary">点击上传</el-button>
           </el-upload>
           <!-- <input type="file" @change="getFile($event)" accept=".xlsx"> -->
@@ -237,6 +237,10 @@
 import InventoryService from "@/api/service/InventoryService";
 import systemLog from "@/components/systemLog.vue"
 import * as Utils from "@/utils/index";
+import store from '@/store'
+import {
+    getToken
+} from '@/utils/auth'
 // import PermIds from "@/api/permissionIds";
 // import { mapGetters } from "vuex";
 export default {
@@ -349,18 +353,18 @@ export default {
         this.$router.push({name: 'InventoryAdd', query: { suppliersInfo: encodeURIComponent(obj), status: 'edit'}});
       },
       editSupplierStart() {
-        this.inventoryStatus = "end";
         InventoryService.startInventory(this.id)
         .then((res) => {
+          this.inventoryStatus = "end";
           this.$message.success("开始盘点");
         }).catch((err) => {
           this.$message.error("开始盘点失败" + err.message)
         })
       },
       editSupplierEnd() {
-        this.inventoryStatus = "start";
         InventoryService.closeInventory(this.id)
         .then((res) => {
+          this.inventoryStatus = "start";
           this.$message.success("结束盘点");
         }).catch((err) => {
           this.$message.error("结束盘点失败" + err.message)
@@ -448,6 +452,7 @@ export default {
         // ]
         InventoryService.getLossBillDetail(this.id)
         .then((res) => {
+          console.log(res.stockTakeBillItemCheckDTOList);
           this.suppliersInfo = res;
           this.storageList = res.stockTakeBillItemCheckDTOList;
         }).catch((err) => {
@@ -457,7 +462,6 @@ export default {
     },
     created() {
       this.id = this.$route.query.id;
-      this.checkUrl = '/stock-take-bill-item-check/' + this.id + '/import';
       this.getDetail();
     },
     components: {
@@ -465,8 +469,14 @@ export default {
     },
     computed: {
       actionUrl() {
-        return process.env.BASE_API + "/stock-take-bill-item-check/" + this.id + "/import";
-      } 
+        return process.env.BASE_API + "/stock-take-bill-item-check/importByTakeBillId?takeBillId=" + this.id;
+      },
+      myHeaders() {
+        if (store.getters.token) {
+          const token = getToken() // 让每个请求携带自定义token
+          return {Authorization: token, 'access-token': token}
+        }
+      }
     },
     filters: {
       binUsageChange(status) {
