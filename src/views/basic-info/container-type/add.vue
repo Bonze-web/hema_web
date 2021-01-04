@@ -320,6 +320,18 @@ export default {
         this.$refs.form.validate(valid => {
           if (valid) {
             if (this.status === 'create') {
+              if (!(this.form.inlength <= this.form.outlength)) {
+                this.$message.error('容器内长需要小于外长，请检查')
+                return
+              }
+              if (!(this.form.inwidth <= this.form.outwidth)) {
+                this.$message.error('容器内宽需要小于外宽，请检查')
+                return
+              }
+              if (!(this.form.inheight <= this.form.outheight)) {
+                this.$message.error('容器内高需要小于外高，请检查')
+                return
+              }
               BasicService.createContainerType(this.form)
               .then(res => {
                 console.log(res)
