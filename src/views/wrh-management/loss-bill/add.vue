@@ -99,7 +99,7 @@
                                         </el-table-column>
                                         <el-table-column width="100" prop="amount" label="损耗金额">
                                           <template slot-scope="scope">
-                                            {{ ((Number(scope.row.consumeQtystr) * (scope.row.qpc) ? Number(scope.row.consumeQtystr) * (scope.row.qpc) : 0)  + (Number(scope.row.consumeQty) ? Number(scope.row.consumeQty) : 0)) * scope.row.price ? ((Number(scope.row.consumeQtystr) * (scope.row.qpc) ? Number(scope.row.consumeQtystr) * (scope.row.qpc) : 0)  + (Number(scope.row.consumeQty) ? Number(scope.row.consumeQty) : 0)) * scope.row.price : 0 }}
+                                            {{ ((Number(scope.row.consumeQtystr) * (scope.row.qpc) ? Number(scope.row.consumeQtystr) * (scope.row.qpc) : 0)  + (Number(scope.row.consumeQty) ? Number(scope.row.consumeQty) : 0)) * scope.row.price ? (((Number(scope.row.consumeQtystr) * (scope.row.qpc) ? Number(scope.row.consumeQtystr) * (scope.row.qpc) : 0)  + (Number(scope.row.consumeQty) ? Number(scope.row.consumeQty) : 0)) * scope.row.price).toFixed(2) : 0 }}
                                           </template>
                                         </el-table-column>
                                         <el-table-column width="100" prop="itemRemark" label="备注">
@@ -216,9 +216,18 @@ export default {
         // this.productList.forEach(item => {
         //   arr.push()
         // })
-        const arr = Array.from(new Set(this.productList))
+        let arr = []
+        this.productList.forEach(item => {
+          arr.push(item.productId)
+        })
+        const arr1 = Array.from(new Set(this.productList))
+        arr = Array.from(new Set(arr))
+        this.productList = arr1
         this.form.totalProductCount = arr.length
-        this.productList = arr
+
+        // const arr = Array.from(new Set(this.productList))
+        // this.form.totalProductCount = arr.length
+        // this.productList = arr
         this.calcProduct()
       },
       createBill: function(reset) {
@@ -243,6 +252,12 @@ export default {
               itemRemark: item.itemRemark
             })
           })
+        for (const item in this.productList) {
+          if (!this.productList[item].consumeQty && !this.productList[item].consumeQtystr) {
+            this.$message.error('请填写商品数')
+            return
+          }
+        }
         _this.$refs.form.validate(valid => {
           if (valid) {
             if (reset) {
@@ -257,8 +272,16 @@ export default {
             })
             .catch((err) => {
               _this.form.stockList = []
-              const arr = Array.from(new Set(this.productList))
-              this.productList = arr
+              // const arr = Array.from(new Set(this.productList))
+              // this.productList = arr
+              // this.form.totalProductCount = arr.length
+              let arr = []
+              this.productList.forEach(item => {
+                arr.push(item.productId)
+              })
+              const arr1 = Array.from(new Set(this.productList))
+              arr = Array.from(new Set(arr))
+              this.productList = arr1
               this.form.totalProductCount = arr.length
               _this.$message.error('创建失败' + err.message)
             })
@@ -386,15 +409,13 @@ export default {
       next(vm => {
         // 通过 `vm` 访问组件实例
         vm.productList = vm.$store.state.bill.multipleSelection
-        const arr = Array.from(new Set(vm.productList))
-        // for (const item in arr) {
-        //   arr[item].consumeAmount = 0
-        //   arr[item].lineNum = Number(item) + 1
-        //   arr[item].consumeQty = 0
-        //   arr[item].consumeQtystr = 0
-        //   arr[item].stockId = arr[item].id
-        // }
-        vm.productList = arr
+        let arr = []
+        vm.productList.forEach(item => {
+          arr.push(item.productId)
+        })
+        const arr1 = Array.from(new Set(vm.productList))
+        arr = Array.from(new Set(arr))
+        vm.productList = arr1
         vm.form.totalProductCount = arr.length
       })
     },

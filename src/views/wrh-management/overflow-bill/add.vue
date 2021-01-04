@@ -103,7 +103,7 @@
                                         </el-table-column>
                                         <el-table-column width="100" prop="amount" label="溢余金额">
                                           <template slot-scope="scope">
-                                            {{ (Number(scope.row.consumeQtystr) + Number(scope.row.consumeQty)) * scope.row.price ? (Number(scope.row.consumeQtystr) + Number(scope.row.consumeQty)) * scope.row.price : 0 }}
+                                            {{ (Number(scope.row.consumeQtystr) + Number(scope.row.consumeQty)) * scope.row.price ? ((Number(scope.row.consumeQtystr) + Number(scope.row.consumeQty)) * scope.row.price).toFixed(2) : 0 }}
                                           </template>
                                         </el-table-column>
                                         <el-table-column width="100" prop="remark" label="备注">
@@ -342,8 +342,16 @@ export default {
           if (value) {
             this.productList.push(this.product)
             this.addSelection(this.product)
-            const arr = Array.from(new Set(this.productList))
-            this.productList = arr
+            // const arr = Array.from(new Set(this.productList))
+            // this.productList = arr
+            // this.form.totalProductCount = arr.length
+            let arr = []
+            this.productList.forEach(item => {
+              arr.push(item.productId)
+            })
+            const arr1 = Array.from(new Set(this.productList))
+            arr = Array.from(new Set(arr))
+            this.productList = arr1
             this.form.totalProductCount = arr.length
             this.product = {
               remark: '',
@@ -443,8 +451,16 @@ export default {
       deleteProduct: function(index) {
         this.deleteSelection(index)
         this.productList.splice(index, 1)
-        const arr = Array.from(new Set(this.productList))
-        this.productList = arr
+        // const arr = Array.from(new Set(this.productList))
+        // this.productList = arr
+        // this.form.totalProductCount = arr.length
+        let arr = []
+        this.productList.forEach(item => {
+          arr.push(item.productId)
+        })
+        const arr1 = Array.from(new Set(this.productList))
+        arr = Array.from(new Set(arr))
+        this.productList = arr1
         this.form.totalProductCount = arr.length
         this.calcProduct()
       },
@@ -463,11 +479,18 @@ export default {
             this.form.stockList.push({
               consumeAmount: item.consumeAmount,
               lineNum: item.lineNum,
-              consumeQty: item.consumeQty,
-              consumeQtystr: item.consumeQtystr,
+              consumeQty: item.consumeQty ? item.consumeQty : 0,
+              consumeQtystr: item.consumeQtystr ? item.consumeQtystr : 0,
               stockId: item.id
             })
           })
+        }
+        for (const item in this.productList) {
+          if (!this.productList[item].consumeQty && !this.productList[item].consumeQtystr) {
+            this.$message.error('请填写商品数')
+            this.form.stockList = []
+            return
+          }
         }
         _this.$refs.form.validate(valid => {
           if (valid) {
@@ -607,15 +630,16 @@ export default {
       next(vm => {
         // 通过 `vm` 访问组件实例
         vm.productList = vm.$store.state.bill.multipleSelection.concat(vm.productList)
-        const arr = Array.from(new Set(vm.productList))
-        // for (const item in arr) {
-        //   arr[item].consumeAmount = 0
-        //   arr[item].lineNum = Number(item) + 1
-        //   arr[item].consumeQty = 0
-        //   arr[item].consumeQtystr = 0
-        //   arr[item].stockId = arr[item].id
-        // }
-        vm.productList = arr
+        // const arr = Array.from(new Set(vm.productList))
+        // vm.productList = arr
+        // vm.form.totalProductCount = arr.length
+        let arr = []
+        vm.productList.forEach(item => {
+          arr.push(item.productId)
+        })
+        const arr1 = Array.from(new Set(vm.productList))
+        arr = Array.from(new Set(arr))
+        vm.productList = arr1
         vm.form.totalProductCount = arr.length
       })
     },

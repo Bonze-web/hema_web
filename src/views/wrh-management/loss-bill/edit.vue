@@ -377,9 +377,17 @@ export default {
           this.deleteSelection(index)
         }
         this.productList.splice(index, 1)
-        const arr = Array.from(new Set(this.productList))
+        // const arr = Array.from(new Set(this.productList))
+        // this.form.totalProductCount = arr.length
+        // this.productList = arr
+        let arr = []
+        this.productList.forEach(item => {
+          arr.push(item.productId)
+        })
+        const arr1 = Array.from(new Set(this.productList))
+        arr = Array.from(new Set(arr))
+        this.productList = arr1
         this.form.totalProductCount = arr.length
-        this.productList = arr
         this.calcProductEdit()
       },
       createBill: function(reset) {
@@ -406,6 +414,12 @@ export default {
               realAmount: item.realAmount
             })
           })
+        }
+        for (const item in this.productList) {
+          if (!this.productList[item].consumeQty && !this.productList[item].consumeQtystr) {
+            this.$message.error('请填写商品数')
+            return
+          }
         }
         if (reset) {
           _this.form.realTotalAmount = _this.form.totalAmount
@@ -550,9 +564,17 @@ export default {
           }
           this.form.totalAmount = result.totalAmount
           this.form.realtotalQtystr = result.realTotalQtystr
-          const arr = Array.from(new Set(this.productList))
+          // const arr = Array.from(new Set(this.productList))
+          // this.form.realtotalProductCount = arr.length
+          // this.productList = arr
+          let arr = []
+          this.productList.forEach(item => {
+            arr.push(item.productId)
+          })
+          const arr1 = Array.from(new Set(this.productList))
+          arr = Array.from(new Set(arr))
+          this.productList = arr1
           this.form.realtotalProductCount = arr.length
-          this.productList = arr
           this.form = Object.assign(this.form, this.billInfo)
         }).catch((err) => {
           this.$message.error('获取详情失败' + err.message)
@@ -581,8 +603,16 @@ export default {
         if (from.path === "/wrhmanagement/lossbill") {
           return
         }
-        const arr = Array.from(new Set(vm.productList))
-        vm.productList = arr
+        // const arr = Array.from(new Set(vm.productList))
+        // vm.productList = arr
+        // vm.form.totalProductCount = arr.length
+        let arr = []
+        vm.productList.forEach(item => {
+          arr.push(item.productId)
+        })
+        const arr1 = Array.from(new Set(vm.productList))
+        arr = Array.from(new Set(arr))
+        vm.productList = arr1
         vm.form.totalProductCount = arr.length
       })
     },

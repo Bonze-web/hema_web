@@ -59,7 +59,7 @@
             <el-row>
               <router-link :to="{ path: '/wrhmanagement/overflowbill/add', query:{ status: 'create'} }">
                   <!-- <span v-if="child.meta&&child.meta.title" :title="child.meta.title">{{child.meta.title}}</span> -->
-                  <el-button type="primary" size="mini" v-if="hasPermission(PermIds.WMS_INCINVBILL_CREATE)">新建</el-button>
+                  <el-button type="primary" size="mini" @click="createBill" v-if="hasPermission(PermIds.WMS_INCINVBILL_CREATE)">新建</el-button>
               </router-link>
             </el-row>
             <el-row style="margin-left:12px">
@@ -131,7 +131,7 @@ import billType from '../../../components/billType.vue';
 import BillTypeService from '@/api/service/BillTypeService'
 import BillService from "@/api/service/BillService";
 import PermIds from "@/api/permissionIds";
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   data() {
@@ -148,7 +148,8 @@ export default {
           productCodeOrNameLikes: '', // 商品
           containerCodeOrNameLikes: '', // 容器
           binCodeEquals: '', // 货位
-          beginAndEndDate: []
+          beginAndEndDate: [],
+          searchCount: true
         },
         lossBill: [],
         page: 1,
@@ -163,8 +164,12 @@ export default {
     ...mapGetters(["hasPermission"])
   },
   methods: {
+    ...mapActions(["clearSelection"]),
     goBack: function() {
       this.table = false
+    },
+    createBill: function() {
+      this.clearSelection()
     },
     handleCurrentChange: function(e) {
       this.page = Number(e)
@@ -231,6 +236,7 @@ export default {
       BillService.getOverflowBillList(_this.form)
       .then((res) => {
         _this.lossBill = res.records
+        _this.totalCount = res.totalCount
       })
       .catch((err) => {
         _this.$message.error('获取单据列表失败' + err.message)
