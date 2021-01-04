@@ -308,6 +308,20 @@ export default {
   WMS_QUALITY_INSPECTION_ORDER_CREATE: "wms:quality-inspection-order:create",
   WMS_QUALITY_INSPECTION_ORDER_UPDATE: "wms:quality-inspection-order:update",
   WMS_QUALITY_INSPECTION_ORDER_VIEW: "wms:quality-inspection-order:view",
+  
+  /**
+   * 仓库作业单
+   */
+  WMS_OPERATE_BILL: "wms:operate_bill",
+  WMS_OPERATE_BILL_VIEW: "wms:operate_bill:view",
+
+  /**
+   * 上架单模块
+   */
+  WMS_PUTAWAY_BILL: "wms:putaway_bill",
+  WMS_PUTAWAY_BILL_VIEW: "wms:putaway_bill:view",
+  WMS_PUTAWAY_BILL_PUTAWAY: "wms:putaway_bill:putaway",
+  WMS_PUTAWAY_BILL_FINISHED: "wms:putaway_bill:finished",
 
   /**
    * 码头模块
