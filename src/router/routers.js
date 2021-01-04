@@ -1379,7 +1379,8 @@ const BillManagement = {
       component: AModule,
       meta: {
         title: '容器拆并单',
-        icon: 'table'
+        icon: 'table',
+        permission: PermIds.WMS_CONTAINER_MERGER_BILL
       },
       children: [{
         path: "",
@@ -1389,7 +1390,8 @@ const BillManagement = {
         hidden: true,
         meta: {
           title: '容器拆并单',
-          icon: 'table'
+          icon: 'table',
+          permission: PermIds.WMS_CONTAINER_MERGER_BILL_VIEW
         }
       }, {
         path: "edit",
@@ -1399,7 +1401,8 @@ const BillManagement = {
         hidden: true,
         meta: {
           title: '查看容器拆并单',
-          icon: 'table'
+          icon: 'table',
+          permission: PermIds.WMS_CONTAINER_MERGER_BILL_VIEW
         }
       }]
     },
@@ -1449,7 +1452,8 @@ const BillManagement = {
       component: AModule,
       meta: {
         title: '锁定解锁单',
-        icon: 'table'
+        icon: 'table',
+        permission: PermIds.STOCK_LOCK_BILL
       },
       children: [{
         path: "",
@@ -1459,7 +1463,8 @@ const BillManagement = {
         hidden: true,
         meta: {
           title: '锁定解锁单',
-          icon: 'table'
+          icon: 'table',
+          permission: PermIds.STOCK_LOCK_BILL_VIEW
         }
       },
       {
@@ -1470,7 +1475,8 @@ const BillManagement = {
         hidden: true,
         meta: {
           title: '锁定解锁单详情',
-          icon: 'table'
+          icon: 'table',
+          permission: PermIds.STOCK_LOCK_BILL_VIEW
         }
       },
       {
@@ -1481,7 +1487,8 @@ const BillManagement = {
         hidden: true,
         meta: {
           title: '新建锁定解锁单',
-          icon: 'table'
+          icon: 'table',
+          permission: PermIds.STOCK_LOCK_BILL_VIEW
         }
       },
       {
@@ -1492,7 +1499,8 @@ const BillManagement = {
         hidden: true,
         meta: {
           title: '新建锁定解锁单',
-          icon: 'table'
+          icon: 'table',
+          permission: PermIds.STOCK_LOCK_BILL_VIEW
         }
       }
     ]

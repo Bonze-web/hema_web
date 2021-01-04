@@ -8,8 +8,8 @@
             <div>
               <!-- SAVED:已保存，AUDITED:已审核 -->
                 <el-button @click="back">返回</el-button>
-                <el-button type="primary" v-if="dataList.status === 'SAVED'" @click="esaminareBtn">审核通过</el-button>
-                <el-button type="primary" v-if="dataList.status === 'SAVED'" @click="deleteBtn">删除</el-button>
+                <el-button type="primary" v-if="dataList.status === 'SAVED' || hasPermission(PermIds.STOCK_LOCK_BILL_UPDATE)" @click="esaminareBtn">审核通过</el-button>
+                <el-button type="primary" v-if="dataList.status === 'SAVED' || hasPermission(PermIds.STOCK_LOCK_BILL_DELETE)" @click="deleteBtn">删除</el-button>
             </div>
         </div>
         <div style="height:20px" />
@@ -139,34 +139,10 @@
                             </el-table>
                         </el-tab-pane>
 
-                        <!-- <el-tab-pane label="操作日志" name="active">
-                          <el-table :data="dataList.sonList" style="width: 100%; text-align: center" :row-style="{ height: '16px', padding: '-4px' }" >
-
-                            <el-table-column prop="a" label="操作时间" style="height: 20px">
-                              <template slot-scope="scope">
-                                  <span>条码{{ scope.row.a }}</span>
-                              </template>
-                            </el-table-column>
-
-                            <el-table-column prop="b" label="操作类型" style="height: 20px">
-                              <template slot-scope="scope">
-                                  <span>容器类型{{ scope.row.b }}</span>
-                            </el-table-column>
-
-                            <el-table-column prop="c" label="事件">
-                              <template slot-scope="scope">
-                                {{ scope.row.c }}
-                              </template>
-                            </el-table-column>
-
-                            <el-table-column prop="d" label="修改">
-                              <template slot-scope="scope">
-                                {{ scope.row.d }}
-                              </template>
-                            </el-table-column>
-
-                          </el-table>
-                        </el-tab-pane> -->
+                        <!-- USER, DOCK, Inbound_Outbound, PRETYPE, PICK_ORDER, USER_PICKAREA, OTHER, SUPPLIER, CONTAINER, CONTAINERTYPE, DECINVBILL, INCINVBILL, PICKAREA, STORAGEAREA, PRODUCT, PRODUCTCATEGORY, BINTYPE, ZONE, PATH, SHELF, BIN, QUALITY, MOVESTOCK, LOCKSTOCK, VENDORRETURNBILL, ORDERBILL -->
+                        <el-tab-pane label="操作日志" name="log">
+                          <system-log modular="LOCKBILL"></system-log>
+                        </el-tab-pane>
                     </el-tabs>
                 </template>
             </div>
@@ -175,11 +151,15 @@
 </template>
 
 <script>
+import systemLog from "@/components/systemLog.vue";
 import DemolitionAndService from "@/api/service/DemolitionAndService";
+import PermIds from "@/api/permissionIds";
+import { mapGetters } from "vuex";
 
 export default {
   data() {
       return {
+        PermIds: PermIds,
         tabActiveName: 'category', // tab栏名称
         id: '', // 详情id
         iptVal: '', // 搜索
@@ -187,7 +167,11 @@ export default {
         orderBillItems: []
       }
     },
+    components: {
+      systemLog
+    },
     computed: {
+      ...mapGetters(["hasPermission"])
     },
     methods: {
       back: function() {

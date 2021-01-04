@@ -154,15 +154,15 @@ export default {
               this.$message.success("保存成功")
               if (toExamine === '审核') {
                 const stockLockBillAuditFilter = {
-                  ids: [this.id]
+                  ids: [res.id]
                 }
 
                 DemolitionAndService.nauditStockLocjBill(stockLockBillAuditFilter)
                 .then(res => {
                   console.log(res)
                   this.$message.success("审核成功")
-                  this.$store.dispatch("tagsView/delView", this.$route);
-                  this.$router.go(-1)
+                  this.$router.push('/wrhmanagement/lockandunlock')
+                  this.$store.state.lockandunlock.multipleSelection = [];
                 })
                 .catch(err => {
                   this.$message.error("审核失败" + err.message)
@@ -170,8 +170,6 @@ export default {
               } else {
                 this.$router.push('/wrhmanagement/lockandunlock')
                 this.$store.state.lockandunlock.multipleSelection = [];
-                this.$store.dispatch("tagsView/delView", this.$route);
-                this.$router.go(-1)
               }
             })
             .catch(err => {

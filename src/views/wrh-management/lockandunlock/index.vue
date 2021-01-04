@@ -42,11 +42,11 @@
     <div style="background: #fff;">
       <el-row>
         <router-link :to="{ path: '/wrhmanagement/lockandunlock/batchAdd'}" >
-          <el-button style="margin: 18px 10px" type="primary" size="mini" >新建</el-button>
+          <el-button style="margin: 18px 10px" type="primary" size="mini" v-if="hasPermission(PermIds.STOCK_LOCK_BILL_CREATE)" >新建</el-button>
         </router-link>
 
-        <el-button style="margin: 18px 10px" size="mini" @click="adopt" >审核通过</el-button>
-        <el-button style="margin: 18px 10px" size="mini" @click="toVoid" >删除</el-button>
+        <el-button style="margin: 18px 10px" size="mini" @click="adopt" v-if="hasPermission(PermIds.STOCK_LOCK_BILL_UPDATE)">审核通过</el-button>
+        <el-button style="margin: 18px 10px" size="mini" @click="toVoid" v-if="hasPermission(PermIds.STOCK_LOCK_BILL_DELETE)" >删除</el-button>
       </el-row>
 
 
@@ -104,10 +104,13 @@
 
 <script>
 import DemolitionAndService from "@/api/service/DemolitionAndService";
+import PermIds from "@/api/permissionIds";
+import { mapGetters } from "vuex";
 
 export default {
   data() {
     return {
+      PermIds: PermIds,
       listData: [], // 列表数据
       activeArr: [], // 选中的数据
       form: {
@@ -121,7 +124,9 @@ export default {
       totalCount: 0
     };
   },
-  computed: {},
+  computed: {
+    ...mapGetters(["hasPermission"])
+  },
   methods: {
     onSubmit: function() {
       const _this = this;

@@ -267,6 +267,14 @@ export default {
   WMS_CONTAINER_CREATE: "wms:container:create",
   WMS_CONTAINER_VIEW: "wms:container:view",
 
+    /**
+   * 容器拆并单模块
+   */
+  WMS_CONTAINER_MERGER_BILL: "wms:container_merger_bill",
+  WMS_CONTAINER_MERGER_BILL_VIEW: "wms:container_merger_bill:view",
+  WMS_CONTAINER_MERGER_BILL_BOX_MERGER: "wms:container_merger_bill:box_merger",
+  WMS_CONTAINER_MERGER_BILL_PRODUCT_MERGER: "wms:container_merger_bill:product_merger",
+
   /**
    * 仓库模块
    */
@@ -355,6 +363,35 @@ export default {
   WMS_PICKORDER_VIEW: "wms:pickorder:view",
   WMS_PICKORDER_MODIFY: "wms:pickorder:modify",
   WMS_PICKORDER_DELETE: "wms:pickorder:remove",
+
+  /**
+   * 库存模块
+   */
+  STOCK: "stock",
+  STOCK_STOCK: "stock:stock",
+  STOCK_STOCK_VIEW: "stock:stock:view",
+
+  /**
+   * 库存信息修改申请单模块
+   */
+  STOCK_UPDATE_INFO_BILL: "stock:update_info_bill",
+  STOCK_UPDATE_INFO_BILL_VIEW: "stock:update_info_bill:view",
+  STOCK_UPDATE_INFO_BILL_CREATE: "stock:update_info_bill:create",
+  STOCK_UPDATE_INFO_BILL_AUDIT: "stock:update_info_bill:audit",
+
+  STOCK_TAKE_BILL: "stock:take_bill",
+  STOCK_TAKE_BILL_VIEW: "stock:take_bill:view",
+  STOCK_TAKE_BILL_CREATE: "stock:take_bill:create",
+  STOCK_TAKE_BILL_UPDATE: "stock:take_bill:update",
+
+  /**
+   * 库存锁定解锁模块
+   */
+  STOCK_LOCK_BILL: "stock:lock_bill",
+  STOCK_LOCK_BILL_CREATE: "stock:lock_bill:create",
+  STOCK_LOCK_BILL_UPDATE: "stock:lock_bill:update",
+  STOCK_LOCK_BILL_VIEW: "stock:lock_bill:view",
+  STOCK_LOCK_BILL_DELETE: "stock:lock_bill:delete",
   /** ******************************* 微信小程序组件 *******************************************/
 
   /**
