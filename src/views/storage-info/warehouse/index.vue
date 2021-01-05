@@ -200,7 +200,7 @@ export default {
 
         this.totalCount = res.totalCount;
         _this.listData = records;
-        this.changeTableSort()
+        // this.changeTableSort()
       }).catch(err => {
         this.$message.error("数据请求失败" + err.message)
       });
@@ -225,8 +225,6 @@ export default {
       this.listData.sort((a, b) => {
         return (new Date(b.updateTime).getTime() - new Date(a.updateTime).getTime())
       })
-
-      console.log(this.listData)
     }
   },
   created() {
