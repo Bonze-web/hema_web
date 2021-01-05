@@ -87,14 +87,7 @@
                                 <div>物流中心:</div>
                                 <div>{{ warehouseInfo.dcName }}</div>
                             </el-col>
-                            <!-- <el-col :span="6" class="info-box">
-                                <div>货主:</div>
-                                <div></div>
-                            </el-col> -->
-                            <!-- <el-col :span="6" class="info-box">
-                                <div>上级类别:</div>
-                                <div>{{ warehouseInfo.parentName ? warehouseInfo.parentName : "&lt;空&gt;" }}</div>
-                            </el-col> -->
+
                             <el-col class="info-box">
                                 <div>备注:</div>
                                 <div>{{ warehouseInfo.remark ? warehouseInfo.remark : "&lt;空&gt;" }}</div>
@@ -103,7 +96,7 @@
 
                         <el-tab-pane label="操作日志" name="log">
                           <system-log modular="WAREHOUSE"></system-log>
-                        </el-tab-pane>\
+                        </el-tab-pane>
                     </el-tabs>
                 </template>
             </div>
@@ -272,7 +265,8 @@ export default {
         })
       },
       editCategory() {
-        this.status = "edit"
+        this.status = "edit";
+        this.tabActiveName = 'category'; // tab栏名称
         this.form = Object.assign(this.form, this.categoryInfo)
         console.log(this.form)
 

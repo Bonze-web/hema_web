@@ -1555,7 +1555,7 @@ const Delivery = {
             import('@/views/delivery/pickingProcess/edit'),
           hidden: true,
           meta: {
-            title: '查看损耗单',
+            title: '拣货流程详情',
             icon: 'table'
             // permission: PermIds.WMS_DECINVBILL_VIEW
           }
