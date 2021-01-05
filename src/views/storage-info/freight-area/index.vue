@@ -731,7 +731,7 @@ import PermIds from "@/api/permissionIds";
       const data = {
         page: 1,
         pageSize: 0,
-        statusEquals: 'OFF'
+        statusEquals: 'ON'
       }
       StorageService.warehouseInit(data)
       .then((res) => {
