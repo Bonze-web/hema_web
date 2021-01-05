@@ -2,8 +2,10 @@
     <div>
         <div class="head">
             <div class="head-title">
-                <div style="margin:8px">{{ '[' + dataList.lockerCode  +']' + dataList.lockerName  }}</div>
-                <div style="margin:11px 0 5px 0; font-size: 12px; color: #999">{{ dataList.status | setStatus }}</div>
+                <!-- <div style="margin:8px">{{ dataList.billNumber  }}</div>
+                <div style="margin:11px 0 5px 0; font-size: 12px; color: #999">{{ dataList.status | setStatus }}</div> -->
+                <div class="status">{{ dataList.status | setStatus }}</div>
+                <div style="margin:8px">{{ '锁定解锁单：' + dataList.billNumber }}</div>
             </div>
             <div>
               <!-- SAVED:已保存，AUDITED:已审核 -->
@@ -91,10 +93,10 @@
                     <el-tabs v-model="tabActiveName">
                         <el-tab-pane label="解锁锁定单" name="category">
                             <div class="info-title">基本信息</div>
-                            <el-col :span="6" class="info-box">
+                            <!-- <el-col :span="6" class="info-box">
                                 <div>单号:</div>
                                 <div>{{ dataList.billNumber }}</div>
-                            </el-col>
+                            </el-col> -->
                             <el-col :span="6" class="info-box">
                                 <div>锁定解锁类型:</div>
                                 <div>{{ dataList.billType | setBillType }}</div>
@@ -130,7 +132,14 @@
                               <!-- <el-table-column prop="lockBillNumber" label="解锁锁定单号" style="height: 20px"></el-table-column> -->
                               <el-table-column prop="productCode" label="商品编码" style="height: 20px"></el-table-column>
                               <el-table-column prop="productName" label="商品名称" style="height: 20px"></el-table-column>
-                              <el-table-column prop="binUsage" label="货位用途" style="height: 20px"></el-table-column>
+                              <!-- <el-table-column prop="binUsage" label="货位用途" style="height: 20px"></el-table-column> -->
+
+                              <el-table-column prop="inputTime" label="货位用途">
+                                <template slot-scope="scope">
+                                  {{ scope.row.binUsage | binUsage }}
+                                </template>
+                              </el-table-column>
+                              
                               <el-table-column prop="price" label="单价" style="height: 20px"></el-table-column>
                               <el-table-column prop="qpc" label="包装数量" style="height: 20px"></el-table-column>
                               <el-table-column prop="qty" label="数量" style="height: 20px"></el-table-column>
@@ -293,6 +302,42 @@ export default {
           default:
             return '未知';
         }
+      },
+      binUsage(type) {
+        switch (type) {
+          case "UNIFYRECEIVE":
+            return "统配收货暂存位"
+          case "PUTAWAY":
+            return "上架中转位"
+          case "PICK":
+            return "拣货位"
+          case "STORAGE":
+            return "存储位"
+          case "PICKSTORAGE":
+            return "拣货存储位"
+          case "UNIFYPICK":
+            return "统配拣货暂存位"
+          case "UNIFYCOLLECT":
+            return "统配集货存储位"
+          case "RPL":
+            return "补货暂存位"
+          case "TRANSFERRECEIVE":
+            return "中转收货暂存位"
+          case "TRANSFERCOLLECT":
+            return "中转集货暂存位"
+          case "DIRECTRECEIVE":
+            return "直通收货暂存位"
+          case "STORECROSSALLOCATE":
+            return "门店分拨位"
+          case "STORERTN":
+            return "门店退货收货暂存位"
+          case "VENDORRTN":
+            return "供应商退货位"
+          case "VENDORCOLLECT":
+            return "供应商集货位"
+          default:
+            return "未知"
+        }
       }
     }
 };
@@ -300,6 +345,13 @@ export default {
 
 <style lang="scss" scoped>
 @import "src/styles/mixin.scss";
+.status{
+  background: #008000;
+  border-radius: 8px;
+  padding: 4px;
+  height: 32px;
+  line-height: 26px;
+}
 .head{
     background: #fff;
     padding: 15px 12px;
@@ -325,6 +377,11 @@ export default {
 }
 .info-title{
     margin: 12px 0;
+    display: flex;
+    justify-content: space-between;
+}
+.list-count{
+    display: flex;
 }
 
 </style>

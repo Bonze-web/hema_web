@@ -1,6 +1,6 @@
 <template>
     <div class="table-index" style="background:#fff">
-        <div class="title">库存信息调整单</div>
+        <div class="title">新建锁定解锁单</div>
         <div class="">
             <el-form ref="form" style="display:flex;flex-wrap:wrap" :model="form" label-width="80px" label-position="right">
                 <el-form-item label="商品">

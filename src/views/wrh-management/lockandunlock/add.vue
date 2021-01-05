@@ -2,7 +2,7 @@
     <div>
         <div class="head">
             <div class="head-title">
-                <div style="margin:8px">新建货库存信息调整单</div>
+                <div style="margin:8px">新建锁定解锁单</div>
             </div>
             <div>
                 <el-button @click="back">取消</el-button>
