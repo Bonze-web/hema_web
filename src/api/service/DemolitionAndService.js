@@ -112,7 +112,7 @@ export default {
     return request.put('/wms/lock-bill', addStockLockBillDTO)
   },
   deleteStockLocjBill(opt) {
-    // 锁定解锁单  删除接口
+    // 锁定解锁单  作废接口
     return request.post('/wms/lock-bill/delete', opt)
   },
   nauditStockLocjBill(opt) {

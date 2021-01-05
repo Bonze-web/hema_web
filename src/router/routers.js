@@ -271,7 +271,30 @@ const BasicInfoPackage = {
           permission: PermIds.SYS_DC_CREATE
         }
       }]
-    }, {
+    },
+    {
+      path: "block",
+      name: "Block",
+      component: AModule,
+      meta: {
+        title: '区块',
+        icon: 'table'
+        // permission: PermIds.SYS_DC
+      },
+      children: [{
+        path: "",
+        name: "BlockView",
+        component: () =>
+          import('@/views/basic-info/block/index'),
+        hidden: true,
+        meta: {
+          title: '区块',
+          icon: 'table'
+          // permission: PermIds.SYS_DC_VIEW
+        }
+      }]
+    },
+    {
     path: "suppliers",
     name: "Suppliers",
     component: AModule,
@@ -1555,7 +1578,7 @@ const Delivery = {
             import('@/views/delivery/pickingProcess/edit'),
           hidden: true,
           meta: {
-            title: '查看损耗单',
+            title: '拣货流程详情',
             icon: 'table'
             // permission: PermIds.WMS_DECINVBILL_VIEW
           }

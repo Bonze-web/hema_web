@@ -3,38 +3,26 @@
     <div class="select-head">
       <el-form ref="form" style="display: flex;flex-wrap:wrap;" :model="form" label-width="90px" label-position="right" >
 
-        <el-form-item label="条码：">
-          <el-input type="text" placeholder="请输入条码" v-model="form.barCodeLikes" class="input-width" ></el-input>
+        <el-form-item label="区块代码：">
+          <el-input type="text" placeholder="请输入区块代码" v-model="form.barCodeLikes" class="input-width" ></el-input>
         </el-form-item>
 
-        <!-- 全部; IDLE 空闲; LOCKED 已锁定; USEING 已使用;ABORTED 已作废;  -->
-        <el-form-item label="状态：">
-          <el-select v-model="form.useStatusEquals" placeholder="请选择状态">
+        <el-form-item label="中心仓：">
+          <el-input type="text" placeholder="请输入中心仓" v-model="form.barCodeLikes" class="input-width" ></el-input>
+        </el-form-item>
+
+        <el-form-item label="网格仓：">
+          <el-input type="text" placeholder="请输入网格仓" v-model="form.barCodeLikes" class="input-width" ></el-input>
+        </el-form-item>
+
+        <el-form-item label="来源：">
+          <el-select v-model="form.useStatusEquals" placeholder="请选择来源">
             <el-option label="全部" value=""></el-option>
-            <el-option value="IDLE" label="空闲"></el-option>
-            <el-option value="LOCKED" label="已锁定"></el-option>
-            <el-option value="USEING" label="已使用"></el-option>
-            <el-option value="ABORTED" label="已作废"></el-option>
+            <el-option value="idle" label="空闲"></el-option>
+            <el-option value="locked" label="已锁定"></el-option>
+            <el-option value="receiving" label="收货中"></el-option>
+            <el-option value="rtnwrhreceiving" label="好退退仓收货中"></el-option>
           </el-select>
-        </el-form-item>
-
-        <el-form-item label="当前位置：">
-          <el-input type="text" placeholder="请输入当前位置" v-model="form.positionCodeOrNameEquals" class="input-width" ></el-input>
-        </el-form-item>
-
-        <!-- <el-form-item label="父容器：">
-          <el-input type="text" placeholder="请输入父容器" v-model="form.parentBarcodeLikes" class="input-width" ></el-input>
-        </el-form-item> -->
-
-        <el-form-item label="容器类型：">
-          <el-select v-model="form.containerTypeCodeEquals" placeholder="请选择容器类型">
-            <el-option label="全部" value=""></el-option>
-            <el-option v-for="(item, index) in containerType" :key="index" :label="item.name" :value="item.code"></el-option>
-          </el-select>
-        </el-form-item>
-
-        <el-form-item label="使用对象：">
-          <el-input type="text" placeholder="请输入使用对象" v-model="form.useNameOrCodeLikes" class="input-width" ></el-input>
         </el-form-item>
 
         <el-form-item>
@@ -47,17 +35,17 @@
     <div style="height: 20px" />
 
     <div style="background: #fff;">
-      <el-row>
+      <!-- <el-row>
         <router-link :to="{ path: '/basicinfo/container/add' }" >
           <el-button style="margin: 18px 10px" type="primary" size="mini" v-if="hasPermission(PermIds.WMS_CONTAINER_CREATE)">新建</el-button>
         </router-link>
 
         <el-button style="margin: 18px 10px" size="mini" @click="printingBtn" >打印</el-button>
-      </el-row>
+      </el-row> -->
 
 
       <el-table :data="listData" @selection-change="handleSelectionChange"  style="width: 100%; text-align: center" :row-style="{ height: '16px', padding: '-4px' }" >
-        <el-table-column prop="barcode" label="条码" style="height: 20px">
+        <el-table-column prop="barcode" label="区块代码" style="height: 20px">
           <template slot-scope="scope">
             <router-link style="color: #409eff" :to="{ path: '/basicinfo/container/edit', query:{ id: scope.row.id} }" >
               <span>{{ scope.row.barcode }}</span>
@@ -65,7 +53,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column prop="useStatus" label="容器类型" style="height: 20px">
+        <el-table-column prop="useStatus" label="网格仓" style="height: 20px">
           <template slot-scope="scope">
             <router-link style="color: #409eff" :to="{ path: '/basicinfo/containertype/edit', query:{ status: 'read', id: scope.row.containerTypeId} }">
               <span>{{ '[' + scope.row.containerTypeCode + ']' + scope.row.containerTypeName }}</span>
@@ -73,23 +61,17 @@
           </template>
         </el-table-column>
   
-        <el-table-column prop="scope" label="当前位置">
+        <el-table-column prop="scope" label="中心仓">
           <template slot-scope="scope">
             {{ scope.row.positionCode !== ' ' ? scope.row.positionCode : "&lt;空&gt;" }}
           </template>
         </el-table-column>
-        <el-table-column prop="scope" label="目标位置">
+        <el-table-column prop="scope" label="来源">
           <template slot-scope="scope">
             {{ scope.row.toPositionCode !== ' ' ? scope.row.toPositionCode : "&lt;空&gt;" }}
           </template>
         </el-table-column>
 
-        <el-table-column prop="scope" label="使用对象">
-          <template slot-scope="scope">
-            {{ scope.row.useId !== '0' ? scope.row.useId : "&lt;空&gt;" }}
-          </template>
-        </el-table-column>
-        
         <el-table-column prop="useStatus" label="状态">
           <template slot-scope="scope">
             {{ scope.row.useStatus | dcStatus }}
@@ -257,18 +239,15 @@ export default {
   },
   filters: {
     dcStatus(useStatus) {
-      // 全部; IDLE 空闲; LOCKED 已锁定; USEING 已使用;ABORTED 已作废; 
       const useStatu = useStatus.toLowerCase();
 
       switch (useStatu) {
-        case 'IDLE':
+        case 'idle':
           return "空闲"
-        case 'LOCKED':
+        case 'locked':
           return "已锁定"
-        case 'USEING':
-          return "已使用"
-        case 'ABORTED':
-          return "已作废"
+        case 'receiving':
+          return "收货中"
         default:
           return '未知';
       }
