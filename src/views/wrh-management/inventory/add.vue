@@ -1,10 +1,11 @@
 <template>
     <div>
         <div class="head">
-            <div style="margin-top:8px">新建盘点单</div>
+            <div style="margin-top:8px" v-if="status === 'create'">新建盘点单</div>
+            <div style="margin-top:8px" v-else>编辑盘点单</div>
             <div>
                 <el-button @click="back">取消</el-button>
-                <el-button type="primary" @click="editInventory" v-if="status === 'edit'">编辑</el-button>
+                <el-button type="primary" @click="editInventory" v-if="status === 'edit'">保存</el-button>
                 <el-button type="primary" @click="createInventory" v-if="status === 'create'">保存</el-button>
                 <el-button type="primary" @click="createInventoryAnd" v-if="status === 'create'">保存并创建</el-button>
             </div>
@@ -86,9 +87,9 @@
                             </el-form-item>
                           </el-col>
                       </el-row>
-                      <el-form-item label="备注">
+                      <!-- <el-form-item label="备注">
                           <textarea maxlength="200" v-model="form.remark"></textarea>
-                      </el-form-item>
+                      </el-form-item> -->
                   </el-form>      
                 </template>
             </div>

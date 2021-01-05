@@ -50,6 +50,13 @@ export default {
     getOverflowBillDetail(id) {
         return request.get('/wms/incinv/getDetail?id=' + id)
     },
+    putBillDetail(postData) {
+        return request.put('/stock-take-bill-item-check/updateQuantityById', postData)
+    },
+    stockDownload() {
+        return request.put('/stock-take-bill/download');
+    },
+    
     /**
      * 搜索报损人
      */

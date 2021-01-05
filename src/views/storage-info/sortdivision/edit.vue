@@ -93,7 +93,7 @@
                             </el-col>
                         </el-tab-pane>
                     <el-tab-pane label="操作日志" name="operational">
-                          <system-log :modular="'PICKAREA'"></system-log>
+                          <system-log :modular="'PICKAREA'" :id="$route.query.id"></system-log>
                     </el-tab-pane>
                     </el-tabs>
                 </template>

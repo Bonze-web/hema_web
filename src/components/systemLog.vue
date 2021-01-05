@@ -22,11 +22,12 @@ export default {
       logList: []
     };
   },
-  props: ["modular"],
+  props: ["modular", "id"],
   methods: {
     getSysLog() {
       const opts = {
-        module: this.modular
+        module: this.modular,
+        id: this.id
       };
       SysyemLogService.query(this.page, this.pageSize, opts)
         .then(res => {

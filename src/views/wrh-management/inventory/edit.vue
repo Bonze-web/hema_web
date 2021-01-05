@@ -174,7 +174,10 @@
                               </el-table-column>
                               <el-table-column prop="quantity" label="数量">
                                   <template slot-scope="scope">
-                                      <span>{{ scope.row.quantity}}</span>
+                                      <span v-if="statusNum === 'INPROGRESS'">
+                                          <el-input type='text' style="width: 70px;padding:0;" placeholder="修改数量" v-model="scope.row.quantity" class="input-width" @change="reviseNum(scope.row)"></el-input>
+                                      </span>
+                                      <span v-else>{{ scope.row.quantity }}</span>
                                   </template>
                               </el-table-column>
                               <el-table-column prop="quantityStr" label="件数">
@@ -211,7 +214,7 @@
                             </div>
                           </el-tab-pane>
                           <el-tab-pane label="操作日志" name="operational">
-                                <system-log :modular="'VENDORRETURNBILL'"></system-log>
+                                <system-log :modular="'ORDERBILL'"></system-log>
                           </el-tab-pane>
                     </el-tabs>
                 </template>
@@ -223,7 +226,7 @@
           </el-upload>
           <!-- <input type="file" @change="getFile($event)" accept=".xlsx"> -->
           <div style="padding-top: 20px;">
-            <el-link type="primary">下载模块</el-link>
+            <a style="color: #409EFF;" :href="stockDownload" download="checkLines.xlsx">点击下载模块</a>
           </div>
           <div slot="footer" class="dialog-footer">
             <el-button @click="Actual = false">取 消</el-button>
@@ -246,6 +249,7 @@ import {
 export default {
   data() {
       return {
+        stockDownload: '',
         form: {
           configure: []
         },
@@ -271,10 +275,20 @@ export default {
         fileList: [],
         storageList: [],
         // PermIds: PermIds,
-        checkUrl: ''
+        checkUrl: '',
+        statusNum: ''
       }
     },
     methods: {
+      reviseNum(numObj) {
+        InventoryService.putBillDetail(numObj)
+        .then((res) => {
+          this.$message.success("修改数量成功");
+          this.getDetail();
+        }).catch((err) => {
+          this.$message.error("修改数量失败" + err.message)
+        })
+      },
       handleSuccess() {
         this.$message.success("上传成功");
       },
@@ -364,7 +378,7 @@ export default {
       editSupplierEnd() {
         InventoryService.closeInventory(this.id)
         .then((res) => {
-          this.inventoryStatus = "start";
+          this.inventoryStatus = "null";
           this.$message.success("结束盘点");
         }).catch((err) => {
           this.$message.error("结束盘点失败" + err.message)
@@ -373,6 +387,7 @@ export default {
       spoilageChange() {
         InventoryService.updateOverflowBill(this.id)
         .then((res) => {
+          this.inventoryStatus = "null";
           this.$message.success("转为损耗单成功");
         }).catch((err) => {
           this.$message.error("转为损耗单失败" + err.message)
@@ -381,6 +396,7 @@ export default {
       moveChange() {
         InventoryService.updatemove(this.id)
         .then((res) => {
+          this.inventoryStatus = "null";
           this.$message.success("转为移库单成功");
         }).catch((err) => {
           this.$message.error("转为移库单失败" + err.message)
@@ -452,6 +468,7 @@ export default {
         // ]
         InventoryService.getLossBillDetail(this.id)
         .then((res) => {
+          this.statusNum = res.status;
           if (res.status === 'INITIAL') {
             this.inventoryStatus = "start";
           } else if (res.status === 'INPROGRESS') {
@@ -468,6 +485,12 @@ export default {
       }
     },
     created() {
+      InventoryService.stockDownload()
+      .then((res) => {
+        this.stockDownload = res;
+      }).catch((err) => {
+        this.$message.error("获取链接失败" + err.message)
+      })
       this.id = this.$route.query.id;
       this.getDetail();
     },
@@ -681,7 +704,10 @@ export default {
 /deep/ .el-transfer__buttons {
   padding: 0 10px;
 }
-
+/deep/ .el-input__inner {
+  padding:0;
+  text-align: center;
+}
 
 .shuttle-box {
   margin-top: -10vh !important;

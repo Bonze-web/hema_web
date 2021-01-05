@@ -177,19 +177,19 @@
           </div>
         </el-dialog>
         <el-dialog title="拣货顺序方案" :visible.sync="editProjects">
-          <el-form :model="editProjectsInfo">
+          <el-form :model="editProjectsObj">
             <el-form-item label="方案代码" :label-width="formLabelWidth">
-              <el-input v-model="editProjectsInfo.code" autocomplete="off"></el-input>
+              <el-input v-model="editProjectsObj.code" autocomplete="off"></el-input>
             </el-form-item>
               <el-form-item label="方案名称" :label-width="formLabelWidth">
-              <el-input v-model="editProjectsInfo.name" autocomplete="off"></el-input>
+              <el-input v-model="editProjectsObj.name" autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item label="备注" :label-width="formLabelWidth">
               <el-input
                 type="textarea"
                 :autosize="{ minRows: 2, maxRows: 4}"
                 placeholder="请输入内容"
-                v-model="editProjectsInfo.remark">
+                v-model="editProjectsObj.remark">
               </el-input>
             </el-form-item>
           </el-form>
@@ -226,16 +226,16 @@
           </div>
         </el-dialog>
         <el-dialog title="编辑门店组" :visible.sync="editStore">
-          <el-form :model="editStoreInfo">
+          <el-form :model="editStoreObj">
             <el-form-item label="代码" :label-width="formLabelWidth">
-              <el-input v-model="editStoreInfo.code" autocomplete="off"></el-input>
+              <el-input v-model="editStoreObj.code" autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item label="名称" :label-width="formLabelWidth">
-              <el-input v-model="editStoreInfo.name" autocomplete="off"></el-input>
+              <el-input v-model="editStoreObj.name" autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item label="拣货顺序方案" :label-width="formLabelWidth">
               <div>
-                {{ editStoreInfo.getByIdMes }}
+                {{ editStoreObj.getByIdMes }}
               </div>
             </el-form-item>
             <el-form-item label="备注" :label-width="formLabelWidth">
@@ -243,7 +243,7 @@
                 type="textarea"
                 :autosize="{ minRows: 2, maxRows: 4}"
                 placeholder="请输入内容"
-                v-model="editStoreInfo.remark">
+                v-model="editStoreObj.remark">
               </el-input>
             </el-form-item>
           </el-form>
@@ -341,6 +341,18 @@ import systemLog from "@/components/systemLog.vue"
 export default {
   data() {
       return {
+        editProjectsObj: {
+          code: '',
+          name: '',
+          remark: '',
+          status: ''
+        },
+        editStoreObj: {
+          code: '',
+          name: '',
+          remark: '',
+          status: ''
+        },
         headerSchemeOneFlag: 0,
         mySelfPage: 1,
         mySelfPageSize: 10,
@@ -532,7 +544,9 @@ export default {
    },
    editProjectsChange(obj) {
     this.editProjects = true;
-    this.editProjectsInfo = obj;
+    for (const k in obj) {
+      this.editProjectsObj[k] = obj[k];
+    }
    },
    deleteGroupChange(obj) {
      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
@@ -577,6 +591,7 @@ export default {
    },
    submitEditPro() {
       this.editProjects = false;
+      this.editProjectsInfo = this.editProjectsObj;
       CargosequenceService.updateScheme(this.editProjectsInfo)
       .then((res) => {
         this.$message.success("修改成功");
@@ -611,11 +626,15 @@ export default {
    },
     editStoreChange(obj, schemeOpt) {
     this.editStore = true;
-    this.editStoreInfo = obj;
-    this.editStoreInfo.getByIdMes = '[' + schemeOpt.schemeList.code + ']' + schemeOpt.schemeList.name;
+    for (const k in obj) {
+      this.editStoreObj[k] = obj[k];
+    }
+    // this.editStoreInfo = obj;
+    this.editStoreObj.getByIdMes = '[' + schemeOpt.schemeList.code + ']' + schemeOpt.schemeList.name;
    },
    submitEditStoreChange() {
      this.editStore = false;
+     this.editStoreInfo = this.editStoreObj;
      CargosequenceService.updateGrpScheme(this.editStoreInfo)
       .then((res) => {
         this.$message.success("修改成功");

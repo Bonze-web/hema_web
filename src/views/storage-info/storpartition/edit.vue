@@ -69,7 +69,7 @@
                             </el-col>
                         </el-tab-pane>
                         <el-tab-pane label="操作日志" name="operational">
-                            <system-log :modular="'STORAGEAREA'"></system-log>
+                            <system-log :modular="'STORAGEAREA'" :id="id"></system-log>
                         </el-tab-pane>
                     </el-tabs>
                 </template>

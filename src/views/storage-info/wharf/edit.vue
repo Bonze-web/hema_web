@@ -85,7 +85,7 @@
                             </el-col>
                         </el-tab-pane>
                         <el-tab-pane label="操作日志" name="operational">
-                          <system-log :modular="'DOCK'"></system-log>
+                          <system-log :modular="'DOCK'" :id="id"></system-log>
                         </el-tab-pane>
                     </el-tabs>
                 </template>
@@ -173,7 +173,6 @@ export default {
         if (this.status === 'read') {
           // 如果是编辑的话,还要将id传递过来
           this.id = this.$route.query.id;
-          console.log(this.id);
           this.getSuppliers(this.id)
         }
       },

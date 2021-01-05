@@ -193,42 +193,6 @@ export default {
       return datetime;
     },
     getBillList: function() {
-      // const _this = this
-      // _this.lossBill = [
-      //   {
-      //     "billNumber": "string",
-      //     "binRange": "string",
-      //     "binUsage": "string",
-      //     "createTime": "2020-12-31T08:56:09.001Z",
-      //     "creatorName": "string",
-      //     "id": "string",
-      //     "operationMode": "string",
-      //     "planDate": "string",
-      //     "realDefaultQuantity": "string",
-      //     "status": "string",
-      //     "takeSchema": "string",
-      //     "updateTime": "2020-12-31T08:56:09.001Z",
-      //     "updatorName": "string",
-      //     "version": "string"
-      //   },
-      //   {
-      //     "billNumber": "string",
-      //     "binRange": "string",
-      //     "binUsage": "string",
-      //     "createTime": "2020-12-31T08:56:09.001Z",
-      //     "creatorName": "string",
-      //     "id": "string",
-      //     "operationMode": "string",
-      //     "planDate": "string",
-      //     "realDefaultQuantity": "string",
-      //     "status": "string",
-      //     "takeSchema": "string",
-      //     "updateTime": "2020-12-31T08:56:09.001Z",
-      //     "updatorName": "string",
-      //     "version": "string"
-      //   }
-      // ];
-      // _this.totalCount = 10;
       const _this = this
       _this.form.page = 1
       _this.form.pageSize = 10;
@@ -236,6 +200,7 @@ export default {
       _this.form.planDateEnd = _this.geshiChange(_this.form.planDate[1]);
       InventoryService.getBillList(_this.form)
       .then((res) => {
+        console.log(res);
         _this.lossBill = res.records;
         _this.totalCount = res.totalCount;
       })
