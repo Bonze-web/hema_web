@@ -26,15 +26,6 @@ const actions = {
     deleteSelection({ commit }, index) {
         commit('DELETE_SELECTION', index)
     }
-    // addMove({ commit }, list) {
-    //     commit('ADD_MOVE', list)
-    // },
-    // clearMove({ commit }, list) {
-    //     commit('CLEAR_MOVE', list)
-    // },
-    // deleteMove({ commit }, index) {
-    //     commit('DELETE_MOVE', index)
-    // }
 }
 
 export default {

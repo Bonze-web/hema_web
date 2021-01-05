@@ -36,7 +36,7 @@
             <div>
                 <template>
                     <el-tabs v-model="tabActiveName" @tab-click="tabClick">
-                        <el-tab-pane label="仓库" name="category">
+                        <el-tab-pane label="仓区" name="category">
                             <div class="info-title">基本信息</div>
                             <el-form :model="form" :rules="createRules" ref="form" label-width="100px" class="demo-ruleForm">
                                 <el-row :gutter="20">
@@ -73,7 +73,7 @@
             <div>
                 <template>
                     <el-tabs v-model="tabActiveName" @tab-click="tabClick">
-                        <el-tab-pane label="商品类别" name="category">
+                        <el-tab-pane label="仓区" name="category">
                             <div class="info-title">基本信息</div>
                             <el-col :span="6" class="info-box">
                                 <div>代码:</div>
@@ -127,7 +127,7 @@ export default {
         parentList: [], // 父级类别列表
         level: "one", // 新建类别级别
         status: '', // 页面状态
-        id: '', // 商品类别ID
+        id: '', // 仓区ID
         tabActiveName: 'category', // tab栏名称
         form: {
           code: '',
@@ -137,7 +137,7 @@ export default {
         },
         page: 0,
         pageSize: 10,
-        warehouseInfo: {}, // 仓库信息
+        warehouseInfo: {}, // 仓区信息
         createRules: {
           code: [
             { required: true, message: '请输入类别代码', trigger: 'blur' },
@@ -170,9 +170,9 @@ export default {
         this.$router.go(-1)
       },
       statusChange: function() {
-        // 修改仓库状态
+        // 修改仓区状态
         const _this = this;
-        this.$confirm('此操作将改变仓库状态，是否继续?', '提示', {
+        this.$confirm('此操作将改变仓区状态，是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -221,7 +221,7 @@ export default {
         .then((res) => {
           console.log(res)
           this.warehouseInfo = res;
-          // 根据状态修改仓库开启switch
+          // 根据状态修改仓区开启switch
           // if (this.warehouseInfo.status === "ON") {
           //   this.warehouseInfo.status = true
           // } else {
