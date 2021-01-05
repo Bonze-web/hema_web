@@ -149,7 +149,7 @@ export default {
             _this.warehouseInit();
           })
           .catch((err) => {
-            _this.$message.error("禁用失败" + err)
+            _this.$message.error("禁用失败" + err.message)
             _this.warehouseInit();
           })
         } else {
@@ -160,7 +160,7 @@ export default {
             _this.warehouseInit();
           })
           .catch((err) => {
-            _this.$message.error("启用失败" + err)
+            _this.$message.error("启用失败" + err.message)
             _this.warehouseInit();
           })
         }
@@ -202,7 +202,7 @@ export default {
         _this.listData = records;
         // this.changeTableSort()
       }).catch(err => {
-        this.$message.error("数据请求失败" + err.message)
+        this.$message.error("数据请求失败" + err.message.message)
       });
     },
     handleCurrentChange: function(e) {
