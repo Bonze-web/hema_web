@@ -258,7 +258,7 @@
                         </el-tab-pane>
                         <!-- <el-tab-pane label="配送中心范围" name="range">配置管理</el-tab-pane> -->
                         <el-tab-pane label="操作日志" name="log">
-                          <system-log modular="CONTAINERTYPE"></system-log>
+                          <system-log modular="CONTAINERTYPE" :id="id"></system-log>
                         </el-tab-pane>
                     </el-tabs>
                 </template>
@@ -484,18 +484,18 @@ export default {
               } else {
                 this.form.status = "OFF"
               }
-              if (!(this.form.inlength <= this.form.outlength)) {
-                  this.$message.error('容器内长需要小于等于外长，请检查')
-                  return
-                }
-                if (!(this.form.inwidth <= this.form.outwidth)) {
-                  this.$message.error('容器内宽需要小于等于外宽，请检查')
-                  return
-                }
-                if (!(this.form.inheight <= this.form.outheight)) {
-                  this.$message.error('容器内高需要小于等于外高，请检查')
-                  return
-                }
+              if (!(Number(this.form.inlength) <= Number(this.form.outlength))) {
+                this.$message.error('容器内长需要小于等于外长，请检查')
+                return
+              }
+              if (!(Number(this.form.inwidth) <= Number(this.form.outwidth))) {
+                this.$message.error('容器内宽需要小于等于外宽，请检查')
+                return
+              }
+              if (!(Number(this.form.inheight) <= Number(this.form.outheight))) {
+                this.$message.error('容器内高需要小于等于外高，请检查')
+                return
+              }
               BasicService.updateContainerType(this.form)
               .then(res => {
                 console.log(res)

@@ -320,15 +320,15 @@ export default {
         this.$refs.form.validate(valid => {
           if (valid) {
             if (this.status === 'create') {
-              if (!(this.form.inlength <= this.form.outlength)) {
+              if (!(Number(this.form.inlength) <= Number(this.form.outlength))) {
                 this.$message.error('容器内长需要小于等于外长，请检查')
                 return
               }
-              if (!(this.form.inwidth <= this.form.outwidth)) {
+              if (!(Number(this.form.inwidth) <= Number(this.form.outwidth))) {
                 this.$message.error('容器内宽需要小于等于外宽，请检查')
                 return
               }
-              if (!(this.form.inheight <= this.form.outheight)) {
+              if (!(Number(this.form.inheight) <= Number(this.form.outheight))) {
                 this.$message.error('容器内高需要小于等于外高，请检查')
                 return
               }

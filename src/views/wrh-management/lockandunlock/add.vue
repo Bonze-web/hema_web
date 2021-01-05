@@ -21,7 +21,7 @@
                               <el-row :gutter="20">
                                   <el-col :span="6" class="info-box">
                                       <el-form-item label="锁定解锁员" prop="lockerIndex">
-                                          <el-select v-model="form.lockerIndex" filterable remote :remote-method="getUsers" placeholder="请输入锁定解锁名称">
+                                          <el-select v-model="form.lockerIndex" filterable remote :remote-method="getUsers" placeholder="请输入锁定解锁员">
                                             <el-option v-for="(item, index) in restaurants" :key="item.id" :label="item.username" :value="index"></el-option>
                                           </el-select>
                                       </el-form-item>

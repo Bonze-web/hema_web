@@ -3,52 +3,23 @@
     <div class="select-head">
       <el-form ref="form" style="display: flex;flex-wrap:wrap;" :model="form" label-width="90px" label-position="right" >
 
-        <el-form-item label="条码：">
-          <el-input type="text" placeholder="请输入条码" v-model="form.barCodeLikes" class="input-width" ></el-input>
+        <el-form-item label="单号：">
+          <el-input type="text" placeholder="请输入单号" v-model="form.billNumber" class="input-width" ></el-input>
         </el-form-item>
 
+        <el-form-item label="波次单号：">
+          <el-input type="text" placeholder="请输入波次单号" v-model="form.waveBillNumber" class="input-width" ></el-input>
+        </el-form-item>
+
+        <!-- 状态 INITIAL: 初始, LOCKED: 已占货, PICKING：拣货中，FINISHED: 已完成 -->
         <el-form-item label="状态：">
-          <el-select v-model="form.useStatusEquals" placeholder="请选择状态">
+          <el-select v-model="form.status" placeholder="请选择状态">
             <el-option label="全部" value=""></el-option>
-            <el-option value="idle" label="空闲"></el-option>
-            <el-option value="locked" label="已锁定"></el-option>
-            <el-option value="receiving" label="收货中"></el-option>
-            <el-option value="rtnwrhreceiving" label="好退退仓收货中"></el-option>
-            <el-option value="rtnvendorreceiving" label="返厂退仓收货中"></el-option>
-            <el-option value="moving" label="平移中"></el-option>
-            <el-option value="allocating" label="分播中"></el-option>
-            <el-option value="putawaying" label="上架中"></el-option>
-            <el-option value="rtnputawaying" label="退仓上架中"></el-option>
-            <el-option value="mergering" label="拆并中"></el-option>
-            <el-option value="shifting" label="移库中"></el-option>
-            <el-option value="aborted" label="已作废"></el-option>
-            <el-option value="stacontainermovelocked" label="移库锁定"></el-option>
-            <el-option value="USING" label="已使用"></el-option>
-            <el-option value="pickuping" label="拣货中"></el-option>
-            <el-option value="handovering" label="交接中"></el-option>
-            <el-option value="shiping" label="装车中"></el-option>
-            <el-option value="shiped" label="已装车"></el-option>
-            <el-option value="instore" label="在门店"></el-option>
+            <el-option value="INITIAL" label="初始"></el-option>
+            <el-option value="LOCKED" label="已占货"></el-option>
+            <el-option value="PICKING" label="拣货中"></el-option>
+            <el-option value="FINISHED" label="已完成"></el-option>
           </el-select>
-        </el-form-item>
-
-        <el-form-item label="当前位置：">
-          <el-input type="text" placeholder="请输入当前位置" v-model="form.positionCodeOrNameEquals" class="input-width" ></el-input>
-        </el-form-item>
-
-        <!-- <el-form-item label="父容器：">
-          <el-input type="text" placeholder="请输入父容器" v-model="form.parentBarcodeLikes" class="input-width" ></el-input>
-        </el-form-item> -->
-
-        <el-form-item label="容器类型：">
-          <el-select v-model="form.containerTypeCodeEquals" placeholder="请选择容器类型">
-            <el-option label="全部" value=""></el-option>
-            <el-option v-for="(item, index) in containerType" :key="index" :label="item.name" :value="item.code"></el-option>
-          </el-select>
-        </el-form-item>
-
-        <el-form-item label="使用对象：">
-          <el-input type="text" placeholder="请输入使用对象" v-model="form.useNameOrCodeLikes" class="input-width" ></el-input>
         </el-form-item>
 
         <el-form-item>
@@ -62,53 +33,59 @@
 
     <div style="background: #fff;">
       <el-row>
-        <router-link :to="{ path: '/basicinfo/container/add' }" >
+        <!-- <router-link :to="{ path: '/basicinfo/container/add' }" >
           <el-button style="margin: 18px 10px" type="primary" size="mini" v-if="hasPermission(PermIds.WMS_CONTAINER_CREATE)">新建</el-button>
-        </router-link>
+        </router-link> -->
 
-        <el-button style="margin: 18px 10px" size="mini" @click="printingBtn" >打印</el-button>
+        <!-- <el-button style="margin: 18px 10px" size="mini" @click="printingBtn" >打印</el-button> -->
       </el-row>
 
 
       <el-table :data="listData" @selection-change="handleSelectionChange"  style="width: 100%; text-align: center" :row-style="{ height: '16px', padding: '-4px' }" >
-        <el-table-column prop="barcode" label="条码" style="height: 20px">
+        <el-table-column prop="scope" label="单号">
           <template slot-scope="scope">
-            <router-link style="color: #409eff" :to="{ path: '/basicinfo/container/edit', query:{ id: scope.row.id} }" >
-              <span>{{ scope.row.barcode }}</span>
+            <router-link style="color: #409eff" :to="{ path: '/delivery/pickingProcess/edit', query:{ id: scope.row.id} }" >
+              <span>{{ scope.row.billNumber }}333333</span>
             </router-link>
           </template>
         </el-table-column>
 
-        <el-table-column prop="useStatus" label="容器类型" style="height: 20px">
+        <el-table-column prop="scope" label="业务类型">
           <template slot-scope="scope">
-            <router-link style="color: #409eff" :to="{ path: '/basicinfo/containertype/edit', query:{ status: 'read', id: scope.row.containerTypeId} }">
-              <span>{{ '[' + scope.row.containerTypeCode + ']' + scope.row.containerTypeName }}</span>
-            </router-link>
+            {{ scope.row.bizType | setBizType }}
+          </template>
+        </el-table-column>
+
+
+        <el-table-column prop="finishTime" label="完成时间" style="height: 20px"></el-table-column>
+        <el-table-column prop="frontDcName" label="网络仓" style="height: 20px"></el-table-column>
+        <el-table-column prop="lockTime" label="暂用存库时间" style="height: 20px"></el-table-column>
+        
+        <el-table-column prop="scope" label="拣货方法">
+          <template slot-scope="scope">
+            {{ scope.row.pickType | setPickType }}
+          </template>
+        </el-table-column>
+
+        <el-table-column prop="pickUserName" label="拣货人" style="height: 20px"></el-table-column>
+
+        <el-table-column prop="scope" label="拣货类型">
+          <template slot-scope="scope">
+            {{ scope.row.type | setType }}
+          </template>
+        </el-table-column>
+
+        <el-table-column prop="scope" label="状态">
+          <template slot-scope="scope">
+            {{ scope.row.status | setStatus }}
           </template>
         </el-table-column>
   
-        <el-table-column prop="scope" label="当前位置">
+        <!-- <el-table-column prop="scope" label="XX">
           <template slot-scope="scope">
-            {{ scope.row.positionCode !== ' ' ? scope.row.positionCode : "&lt;空&gt;" }}
+            {{ scope.row.XX !== ' ' ? scope.row.XX : "&lt;空&gt;" }}
           </template>
-        </el-table-column>
-        <el-table-column prop="scope" label="目标位置">
-          <template slot-scope="scope">
-            {{ scope.row.toPositionCode !== ' ' ? scope.row.toPositionCode : "&lt;空&gt;" }}
-          </template>
-        </el-table-column>
-
-        <el-table-column prop="scope" label="使用对象">
-          <template slot-scope="scope">
-            {{ scope.row.useId !== '0' ? scope.row.useId : "&lt;空&gt;" }}
-          </template>
-        </el-table-column>
-        
-        <el-table-column prop="useStatus" label="状态">
-          <template slot-scope="scope">
-            {{ scope.row.useStatus | dcStatus }}
-          </template>
-        </el-table-column>
+        </el-table-column> -->
 
       </el-table>
 
@@ -127,23 +104,20 @@
 </template>
 
 <script>
-import BasicService from "@/api/service/BasicService";
+import DeliveryService from "@/api/service/DeliveryService";
 import PermIds from "@/api/permissionIds";
 import { mapGetters } from "vuex";
 
 export default {
   data() {
-    return {
+    return {    
       PermIds: PermIds,
-      listData: [], // 列表数据
+      listData: [{}], // 列表数据
       containerType: [], // 容器类型
       form: {
-        barCodeLikes: '', // 条码
-        useStatusEquals: '', // 状态
-        positionCodeOrNameEquals: '', // 当前位置
-        // parentBarcodeLikes: '', // 父容器
-        containerTypeCodeEquals: '', // 容器类型code值
-        useNameOrCodeLikes: '' // 使用对象名称或者代码的值
+        billNumber: '', // 单号
+        waveBillNumber: '', // 波次单号
+        status: '' // 状态
       },
       page: 1,
       pageSize: 10,
@@ -163,46 +137,20 @@ export default {
 
       this.$refs.form.validate((result) => {
         if (result) {
-          _this.quertOcntainer();
+          _this.pickBill();
         }
       });
     },
-    // deleteWmsBintype: function(id, version) {
-    //   // 删除
-    //   // const _this = this;
-    //   this.$confirm('此操作将删除货位，是否继续?', '提示', {
-    //     confirmButtonText: '确定',
-    //     cancelButtonText: '取消',
-    //     type: 'warning'
-    //   }).then(() => {
-    //     // BasicService.deleteWmsBintype(id, version)
-    //     // .then(res => {
-    //     //   this.$message.success("删除成功")
-    //     //   _this.quertOcntainer()
-    //     // })
-    //     // .catch(err => {
-    //     //   this.$message.error("删除失败" + err.message)
-    //     // })
-    //   }).catch(() => {
-    //     this.$message({
-    //       type: 'info',
-    //       message: '已取消'
-    //     })        
-    //   })
-    // },
     clearInput: function() {
       this.form = {
-        barCodeLikes: '',
-        useStatusEquals: '',
-        positionCodeOrNameEquals: '',
-        // parentBarcodeLikes: '',
-        containerTypeCodeEquals: '',
-        useNameOrCodeLikes: ''
+        billNumber: '', // 单号
+        waveBillNumber: '', // 波次单号
+        status: '' // 状态
       };
 
-      this.quertOcntainer();
+      this.pickBill();
     },
-    quertOcntainer: function() {
+    pickBill: function() {
       // 获取容器列表
       this.suppliersData = []
 
@@ -211,16 +159,13 @@ export default {
       const data = {
         page: this.page,
         pageSize: this.pageSize,
-        barCodeLikes: this.form.barCodeLikes,
-        useStatusEquals: this.form.useStatusEquals.toUpperCase(),
-        positionCodeOrNameEquals: this.form.positionCodeOrNameEquals,
-        // parentBarcodeLikes: this.form.parentBarcodeLikes,
-        containerTypeCodeEquals: this.form.containerTypeCodeEquals,
-        useNameOrCodeLikes: this.form.useNameOrCodeLikes,
+        billNumber: this.form.billNumber, // 单号
+        waveBillNumber: this.form.waveBillNumber, // 波次单号
+        status: this.form.status ? this.form.status : null, // 状态
         searchCount: true
       };
 
-      BasicService.quertOcntainer(data).then((res) => {
+      DeliveryService.pickBill(data).then((res) => {
         const records = res.records;
 
         this.totalCount = res.totalCount;
@@ -234,84 +179,73 @@ export default {
     },
     handleCurrentChange: function(e) {
       this.page = Number(e);
-      this.quertOcntainer(true);
+      this.pickBill(true);
     },
     handleSizeChange: function(e) {
       this.pageSize = Number(e);
       this.page = 1;
-      this.quertOcntainer(true);
-    },
-    getContainerType: function() {
-      // 获取容器类型
-      BasicService.getContainerTypeList({
-        page: 1,
-        pageSize: 0,
-        statusEquals: 'ON'
-      })
-      .then(res => {
-        this.containerType = res.records
-      })
-      .catch(err => {
-        this.$message.error("获取容器类型失败" + err.message)
-      })
+      this.pickBill(true);
     },
     printingBtn() {
       this.$message.error("打印功能还未开通")
     }
   },
   created() {
-    this.quertOcntainer();
-    this.getContainerType() // 获容器类型
+    // this.pickBill();
   },
   beforeRouteEnter(to, from, next) {
     next(vm => {
       // 通过 `vm` 访问组件实例
-      vm.quertOcntainer(0);
+      // vm.pickBill();
     })
   },
   filters: {
-    dcStatus(useStatus) {
-      const useStatu = useStatus.toLowerCase();
-
-      switch (useStatu) {
-        case 'idle':
-          return "空闲"
-        case 'locked':
-          return "已锁定"
-        case 'receiving':
-          return "收货中"
-        case 'rtnwrhreceiving':
-          return "好退退仓收货中"
-        case 'rtnvendorreceiving':
-          return "返厂退仓收货中"
-        case 'moving':
-          return "平移中"
-        case 'allocating':
-          return "分播中"
-        case 'putawaying':
-          return "上架中"
-        case 'rtnputawaying':
-          return "退仓上架中"
-        case 'mergering':
-          return "拆并中"
-        case 'shifting':
-          return "移库中"
-        case 'aborted':
-          return "已作废"
-        case 'stacontainermovelocked':
-          return "移库锁定"
-        case 'using':
-          return "已使用"
-        case 'pickuping':
+    setBizType(type) {
+      // 业务类型。取值：DIST：配货；RETURN：退供应商
+      switch (type) {
+        case 'DIST':
+          return "配货"
+        case 'RETURN':
+          return "退供应商"
+        default:
+          return '未知';
+      }
+    },
+    setPickType(type) {
+      // ‘拣货方法，RF：RF ，BILL：拣货单’
+      switch (type) {
+        case 'RF':
+          return "RF"
+        case 'BILL':
+          return "拣货单"
+        default:
+          return '未知';
+      }
+    },
+    setStatus(type) {
+      // 状态 INITIAL: 初始, LOCKED: 已占货, PICKING：拣货中，FINISHED: 已完成
+      switch (type) {
+        case 'INITIAL':
+          return "初始"
+        case 'LOCKED':
+          return "已占货"
+        case 'PICKING':
           return "拣货中"
-        case 'handovering':
-          return "交接中"
-        case 'shiping':
-          return "装车中"
-        case 'shiped':
-          return "已装车"
-        case 'instore':
-          return "在门店"
+        case 'FINISHED':
+          return "已完成"
+        default:
+          return '未知';
+      }
+    },
+    setType(type) {
+      // 拣货类型，PALLET：整托 ，CASE：整件 ，SPLIT：拆零
+      switch (type) {
+        case 'PALLET':
+          return "整托"
+        case 'CASE':
+          return "整件"
+        case 'SPLIT':
+          return "拆零"
         default:
           return '未知';
       }

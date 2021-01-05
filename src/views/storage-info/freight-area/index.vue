@@ -5,7 +5,7 @@
       <el-form ref="form" style="display: flex" :model="form" label-width="10px" label-position="right" >
 
         <el-form-item>
-          <el-input placeholder="请输入货区/货道/货架/货位的编号" v-model="form.keyword">
+          <el-input clearable style="width: 300px" placeholder="请输入货区/货道/货架/货位编号" v-model="form.keyword">
             <i slot="prefix" class="el-input__icon el-icon-search"></i>
           </el-input>
         </el-form-item>
@@ -36,7 +36,9 @@
       :props="props"
       :load="loadNode">
       <span class="custom-tree-node" slot-scope="{ node, data }">
-        <span style="width: 200px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">{{ node.label }}</span>
+        <span style="width: 200px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">
+          {{ node.label }}
+        </span>
         <span class="tree-content">
           <div class="content-info">
             <div class="tree-box" v-if="node.level === 1">
@@ -547,7 +549,7 @@ import PermIds from "@/api/permissionIds";
             resolve([])
           } else {
             res.records.forEach((item) => {
-              item.label = item.code
+              item.label = '货道' + item.code
             })
             resolve(res.records)
           }
@@ -569,7 +571,7 @@ import PermIds from "@/api/permissionIds";
             resolve([])
           } else {
             res.records.forEach((item) => {
-              item.label = item.code
+              item.label = '货架' + item.code
             })
             resolve(res.records)
           }
@@ -591,7 +593,7 @@ import PermIds from "@/api/permissionIds";
             resolve([])
           } else {
             res.records.forEach((item) => {
-              item.label = item.code
+              item.label = '货位' + item.code
               item.isLeaf = true
             })
             resolve(res.records)
@@ -614,7 +616,7 @@ import PermIds from "@/api/permissionIds";
         for (const item in res.records) {
           const obj = {
             id: res.records[item].id,
-            label: '[' + res.records[item].code + ']' + res.records[item].name,
+            label: '[' + '货区' + res.records[item].code + ']' + res.records[item].name,
             code: res.records[item].code,
             name: res.records[item].name,
             wrhName: res.records[item].name,

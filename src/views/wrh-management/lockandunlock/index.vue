@@ -46,7 +46,7 @@
         </router-link>
 
         <el-button style="margin: 18px 10px" size="mini" @click="adopt" v-if="hasPermission(PermIds.STOCK_LOCK_BILL_UPDATE)">审核通过</el-button>
-        <el-button style="margin: 18px 10px" size="mini" @click="toVoid" v-if="hasPermission(PermIds.STOCK_LOCK_BILL_DELETE)" >删除</el-button>
+        <el-button style="margin: 18px 10px" size="mini" @click="toVoid" v-if="hasPermission(PermIds.STOCK_LOCK_BILL_DELETE)" >作废</el-button>
       </el-row>
 
 
@@ -220,7 +220,7 @@ export default {
       })
     },
     toVoid() {
-      // 删除
+      // 作废
       if (this.activeArr.length === 0) return;
 
       const stockLockBillAuditFilter = {
@@ -231,7 +231,7 @@ export default {
         stockLockBillAuditFilter.ids.push(item.id)
       })
 
-      this.$confirm('是否删除锁定解锁单?', '提示', {
+      this.$confirm('是否作废锁定解锁单?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -242,7 +242,7 @@ export default {
           this.stockLocjBill();
         })
         .catch(err => {
-          this.$message.error("删除失败" + err.message)
+          this.$message.error("作废失败" + err.message)
         });
       }).catch(() => {
         this.$message({

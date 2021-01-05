@@ -10,8 +10,8 @@
             <div>
               <!-- SAVED:已保存，AUDITED:已审核 -->
                 <el-button @click="back">返回</el-button>
-                <el-button type="primary" v-if="dataList.status === 'SAVED' || hasPermission(PermIds.STOCK_LOCK_BILL_UPDATE)" @click="esaminareBtn">审核通过</el-button>
-                <el-button type="primary" v-if="dataList.status === 'SAVED' || hasPermission(PermIds.STOCK_LOCK_BILL_DELETE)" @click="deleteBtn">删除</el-button>
+                <el-button type="primary" v-show="dataList.status === 'SAVED'" v-if="hasPermission(PermIds.STOCK_LOCK_BILL_UPDATE)" @click="esaminareBtn">审核通过</el-button>
+                <el-button type="primary" v-show="dataList.status === 'AUDITED'" v-if="hasPermission(PermIds.STOCK_LOCK_BILL_DELETE)" @click="deleteBtn">作废</el-button>
             </div>
         </div>
         <div style="height:20px" />
@@ -240,12 +240,12 @@ export default {
         })
       },
       deleteBtn() {
-        // 删除
+        // 作废
         const stockLockBillAuditFilter = {
           ids: [this.id]
         }
 
-        this.$confirm('是否删除锁定解锁单?', '提示', {
+        this.$confirm('是否作废锁定解锁单?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -258,7 +258,7 @@ export default {
             this.$router.go(-1)
           })
           .catch(err => {
-            this.$message.error("删除失败" + err.message)
+            this.$message.error("作废失败" + err.message)
           });
         }).catch(() => {
           this.$message({
