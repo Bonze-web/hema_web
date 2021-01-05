@@ -8,8 +8,8 @@
         label-width="80px"
         label-position="right"
       >
-        <el-form-item label="仓库">
-          <el-input type="text" placeholder="请输入仓库编号/名称" v-model="form.codeEqOrNameLike" class="input-width" ></el-input>
+        <el-form-item label="仓区">
+          <el-input type="text" placeholder="请输入仓区编号/名称" v-model="form.codeEqOrNameLike" class="input-width" ></el-input>
         </el-form-item>
 
         <el-form-item label="状态">
@@ -134,9 +134,9 @@ export default {
       });
     },
     statusChange: function(status, id, version) {
-      // 修改仓库状态
+      // 修改仓区状态
       const _this = this;
-      this.$confirm('此操作将改变仓库状态，是否继续?', '提示', {
+      this.$confirm('此操作将改变仓区状态，是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -178,7 +178,7 @@ export default {
       };
     },
     warehouseInit: function(reset) {
-      // 获取仓库列表
+      // 获取仓区列表
       this.suppliersData = []
 
       // 获取供应商列表

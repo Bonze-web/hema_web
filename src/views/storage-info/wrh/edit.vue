@@ -101,12 +101,9 @@
                             </el-col>
                         </el-tab-pane>
 
-                        <!-- USER, DOCK, Inbound_Outbound, PRETYPE, PICK_ORDER, USER_PICKAREA, OTHER, SUPPLIER, CONTAINER, CONTAINERTYPE, DECINVBILL, INCINVBILL, PICKAREA, STORAGEAREA, PRODUCT, PRODUCTCATEGORY, BINTYPE, ZONE, PATH, SHELF, BIN, QUALITY, MOVESTOCK, LOCKSTOCK, VENDORRETURNBILL, ORDERBILL -->
                         <el-tab-pane label="操作日志" name="log">
-                          <system-log modular="CONTAINER"></system-log>
-                        </el-tab-pane>
-                        <!-- <el-tab-pane label="配送中心范围" name="range">配置管理</el-tab-pane>
-                        <el-tab-pane label="操作日志" name="log">角色管理</el-tab-pane> -->
+                          <system-log modular="WAREHOUSE"></system-log>
+                        </el-tab-pane>\
                     </el-tabs>
                 </template>
             </div>
@@ -240,7 +237,6 @@ export default {
       tabClick: function() {  
       },
       createCategory: function() {
-        // 创建新的仓位
         this.$refs.form.validate(valid => {
           if (valid) {
             if (!this.form.dcId) {
@@ -249,6 +245,7 @@ export default {
             }
 
             if (this.status === 'create') {
+              // 创建新的仓位
               StorageService.createWarehouse(this.form)
               .then(res => {
                 this.$message.success("创建成功")
@@ -259,11 +256,6 @@ export default {
                 this.$message.error("创建失败" + err.message)
               })
             } else {
-              // if (this.form.status) {
-              //   this.form.status = "ON"
-              // } else {
-              //   this.form.status = "OFF"
-              // }
               StorageService.updateWarehouse(this.form)
               .then(res => {
                 console.log(res)
