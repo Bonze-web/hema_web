@@ -34,8 +34,8 @@
                                               <el-option
                                                 v-for="item in restaurants"
                                                 :key="item.id"
-                                                :label="item.username"
-                                                :value="item.username">
+                                                :label="'[' + item.username + ']' + item.realName"
+                                                :value="'[' + item.username + ']' + item.realName">
                                               </el-option>
                                             </el-select>
                                         </el-form-item>
@@ -366,9 +366,9 @@ export default {
           item.qty = Number(item.consumeQty) * Number(item.qpc) + Number(item.consumeQtystr)
         });
       },
-      getUsers: function() {
+      getUsers: function(query) {
         this.restaurants = []
-        MemberService.query(1, 0, {nameLike: this.form.decerName})
+        MemberService.query(1, 0, {nameLike: query})
         .then((res) => {
           this.restaurants = res.records
         }).catch((err) => {
@@ -379,7 +379,7 @@ export default {
         UserService.getLoginUser()
         .then((result) => {
           console.log(result)
-          this.form.moverName = result.username
+          this.form.moverName = '[' + result.username + ']' + result.realName
           this.form.moverId = result.id
         }).catch((err) => {
           this.$message.error('获取当前用户失败' + err.message)

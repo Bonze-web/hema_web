@@ -104,7 +104,7 @@
                         </el-tab-pane>
                         <!-- <el-tab-pane label="配送中心范围" name="range">配置管理</el-tab-pane> -->
                         <el-tab-pane label="操作日志" name="log">
-                          <system-log modular="DECINVBILL"></system-log>
+                          <system-log modular="DECINVBILL" :id="id"></system-log>
                         </el-tab-pane>
                     </el-tabs>
                 </template>
@@ -145,14 +145,28 @@
                                     </el-col>
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="报损人" prop="decerName">
-                                            <el-autocomplete
+                                          <el-select
+                                              v-model="form.decerName"
+                                              filterable
+                                              remote
+                                              placeholder="请输入移库员名称"
+                                              :remote-method="getUsers"
+                                              @change="handleSelect">
+                                              <el-option
+                                                v-for="item in restaurants"
+                                                :key="item.id"
+                                                :label="'[' + item.username + ']' + item.realName"
+                                                :value="item.username">
+                                              </el-option>
+                                            </el-select>
+                                            <!-- <el-autocomplete
                                                 class="inline-input"
                                                 v-model="form.decerName"
                                                 :fetch-suggestions="querySearch"
                                                 placeholder="请输入报损人"
                                                 :trigger-on-focus="false"
                                                 @select="handleSelect"
-                                            ></el-autocomplete>
+                                            ></el-autocomplete> -->
                                         </el-form-item>
                                     </el-col>
                                 </el-row>
@@ -553,16 +567,11 @@ export default {
           console.log(item)
         });
       },
-      getUsers: function() {
-        MemberService.query(1, 0, {nameLike: this.form.decerName})
+      getUsers: function(query) {
+        this.restaurants = []
+        MemberService.query(1, 0, {nameLike: query})
         .then((res) => {
-          res.records.forEach((item) => {
-            const obj = {
-              value: item.username,
-              id: item.id
-            }
-            this.restaurants.push(obj)
-          })
+          this.restaurants = res.records
         }).catch((err) => {
           this.$message.error('获取用户列表失败' + err.message)
         })
