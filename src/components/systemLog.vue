@@ -27,7 +27,7 @@ export default {
     getSysLog() {
       const opts = {
         module: this.modular,
-        id: this.id
+        moduleId: this.id
       };
       SysyemLogService.query(this.page, this.pageSize, opts)
         .then(res => {
