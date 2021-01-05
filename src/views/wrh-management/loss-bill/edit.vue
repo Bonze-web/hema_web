@@ -508,13 +508,13 @@ export default {
           realQty = Number(realQty) + (Number(item.realQty) ? Number(item.realQty) : 0)
           if (Number(item.realQtystr) * item.qpc > Number(item.qty) || Number(item.realQty) + Number(item.realQtystr) * item.qpc > Number(item.qty) || Number(item.realQty) < 0 || Number(item.realQtystr) < 0) {
             this.$message.error('请输入正确数据')
-            consumeQtystr = 0
-            consumeQty = 0
-            if ('consumeQtystr' in item) {
-              item.consumeQtystr = ''
+            realQtystr = 0
+            realQty = 0
+            if ('realQtystr' in item) {
+              item.realQtystr = ''
             }
-            if ('consumeQty' in item) {
-              item.consumeQty = ''
+            if ('realQty' in item) {
+              item.realQty = ''
             }
           }
           this.form.realTotalQtystr = realQtystr * item.qpc + realQty
