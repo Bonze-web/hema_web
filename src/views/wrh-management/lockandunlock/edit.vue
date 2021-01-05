@@ -10,8 +10,8 @@
             <div>
               <!-- SAVED:已保存，AUDITED:已审核 -->
                 <el-button @click="back">返回</el-button>
-                <el-button type="primary" v-if="dataList.status === 'SAVED' || hasPermission(PermIds.STOCK_LOCK_BILL_UPDATE)" @click="esaminareBtn">审核通过</el-button>
-                <el-button type="primary" v-if="dataList.status === 'SAVED' || hasPermission(PermIds.STOCK_LOCK_BILL_DELETE)" @click="deleteBtn">删除</el-button>
+                <el-button type="primary" v-show="dataList.status === 'SAVED'" v-if="hasPermission(PermIds.STOCK_LOCK_BILL_UPDATE)" @click="esaminareBtn">审核通过</el-button>
+                <el-button type="primary" v-show="dataList.status === 'AUDITED'" v-if="hasPermission(PermIds.STOCK_LOCK_BILL_DELETE)" @click="deleteBtn">删除</el-button>
             </div>
         </div>
         <div style="height:20px" />
