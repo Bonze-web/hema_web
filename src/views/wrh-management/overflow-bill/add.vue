@@ -551,7 +551,7 @@ export default {
         const postData = {
           page: 1,
           pageSize: 0,
-          statusEquals: 'OFF'
+          statusEquals: 'ON'
         }
         StorageService.warehouseInit(postData)
         .then((res) => {
