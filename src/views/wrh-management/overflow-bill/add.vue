@@ -77,7 +77,11 @@
                                         </el-table-column>
                                         <el-table-column width="100" prop="productName" label="商品"></el-table-column>
                                         <el-table-column width="100" prop="binCode" label="货位"></el-table-column>
-                                        <el-table-column width="100" prop="binUsage" label="货位用途"></el-table-column>
+                                        <el-table-column width="100" prop="binUsage" label="货位用途">
+                                          <template slot-scope="scope">
+                                            {{ scope.row.binUsage | binUsage }}
+                                          </template>
+                                        </el-table-column>
                                         <el-table-column width="100" prop="containerBarcode" label="容器"></el-table-column>
                                         <el-table-column width="100" prop="vendorName" label="供应商"></el-table-column>
                                         <el-table-column width="100" prop="productionBatch" label="批号"></el-table-column>
@@ -648,6 +652,42 @@ export default {
       })
     },
     filters: {
+      binUsage(type) {
+      switch (type) {
+        case "UNIFYRECEIVE":
+          return "统配收货暂存位"
+        case "PUTAWAY":
+          return "上架中转位"
+        case "PICK":
+          return "拣货位"
+        case "STORAGE":
+          return "存储位"
+        case "PICKSTORAGE":
+          return "拣货存储位"
+        case "UNIFYPICK":
+          return "统配拣货暂存位"
+        case "UNIFYCOLLECT":
+          return "统配集货存储位"
+        case "RPL":
+          return "补货暂存位"
+        case "TRANSFERRECEIVE":
+          return "中转收货暂存位"
+        case "TRANSFERCOLLECT":
+          return "中转集货暂存位"
+        case "DIRECTRECEIVE":
+          return "直通收货暂存位"
+        case "STORECROSSALLOCATE":
+          return "门店分拨位"
+        case "STORERTN":
+          return "门店退货收货暂存位"
+        case "VENDORRTN":
+          return "供应商退货位"
+        case "VENDORCOLLECT":
+          return "供应商集货位"
+        default:
+          return "未知"
+      }
+    }
     }
 };
 </script>
