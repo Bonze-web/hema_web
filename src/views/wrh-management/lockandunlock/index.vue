@@ -239,6 +239,7 @@ export default {
         DemolitionAndService.deleteStockLocjBill(stockLockBillAuditFilter)
         .then(res => {
           this.$message.success("操作成功")
+          this.stockLocjBill();
         })
         .catch(err => {
           this.$message.error("删除失败" + err.message)
