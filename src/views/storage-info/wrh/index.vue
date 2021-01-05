@@ -32,7 +32,7 @@
 
     <div style="background: #fff">
       <el-row>
-        <router-link :to="{ path: '/storageinfo/warehouse/add', query:{ status: 'create'} }" >
+        <router-link :to="{ path: '/storageinfo/wrh/add', query:{ status: 'create'} }" >
           <el-button style="margin: 18px 10px" type="primary" size="mini" v-if="hasPermission(PermIds.WMS_WAREHOUSE_CREATE)" >新建</el-button
           >
         </router-link>
@@ -42,7 +42,7 @@
 
         <el-table-column prop="code" sortable label="代码" style="height: 20px">
           <template slot-scope="scope">
-            <router-link style="color: #409eff" :to="{ path: '/storageinfo/warehouse/edit', query: { status: 'read', id: scope.row.id }, }" >
+            <router-link style="color: #409eff" :to="{ path: '/storageinfo/wrh/edit', query: { status: 'read', id: scope.row.id }, }" >
               <span>{{ scope.row.code }}</span>
             </router-link>
           </template>
@@ -194,22 +194,13 @@ export default {
       console.log(this.form)
 
       StorageService.warehouseInit(data).then((res) => {
-        const records = res.records;
-        const listData = [];
         console.log(res)
+
+        const records = res.records;
+
         this.totalCount = res.totalCount;
-
-        records.forEach((item, index) => {
-          // if (item.status === 'OFF') {
-          //   item.status = true
-          // } else {
-          //   item.status = false
-          // }
-          listData.push(item)
-        })
-
-        _this.listData = listData;
-        console.log(_this.listData)
+        _this.listData = records;
+        // this.changeTableSort()
       }).catch(err => {
         this.$message.error("数据请求失败" + err.message)
       });
@@ -226,11 +217,20 @@ export default {
     allSelectionChange(val) {
       console.log(val);
       this.multipleSelection = val;
+    },
+    // 初始化加载列表
+    changeTableSort() {
+      console.log(this.listData)
+      // 将“创建时间”转换为所需的时间格式
+      this.listData.sort((a, b) => {
+        return (new Date(b.updateTime).getTime() - new Date(a.updateTime).getTime())
+      })
     }
   },
   created() {
     this.warehouseInit();
   },
+
   beforeRouteEnter(to, from, next) {
     next(vm => {
       // 通过 `vm` 访问组件实例

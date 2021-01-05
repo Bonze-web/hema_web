@@ -35,7 +35,7 @@
           </div>
       </div>
 
-      <el-button class="btn" type="primary" size="mini" @click="onSubmit" >到货登记</el-button>
+      <el-button class="btn" type="primary" size="mini" :disabled="getData.status !=='INITIAL'" @click="onSubmit" >到货登记</el-button>
 
     </div>
   </div>
@@ -113,6 +113,7 @@ export default {
           driverPhone: '',
           carNumber: ''
         }
+
         _this.billNumber = '';
         _this.getData = {}
         _this.iptFocus()

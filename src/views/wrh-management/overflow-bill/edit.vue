@@ -492,7 +492,7 @@ export default {
         const postData = {
           page: 1,
           pageSize: 0,
-          statusEquals: 'OFF'
+          statusEquals: 'ON'
         }
         StorageService.warehouseInit(postData)
         .then((res) => {
@@ -515,7 +515,7 @@ export default {
           realQtystr = Number(realQtystr) + (Number(item.realQtystr) ? Number(item.realQtystr) : 0)
           realQty = Number(realQty) + (Number(item.realQty) ? Number(item.realQty) : 0)
           console.log(realQty)
-          this.form.realTotalQtystr = realQtystr + '+' + realQty
+          this.form.realTotalQtystr = realQtystr * item.qpc + realQty
           this.form.realTotalAmount = Number(this.form.totalAmount) + Number(item.realAmount)
           console.log(item)
         });
@@ -535,11 +535,17 @@ export default {
             this.$message.error('请输入正确的数据')
             consumeQtystr = 0
             consumeQty = 0
-            item.consumeQtystr = 0
-            item.consumeQty = 0
+            if ('consumeQtystr' in item) {
+              item.consumeQtystr = ''
+            }
+            if ('consumeQty' in item) {
+              item.consumeQty = ''
+            }
+            // item.consumeQtystr = 0
+            // item.consumeQty = 0
           }
           console.log(consumeQty)
-          this.form.totalQtystr = consumeQtystr + '+' + consumeQty
+          this.form.totalQtystr = consumeQtystr * item.qpc + consumeQty
           this.form.totalAmount = Number(this.form.totalAmount) + Number(item.consumeAmount)
           console.log(item)
         });

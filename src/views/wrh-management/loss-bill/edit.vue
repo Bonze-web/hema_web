@@ -484,7 +484,7 @@ export default {
         const postData = {
           page: 1,
           pageSize: 0,
-          statusEquals: 'OFF'
+          statusEquals: 'ON'
         }
         StorageService.warehouseInit(postData)
         .then((res) => {
@@ -506,7 +506,18 @@ export default {
           // this.form.realTotalAmount += item.realAmount
           realQtystr = Number(realQtystr) + (Number(item.realQtystr) ? Number(item.realQtystr) : 0)
           realQty = Number(realQty) + (Number(item.realQty) ? Number(item.realQty) : 0)
-          this.form.realTotalQtystr = realQtystr + '+' + realQty
+          if (Number(item.realQtystr) * item.qpc > Number(item.qty) || Number(item.realQty) + Number(item.realQtystr) * item.qpc > Number(item.qty) || Number(item.realQty) < 0 || Number(item.realQtystr) < 0) {
+            this.$message.error('请输入正确数据')
+            realQtystr = 0
+            realQty = 0
+            if ('realQtystr' in item) {
+              item.realQtystr = ''
+            }
+            if ('realQty' in item) {
+              item.realQty = ''
+            }
+          }
+          this.form.realTotalQtystr = realQtystr * item.qpc + realQty
           this.form.realTotalAmount = (Number(this.form.totalAmount) + Number(item.realAmount)).toFixed(2)
         });
       },
@@ -521,15 +532,19 @@ export default {
           // this.form.realTotalAmount += item.consumeAmount
           consumeQtystr = Number(consumeQtystr) + (Number(item.consumeQtystr) ? Number(item.consumeQtystr) : 0)
           consumeQty = Number(consumeQty) + (Number(item.consumeQty) ? Number(item.consumeQty) : 0)
-          if (Number(item.consumeQty) + Number(item.consumeQtystr) > Number(item.qty) || Number(item.consumeQty) < 0 || Number(item.consumeQtystr) < 0) {
+          if (Number(item.consumeQtystr) * item.qpc > Number(item.qty) || Number(item.consumeQty) + Number(item.consumeQtystr) * item.qpc > Number(item.qty) || Number(item.consumeQty) < 0 || Number(item.consumeQtystr) < 0) {
             this.$message.error('请输入正确数据')
             consumeQtystr = 0
             consumeQty = 0
-            item.consumeQtystr = 0
-            item.consumeQty = 0
+            if ('consumeQtystr' in item) {
+              item.consumeQtystr = ''
+            }
+            if ('consumeQty' in item) {
+              item.consumeQty = ''
+            }
           }
           console.log(consumeQty)
-          this.form.totalQtystr = consumeQtystr + '+' + consumeQty
+          this.form.totalQtystr = consumeQtystr * item.qpc + consumeQty
           this.form.totalAmount = (Number(this.form.totalAmount) + Number(item.consumeAmount)).toFixed(2)
           console.log(item)
         });

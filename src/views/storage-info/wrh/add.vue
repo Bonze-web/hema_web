@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="head" v-if="status === 'create' || status === 'edit'">
-            <div style="margin-top:8px" v-if="status === 'create'">新建仓库</div>
+            <div style="margin-top:8px" v-if="status === 'create'">新建仓区</div>
             <div style="margin-top:8px" v-else>编辑</div>
             <div>
                 <el-button @click="back">取消</el-button>
@@ -36,7 +36,7 @@
             <div>
                 <template>
                     <el-tabs v-model="tabActiveName" @tab-click="tabClick">
-                        <el-tab-pane label="仓库" name="category">
+                        <el-tab-pane label="仓区" name="category">
                             <div class="info-title">基本信息</div>
                             <el-form :model="form" :rules="createRules" ref="form" label-width="100px" class="demo-ruleForm">
                                 <el-row :gutter="20">
@@ -72,7 +72,7 @@
             <div>
                 <template>
                     <el-tabs v-model="tabActiveName" @tab-click="tabClick">
-                        <el-tab-pane label="仓库" name="category">
+                        <el-tab-pane label="仓区" name="category">
                             <div class="info-title">基本信息</div>
                             <el-col :span="6" class="info-box">
                                 <div>代码:</div>
@@ -146,7 +146,7 @@ export default {
       statusChange: function() {
         // 修改仓库状态
         const _this = this;
-        this.$confirm('此操作将改变仓库状态，是否继续?', '提示', {
+        this.$confirm('此操作将改变仓区状态，是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'

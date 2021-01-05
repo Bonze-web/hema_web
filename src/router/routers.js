@@ -526,11 +526,11 @@ const StorageInfoPackage = {
   },
   children: [
   {
-    path: "warehouse",
+    path: "wrh",
     name: "Warehouse",
     component: AModule,
     meta: {
-      title: '仓库',
+      title: '仓区',
       icon: 'table',
       permission: PermIds.WMS_WAREHOUSE
     },
@@ -539,10 +539,10 @@ const StorageInfoPackage = {
       path: "",
       name: "View",
       component: () =>
-        import('@/views/storage-info/warehouse/index'),
+        import('@/views/storage-info/wrh/index'),
       hidden: true,
       meta: {
-        title: '仓库',
+        title: '仓区',
         icon: 'table',
         permission: PermIds.WMS_WAREHOUSE_VIEW
       }
@@ -550,10 +550,10 @@ const StorageInfoPackage = {
       path: "edit",
       name: "Edit",
       component: () =>
-        import('@/views/storage-info/warehouse/edit'),
+        import('@/views/storage-info/wrh/edit'),
       hidden: true,
       meta: {
-        title: '查看仓库',
+        title: '查看仓区',
         icon: 'table',
         permission: PermIds.WMS_WAREHOUSE_VIEW
       }
@@ -562,10 +562,10 @@ const StorageInfoPackage = {
       path: "add",
       name: "Add",
       component: () =>
-        import('@/views/storage-info/warehouse/add'),
+        import('@/views/storage-info/wrh/add'),
       hidden: true,
       meta: {
-        title: '新建仓库',
+        title: '新建仓区',
         icon: 'table',
         permission: PermIds.WMS_WAREHOUSE_CREATE
       }
