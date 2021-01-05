@@ -89,7 +89,7 @@
               {{ scope.row.putawayTime }}
             </template>
           </el-table-column>
-          <el-table-column prop="qpcStr" label="规格">
+          <el-table-column prop="qpcStr" label="商品包装">
             <template slot-scope="scope">
               {{ scope.row.qpcStr }}
             </template>

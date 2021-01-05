@@ -142,7 +142,7 @@
 
                               <el-table-column prop="qtystr" label="收货件数" style="height: 20px"></el-table-column>
  
-                              <el-table-column prop="qty" label="收货数量" style="height: 20px"></el-table-column>
+                              <el-table-column prop="qty" label="数量" style="height: 20px"></el-table-column>
 
                               <el-table-column prop="productDate" label="生产日期" style="height: 20px"></el-table-column>
 

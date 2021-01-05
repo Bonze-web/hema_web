@@ -39,7 +39,7 @@
                 <el-table-column prop="productionBatch" label="批号"></el-table-column>
                 <el-table-column prop="productionDate" label="生产日期"></el-table-column>
                 <el-table-column prop="validDate" label="到效日期"></el-table-column>
-                <el-table-column prop="qpcStr" label="规格"></el-table-column>
+                <el-table-column prop="qpcStr" label="商品包装"></el-table-column>
                 <el-table-column prop="qty" label="数量"></el-table-column>
                 <el-table-column prop="batch" label="批次"></el-table-column>
             </el-table>

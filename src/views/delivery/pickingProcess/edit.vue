@@ -2,17 +2,20 @@
     <div>
         <div class="head">
             <div class="head-title">
-                <div style="margin:8px">{{ '[' + dataList.lockerCode  +']' + dataList.lockerName  }}</div>
-                <div style="margin:11px 0 5px 0; font-size: 12px; color: #999">{{ dataList.status | setStatus }}</div>
+                <div style="margin:8px">{{ '[' + dataList.barcode  +']' + dataList.containerTypeName  }}</div>
+                <!-- <template> -->
+                  <!-- <div style="margin:11px 0 5px 0; font-size: 12px; color: #999">{{ state }}</div> -->
+                <!-- </template> -->
+                <div style="margin:11px 0 5px 0; font-size: 12px; color: #999">{{ dataList.useStatus | dcStatus }}</div>
+                
             </div>
             <div>
-              <!-- SAVED:已保存，AUDITED:已审核 -->
                 <el-button @click="back">返回</el-button>
-                <el-button type="primary" v-if="dataList.status === 'SAVED' || hasPermission(PermIds.STOCK_LOCK_BILL_UPDATE)" @click="esaminareBtn">审核通过</el-button>
-                <el-button type="primary" v-if="dataList.status === 'SAVED' || hasPermission(PermIds.STOCK_LOCK_BILL_DELETE)" @click="deleteBtn">删除</el-button>
+                <el-button type="primary"  @click="printingBtn">打印</el-button>
             </div>
         </div>
         <div style="height:20px" />
+
 
         <!-- 编辑 -->
         <!-- <div class="info-content" v-if="status === 'create' || status === 'edit'">
@@ -89,59 +92,86 @@
             <div>
                 <template>
                     <el-tabs v-model="tabActiveName">
-                        <el-tab-pane label="解锁锁定单" name="category">
+                        <el-tab-pane label="容器详情" name="category">
                             <div class="info-title">基本信息</div>
                             <el-col :span="6" class="info-box">
-                                <div>单号:</div>
-                                <div>{{ dataList.billNumber }}</div>
+                                <div>条码:</div>
+                                <div>{{ dataList.barcode }}</div>
                             </el-col>
                             <el-col :span="6" class="info-box">
-                                <div>锁定解锁类型:</div>
-                                <div>{{ dataList.billType | setBillType }}</div>
-                            </el-col>
-
-                            <el-col :span="6" class="info-box">
-                                <div>锁定解锁员:</div>
-                                <div>{{ dataList.lockerName }}</div>
+                                <div>容器类型:</div>
+                                {{ '[' + dataList.containerTypeCode + ']' + dataList.containerTypeName }}
                             </el-col>
 
                             <el-col :span="6" class="info-box">
-                                <div>原因:</div>
-                                <div>{{dataList.reason | setReason}}</div>
+                                <div>创建时间:</div>
+                                {{ dataList.createTime }}
                             </el-col>
 
-                            <el-col class="info-box">
-                                <div>备注:</div>
-                                <div>{{ dataList.note ? dataList.note : "&lt;空&gt;" }}</div>
+                            <el-col :span="6" class="info-box">
+                                <div>创建人名称:</div>
+                                {{ dataList.creatorName }}
                             </el-col>
 
+                            <el-col :span="6" class="info-box">
+                                <div>最后更新时间:</div>
+                                {{ dataList.updateTime }}
+                            </el-col>
 
-                            <el-col>
+                            <el-col :span="6" class="info-box">
+                                <div>最后更新人名称:</div>
+                                {{ dataList.updatorName }}
+                            </el-col>
+
+                            <el-col :span="6" class="info-box">
+                                <div>父容器:</div>
+                                <div>{{ dataList.parentId !== '0' ? dataList.parentId : "&lt;空&gt;" }}</div>
+                            </el-col>
+
+                            <el-col :span="6" class="info-box">
+                                <div>当前位置:</div>
+                                <div>{{ dataList.positionCode !== " " ? dataList.positionCode : "&lt;空&gt;" }}</div>
+                            </el-col>
+
+                            <el-col :span="6" class="info-box">
+                                <div>目标位置:</div>
+                                <div>{{ dataList.toPositionCode !== " " ? dataList.toPositionCode : "&lt;空&gt;" }}</div>
+                            </el-col>
+                            <br>
+
+                            <!-- <el-col>
                                 <div  class="info-title title">子容器</div>
                             </el-col>
-                            <el-input type="text" v-model="iptVal" placeholder="请输入商品编号" class="input-width" ></el-input>
-                            <el-button type="primary" size="mini" @click="onSubmit" >立即搜索</el-button>
 
                             <div style="height:20px" />
 
-                            <el-table :data="orderBillItems" style="width: 100%; text-align: center" :row-style="{ height: '16px', padding: '-4px' }" >
-                              <el-table-column type="index" label="序号"></el-table-column>
+                            <el-table :data="dataList.sonList" style="width: 100%; text-align: center" :row-style="{ height: '16px', padding: '-4px' }" >
 
-                              <!-- <el-table-column prop="lockBillNumber" label="解锁锁定单号" style="height: 20px"></el-table-column> -->
-                              <el-table-column prop="productCode" label="商品编码" style="height: 20px"></el-table-column>
-                              <el-table-column prop="productName" label="商品名称" style="height: 20px"></el-table-column>
-                              <el-table-column prop="binUsage" label="货位用途" style="height: 20px"></el-table-column>
-                              <el-table-column prop="price" label="单价" style="height: 20px"></el-table-column>
-                              <el-table-column prop="qpc" label="包装数量" style="height: 20px"></el-table-column>
-                              <el-table-column prop="qty" label="数量" style="height: 20px"></el-table-column>
-                              <el-table-column prop="stockBatch" label="批次" style="height: 20px"></el-table-column>
+                            <el-table-column prop="a" label="条码" style="height: 20px">
+                              <template slot-scope="scope">
+                                <span>条码{{ scope.row.barcode }}</span>
+                              </template>
+                            </el-table-column>
 
-                            </el-table>
+                            <el-table-column prop="b" label="容器类型" style="height: 20px">
+                              <template slot-scope="scope">
+                                <span>容器类型{{ scope.row.containerTypeName }}</span>
+                              </template>
+                            </el-table-column>
+
+                            <el-table-column prop="c" label="状态">
+                              <template slot-scope="scope">
+                                {{ scope.row.useStatus | dcStatus }}
+                              </template>
+                            </el-table-column>
+
+                          </el-table> -->
+
+
                         </el-tab-pane>
-
                         <!-- USER, DOCK, Inbound_Outbound, PRETYPE, PICK_ORDER, USER_PICKAREA, OTHER, SUPPLIER, CONTAINER, CONTAINERTYPE, DECINVBILL, INCINVBILL, PICKAREA, STORAGEAREA, PRODUCT, PRODUCTCATEGORY, BINTYPE, ZONE, PATH, SHELF, BIN, QUALITY, MOVESTOCK, LOCKSTOCK, VENDORRETURNBILL, ORDERBILL -->
                         <el-tab-pane label="操作日志" name="log">
-                          <system-log modular="LOCKBILL"></system-log>
+                          <system-log modular="CONTAINER"></system-log>
                         </el-tab-pane>
                     </el-tabs>
                 </template>
@@ -152,144 +182,94 @@
 
 <script>
 import systemLog from "@/components/systemLog.vue";
-import DemolitionAndService from "@/api/service/DemolitionAndService";
-import PermIds from "@/api/permissionIds";
-import { mapGetters } from "vuex";
+import BasicService from "@/api/service/BasicService";
 
 export default {
   data() {
       return {
-        PermIds: PermIds,
         tabActiveName: 'category', // tab栏名称
-        id: '', // 详情id
-        iptVal: '', // 搜索
-        dataList: {}, // 详情数据
-        orderBillItems: []
+        active: 'ccc',
+        status: '', // 页面状态
+        id: '', // 货位类别ID
+        dataList: {} // 详情数据
       }
+    },
+    computed: {
     },
     components: {
       systemLog
-    },
-    computed: {
-      ...mapGetters(["hasPermission"])
     },
     methods: {
       back: function() {
         this.$store.dispatch("tagsView/delView", this.$route);
         this.$router.go(-1)
       },
-      onSubmit() {
-        if (this.iptVal === '') {
-          this.orderBillItems = this.dataList.stockLockItemList
-        } else {
-          this.orderBillItems = this.dataList.stockLockItemList.filter((item) => {
-            return item.productCode.indexOf(this.iptVal) !== -1
-          })
-        }
-      },
-      detailsStockLocjBill() {
+      getQueryStatus: function() {
         this.id = this.$route.query.id;
-
-        DemolitionAndService.detailsStockLocjBill(this.id)
-        .then(res => {
-          console.log(res)
+        this.ocntainerOcntainer(this.id) // 获取详情
+      },
+      ocntainerOcntainer: function(id) {
+        BasicService.ocntainerOcntainer(id)
+        .then((res) => {
           this.dataList = res;
-          this.orderBillItems = res.stockLockItemList;
-        })
-        .catch(err => {
-          this.$message.error("查询失败" + err.message)
-        });
-      },
-      esaminareBtn() {
-        // 审核
-         const stockLockBillAuditFilter = {
-          ids: [this.id]
-        }
 
-        this.$confirm('是否审核锁定解锁单?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
+          console.log(this.dataList.sonList)
         })
-        .then(() => {
-          DemolitionAndService.nauditStockLocjBill(stockLockBillAuditFilter)
-          .then(res => {
-            console.log(res)
-            this.$message.success("操作成功")
-            this.$store.dispatch("tagsView/delView", this.$route);
-            this.$router.go(-1)
-          })
-          .catch(err => {
-            this.$message.error("审核失败" + err.message)
-          });
-        })
-        .catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消'
-          })        
+        .catch((err) => {
+          this.$message.error("获取详情失败" + err.message)
         })
       },
-      deleteBtn() {
-        // 删除
-        const stockLockBillAuditFilter = {
-          ids: [this.id]
-        }
-
-        this.$confirm('是否删除锁定解锁单?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          DemolitionAndService.deleteStockLocjBill(stockLockBillAuditFilter)
-          .then(res => {
-            this.$message.success("操作成功")
-            console.log(res)
-            this.$store.dispatch("tagsView/delView", this.$route);
-            this.$router.go(-1)
-          })
-          .catch(err => {
-            this.$message.error("删除失败" + err.message)
-          });
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消'
-          })        
-        })
+      printingBtn() {
+        this.$message.error("打印功能还未开通")
       }
     },
     created() {
-      this.detailsStockLocjBill()
+      this.getQueryStatus()
     },
     filters: {
-      setStatus(type) {
-        // SAVED:已保存，AUDITED:已审核
-        switch (type) {
-          case 'SAVED':
-            return "已保存"
-          case 'AUDITED':
-            return "已审核"
-          default:
-            return '未知';
-        }
-      },
-      setBillType(type) {
-        // LOCK:锁定 UNLOCK:解锁
-        switch (type) {
-          case 'LOCK':
-            return "锁定"
-          case 'UNLOCK':
-            return "解锁"
-          default:
-            return '未知';
-        }
-      },
-      setReason(type) {
-        // 锁定解锁原因 LOCKUNLOCK:锁定解锁
-        switch (type) {
-          case 'LOCKUNLOCK':
-            return "锁定解锁"
+      dcStatus(useStatus) {
+        if (useStatus === undefined) return;
+        const useStatu = useStatus.toLowerCase();
+
+        switch (useStatu) {
+          case 'idle':
+            return "空闲"
+          case 'locked':
+            return "已锁定"
+          case 'receiving':
+            return "收货中"
+          case 'rtnwrhreceiving':
+            return "好退退仓收货中"
+          case 'rtnvendorreceiving':
+            return "返厂退仓收货中"
+          case 'moving':
+            return "平移中"
+          case 'allocating':
+            return "分播中"
+          case 'putawaying':
+            return "上架中"
+          case 'rtnputawaying':
+            return "退仓上架中"
+          case 'mergering':
+            return "拆并中"
+          case 'shifting':
+            return "移库中"
+          case 'aborted':
+            return "已作废"
+          case 'stacontainermovelocked':
+            return "移库锁定"
+          case 'using':
+            return "已使用"
+          case 'pickuping':
+            return "拣货中"
+          case 'handovering':
+            return "交接中"
+          case 'shiping':
+            return "装车中"
+          case 'shiped':
+            return "已装车"
+          case 'instore':
+            return "在门店"
           default:
             return '未知';
         }

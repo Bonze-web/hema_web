@@ -74,7 +74,7 @@
                                     <el-table-column label="批号" width="120" prop="batch"></el-table-column>
                                     <el-table-column label="生产日期" width="120" prop="productionDate"></el-table-column>
                                     <el-table-column label="到效日期" width="120" prop="validDate"></el-table-column>
-                                    <el-table-column label="规格/计量单位" width="120" prop="qpcStr"></el-table-column>
+                                    <el-table-column label="商品包装/计量单位" width="120" prop="qpcStr"></el-table-column>
                                     <el-table-column label="件数" width="200" style="diaplay:flex">
                                       <template slot-scope="scope">
                                         <el-input type="number" style="width:80px" max="100" @change="calcProduct" size="mini" v-model="scope.row.consumeQty"></el-input>

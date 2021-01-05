@@ -43,7 +43,7 @@
                                             {{ scope.row.productName + '/' + scope.row.productSpec }}
                                           </template>
                                         </el-table-column>
-                                        <el-table-column width="120" prop="qpcStr" label="包装规格/计量单位">
+                                        <el-table-column width="120" prop="qpcStr" label="商品包装/计量单位">
                                           <template slot-scope="scope">
                                             {{ scope.row.qpcStr + '/' + scope.row.productSpec }}
                                           </template>
@@ -73,7 +73,7 @@
                                             {{ '[' + scope.row.vendorCode + ']' + scope.row.vendorName }}
                                           </template>
                                         </el-table-column>
-                                        <el-table-column width="120" prop="qty" label="件数"></el-table-column>
+                                        <el-table-column width="120" prop="qty" label="数量"></el-table-column>
                                     </el-table>
                         </el-tab-pane>
                         <!-- <el-tab-pane label="配送中心范围" name="range">配置管理</el-tab-pane> -->

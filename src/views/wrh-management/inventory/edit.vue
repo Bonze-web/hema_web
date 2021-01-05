@@ -167,7 +167,7 @@
                                       <span>{{ scope.row.validDate}}</span>
                                   </template>
                               </el-table-column>
-                              <el-table-column prop="qpcStr" label="规格">
+                              <el-table-column prop="qpcStr" label="商品包装">
                                   <template slot-scope="scope">
                                       <span>{{ scope.row.qpcStr}}</span>
                                   </template>

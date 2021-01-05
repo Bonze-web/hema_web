@@ -83,14 +83,14 @@
                                         <el-table-column width="100" prop="productionBatch" label="批号"></el-table-column>
                                         <el-table-column width="100" prop="productionDate" label="生产日期"></el-table-column>
                                         <el-table-column width="100" prop="validDate" label="到效日期"></el-table-column>
-                                        <el-table-column width="100" prop="qpcStr" label="规格/计量单位">
+                                        <el-table-column width="100" prop="qpcStr" label="商品包装/计量单位">
                                           <template slot-scope="scope">
                                             {{ scope.row.spec ? scope.row.spec : scope.row.qpcStr }}
                                           </template>
                                         </el-table-column>
                                         <el-table-column width="100" prop="price" label="单价"></el-table-column>
                                         <el-table-column width="100" prop="batch" label="批次"></el-table-column>
-                                        <el-table-column width="100" prop="qty" label="可用库存数量"></el-table-column>
+                                        <el-table-column width="100" prop="qty" label="数量"></el-table-column>
                                         <el-table-column width="100" prop="consumeQtystr" label="溢余件数">
                                           <template slot-scope="scope">
                                             <el-input type="number" max="100" @change="calcProduct" size="mini" v-model="scope.row.consumeQtystr"></el-input>

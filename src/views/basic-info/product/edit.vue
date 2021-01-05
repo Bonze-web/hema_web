@@ -308,10 +308,10 @@
                 </el-col>
               </el-row>
             </el-tab-pane>
-            <el-tab-pane label="规格详情" name="qpc">
+            <el-tab-pane label="包装数量" name="qpc">
               <el-button icon="el-icon-circle-plus-outline" type="text" @click="addSpec" v-if="workingOrg.type==='GROUP'">新增</el-button>
               <el-table :data="specList" style="width: 100%; text-align: center" :row-style="{ height: '16px', padding: '-4px' }">
-                <el-table-column prop="qpcStr" label="包装规格" style="height: 20px">
+                <el-table-column prop="qpcStr" label="商品包装" style="height: 20px">
                   <template slot-scope="scope">
                     <el-input v-if="!scope.row.id || (scope.row.isEdit && workingOrg.type === 'GROUP')" v-model="scope.row.qpcStr" placeholder="格式为1*m*n"></el-input>
                     <span v-else>{{ scope.row.qpcStr }}</span>
@@ -395,7 +395,7 @@
                     <el-input v-else v-model="scope.row.barcode" placeholder="条码" :max="32"></el-input>
                   </template>
                 </el-table-column>
-                <el-table-column prop="qpcStr" label="规格">
+                <el-table-column prop="qpcStr" label="商品包装">
                   <template slot-scope="scope">
                     <span v-if="scope.row.id && !scope.row.isEdit">{{ scope.row.qpcStr }}</span>
                     <product-spec-select v-else :specValue.sync="scope.row.qpcStr" :productId="id"></product-spec-select>
@@ -1278,10 +1278,10 @@ export default {
       const regMN = /^(\d+(\.\d+)*)\*(\d+(\.\d+)*)$/;
 
       if (!val.qpcStr) {
-        this.$message.error("请填写包装规格！");
+        this.$message.error("请填写商品包装规格！");
         return false;
       } else if (!reg.test(val.qpcStr)) {
-        this.$message.error("请填写正确的包装规格，例如1*m*n,m,n为数字！");
+        this.$message.error("请填写正确的商品包装规格，例如1*m*n,m,n为数字！");
         return false;
       } else if (!val.munit) {
         this.$message.error("请填写计量单位！");
@@ -1290,14 +1290,14 @@ export default {
         this.$message.error("计量单位的长度不能超过32位");
         return false;
       } else if (!val.paq) {
-        this.$message.error("请填写包装件数！");
+        this.$message.error("请填写商品包装件数！");
         return false;
       } else if (!(Number(val.paq) >= 0)) {
-        this.$message.error("包装件数为数字且不能小于0！");
+        this.$message.error("商品包装件数为数字且不能小于0！");
         return false;
       } else if (this.qpcStrToNumber(val.qpcStr) !== Number(val.paq)) {
         console.log(this.qpcStrToNumber(val.qpcStr), Number(val.paq));
-        this.$message.error("包装规格和包装件数不一致！");
+        this.$message.error("商品包装规格和包装件数不一致！");
         return false;
       } else if (!val.length) {
         this.$message.error("请填写商品包装的长！");

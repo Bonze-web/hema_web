@@ -62,7 +62,7 @@
                                   <el-table-column label="批号" width="120" prop="batch"></el-table-column>
                                   <el-table-column label="生产日期" width="120" prop="productionDate"></el-table-column>
                                   <el-table-column label="到效日期" width="120" prop="validDate"></el-table-column>
-                                  <el-table-column label="规格/计量单位" width="120" prop="qpcStr"></el-table-column>
+                                  <el-table-column label="商品包装/计量单位" width="120" prop="qpcStr"></el-table-column>
                                   <el-table-column label="批次" width="120" prop="batch"></el-table-column>
                                   <el-table-column label="价格" width="120" prop="price"></el-table-column>
                                   <el-table-column label="入库时间" width="120" prop="instockTime"></el-table-column>

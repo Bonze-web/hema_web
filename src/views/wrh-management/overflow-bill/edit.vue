@@ -75,7 +75,7 @@
                                           </template>
                                         </el-table-column>
                                         <el-table-column width="100" prop="productName" label="商品/商品规格"></el-table-column>
-                                        <el-table-column width="100" prop="qpcStr" label="规格/计量单位"></el-table-column>
+                                        <el-table-column width="100" prop="qpcStr" label="商品包装/计量单位"></el-table-column>
                                         <el-table-column width="100" prop="binCode" label="货位"></el-table-column>
                                         <el-table-column width="100" prop="containerBarcode" label="容器"></el-table-column>
                                         <el-table-column width="100" prop="productionDate" label="生产日期"></el-table-column>
@@ -203,10 +203,10 @@
                                         <el-table-column width="100" prop="productionBatch" label="批号"></el-table-column>
                                         <el-table-column width="100" prop="productionDate" label="生产日期"></el-table-column>
                                         <el-table-column width="100" prop="validDate" label="到效日期"></el-table-column>
-                                        <el-table-column width="100" prop="qpcStr" label="规格/计量单位"></el-table-column>
+                                        <el-table-column width="100" prop="qpcStr" label="商品包装/计量单位"></el-table-column>
                                         <el-table-column width="100" prop="price" label="单价"></el-table-column>
                                         <el-table-column width="100" prop="batch" label="批次"></el-table-column>
-                                        <el-table-column width="100" prop="stockQty" label="可用库存数量">
+                                        <el-table-column width="100" prop="stockQty" label="数量">
                                           <template slot-scope="scope">
                                             {{ scope.row.qty ? scope.row.qty : scope.row.stockQty }}
                                           </template>

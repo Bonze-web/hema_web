@@ -153,7 +153,7 @@
                               <el-table-column prop="munit" label="单位" style="height: 20px"></el-table-column>
                               <el-table-column prop="spec" label="规格" style="height: 20px"></el-table-column>
                               <el-table-column prop="qtystr" label="应收件数" style="height: 20px"></el-table-column>
-                              <el-table-column prop="qty" label="应收数量" style="height: 20px"></el-table-column>
+                              <el-table-column prop="qty" label="数量" style="height: 20px"></el-table-column>
                               <el-table-column prop="receivedQtystr" label="实收件数" style="height: 20px"></el-table-column>
                               <el-table-column prop="receivedQty" label="实收数量" style="height: 20px"></el-table-column>
                               <el-table-column prop="rejectQtystr" label="拒收件数" style="height: 20px"></el-table-column>

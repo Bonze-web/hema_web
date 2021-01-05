@@ -102,19 +102,19 @@
                     {{ scope.row.pickedQty}}
                 </template>
             </el-table-column>
-            <el-table-column prop="qpc" label="规格数">
+            <el-table-column prop="qpc" label="包装数量">
                 <template slot-scope="scope">
                     {{ scope.row.qpc}}
                 </template>
             </el-table-column>
-            <el-table-column prop="qpcStr" label="规格">
+            <el-table-column prop="qpcStr" label="商品包装">
                 <template slot-scope="scope">
                     {{ scope.row.qpcStr}}
                 </template>
             </el-table-column>
             <el-table-column prop="qty" label="数量">
                 <template slot-scope="scope">
-                    {{ scope.row.qpcStr}}
+                    {{ scope.row.qty}}
                 </template>
             </el-table-column>
             <el-table-column prop="qtyStr" label="件数">
