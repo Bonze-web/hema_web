@@ -3,10 +3,10 @@
         <el-container style="height: 500px; border: 1px solid #eee">
           <el-aside width="300px" style="background-color: #fff;padding: 0 20px;border: 1px #eee solid;">
             <div class="seriation-left-header" style="padding-top:20px;display:flex;align-items: center;">
-              <div class="seriation-left-title">拣货顺序方案</div>
+              <div class="seriation-left-title">方案</div>
               <el-button type="primary" @click.stop="newProjectsChange">新建方案</el-button>
             </div>
-            <el-input v-model="codeEqOrNameLike" placeholder="请输入门店代码/名称" @change="searchScheme"><i slot="prefix" class="el-input__icon el-icon-search" style="right:0" @click="searchScheme"></i></el-input>
+            <el-input v-model="codeEqOrNameLike" placeholder="请输入团点代码/名称" @change="searchScheme"><i slot="prefix" class="el-input__icon el-icon-search" style="right:0" @click="searchScheme"></i></el-input>
             <el-collapse accordion style="margin-top:15px;">
               <el-collapse-item v-for="(ele, idx) in storeAllSchemeAll" :key="idx">
                 <template slot="title">
@@ -37,7 +37,7 @@
                          <el-button
                             size="mini"
                             type="text"
-                            @click.stop="editStoreChange(item, ele)"
+                            @click.stop="editStoreChange(item, ele, index)"
                             >编辑</el-button
                           >
                           <el-button
@@ -60,7 +60,7 @@
                       <div>
                         {{headerScheme}}
                       </div>
-                      <el-button type="primary" @click="newStoreChange">添加门店组</el-button>
+                      <el-button type="primary" @click="newStoreChange">新建线路</el-button>
                     </div>
                   </el-header>
                   <el-header style="font-size: 16px;height:30px;" v-if="changeActive === 'store'">
@@ -113,23 +113,33 @@
                       <el-button style="margin:18px 0" type="primary" size="mini" @click="establishChange"><span class="iconfont iconplus-fill" style="font-size:12px;"></span> 新建</el-button>
                     </el-row>
                     <el-table
-                        lable="拣货顺序"
+                        lable="团点"
                         :data="storeOption"
                         style="width: 100%;text-align:center"
                     >
-                      <el-table-column label="序号">
+                     <el-table-column label="序号">
                           <template slot-scope="scope">
-                              {{ scope.row.idx}}
+                              {{ scope.row.idx }}
                           </template>
                       </el-table-column>
-                      <el-table-column label="门店">
+                      <el-table-column label="团点">
                           <template slot-scope="scope">
                               <span style="color:#409EFF">{{ "[" + scope.row.storeCode + "]" + scope.row.storeName}}</span>
                           </template>
                       </el-table-column>
-                      <el-table-column label="拣货顺序">
+                      <el-table-column label="顺序">
                           <template slot-scope="scope">
                               {{ scope.row.storeOrder}}
+                          </template>
+                      </el-table-column>
+                      <el-table-column label="配送中心">
+                          <template slot-scope="scope">
+                              {{ '[' + scope.row.dcCode + ']' + scope.row.dcName }}
+                          </template>
+                      </el-table-column>
+                      <el-table-column label="状态">
+                          <template slot-scope="scope">
+                              {{ scope.row.status | statusType}}
                           </template>
                       </el-table-column>
                       <el-table-column label="操作" width="200">
@@ -162,6 +172,12 @@
             <el-form-item label="方案名称" :label-width="formLabelWidth" prop="name">
               <el-input v-model="newProjectsList.name" autocomplete="off"></el-input>
             </el-form-item>
+            <el-form-item label="是否默认" :label-width="formLabelWidth">
+              <el-select v-model="newProjectsList.def" placeholder="请选择">
+                <el-option label="是" :value="true"></el-option>
+                <el-option label="否" :value="false"></el-option>
+              </el-select>
+            </el-form-item>
             <el-form-item label="备注" :label-width="formLabelWidth" prop="remark">
               <el-input
                 type="textarea"
@@ -176,13 +192,19 @@
             <el-button type="primary" @click="newProjectsFlag">确 定</el-button>
           </div>
         </el-dialog>
-        <el-dialog title="拣货顺序方案" :visible.sync="editProjects">
+        <el-dialog title="编辑方案" :visible.sync="editProjects">
           <el-form :model="editProjectsObj">
             <el-form-item label="方案代码" :label-width="formLabelWidth">
               <el-input v-model="editProjectsObj.code" autocomplete="off"></el-input>
             </el-form-item>
-              <el-form-item label="方案名称" :label-width="formLabelWidth">
+            <el-form-item label="方案名称" :label-width="formLabelWidth">
               <el-input v-model="editProjectsObj.name" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="是否默认" :label-width="formLabelWidth">
+              <el-select v-model="editProjectsObj.def" placeholder="请选择">
+                <el-option label="是" :value="true"></el-option>
+                <el-option label="否" :value="false"></el-option>
+              </el-select>
             </el-form-item>
             <el-form-item label="备注" :label-width="formLabelWidth">
               <el-input
@@ -198,7 +220,7 @@
             <el-button type="primary" @click="submitEditPro">确 定</el-button>
           </div>
         </el-dialog>
-        <el-dialog title="新建门店组" :visible.sync="newStore">
+        <el-dialog title="新建线路" :visible.sync="newStore">
           <el-form :model="newStoreInfo" :rules="newStoreRules" ref="ruleForm">
             <el-form-item label="代码" :label-width="formLabelWidth" prop="code">
               <el-input v-model="newStoreInfo.code" autocomplete="off"></el-input>
@@ -206,7 +228,7 @@
             <el-form-item label="名称" :label-width="formLabelWidth" prop="name">
               <el-input v-model="newStoreInfo.name" autocomplete="off"></el-input>
             </el-form-item>
-            <el-form-item label="拣货顺序方案" :label-width="formLabelWidth">
+            <el-form-item label="方案" :label-width="formLabelWidth">
               <div>
                 {{ '[' + getByIdDetail.code + ']' + getByIdDetail.name }}
               </div>
@@ -225,18 +247,31 @@
             <el-button type="primary" @click="submintNewStoreInfo">确 定</el-button>
           </div>
         </el-dialog>
-        <el-dialog title="编辑门店组" :visible.sync="editStore">
-          <el-form :model="editStoreObj">
-            <el-form-item label="代码" :label-width="formLabelWidth">
-              <el-input v-model="editStoreObj.code" autocomplete="off"></el-input>
-            </el-form-item>
-            <el-form-item label="名称" :label-width="formLabelWidth">
-              <el-input v-model="editStoreObj.name" autocomplete="off"></el-input>
-            </el-form-item>
-            <el-form-item label="拣货顺序方案" :label-width="formLabelWidth">
+        <el-dialog title="编辑线路" :visible.sync="editStore">
+          <el-form :model="editStoreObj" >
+            <el-form-item label="路线方案" :label-width="formLabelWidth">
               <div>
                 {{ editStoreObj.getByIdMes }}
               </div>
+            </el-form-item>
+            <el-form-item label="线路代码" :label-width="formLabelWidth">
+              <el-input v-model="editStoreObj.code" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="线路名称" :label-width="formLabelWidth">
+              <el-input v-model="editStoreObj.name" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="线路数量" :label-width="formLabelWidth">
+              <div>
+                {{ editStoreObj.totalNum }}
+              </div>
+            </el-form-item>
+            <el-form-item label="当前序号" :label-width="formLabelWidth">
+              <div>
+                {{ editStoreObj.index }}
+              </div>
+            </el-form-item>
+            <el-form-item label="调整序号" :label-width="formLabelWidth">
+              <el-input-number v-model="editStoreObj.afterNum" :min="1" :max="editStoreObj.totalNum"></el-input-number>
             </el-form-item>
             <el-form-item label="备注" :label-width="formLabelWidth">
               <el-input
@@ -278,7 +313,7 @@
             <el-button type="primary" @click="Cancellation">确 定</el-button>
           </div>
         </el-dialog>
-         <el-dialog title="添加门店" :visible.sync="establish" style="margin-top: 7vh" class="shuttle-box">
+         <el-dialog title="添加线路" :visible.sync="establish" style="margin-top: 7vh" class="shuttle-box">
             <div style="text-align: center; position: relative">
               <div class="shuttle">
                   <div class="shuttle-left">
@@ -302,7 +337,7 @@
                           width="55">
                         </el-table-column>
                         <el-table-column
-                          label="门店"
+                          label="线路"
                           width="calc(100% - 55px)"
                           style="padding: 7px 0;">
                           <template slot-scope="scope">
@@ -341,17 +376,19 @@ import systemLog from "@/components/systemLog.vue"
 export default {
   data() {
       return {
+        afterNum: 1,
         editProjectsObj: {
           code: '',
           name: '',
           remark: '',
-          status: ''
+          def: false
         },
         editStoreObj: {
           code: '',
           name: '',
           remark: '',
-          status: ''
+          def: false,
+          afterNum: 1
         },
         headerSchemeOneFlag: 0,
         mySelfPage: 1,
@@ -371,7 +408,8 @@ export default {
         newProjectsList: {
           code: "",
           name: "",
-          remark: ""
+          remark: "",
+          def: false
         },
         // 所有的方案请求
         getAllScheme: [],
@@ -384,7 +422,8 @@ export default {
         newStoreInfo: {
           code: "",
           name: "",
-          remark: ""
+          remark: "",
+          def: false
         },
         editProjectsInfo: {},
         editStoreInfo: {},
@@ -431,6 +470,7 @@ export default {
    },
    newProjectsFlag() {
     this.newProjects = false;
+    this.newProjectsList.status = 'ON';
     CargosequenceService.requestNewProjectsList(this.newProjectsList)
     .then((res) => {
       this.$message.success("新建成功");
@@ -512,9 +552,9 @@ export default {
    },
    // 获取门店组下面所有的所有的门店
    getAllStoreByGrpId(id) {
+     console.log(id);
       CargosequenceService.getAllStoreByGrpId(id)
       .then((res) => {
-        console.log(res);
           const storeOptionArr = res;
           storeOptionArr.forEach((ele, idx) => {
               ele.idx = idx + 1;
@@ -537,9 +577,9 @@ export default {
    getGrpById(id) {
       CargosequenceService.getGrpById(id)
       .then((res) => {
-        this.getGrpByIdDetail = res.data;
+        this.getGrpByIdDetail = res;
       }).catch((err) => {
-        this.$message.error("方案详情获取失败" + err.message)
+        this.$message.error("详情获取失败" + err.message)
       })
    },
    editProjectsChange(obj) {
@@ -574,7 +614,6 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          console.log(obj);
             CargosequenceService.deleteSchemeItem(obj)
             .then((res) => {
               this.$message.success("删除成功");
@@ -592,6 +631,7 @@ export default {
    submitEditPro() {
       this.editProjects = false;
       this.editProjectsInfo = this.editProjectsObj;
+      console.log(this.editProjectsInfo);
       CargosequenceService.updateScheme(this.editProjectsInfo)
       .then((res) => {
         this.$message.success("修改成功");
@@ -624,13 +664,17 @@ export default {
           }
         });
    },
-    editStoreChange(obj, schemeOpt) {
+    editStoreChange(obj, schemeOpt, index) {
     this.editStore = true;
     for (const k in obj) {
       this.editStoreObj[k] = obj[k];
     }
     // this.editStoreInfo = obj;
     this.editStoreObj.getByIdMes = '[' + schemeOpt.schemeList.code + ']' + schemeOpt.schemeList.name;
+    this.editStoreObj.totalNum = schemeOpt.store.length;
+    this.editStoreObj.index = index + 1;
+    this.editStoreObj.afterNum = index + 1;
+    this.afterNum = index + 1;
    },
    submitEditStoreChange() {
      this.editStore = false;
@@ -694,7 +738,7 @@ export default {
         this.mySelfPageSize = Number(e)
         this.mySelfPage = 1
         this.storedContentChange()
-      },
+    },
     handleCurrentChangeOne(e) {
       this.mySelfPage = Number(e);
       this.storedContentChange()
@@ -730,21 +774,21 @@ export default {
     },
     leftHandleComfirm() {
       this.establish = false;
-      console.log(this.editProjectsInfo, this.storeArmy);
       const postData = [];
       this.leftSelect.forEach((ele, idx) => {
         postData.push({
-          pickOrderId: this.editProjectsInfo.id,
-          grpId: this.storeArm.id,
+          pickOrderId: this.editProjectsInfo.schemeList.id,
+          grpId: this.storeArmy.id,
           storeCode: ele.code,
           storeName: ele.name,
           storeOrder: idx
         })
       })
-      
+      console.log(this.changeActive, this.storeArmy, this.editProjectsInfo);
       CargosequenceService.addGrpItems(postData)
       .then((res) => {
         this.$message.success("添加成功");
+        // this.schemeOrStore(this.changeActive, this.storeArmy, this.editProjectsInfo)
       }).catch((err) => {
         this.$message.error("添加失败" + err.message)
       })
@@ -768,7 +812,14 @@ export default {
     this.getAllPickOrder();
   },
   filters: {
-  
+    statusType(status) {
+      switch (status) {
+        case "ON":
+          return "启用"
+        case "OFF":
+          return "禁用"
+      }
+    }
   },
   components: {
     "system-log": systemLog

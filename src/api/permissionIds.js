@@ -293,7 +293,7 @@ export default {
   WMS_ORDERBILL_ARRIVE: "wms:orderbill:arrive",
   WMS_ORDERBILL_FINISH: "wms:orderbill:finish",  
 
-    /**
+  /**
    * 收货装箱单模块
    */
   WMS_RECEIVE_BILL: "wms:receive_bill",
@@ -301,7 +301,7 @@ export default {
   WMS_RECEIVE_BILL_RECEIVE: "wms:receive_bill:receive",
   WMS_RECEIVE_BILL_FAST_RECEIVE: "wms:receive_bill:fast_receive",
 
-    /**
+  /**
    * 质检类型
    */
   WMS_QUALITY_INSPECTION_ORDER: "wms:quality-inspection-order",

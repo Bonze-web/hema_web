@@ -53,12 +53,17 @@
                         <span>{{ '[' + scope.row.code + ']' + scope.row.name }}</span>
                     </template>
                 </el-table-column>
+                <el-table-column label="状态">
+                    <template slot-scope="scope">
+                        {{ scope.row.status | purposeChange }}
+                    </template>
+                </el-table-column>
                 <el-table-column label="地址">
                     <template slot-scope="scope">
                         {{ scope.row.address }}
                     </template>
                 </el-table-column>
-                <el-table-column label="所属区块编码">
+                <el-table-column label="所属区块">
                     <template slot-scope="scope">
                         {{ scope.row.blockCode }}
                     </template>
@@ -68,39 +73,24 @@
                         {{ '[' + scope.row.centerDcCode + ']' + scope.row.centerDcName }}
                     </template>
                 </el-table-column>
+                 <el-table-column label="所属网格仓">
+                    <template slot-scope="scope">
+                        {{ '[' + scope.row.frontDcCode + ']' + scope.row.frontDcName }}
+                    </template>
+                </el-table-column>
+                <el-table-column label="联系人姓名">
+                  <template slot-scope="scope">
+                      {{ scope.row.contactor }}
+                  </template>
+                </el-table-column>
                 <el-table-column label="联系人电话">
                     <template slot-scope="scope">
                         {{ scope.row.contactPhone }}
                     </template>
                 </el-table-column>
-                <el-table-column label="联系人姓名">
-                    <template slot-scope="scope">
-                        {{ scope.row.contactor }}
-                    </template>
-                </el-table-column>
-                <el-table-column label="所属网格仓">
-                    <template slot-scope="scope">
-                        {{ '[' + scope.row.frontDcCode + ']' + scope.row.frontDcName }}
-                    </template>
-                </el-table-column>
-                <el-table-column label="纬度">
-                    <template slot-scope="scope">
-                        {{ scope.row.lat }}
-                    </template>
-                </el-table-column>
-                <el-table-column label="经度">
-                    <template slot-scope="scope">
-                        {{ scope.row.lng }}
-                    </template>
-                </el-table-column>
                 <el-table-column label="来源">
                     <template slot-scope="scope">
                         {{ scope.row.sourceWay | sourceType }}
-                    </template>
-                </el-table-column>
-                <el-table-column label="状态">
-                    <template slot-scope="scope">
-                        {{ scope.row.status | purposeChange }}
                     </template>
                 </el-table-column>
                 <el-table-column label="邮编">
