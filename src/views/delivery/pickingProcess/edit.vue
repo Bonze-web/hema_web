@@ -2,90 +2,16 @@
     <div>
         <div class="head">
             <div class="head-title">
-                <div style="margin:8px">{{ '[' + dataList.barcode  +']' + dataList.containerTypeName  }}</div>
-                <!-- <template> -->
-                  <!-- <div style="margin:11px 0 5px 0; font-size: 12px; color: #999">{{ state }}</div> -->
-                <!-- </template> -->
-                <div style="margin:11px 0 5px 0; font-size: 12px; color: #999">{{ dataList.useStatus | dcStatus }}</div>
+                <div style="margin:8px">{{ dataList.billNumber  }}</div>
+                <div style="margin:11px 0 5px 0; font-size: 12px; color: #999">{{ dataList.status | setStatus }}</div>
                 
             </div>
             <div>
                 <el-button @click="back">返回</el-button>
-                <el-button type="primary"  @click="printingBtn">打印</el-button>
+                <!-- <el-button type="primary"  @click="printingBtn">打印</el-button> -->
             </div>
         </div>
         <div style="height:20px" />
-
-
-        <!-- 编辑 -->
-        <!-- <div class="info-content" v-if="status === 'create' || status === 'edit'">
-            <div>
-                <template>
-                    <el-tabs v-model="tabActiveName">
-                        <el-tab-pane label="货位类型" name="category">
-                          <div class="info-title">基本信息</div>
-                            <el-form :model="form" :rules="createRules" ref="form" label-width="100px" class="demo-ruleForm">
-                                <el-row :gutter="20">
-                                    <el-col :span="6" class="info-box">
-                                        <el-form-item label="代码" prop="code">
-                                            <el-input v-model="form.code"></el-input>
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col :span="6" class="info-box">
-                                        <el-form-item label="名称" prop="name">
-                                            <el-input v-model="form.name"></el-input>
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col :span="6" class="info-box">
-                                      <el-form-item label="存储盘数" prop="storageNumber">
-                                          <el-input v-model="form.storageNumber"></el-input>
-                                      </el-form-item>
-                                    </el-col>
-                                </el-row>
-                                <el-form-item label="备注" prop="remark">
-                                    <textarea v-model="form.remark"></textarea>
-                                </el-form-item>
-
-                             <div class="info-title">规格信息</div>
-
-                                <el-row :gutter="20">
-                                    <el-col :span="6" class="info-box">
-                                        <el-form-item label="长度(cm)" prop="length">
-                                            <el-input v-model="form.length"></el-input>
-                                        </el-form-item>
-                                    </el-col>
-
-                                    <el-col :span="6" class="info-box">
-                                        <el-form-item label="宽度(cm)" prop="widht">
-                                            <el-input v-model="form.widht"></el-input>
-                                        </el-form-item>
-                                    </el-col>
-
-                                    <el-col :span="6" class="info-box">
-                                      <el-form-item label="高度(cm)" prop="height">
-                                          <el-input v-model="form.height"></el-input>
-                                      </el-form-item>
-                                    </el-col>
-
-                                    <el-col :span="6" class="info-box">
-                                      <el-form-item label="承重(kg)" prop="weight">
-                                          <el-input v-model="form.weight"></el-input>
-                                      </el-form-item>
-                                    </el-col>
-
-                                    <el-col :span="6" class="info-box">
-                                      <el-form-item label="容积率(%)" prop="plotRatio">
-                                          <el-input v-model="form.plotRatio"></el-input>
-                                      </el-form-item>
-                                    </el-col>
-                                </el-row>
-                            </el-form>
-                        </el-tab-pane>
-                    </el-tabs>
-                </template>
-            </div>
-        </div> -->
-
 
         <!-- 展示 -->
         <div class="info-content table-index _table-index">
@@ -95,48 +21,53 @@
                         <el-tab-pane label="容器详情" name="category">
                             <div class="info-title">基本信息</div>
                             <el-col :span="6" class="info-box">
-                                <div>条码:</div>
-                                <div>{{ dataList.barcode }}</div>
+                                <div>业务类型:</div>
+                                <div>{{ dataList.bizType }}</div>
                             </el-col>
                             <el-col :span="6" class="info-box">
-                                <div>容器类型:</div>
-                                {{ '[' + dataList.containerTypeCode + ']' + dataList.containerTypeName }}
-                            </el-col>
-
-                            <el-col :span="6" class="info-box">
-                                <div>创建时间:</div>
-                                {{ dataList.createTime }}
+                                <div>完成时间:</div>
+                                {{ dataList.finishTime }}
                             </el-col>
 
                             <el-col :span="6" class="info-box">
-                                <div>创建人名称:</div>
-                                {{ dataList.creatorName }}
+                                <div>网格仓:</div>
+                                {{ dataList.frontDcName }}
                             </el-col>
 
                             <el-col :span="6" class="info-box">
-                                <div>最后更新时间:</div>
-                                {{ dataList.updateTime }}
+                                <div>暂用时间:</div>
+                                {{ dataList.lockTime }}
                             </el-col>
 
                             <el-col :span="6" class="info-box">
-                                <div>最后更新人名称:</div>
-                                {{ dataList.updatorName }}
+                                <div>拣货方法:</div>
+                                {{ dataList.pickType | setPickType }}
                             </el-col>
 
                             <el-col :span="6" class="info-box">
-                                <div>父容器:</div>
-                                <div>{{ dataList.parentId !== '0' ? dataList.parentId : "&lt;空&gt;" }}</div>
+                                <div>拣货人:</div>
+                                {{ dataList.pickUserName }}
                             </el-col>
 
                             <el-col :span="6" class="info-box">
-                                <div>当前位置:</div>
-                                <div>{{ dataList.positionCode !== " " ? dataList.positionCode : "&lt;空&gt;" }}</div>
+                                <div>开始拣货时间:</div>
+                                <div>{{ dataList.startPickTime }}</div>
                             </el-col>
 
                             <el-col :span="6" class="info-box">
+                                <div>完成时间:</div>
+                                <div>{{ dataList.remark }}</div>
+                            </el-col>
+
+                            <el-col :span="6" class="info-box">
+                                <div>拣货类别:</div>
+                                {{ dataList.type | setType }}
+                            </el-col>
+
+                            <!-- <el-col :span="6" class="info-box">
                                 <div>目标位置:</div>
-                                <div>{{ dataList.toPositionCode !== " " ? dataList.toPositionCode : "&lt;空&gt;" }}</div>
-                            </el-col>
+                                <div>{{ dataList.XX !== " " ? dataList.XX : "&lt;空&gt;" }}</div>
+                            </el-col> -->
                             <br>
 
                             <!-- <el-col>
@@ -169,7 +100,7 @@
 
 
                         </el-tab-pane>
-                        <!-- USER, DOCK, Inbound_Outbound, PRETYPE, PICK_ORDER, USER_PICKAREA, OTHER, SUPPLIER, CONTAINER, CONTAINERTYPE, DECINVBILL, INCINVBILL, PICKAREA, STORAGEAREA, PRODUCT, PRODUCTCATEGORY, BINTYPE, ZONE, PATH, SHELF, BIN, QUALITY, MOVESTOCK, LOCKSTOCK, VENDORRETURNBILL, ORDERBILL -->
+
                         <el-tab-pane label="操作日志" name="log">
                           <system-log modular="CONTAINER"></system-log>
                         </el-tab-pane>
@@ -182,7 +113,7 @@
 
 <script>
 import systemLog from "@/components/systemLog.vue";
-import BasicService from "@/api/service/BasicService";
+import DeliveryService from "@/api/service/DeliveryService";
 
 export default {
   data() {
@@ -204,12 +135,10 @@ export default {
         this.$store.dispatch("tagsView/delView", this.$route);
         this.$router.go(-1)
       },
-      getQueryStatus: function() {
+      detailsPick: function(id) {
         this.id = this.$route.query.id;
-        this.ocntainerOcntainer(this.id) // 获取详情
-      },
-      ocntainerOcntainer: function(id) {
-        BasicService.ocntainerOcntainer(id)
+
+        DeliveryService.detailsPick(id)
         .then((res) => {
           this.dataList = res;
 
@@ -224,52 +153,55 @@ export default {
       }
     },
     created() {
-      this.getQueryStatus()
+      this.detailsPick()
     },
     filters: {
-      dcStatus(useStatus) {
-        if (useStatus === undefined) return;
-        const useStatu = useStatus.toLowerCase();
-
-        switch (useStatu) {
-          case 'idle':
-            return "空闲"
-          case 'locked':
-            return "已锁定"
-          case 'receiving':
-            return "收货中"
-          case 'rtnwrhreceiving':
-            return "好退退仓收货中"
-          case 'rtnvendorreceiving':
-            return "返厂退仓收货中"
-          case 'moving':
-            return "平移中"
-          case 'allocating':
-            return "分播中"
-          case 'putawaying':
-            return "上架中"
-          case 'rtnputawaying':
-            return "退仓上架中"
-          case 'mergering':
-            return "拆并中"
-          case 'shifting':
-            return "移库中"
-          case 'aborted':
-            return "已作废"
-          case 'stacontainermovelocked':
-            return "移库锁定"
-          case 'using':
-            return "已使用"
-          case 'pickuping':
+      setBizType(type) {
+        // 业务类型。取值：DIST：配货；RETURN：退供应商
+        switch (type) {
+          case 'DIST':
+            return "配货"
+          case 'RETURN':
+            return "退供应商"
+          default:
+            return '未知';
+        }
+      },
+      setPickType(type) {
+        // ‘拣货方法，RF：RF ，BILL：拣货单’
+        switch (type) {
+          case 'RF':
+            return "RF"
+          case 'BILL':
+            return "拣货单"
+          default:
+            return '未知';
+        }
+      },
+      setStatus(type) {
+        // 状态 INITIAL: 初始, LOCKED: 已占货, PICKING：拣货中，FINISHED: 已完成
+        switch (type) {
+          case 'INITIAL':
+            return "初始"
+          case 'LOCKED':
+            return "已占货"
+          case 'PICKING':
             return "拣货中"
-          case 'handovering':
-            return "交接中"
-          case 'shiping':
-            return "装车中"
-          case 'shiped':
-            return "已装车"
-          case 'instore':
-            return "在门店"
+          case 'FINISHED':
+            return "已完成"
+          default:
+            return '未知';
+        }
+      },
+      setType(type) {
+        // 拣货类型，PALLET：整托 ，CASE：整件 ，SPLIT：拆零
+        switch (type) {
+          case 'PALLET':
+            return "整托"
+          case 'CASE':
+            return "整件"
+          case 'SPLIT':
+            return "拆零"
           default:
             return '未知';
         }

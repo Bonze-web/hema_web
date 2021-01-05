@@ -271,7 +271,30 @@ const BasicInfoPackage = {
           permission: PermIds.SYS_DC_CREATE
         }
       }]
-    }, {
+    },
+    {
+      path: "block",
+      name: "Block",
+      component: AModule,
+      meta: {
+        title: '区块',
+        icon: 'table'
+        // permission: PermIds.SYS_DC
+      },
+      children: [{
+        path: "",
+        name: "BlockView",
+        component: () =>
+          import('@/views/basic-info/block/index'),
+        hidden: true,
+        meta: {
+          title: '区块',
+          icon: 'table'
+          // permission: PermIds.SYS_DC_VIEW
+        }
+      }]
+    },
+    {
     path: "suppliers",
     name: "Suppliers",
     component: AModule,
