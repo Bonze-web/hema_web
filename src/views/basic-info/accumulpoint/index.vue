@@ -65,7 +65,7 @@
                 </el-table-column>
                 <el-table-column label="所属中心仓">
                     <template slot-scope="scope">
-                        {{ '[' + scope.row.centerDcCode + '' + scope.row.centerDcName }}
+                        {{ '[' + scope.row.centerDcCode + ']' + scope.row.centerDcName }}
                     </template>
                 </el-table-column>
                 <el-table-column label="联系人电话">

@@ -1101,7 +1101,7 @@ const outhousingAdm = {
   alwaysShow: true,
   meta: {
     title: '出库管理',
-    icon: 'wrhing'
+    icon: 'outhous'
   },
   children: [
     {
