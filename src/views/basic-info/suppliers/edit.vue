@@ -21,8 +21,8 @@
                     </el-switch>
                 </template> -->
                 <template>
-                  <el-button type="text" @click="statusChange" v-if="suppliersInfo.status">禁用</el-button>
-                  <el-button type="text" @click="statusChange" v-if="!suppliersInfo.status">启用</el-button>
+                  <el-button type="text" @click="statusChange" :disabled="!hasPermission(PermIds.PRODUCT_SUPPLIER_MODLIFY)" v-if="suppliersInfo.status">禁用</el-button>
+                  <el-button type="text" @click="statusChange" :disabled="!hasPermission(PermIds.PRODUCT_SUPPLIER_MODLIFY)" v-if="!suppliersInfo.status">启用</el-button>
                 </template>
             </div>
             <div>

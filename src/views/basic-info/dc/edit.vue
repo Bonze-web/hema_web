@@ -21,8 +21,8 @@
                     </el-switch>
                 </template> -->
                 <template>
-                  <el-button type="text" @click="statusChange" :disabled="hasPermission(PermIds.SYS_DC_DISABLE)" v-if="dcInfo.status">禁用</el-button>
-                  <el-button type="text" @click="statusChange" :disabled="hasPermission(PermIds.SYS_DC_ENABLE)" v-if="!dcInfo.status">启用</el-button>
+                  <el-button type="text" @click="statusChange" :disabled="!hasPermission(PermIds.SYS_DC_DISABLE)" v-if="dcInfo.status">禁用</el-button>
+                  <el-button type="text" @click="statusChange" :disabled="!hasPermission(PermIds.SYS_DC_ENABLE)" v-if="!dcInfo.status">启用</el-button>
                 </template>
             </div>
             <div>
