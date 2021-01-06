@@ -37,7 +37,7 @@
 
                                   <el-col>
                                     <el-form-item label="备注" prop="note">
-                                      <textarea v-model="form.note"></textarea>
+                                      <textarea rows="5" v-model="form.note"></textarea>
                                     </el-form-item> 
                                   </el-col>
 

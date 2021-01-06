@@ -82,7 +82,7 @@
                                     </el-col>
                                 </el-row>
                                 <el-form-item label="备注">
-                                    <textarea v-model="form.remark"></textarea>
+                                    <textarea rows="5" v-model="form.remark"></textarea>
                                 </el-form-item>
                                 <div class="info-title">规格信息</div>
                                 <el-row :gutter="20">

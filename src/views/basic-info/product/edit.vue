@@ -94,7 +94,7 @@
                 </el-col>
                 <el-col :span="24" class="info-box">
                   <el-form-item label="备注">
-                    <textarea v-model="form.remark"></textarea>
+                    <textarea rows="5" v-model="form.remark"></textarea>
                   </el-form-item>
                 </el-col>
               </el-row>

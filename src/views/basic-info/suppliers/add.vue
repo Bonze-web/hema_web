@@ -68,14 +68,14 @@
                                             <el-input maxlength="40" v-model="form.recordCode"></el-input>
                                         </el-form-item>
                                     </el-col>
-                                    <el-col :span="6" class="info-box">
+                                    <!-- <el-col :span="6" class="info-box">
                                         <el-form-item label="自定义字段1">
                                             <el-input maxlength="40" v-model="form.customField"></el-input>
                                         </el-form-item>
-                                    </el-col>
+                                    </el-col> -->
                                 </el-row>
                                 <el-form-item label="备注">
-                                    <textarea maxlength="250" v-model="form.remark"></textarea>
+                                    <textarea rows="5" maxlength="250" v-model="form.remark"></textarea>
                                 </el-form-item>
                             </el-form>
                         </el-tab-pane>
@@ -234,3 +234,4 @@ export default {
     margin: 12px 0;
 }
 </style>
+

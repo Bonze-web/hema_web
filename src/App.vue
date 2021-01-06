@@ -69,4 +69,12 @@ export default {
   }
 }
 </style>
+<style>
+textarea{
+  resize:none;
+  border:1px solid #DCDFE6;
+  border-radius: 4px;
+  width: 70%;
+}
+</style>
 

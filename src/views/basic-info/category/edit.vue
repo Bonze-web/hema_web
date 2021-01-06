@@ -68,7 +68,7 @@
                                     </el-col>
                                 </el-row>
                                 <el-form-item label="备注">
-                                    <textarea maxlength="128" v-model="form.remark"></textarea>
+                                    <textarea rows="5" maxlength="128" v-model="form.remark"></textarea>
                                 </el-form-item>
                             </el-form>
                         </el-tab-pane>
