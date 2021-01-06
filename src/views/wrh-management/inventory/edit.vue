@@ -214,7 +214,7 @@
                             </div>
                           </el-tab-pane>
                           <el-tab-pane label="操作日志" name="operational">
-                                <system-log :modular="'ORDERBILL'"></system-log>
+                                <system-log :modular="'STOCK_TAKE_BILL'" :id="id"></system-log>
                           </el-tab-pane>
                     </el-tabs>
                 </template>

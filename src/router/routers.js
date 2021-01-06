@@ -517,7 +517,8 @@ const BasicInfoPackage = {
       component: AModule,
       meta: {
         title: '团点',
-        icon: 'table'
+        icon: 'table',
+        permission: PermIds.WMS_STORE
       },
       children: [
         {
@@ -528,7 +529,8 @@ const BasicInfoPackage = {
         hidden: true,
         meta: {
           title: '团点',
-          icon: 'table'
+          icon: 'table',
+          permission: PermIds.WMS_STORE_VIEW
         }
       }] 
     }
@@ -1511,7 +1513,8 @@ const BillManagement = {
       component: AModule,
       meta: {
         title: '盘点单',
-        icon: 'table'
+        icon: 'table',
+        permission: PermIds.STOCK_TAKE_BILL
       },
       children: [{
         path: "",
@@ -1521,7 +1524,8 @@ const BillManagement = {
         hidden: true,
         meta: {
           title: '盘点单',
-          icon: 'table'
+          icon: 'table',
+          permission: PermIds.STOCK_TAKE_BILL_VIEW
         }
       }, {
         path: "edit",
@@ -1531,7 +1535,8 @@ const BillManagement = {
         hidden: true,
         meta: {
           title: '查看盘点单',
-          icon: 'table'
+          icon: 'table',
+          permission: PermIds.STOCK_TAKE_BILL_VIEW
         }
       }, {
         path: "add",
@@ -1541,7 +1546,8 @@ const BillManagement = {
         hidden: true,
         meta: {
           title: '新建盘点单',
-          icon: 'table'
+          icon: 'table',
+          permission: PermIds.STOCK_TAKE_BILL_CREATE
         }
       }]
     },
@@ -1660,6 +1666,51 @@ const carriage = {
           hidden: true,
           meta: {
             title: '新建网格仓线路',
+            icon: 'table'
+            // permission: PermIds.WMS_PICKORDER_CREATE
+          }
+        }] 
+    },
+    {
+      path: "circuitry",
+      name: "Circuitry",
+      component: AModule,
+      meta: {
+        title: '中心仓线路设置',
+        icon: 'table'
+        // permission: PermIds.WMS_PICKORDER
+      },
+      children: [{
+        path: "",
+        name: "CircuitryView",
+        component: () =>
+          import('@/views/carriage/circuitry/index'),
+          hidden: true,
+        meta: {
+          title: '中心仓线路设置',
+          icon: 'table'
+          // permission: PermIds.WMS_PICKORDER_VIEW 
+        }
+      }, {
+        path: "edit",
+        name: "CircuitryEdit",
+        component: () =>
+          import('@/views/carriage/circuitry/edit'),
+          hidden: true,
+          meta: {
+            title: '编辑中心仓线路',
+            icon: 'table'
+            // permission: PermIds.WMS_PICKORDER_VIEW
+          }
+        },
+        {
+          path: "add",
+          name: "CircuitryAdd",
+          component: () =>
+            import('@/views/carriage/circuitry/add'),
+          hidden: true,
+          meta: {
+            title: '新建中心仓线路',
             icon: 'table'
             // permission: PermIds.WMS_PICKORDER_CREATE
           }

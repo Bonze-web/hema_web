@@ -102,7 +102,8 @@
                                   </el-col> -->
                               </el-tab-pane>
                               <el-tab-pane label="操作日志" name="operational">
-                                    <system-log :modular="'PICK_ORDER'" :id="storeArmy.id"></system-log>
+                                    <!-- <system-log :modular="'PICK_ORDER'" :id="storeArmy.id"></system-log> -->
+                                    <system-log :modular="'PICK_ORDER'" :id="editProjectsInfo.schemeList.id"></system-log>
                               </el-tab-pane>
                           </el-tabs>
                       </template>
@@ -113,35 +114,31 @@
                       <el-button style="margin:18px 0" type="primary" size="mini" @click="establishChange"><span class="iconfont iconplus-fill" style="font-size:12px;"></span> 新建</el-button>
                     </el-row>
                     <el-table
-                        lable="团点"
+                        lable="网格仓"
                         :data="storeOption"
+                        :default-sort = "{prop: 'idx', order: 'descending'}"
                         style="width: 100%;text-align:center"
                     >
-                     <!-- <el-table-column label="序号">
+                     <el-table-column label="序号" sortable prop="idx">
                           <template slot-scope="scope">
                               {{ scope.row.idx }}
                           </template>
-                      </el-table-column> -->
+                      </el-table-column>
+                      <el-table-column label="网格仓">
+                          <template slot-scope="scope">
+                              <span style="color:#409EFF">{{ "[" + scope.row.storeCode + "]" + scope.row.storeName}}</span>
+                          </template>
+                      </el-table-column>
                       <el-table-column label="顺序">
                           <template slot-scope="scope">
                               {{ scope.row.storeOrder}}
                           </template>
                       </el-table-column>
-                      <el-table-column label="团点">
-                          <template slot-scope="scope">
-                              <span style="color:#409EFF">{{ "[" + scope.row.storeCode + "]" + scope.row.storeName}}</span>
-                          </template>
-                      </el-table-column>
-                      <el-table-column label="配送中心">
-                          <template slot-scope="scope">
-                              {{ '[' + scope.row.dcCode + ']' + scope.row.dcName }}
-                          </template>
-                      </el-table-column>
-                      <el-table-column label="状态">
+                      <!-- <el-table-column label="状态">
                           <template slot-scope="scope">
                               {{ scope.row.status | statusType}}
                           </template>
-                      </el-table-column>
+                      </el-table-column> -->
                       <el-table-column label="操作" width="200">
                           <template slot-scope="scope">
                             <el-button
@@ -371,11 +368,12 @@
 
 <script>
 // 引入公共模块
-import CargosequenceService from "@/api/service/CargosequenceService";
+import CircuitryService from "@/api/service/CircuitryService";
 import systemLog from "@/components/systemLog.vue"
 export default {
   data() {
       return {
+        adjustOrderFlag: {},
         afterNum: 1,
         editProjectsObj: {
           code: '',
@@ -471,7 +469,7 @@ export default {
    newProjectsFlag() {
     this.newProjects = false;
     this.newProjectsList.status = 'ON';
-    CargosequenceService.requestNewProjectsList(this.newProjectsList)
+    CircuitryService.requestNewProjectsList(this.newProjectsList)
     .then((res) => {
       this.$message.success("新建成功");
       this.getAllPickOrder();
@@ -508,7 +506,7 @@ export default {
         page: 1,
         pageSize: 0
       }
-      CargosequenceService.searchData(searchData)
+      CircuitryService.searchData(searchData)
       .then((res) => {
         this.getAllScheme = res.records;
         this.getAllGrpByPickId(this.getAllScheme);
@@ -520,7 +518,7 @@ export default {
      const postData = {
        storeCodeEqOrNameLk: this.codeEqOrNameLike || null
      }
-     CargosequenceService.getAllPickOrder(postData)
+     CircuitryService.getAllPickOrder(postData)
       .then((res) => {
         this.getAllGrpByPickId(res);
       }).catch((err) => {
@@ -533,7 +531,7 @@ export default {
         if (schemeArr.length <= 0) return false;
         this.storeAllSchemeAll = [];
         schemeArr.forEach((ele, idx) => {
-          CargosequenceService.getAllGrpByPickId(ele.id)
+          CircuitryService.getAllGrpByPickId(ele.id)
           .then((res) => {
             // 这里是所有的门店组的信息
             this.storeAllSchemeAll.push({schemeList: ele, store: res});
@@ -552,8 +550,7 @@ export default {
    },
    // 获取门店组下面所有的所有的门店
    getAllStoreByGrpId(id) {
-     console.log(id);
-      CargosequenceService.getAllStoreByGrpId(id)
+      CircuitryService.getAllStoreByGrpId(id)
       .then((res) => {
           const storeOptionArr = res;
           storeOptionArr.forEach((ele, idx) => {
@@ -567,7 +564,7 @@ export default {
    },
    // 获取方案详情
    getById(id) {
-      CargosequenceService.getById(id)
+      CircuitryService.getById(id)
       .then((res) => {
         this.getByIdDetail = res;
       }).catch((err) => {
@@ -575,7 +572,7 @@ export default {
       })
    },
    getGrpById(id) {
-      CargosequenceService.getGrpById(id)
+      CircuitryService.getGrpById(id)
       .then((res) => {
         this.getGrpByIdDetail = res;
       }).catch((err) => {
@@ -594,7 +591,7 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-            CargosequenceService.deleteGroupItem(obj)
+            CircuitryService.deleteGroupItem(obj)
             .then((res) => {
               this.$message.success("删除成功");
               this.getAllPickOrder();
@@ -614,7 +611,7 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-            CargosequenceService.deleteSchemeItem(obj)
+            CircuitryService.deleteSchemeItem(obj)
             .then((res) => {
               this.$message.success("删除成功");
               this.getAllPickOrder();
@@ -632,7 +629,7 @@ export default {
       this.editProjects = false;
       this.editProjectsInfo = this.editProjectsObj;
       console.log(this.editProjectsInfo);
-      CargosequenceService.updateScheme(this.editProjectsInfo)
+      CircuitryService.updateScheme(this.editProjectsInfo)
       .then((res) => {
         this.$message.success("修改成功");
         this.getAllPickOrder();
@@ -648,7 +645,7 @@ export default {
           if (valid) {
             this.newStoreInfo.pickorderId = this.getByIdDetail.id;
             this.newStoreInfo.status = this.getByIdDetail.status;
-            CargosequenceService.createGrp(this.newStoreInfo)
+            CircuitryService.createGrp(this.newStoreInfo)
             .then((res) => {
               this.$message.success("创建成功");
               this.getByIdDetail = {
@@ -679,7 +676,7 @@ export default {
    submitEditStoreChange() {
      this.editStore = false;
      this.editStoreInfo = this.editStoreObj;
-     CargosequenceService.updateGrpScheme(this.editStoreInfo)
+     CircuitryService.updateGrpScheme(this.editStoreInfo)
       .then((res) => {
         this.$message.success("修改成功");
         this.editStoreInfo = {};
@@ -693,6 +690,7 @@ export default {
      // 存储方案的字段
      this.editProjectsInfo = schemeOpt;
      this.storeArmy = obj;
+     console.log(schemeOpt.schemeList.dcId);
      if (item === 'scheme') {
         this.getById(obj.id);
         this.headerScheme = "[" + obj.code + "]" + obj.name;
@@ -723,11 +721,12 @@ export default {
       // "updatorId": "string",
       // "updatorName": "string",
       // "version": "string"
+      this.adjustOrderFlag = obj;
       this.storeMesAll = {
-        adjustOrder: obj.idx,
+        adjustOrder: obj.storeOrder,
         grpId: obj.grpId,
         id: obj.id,
-        pickOrderId: obj.pickOrderId,
+        pickorderId: obj.pickorderId,
         remark: obj.remark,
         status: obj.status,
         storeCode: obj.storeCode,
@@ -737,22 +736,39 @@ export default {
         getByIdMesName: '[' + this.editProjectsInfo.schemeList.code + ']' + this.editProjectsInfo.schemeList.name,
         getGrpByIdMesName: '[' + this.storeArmy.code + ']' + this.storeArmy.name,
         mylength: this.storeOption.length,
-        curIdx: obj.idx
+        curIdx: obj.storeOrder
       }
    },
    Cancellation() {
     this.dialogFormVisible = false;
-    this.postAdjustOrder(this.storeMesAll);
-    this.getAllStoreByGrpId(this.storeMesAll.id);
-   },
+    this.adjustOrderFlag.adjustOrder = this.storeMesAll.adjustOrder;
+    CircuitryService.adjustOrder(this.adjustOrderFlag)
+    .then((res) => {
+     this.schemeOrStore(this.changeActive, this.storeArmy, this.editProjectsInfo)
+      this.$message.success("调序成功");
+    }).catch((err) => {
+      this.$message.error("调序失败" + err.message)
+    });
+  },
    deleteItem(obj) {
-      CargosequenceService.deleteItem(obj.id, obj.version)
-      .then((res) => {
-        this.$message.success("删除成功");
-        this.getAllStoreByGrpId(obj.id);
-      }).catch((err) => {
-        this.$message.error("删除失败" + err.message)
-      });
+     this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          CircuitryService.deleteItem(obj.id, obj.version)
+          .then((res) => {
+            this.$message.success("删除成功");
+            this.schemeOrStore(this.changeActive, this.storeArmy, this.editProjectsInfo)
+          }).catch((err) => {
+            this.$message.error("删除失败" + err.message)
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });          
+        });
    },
     handleSizeChangeOne(e) {
         this.mySelfPageSize = Number(e)
@@ -772,15 +788,15 @@ export default {
     storedContentChange() {
         this.storedContent = [];
         const mySelfData = {
-          codeOrNameEquals: this.codeOrNameEquals || null,
+          dcId: this.editProjectsInfo.schemeList.dcId,
           page: this.mySelfPage,
           pageSize: this.mySelfPageSize,
           searchCount: true
         }
-        CargosequenceService.queryItem(mySelfData)
+        CircuitryService.getFrontByDcId(mySelfData)
         .then((res) => {
-          this.storedContent = res.records;
-          this.storedContentTotalCount = res.totalCount;
+          this.storedContent = res;
+          this.storedContentTotalCount = res.length;
         }).catch((err) => {
           this.$message.error("获取信息失败" + err.message);
         })
@@ -797,21 +813,23 @@ export default {
       const postData = [];
       this.leftSelect.forEach((ele, idx) => {
         postData.push({
-          pickOrderId: this.editProjectsInfo.schemeList.id,
+          pickorderId: this.editProjectsInfo.schemeList.id,
           grpId: this.storeArmy.id,
           storeCode: ele.code,
           storeName: ele.name,
-          storeOrder: idx
+          storeId: ele.id,
+          storeOrder: idx + 1 + this.storeOption.length
         })
       })
       const postDataObj = {
         createGrpItemDTOs: postData,
         grpId: this.storeArmy.id
       }
-      CargosequenceService.addGrpItems(postDataObj)
+      CircuitryService.addGrpItems(postDataObj)
       .then((res) => {
+        // console.log(this.changeActive, this.storeArmy, this.editProjectsInfo);
         this.$message.success("添加成功");
-        // this.schemeOrStore(this.changeActive, this.storeArmy, this.editProjectsInfo)
+        this.schemeOrStore(this.changeActive, this.storeArmy, this.editProjectsInfo)
       }).catch((err) => {
         this.$message.error("添加失败" + err.message)
       })

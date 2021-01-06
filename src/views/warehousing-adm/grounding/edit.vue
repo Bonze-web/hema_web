@@ -37,21 +37,21 @@
             {{ scope.row.productName }}
           </template>
           </el-table-column>
-          <el-table-column prop="price" label="商品单价">
+          <!-- <el-table-column prop="price" label="库存单价">
             <template slot-scope="scope">
               {{ scope.row.price }}
             </template>
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column prop="productCode" label="商品编码">
             <template slot-scope="scope">
               {{ scope.row.productCode }}
             </template>
           </el-table-column>
-          <el-table-column prop="productDate" label="商品生产日期">
+          <!-- <el-table-column prop="productDate" label="商品生产日期">
             <template slot-scope="scope">
               {{ scope.row.productDate }}
             </template>
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column prop="billNumber" label="单号" style="height: 20px">
             <template slot-scope="scope">{{ scope.row.billNumber }}</template>
           </el-table-column>
@@ -62,6 +62,12 @@
             </template>
           </el-table-column>
 
+          <el-table-column prop="productPrice" label="库存单价">
+            <template slot-scope="scope">
+              {{ scope.row.price }}
+            </template>
+          </el-table-column>
+          
           <el-table-column prop="binCode" label="上架货位">
             <template slot-scope="scope">
               {{ scope.row.binCode }} 
@@ -79,11 +85,11 @@
               {{ scope.row.munit }}
             </template>
           </el-table-column>
-          <el-table-column prop="productionBatch" label="批号">
+          <!-- <el-table-column prop="productionBatch" label="批号">
             <template slot-scope="scope">
               {{ scope.row.productionBatch }}
             </template>
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column prop="putawayTime" label="上架时间">
             <template slot-scope="scope">
               {{ scope.row.putawayTime }}
@@ -109,7 +115,7 @@
               {{ scope.row.qtyStr }}
             </template>
           </el-table-column>
-          <el-table-column prop="volume" label="体积">
+          <!-- <el-table-column prop="volume" label="体积">
             <template slot-scope="scope">
               {{ scope.row.volume }}
             </template>
@@ -118,8 +124,8 @@
             <template slot-scope="scope">
               {{ scope.row.weight }}
             </template>
-          </el-table-column>
-          <el-table-column prop="sourceBinCode" label="来源货位编码">
+          </el-table-column> -->
+          <!-- <el-table-column prop="sourceBinCode" label="来源货位编码">
             <template slot-scope="scope">
               {{ scope.row.sourceBinCode }}
             </template>
@@ -128,8 +134,8 @@
             <template slot-scope="scope">
               {{ scope.row.sourceBinUsage }}
             </template>
-          </el-table-column>
-          <el-table-column prop="stockBatch" label="批次">
+          </el-table-column> -->
+          <el-table-column prop="stockBatch" label="库存批次">
             <template slot-scope="scope">
               {{ scope.row.stockBatch }}
             </template>
@@ -144,7 +150,7 @@
               {{ scope.row.targetBinUsage | binUsageChange}}
             </template>
           </el-table-column>
-          <el-table-column prop="validDate" label="商品到效期">
+          <!-- <el-table-column prop="validDate" label="商品到效期">
             <template slot-scope="scope">
               {{ scope.row.validDate }}
             </template>
@@ -158,7 +164,7 @@
             <template slot-scope="scope">
               {{ scope.row.vendorName }}
             </template>
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column prop="remark" label="备注">
             <template slot-scope="scope">
               {{ scope.row.remark }}

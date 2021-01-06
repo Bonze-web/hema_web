@@ -378,6 +378,19 @@ export default {
   WMS_PICKORDER_MODIFY: "wms:pickorder:modify",
   WMS_PICKORDER_DELETE: "wms:pickorder:remove",
 
+  /**
+   * 查看自提点接口
+   */
+  WMS_STORE: "wms:store",
+  WMS_STORE_VIEW: "wms:store:view",
+
+  /**
+   * 盘点
+   */
+  STOCK_TAKE_BILL: "stock:take_bill",
+  STOCK_TAKE_BILL_VIEW: "stock:take_bill:view",
+  STOCK_TAKE_BILL_CREATE: "stock:take_bill:create",
+  STOCK_TAKE_BILL_UPDATE: "stock:take_bill:update",
     /**
    * 拣货单模块
    */
@@ -407,10 +420,10 @@ export default {
   STOCK_UPDATE_INFO_BILL_CREATE: "stock:update_info_bill:create",
   STOCK_UPDATE_INFO_BILL_AUDIT: "stock:update_info_bill:audit",
 
-  STOCK_TAKE_BILL: "stock:take_bill",
-  STOCK_TAKE_BILL_VIEW: "stock:take_bill:view",
-  STOCK_TAKE_BILL_CREATE: "stock:take_bill:create",
-  STOCK_TAKE_BILL_UPDATE: "stock:take_bill:update",
+  // STOCK_TAKE_BILL: "stock:take_bill",
+  // STOCK_TAKE_BILL_VIEW: "stock:take_bill:view",
+  // STOCK_TAKE_BILL_CREATE: "stock:take_bill:create",
+  // STOCK_TAKE_BILL_UPDATE: "stock:take_bill:update",
 
   /**
    * 库存锁定解锁模块
