@@ -57,7 +57,7 @@
                     {{ '[' + scope.row.wrhCode + ']' + scope.row.wrhName }}
                   </template>
                 </el-table-column> -->
-                <el-table-column prop="moverName" label="报告员">
+                <el-table-column prop="moverName" label="移库员">
                   <template slot-scope="scope">
                     {{ scope.row.moverName }}
                   </template>

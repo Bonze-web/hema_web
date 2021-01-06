@@ -45,7 +45,7 @@
                                         </el-table-column>
                                         <el-table-column prop="qpcStr" label="商品包装/计量单位">
                                           <template slot-scope="scope">
-                                            {{ scope.row.qpcStr + '/' + scope.row.productSpec }}
+                                            {{ scope.row.qpcStr + '/' + scope.row.munit }}
                                           </template>
                                         </el-table-column>
                                         <el-table-column prop="fromBinCode" label="来源货位">
@@ -54,6 +54,7 @@
                                           </template>
                                         </el-table-column>
                                         <el-table-column prop="fromContainerBarcode" label="来源容器"></el-table-column>
+                                        <el-table-column prop="price" label="单价"></el-table-column>
                                         <el-table-column prop="toBinCode" label="目标货位">
                                           <template slot-scope="scope">
                                             {{ '[' + scope.row.toBinCode + ']' }}{{ scope.row.toBinUsage | binUsage }}
@@ -65,7 +66,7 @@
                                           </template>
                                         </el-table-column>
                                         <!-- <el-table-column prop="productionBatch" label="批号"></el-table-column> -->
-                                        <!-- <el-table-column prop="stockBatch" label="批次"></el-table-column> -->
+                                        <el-table-column prop="stockBatch" label="批次"></el-table-column>
                                         <!-- <el-table-column prop="consumeQtystr" label="生产日期"></el-table-column>
                                         <el-table-column prop="validDate" label="到效日期"></el-table-column>
                                         <el-table-column prop="vendorCode" label="供应商">

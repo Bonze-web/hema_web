@@ -74,8 +74,12 @@
                                             {{ scope.$index + 1 }}
                                           </template>
                                         </el-table-column>
-                                        <el-table-column width="100" prop="productName" label="商品/商品规格"></el-table-column>
-                                        <el-table-column width="100" prop="qpcStr" label="商品包装/计量单位"></el-table-column>
+                                        <el-table-column width="100" prop="productName" label="商品/商品规格">
+                                          {{ scope.row.productName + '/' + scope.row.productSpec }}
+                                        </el-table-column>
+                                        <el-table-column width="100" prop="qpcStr" label="商品包装/计量单位">
+                                          {{ scope.row.qpcStr + '/' + scope.row.munit }}
+                                        </el-table-column>
                                         <el-table-column width="100" prop="binCode" label="货位"></el-table-column>
                                         <el-table-column width="100" prop="containerBarcode" label="容器"></el-table-column>
                                         <el-table-column width="100" prop="productionDate" label="生产日期"></el-table-column>
