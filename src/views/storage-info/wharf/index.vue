@@ -68,7 +68,7 @@
                         
                     </div> -->
                     
-                    <!-- <el-button :disabled="scope.row.status" size="mini" type="text" @click="statusChange(scope.row.status, scope.row.id, scope.row.version)">休闲</el-button>
+                    <!-- <el-button :disabled="scope.row.status" size="mini" type="text" @click="statusChange(scope.row.status, scope.row.id, scope.row.version)">空闲</el-button>
                     <el-button :disabled="!scope.row.status" size="mini" type="text" @click="statusChange(scope.row.status, scope.row.id, scope.row.version)">使用中</el-button>
                     <el-button :disabled="!scope.row.status" size="mini" type="text" @click="statusChange(scope.row.status, scope.row.id, scope.row.version)">停用</el-button> -->
                     <el-dropdown :hide-on-click="true" trigger="click" @command="statusChange" placement="bottom">
@@ -76,7 +76,7 @@
                         设置状态
                       </span>
                       <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item :disabled="scope.row.status=='IDLE'" :command="[scope.row.id, scope.row.version, 'IDLE']">休闲</el-dropdown-item>
+                        <el-dropdown-item :disabled="scope.row.status=='IDLE'" :command="[scope.row.id, scope.row.version, 'IDLE']">空闲</el-dropdown-item>
                         <el-dropdown-item :disabled="scope.row.status=='USING'" :command="[scope.row.id, scope.row.version, 'USING']">使用中</el-dropdown-item>
                         <el-dropdown-item :disabled="scope.row.status=='STOP'" :command="[scope.row.id, scope.row.version, 'STOP']">停用</el-dropdown-item>
                       </el-dropdown-menu>
@@ -157,14 +157,14 @@ export default {
           WharfService.openSuppliers(command[0], command[1], command[2])
           .then((res) => {
             console.log(res);
-            _this.$message.success("休闲状态修改成功")
+            _this.$message.success("空闲状态修改成功")
             _this.getSuppliersList();
           })
           .catch((err) => {
             if (err === "") {
-              _this.$message.success("休闲状态修改成功")
+              _this.$message.success("空闲状态修改成功")
             } else {
-              _this.$message.error("休闲状态修改失败" + err.message)
+              _this.$message.error("空闲状态修改失败" + err.message)
             }
             _this.getSuppliersList();
           })
