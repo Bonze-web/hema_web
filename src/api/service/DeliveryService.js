@@ -13,7 +13,7 @@ export default {
     },
     detailsPick(id) {
         // 查看列表
-        return request.get('/wms/pick-bill/getById?id=', id)
+        return request.get('/wms/pick-bill/getById?id=' + id)
     }
     /**
      * 拣货流程结束

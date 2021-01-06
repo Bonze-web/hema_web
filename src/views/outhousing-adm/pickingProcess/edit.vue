@@ -135,14 +135,12 @@ export default {
         this.$store.dispatch("tagsView/delView", this.$route);
         this.$router.go(-1)
       },
-      detailsPick: function(id) {
+      detailsPick: function() {
         this.id = this.$route.query.id;
-
-        DeliveryService.detailsPick(id)
+        console.log(this.id)
+        DeliveryService.detailsPick(this.id)
         .then((res) => {
           this.dataList = res;
-
-          console.log(this.dataList.sonList)
         })
         .catch((err) => {
           this.$message.error("获取详情失败" + err.message)

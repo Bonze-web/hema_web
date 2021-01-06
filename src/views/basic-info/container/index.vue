@@ -258,9 +258,10 @@ export default {
   filters: {
     dcStatus(useStatus) {
       // 全部; IDLE 空闲; LOCKED 已锁定; USEING 已使用;ABORTED 已作废; 
-      const useStatu = useStatus.toLowerCase();
+      // const useStatu = useStatus.toLowerCase();
+      console.log(useStatus)
 
-      switch (useStatu) {
+      switch (useStatus) {
         case 'IDLE':
           return "空闲"
         case 'LOCKED':

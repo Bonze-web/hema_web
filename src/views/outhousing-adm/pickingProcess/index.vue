@@ -44,8 +44,8 @@
       <el-table :data="listData" @selection-change="handleSelectionChange"  style="width: 100%; text-align: center" :row-style="{ height: '16px', padding: '-4px' }" >
         <el-table-column prop="scope" label="单号">
           <template slot-scope="scope">
-            <router-link style="color: #409eff" :to="{ path: '/delivery/pickingProcess/edit', query:{ id: scope.row.id} }" >
-              <span>{{ scope.row.billNumber }}333333</span>
+            <router-link style="color: #409eff" :to="{ path: '/outhousing-adm/pickingProcess/edit', query:{ id: scope.row.id} }" >
+              <span>{{ scope.row.billNumber }}</span>
             </router-link>
           </template>
         </el-table-column>
@@ -191,12 +191,12 @@ export default {
     }
   },
   created() {
-    // this.pickBill();
+    this.pickBill();
   },
   beforeRouteEnter(to, from, next) {
     next(vm => {
       // 通过 `vm` 访问组件实例
-      // vm.pickBill();
+      vm.pickBill();
     })
   },
   filters: {
