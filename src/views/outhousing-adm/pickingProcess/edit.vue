@@ -22,8 +22,14 @@
                             <div class="info-title">基本信息</div>
                             <el-col :span="6" class="info-box">
                                 <div>业务类型:</div>
-                                <div>{{ dataList.bizType }}</div>
+                                <div>{{ dataList.bizType | setBizType }}</div>
                             </el-col>
+
+                            <el-col :span="6" class="info-box">
+                                <div>开始拣货时间:</div>
+                                <div>{{ dataList.startPickTime }}</div>
+                            </el-col>
+
                             <el-col :span="6" class="info-box">
                                 <div>完成时间:</div>
                                 {{ dataList.finishTime }}
@@ -50,18 +56,13 @@
                             </el-col>
 
                             <el-col :span="6" class="info-box">
-                                <div>开始拣货时间:</div>
-                                <div>{{ dataList.startPickTime }}</div>
-                            </el-col>
-
-                            <el-col :span="6" class="info-box">
-                                <div>完成时间:</div>
-                                <div>{{ dataList.remark }}</div>
-                            </el-col>
-
-                            <el-col :span="6" class="info-box">
                                 <div>拣货类别:</div>
                                 {{ dataList.type | setType }}
+                            </el-col>
+
+                            <el-col :span="6" class="info-box">
+                                <div>备注:</div>
+                                <div>{{ dataList.remark }}</div>
                             </el-col>
 
                             <!-- <el-col :span="6" class="info-box">

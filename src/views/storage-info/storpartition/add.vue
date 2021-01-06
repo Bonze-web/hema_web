@@ -53,7 +53,7 @@
             <div>
                 <template>
                     <el-tabs v-model="tabActiveName">
-                        <el-tab-pane label="码头" name="suppliers">
+                        <el-tab-pane label="存储分区" name="suppliers">
                             <div class="info-title">基本信息</div>
                             <el-col :span="6" class="info-box">
                                 <div>代码:</div>
@@ -97,7 +97,7 @@ export default {
             { required: true, message: '请输入代码', trigger: 'blur' }
           ],
           name: [
-            { required: true, message: '请输入码头名称', trigger: 'blur' }
+            { required: true, message: '请输入存储分区名称', trigger: 'blur' }
           ],
           binScope: [
             { required: true, message: '请填写货位范围', trigger: 'blur' },

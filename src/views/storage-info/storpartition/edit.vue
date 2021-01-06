@@ -104,7 +104,7 @@ export default {
             { required: true, message: '请输入代码', trigger: 'blur' }
           ],
           name: [
-            { required: true, message: '请输入码头名称', trigger: 'blur' }
+            { required: true, message: '请输入存储分区名称', trigger: 'blur' }
           ],
           binScope: [
             { required: true, message: '请填写货位范围', trigger: 'blur' },
@@ -211,6 +211,7 @@ export default {
       // 详情页面跳转到编辑页面
       editSupplier() {
         this.status = "edit"
+        this.tabActiveName = 'suppliers'; // tab栏名称
         // 这个form肯定就是编辑页面的数据,suppliersInfo是前一个页面传递过来的数据
         // 传递的是form是用户填写的数据
         this.form = Object.assign(this.form, this.suppliersInfo)
