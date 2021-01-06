@@ -378,6 +378,20 @@ export default {
   WMS_PICKORDER_MODIFY: "wms:pickorder:modify",
   WMS_PICKORDER_DELETE: "wms:pickorder:remove",
 
+    /**
+   * 拣货单模块
+   */
+  WMS_PICK_BILL: "wms:receive_bill",
+  WMS_PICK_BILL_VIEW: "wms:receive_bill:view",
+  WMS_PICK_BILL_CREATE: "wms:receive_bill:create",
+  WMS_PICK_BILL_UPDATE: "wms:receive_bill:receive",
+
+    /**
+   * 查看区块
+   */
+  WMS_BLOCK: "wms:block",
+  WMS_BLOCK_VIEW: "wms:block:view",
+
   /**
    * 库存模块
    */
@@ -386,7 +400,7 @@ export default {
   STOCK_STOCK_VIEW: "stock:stock:view",
 
   /**
-   * 库存信息修改申请单模块
+   * 修改申请单模块
    */
   STOCK_UPDATE_INFO_BILL: "stock:update_info_bill",
   STOCK_UPDATE_INFO_BILL_VIEW: "stock:update_info_bill:view",

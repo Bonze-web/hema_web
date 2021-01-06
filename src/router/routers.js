@@ -278,8 +278,8 @@ const BasicInfoPackage = {
       component: AModule,
       meta: {
         title: '区块',
-        icon: 'table'
-        // permission: PermIds.SYS_DC
+        icon: 'table',
+        permission: PermIds.WMS_BLOCK
       },
       children: [{
         path: "",
@@ -289,8 +289,8 @@ const BasicInfoPackage = {
         hidden: true,
         meta: {
           title: '区块',
-          icon: 'table'
-          // permission: PermIds.SYS_DC_VIEW
+          icon: 'table',
+          permission: PermIds.WMS_BLOCK_VIEW
         }
       }]
     },
@@ -548,387 +548,388 @@ const StorageInfoPackage = {
     icon: 'storage-info'
   },
   children: [
-  {
-    path: "wrh",
-    name: "Warehouse",
-    component: AModule,
-    meta: {
-      title: '仓区',
-      icon: 'table',
-      permission: PermIds.WMS_WAREHOUSE
-    },
-    children: [
-      {
-      path: "",
-      name: "View",
-      component: () =>
-        import('@/views/storage-info/wrh/index'),
-      hidden: true,
+    {
+      path: "wrh",
+      name: "Warehouse",
+      component: AModule,
       meta: {
         title: '仓区',
         icon: 'table',
-        permission: PermIds.WMS_WAREHOUSE_VIEW
-      }
-    }, {
-      path: "edit",
-      name: "Edit",
-      component: () =>
-        import('@/views/storage-info/wrh/edit'),
-      hidden: true,
-      meta: {
-        title: '查看仓区',
-        icon: 'table',
-        permission: PermIds.WMS_WAREHOUSE_VIEW
-      }
-    }, 
-    {
-      path: "add",
-      name: "Add",
-      component: () =>
-        import('@/views/storage-info/wrh/add'),
-      hidden: true,
-      meta: {
-        title: '新建仓区',
-        icon: 'table',
-        permission: PermIds.WMS_WAREHOUSE_CREATE
-      }
-    }] 
-  },
-  {
-    path: "locationtype",
-    name: "locationType",
-    component: AModule,
-    meta: {
-      title: '货位类型',
-      icon: 'table',
-      permission: PermIds.WMS_BINTYPE
-    },
-    children: [
+        permission: PermIds.WMS_WAREHOUSE
+      },
+      children: [
+        {
+        path: "",
+        name: "View",
+        component: () =>
+          import('@/views/storage-info/wrh/index'),
+        hidden: true,
+        meta: {
+          title: '仓区',
+          icon: 'table',
+          permission: PermIds.WMS_WAREHOUSE_VIEW
+        }
+      }, {
+        path: "edit",
+        name: "Edit",
+        component: () =>
+          import('@/views/storage-info/wrh/edit'),
+        hidden: true,
+        meta: {
+          title: '查看仓区',
+          icon: 'table',
+          permission: PermIds.WMS_WAREHOUSE_VIEW
+        }
+      }, 
       {
-      path: "",
-      name: "View",
-      component: () =>
-        import('@/views/storage-info/location-type/index'),
-      hidden: true,
+        path: "add",
+        name: "Add",
+        component: () =>
+          import('@/views/storage-info/wrh/add'),
+        hidden: true,
+        meta: {
+          title: '新建仓区',
+          icon: 'table',
+          permission: PermIds.WMS_WAREHOUSE_CREATE
+        }
+      }] 
+    },
+    {
+      path: "locationtype",
+      name: "locationType",
+      component: AModule,
       meta: {
         title: '货位类型',
         icon: 'table',
-        permission: PermIds.WMS_BINTYPE_VIEW
-      }
-    }, {
-      path: "edit",
-      name: "Edit",
-      component: () =>
-        import('@/views/storage-info/location-type/edit'),
-      hidden: true,
-      meta: {
-        title: '查看货位',
-        icon: 'table',
-        permission: PermIds.WMS_BINTYPE_VIEW
-      }
-    }, {
-      path: "add",
-      name: "Add",
-      component: () =>
-        import('@/views/storage-info/location-type/add'),
-      hidden: true,
-      meta: {
-        title: '新建货位类型',
-        icon: 'table',
-        permission: PermIds.WMS_BINTYPE_CREATE
-      }
-    }] 
-  }, {
-    path: "wharf",
-    name: "Wharf",
-    component: AModule,
-    meta: {
-      title: '码头',
-      icon: 'table',
-      permission: PermIds.WMS_DOCK
-    },
-    children: [{
-      path: "",
-      name: "WharfView",
-      component: () =>
-        import('@/views/storage-info/wharf/index'),
+        permission: PermIds.WMS_BINTYPE
+      },
+      children: [
+        {
+        path: "",
+        name: "View",
+        component: () =>
+          import('@/views/storage-info/location-type/index'),
         hidden: true,
+        meta: {
+          title: '货位类型',
+          icon: 'table',
+          permission: PermIds.WMS_BINTYPE_VIEW
+        }
+      }, {
+        path: "edit",
+        name: "Edit",
+        component: () =>
+          import('@/views/storage-info/location-type/edit'),
+        hidden: true,
+        meta: {
+          title: '查看货位',
+          icon: 'table',
+          permission: PermIds.WMS_BINTYPE_VIEW
+        }
+      }, {
+        path: "add",
+        name: "Add",
+        component: () =>
+          import('@/views/storage-info/location-type/add'),
+        hidden: true,
+        meta: {
+          title: '新建货位类型',
+          icon: 'table',
+          permission: PermIds.WMS_BINTYPE_CREATE
+        }
+      }] 
+    }, {
+      path: "wharf",
+      name: "Wharf",
+      component: AModule,
       meta: {
         title: '码头',
         icon: 'table',
-        permission: PermIds.WMS_DOCK_VIEW
-      }
-    }, {
-      path: "edit",
-      name: "WharfEdit",
-      component: () =>
-        import('@/views/storage-info/wharf/edit'),
-        hidden: true,
+        permission: PermIds.WMS_DOCK
+      },
+      children: [{
+        path: "",
+        name: "WharfView",
+        component: () =>
+          import('@/views/storage-info/wharf/index'),
+          hidden: true,
         meta: {
-          title: '编辑码头',
+          title: '码头',
           icon: 'table',
           permission: PermIds.WMS_DOCK_VIEW
         }
-      },
-      {
-        path: "add",
-        name: "WharfAdd",
+      }, {
+        path: "edit",
+        name: "WharfEdit",
         component: () =>
-          import('@/views/storage-info/wharf/add'),
-        hidden: true,
-        meta: {
-          title: '新建码头',
-          icon: 'table',
-          permission: PermIds.WMS_DOCK_CREATE
-        }
-      }] 
-  },
-  {
-    path: "sortdivision",
-    name: "Sortdivision",
-    component: AModule,
-    meta: {
-      title: '拣货分区',
-      icon: 'table',
-      permission: PermIds.WMS_PICKAREA
+          import('@/views/storage-info/wharf/edit'),
+          hidden: true,
+          meta: {
+            title: '编辑码头',
+            icon: 'table',
+            permission: PermIds.WMS_DOCK_VIEW
+          }
+        },
+        {
+          path: "add",
+          name: "WharfAdd",
+          component: () =>
+            import('@/views/storage-info/wharf/add'),
+          hidden: true,
+          meta: {
+            title: '新建码头',
+            icon: 'table',
+            permission: PermIds.WMS_DOCK_CREATE
+          }
+        }] 
     },
-    children: [{
-      path: "",
-      name: "SortdivisionView",
-      component: () =>
-        import('@/views/storage-info/sortdivision/index'),
-        hidden: true,
+    {
+      path: "sortdivision",
+      name: "Sortdivision",
+      component: AModule,
       meta: {
         title: '拣货分区',
         icon: 'table',
-        permission: PermIds.WMS_PICKAREA_VIEW
-      }
-    }, {
-      path: "edit",
-      name: "SortdivisionEdit",
-      component: () =>
-        import('@/views/storage-info/sortdivision/edit'),
-        hidden: true,
-        meta: {
-          title: '编辑拣货分区',
-          icon: 'table',
-         permission: PermIds.WMS_PICKAREA_VIEW
-        }
+        permission: PermIds.WMS_PICKAREA
       },
-      {
-        path: "add",
-        name: "SortdivisionAdd",
+      children: [{
+        path: "",
+        name: "SortdivisionView",
         component: () =>
-          import('@/views/storage-info/sortdivision/add'),
-        hidden: true,
+          import('@/views/storage-info/sortdivision/index'),
+          hidden: true,
         meta: {
-          title: '新建拣货分区',
+          title: '拣货分区',
           icon: 'table',
-          permission: PermIds.WMS_PICKAREA_CREATE
+          permission: PermIds.WMS_PICKAREA_VIEW
         }
-      }] 
-  },
-  {
-    path: "personnelbind",
-    name: "Personnelbind",
-    component: AModule,
-    meta: {
-      title: '用户拣货分区绑定',
-      icon: 'table',
-      permission: PermIds.WMS_USER_PICKAREA
+      }, {
+        path: "edit",
+        name: "SortdivisionEdit",
+        component: () =>
+          import('@/views/storage-info/sortdivision/edit'),
+          hidden: true,
+          meta: {
+            title: '编辑拣货分区',
+            icon: 'table',
+          permission: PermIds.WMS_PICKAREA_VIEW
+          }
+        },
+        {
+          path: "add",
+          name: "SortdivisionAdd",
+          component: () =>
+            import('@/views/storage-info/sortdivision/add'),
+          hidden: true,
+          meta: {
+            title: '新建拣货分区',
+            icon: 'table',
+            permission: PermIds.WMS_PICKAREA_CREATE
+          }
+        }] 
     },
-    children: [{
-      path: "",
-      name: "PersonnelbindView",
-      component: () =>
-        import('@/views/storage-info/personnelbind/index'),
-        hidden: true,
+    {
+      path: "personnelbind",
+      name: "Personnelbind",
+      component: AModule,
       meta: {
         title: '用户拣货分区绑定',
         icon: 'table',
-        permission: PermIds.WMS_USER_PICKAREA_VIEW
-      }
-    }, {
-      path: "edit",
-      name: "PersonnelbindEdit",
-      component: () =>
-        import('@/views/storage-info/personnelbind/edit'),
-        hidden: true,
+        permission: PermIds.WMS_USER_PICKAREA
+      },
+      children: [{
+        path: "",
+        name: "PersonnelbindView",
+        component: () =>
+          import('@/views/storage-info/personnelbind/index'),
+          hidden: true,
         meta: {
-          title: '编辑用户拣货分区',
+          title: '用户拣货分区绑定',
           icon: 'table',
           permission: PermIds.WMS_USER_PICKAREA_VIEW
         }
-      },
-      {
-        path: "add",
-        name: "PersonnelbindAdd",
+      }, {
+        path: "edit",
+        name: "PersonnelbindEdit",
         component: () =>
-          import('@/views/storage-info/personnelbind/add'),
-        hidden: true,
-        meta: {
-          title: '新建用户拣货分区',
-          icon: 'table',
-          permission: PermIds.WMS_USER_PICKAREA_CREATE
-        }
-      }] 
-  },
-  {
-    path: "cargosequence",
-    name: "Cargosequence",
-    component: AModule,
-    meta: {
-      title: '网格仓线路设置',
-      icon: 'table',
-      permission: PermIds.WMS_PICKORDER
+          import('@/views/storage-info/personnelbind/edit'),
+          hidden: true,
+          meta: {
+            title: '编辑用户拣货分区',
+            icon: 'table',
+            permission: PermIds.WMS_USER_PICKAREA_VIEW
+          }
+        },
+        {
+          path: "add",
+          name: "PersonnelbindAdd",
+          component: () =>
+            import('@/views/storage-info/personnelbind/add'),
+          hidden: true,
+          meta: {
+            title: '新建用户拣货分区',
+            icon: 'table',
+            permission: PermIds.WMS_USER_PICKAREA_CREATE
+          }
+        }] 
     },
-    children: [{
-      path: "",
-      name: "CargosequenceView",
-      component: () =>
-        import('@/views/storage-info/cargosequence/index'),
-        hidden: true,
+    {
+      path: "cargosequence",
+      name: "Cargosequence",
+      component: AModule,
       meta: {
         title: '网格仓线路设置',
         icon: 'table',
-        permission: PermIds.WMS_PICKORDER_VIEW 
-      }
-    }, {
-      path: "edit",
-      name: "CargosequenceEdit",
-      component: () =>
-        import('@/views/storage-info/cargosequence/edit'),
-        hidden: true,
-        meta: {
-          title: '编辑网格仓线路',
-          icon: 'table',
-          permission: PermIds.WMS_PICKORDER_VIEW
-        }
+        permission: PermIds.WMS_PICKORDER
       },
-      {
-        path: "add",
-        name: "CargosequenceAdd",
+      children: [{
+        path: "",
+        name: "CargosequenceView",
         component: () =>
-          import('@/views/storage-info/cargosequence/add'),
-        hidden: true,
+          import('@/views/storage-info/cargosequence/index'),
+          hidden: true,
         meta: {
-          title: '新建网格仓线路',
+          title: '网格仓线路设置',
           icon: 'table',
-          permission: PermIds.WMS_PICKORDER_CREATE
+          permission: PermIds.WMS_PICKORDER_VIEW 
         }
-      }] 
-  },
-  {
-    path: "circuitry",
-    name: "Circuitry",
-    component: AModule,
-    meta: {
-      title: '中心仓线路设置',
-      icon: 'table',
-      permission: PermIds.WMS_PICKORDER
+      }, {
+        path: "edit",
+        name: "CargosequenceEdit",
+        component: () =>
+          import('@/views/storage-info/cargosequence/edit'),
+          hidden: true,
+          meta: {
+            title: '编辑网格仓线路',
+            icon: 'table',
+            permission: PermIds.WMS_PICKORDER_VIEW
+          }
+        },
+        {
+          path: "add",
+          name: "CargosequenceAdd",
+          component: () =>
+            import('@/views/storage-info/cargosequence/add'),
+          hidden: true,
+          meta: {
+            title: '新建网格仓线路',
+            icon: 'table',
+            permission: PermIds.WMS_PICKORDER_CREATE
+          }
+        }] 
     },
-    children: [{
-      path: "",
-      name: "CircuitryView",
-      component: () =>
-        import('@/views/storage-info/circuitry/index'),
-        hidden: true,
+    {
+      path: "circuitry",
+      name: "Circuitry",
+      component: AModule,
       meta: {
         title: '中心仓线路设置',
         icon: 'table',
-        permission: PermIds.WMS_PICKORDER_VIEW 
-      }
-    }, {
-      path: "edit",
-      name: "CircuitryEdit",
-      component: () =>
-        import('@/views/storage-info/circuitry/edit'),
-        hidden: true,
-        meta: {
-          title: '编辑中心仓线路',
-          icon: 'table',
-          permission: PermIds.WMS_PICKORDER_VIEW
-        }
+        permission: PermIds.WMS_PICKORDER
       },
-      {
-        path: "add",
-        name: "CircuitryAdd",
+      children: [{
+        path: "",
+        name: "CircuitryView",
         component: () =>
-          import('@/views/storage-info/circuitry/add'),
-        hidden: true,
+          import('@/views/storage-info/circuitry/index'),
+          hidden: true,
         meta: {
-          title: '新建中心仓线路',
+          title: '中心仓线路设置',
           icon: 'table',
-          permission: PermIds.WMS_PICKORDER_CREATE
+          permission: PermIds.WMS_PICKORDER_VIEW 
         }
-      }] 
-  },
-  {
-    path: "storpartition",
-    name: "Storpartition",
-    component: AModule,
-    meta: {
-      title: '存储分区',
-      icon: 'table',
-      permission: PermIds.WMS_STORAGEAREA
+      }, {
+        path: "edit",
+        name: "CircuitryEdit",
+        component: () =>
+          import('@/views/storage-info/circuitry/edit'),
+          hidden: true,
+          meta: {
+            title: '编辑中心仓线路',
+            icon: 'table',
+            permission: PermIds.WMS_PICKORDER_VIEW
+          }
+        },
+        {
+          path: "add",
+          name: "CircuitryAdd",
+          component: () =>
+            import('@/views/storage-info/circuitry/add'),
+          hidden: true,
+          meta: {
+            title: '新建中心仓线路',
+            icon: 'table',
+            permission: PermIds.WMS_PICKORDER_CREATE
+          }
+        }] 
     },
-    children: [{
-      path: "",
-      name: "StorpartitionView",
-      component: () =>
-        import('@/views/storage-info/storpartition/index'),
-        hidden: true,
+    {
+      path: "storpartition",
+      name: "Storpartition",
+      component: AModule,
       meta: {
         title: '存储分区',
         icon: 'table',
-        permission: PermIds.WMS_STORAGEAREA_VIEW
-      }
-    }, {
-      path: "edit",
-      name: "StorpartitionEdit",
-      component: () =>
-        import('@/views/storage-info/storpartition/edit'),
-        hidden: true,
+        permission: PermIds.WMS_STORAGEAREA
+      },
+      children: [{
+        path: "",
+        name: "StorpartitionView",
+        component: () =>
+          import('@/views/storage-info/storpartition/index'),
+          hidden: true,
         meta: {
-          title: '编辑存储分区',
+          title: '存储分区',
           icon: 'table',
           permission: PermIds.WMS_STORAGEAREA_VIEW
         }
-      },
-      {
-        path: "add",
-        name: "StorpartitionAdd",
+      }, {
+        path: "edit",
+        name: "StorpartitionEdit",
         component: () =>
-          import('@/views/storage-info/storpartition/add'),
-        hidden: true,
-        meta: {
-          title: '新建存储分区',
-          icon: 'table',
-          permission: PermIds.WMS_STORAGEAREA_CREATE
-        }
-      }] 
-  }, {
-    path: "freightarea",
-    name: "FreightArea",
-    component: AModule,
-    meta: {
-      title: '货区',
-      icon: 'table',
-      permission: PermIds.WMS_BIN
-    },
-    children: [{
-      path: "",
-      name: "FreightAreaView",
-      component: () =>
-        import('@/views/storage-info/freight-area/index'),
-        hidden: true,
+          import('@/views/storage-info/storpartition/edit'),
+          hidden: true,
+          meta: {
+            title: '编辑存储分区',
+            icon: 'table',
+            permission: PermIds.WMS_STORAGEAREA_VIEW
+          }
+        },
+        {
+          path: "add",
+          name: "StorpartitionAdd",
+          component: () =>
+            import('@/views/storage-info/storpartition/add'),
+          hidden: true,
+          meta: {
+            title: '新建存储分区',
+            icon: 'table',
+            permission: PermIds.WMS_STORAGEAREA_CREATE
+          }
+        }] 
+    }, {
+      path: "freightarea",
+      name: "FreightArea",
+      component: AModule,
       meta: {
         title: '货区',
         icon: 'table',
-        permission: PermIds.WMS_BIN_VIEW
-      }
-    }]
-  }]
+        permission: PermIds.WMS_BIN
+      },
+      children: [{
+        path: "",
+        name: "FreightAreaView",
+        component: () =>
+          import('@/views/storage-info/freight-area/index'),
+          hidden: true,
+        meta: {
+          title: '货区',
+          icon: 'table',
+          permission: PermIds.WMS_BIN_VIEW
+        }
+      }]
+    }
+  ]
 }
 
 /**
@@ -1213,8 +1214,8 @@ const outhousingAdm = {
     component: AModule,
     meta: {
       title: '拣货单',
-      icon: 'table'
-      // permission: PermIds.WMS_DECINVBILL
+      icon: 'table',
+      permission: PermIds.WMS_PICK_BILL
     },
     children: [
       {
@@ -1225,8 +1226,8 @@ const outhousingAdm = {
         hidden: true,
         meta: {
           title: '拣货单',
-          icon: 'table'
-          // permission: PermIds.WMS_DECINVBILL_VIEW
+          icon: 'table',
+          permission: PermIds.WMS_PICK_BILL_VIEW
         }
       },
       {
@@ -1237,8 +1238,8 @@ const outhousingAdm = {
         hidden: true,
         meta: {
           title: '拣货单详情',
-          icon: 'table'
-          // permission: PermIds.WMS_DECINVBILL_VIEW
+          icon: 'table',
+          permission: PermIds.WMS_PICK_BILL_VIEW
         }
       }
     ]
