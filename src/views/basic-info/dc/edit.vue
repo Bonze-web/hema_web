@@ -21,8 +21,8 @@
                     </el-switch>
                 </template> -->
                 <template>
-                  <el-button type="text" @click="statusChange" v-if="dcInfo.status">禁用</el-button>
-                  <el-button type="text" @click="statusChange" v-if="!dcInfo.status">启用</el-button>
+                  <el-button type="text" @click="statusChange" :disabled="!hasPermission(PermIds.SYS_DC_DISABLE)" v-if="dcInfo.status">禁用</el-button>
+                  <el-button type="text" @click="statusChange" :disabled="!hasPermission(PermIds.SYS_DC_ENABLE)" v-if="!dcInfo.status">启用</el-button>
                 </template>
             </div>
             <div>
@@ -95,7 +95,7 @@
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
-                                        <el-form-item label="经营面积(m2)">
+                                        <el-form-item label="经营面积(㎡)">
                                             <el-input @change="areaChange" type="number" placeholder="0.000" v-model="form.operatingArea"></el-input>
                                         </el-form-item>
                                     </el-col>
@@ -274,7 +274,7 @@ export default {
       statusChange: function() {
         // 修改仓库状态
         const self = this
-        this.$confirm('此操作将改变物流中心仓库状态, 是否继续?', '提示', {
+        this.$confirm('此操作将改变物流中心状态, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -300,11 +300,6 @@ export default {
             self.getDc(self.id)
           })
         }
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });          
         })
       },
       getQueryStatus: function() {

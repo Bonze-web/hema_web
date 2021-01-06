@@ -57,8 +57,8 @@
                 <el-table-column
                 label="操作">
                 <template slot-scope="scope">
-                  <el-button :disabled="scope.row.status" size="mini" type="text" @click="statusChange(scope.row.status, scope.row.id, scope.row.version)">启用</el-button>
-                  <el-button :disabled="!scope.row.status" size="mini" type="text" @click="statusChange(scope.row.status, scope.row.id, scope.row.version)">禁用</el-button>
+                  <el-button v-if="!scope.row.status" :disabled="!hasPermission(PermIds.WMS_CONTAINER_TYPE_MODIFY)" size="mini" type="text" @click="statusChange(scope.row.status, scope.row.id, scope.row.version)">启用</el-button>
+                  <el-button v-if="scope.row.status" :disabled="!hasPermission(PermIds.WMS_CONTAINER_TYPE_MODIFY)" size="mini" type="text" @click="statusChange(scope.row.status, scope.row.id, scope.row.version)">禁用</el-button>
                 </template>
                 </el-table-column>
             </el-table>
@@ -143,12 +143,7 @@ export default {
             _this.getContainerTypeList()
           })
         }
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          })         
-        });
+        })
       },
       clearInput: function() {
         this.form = {
