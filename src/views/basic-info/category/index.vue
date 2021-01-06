@@ -145,11 +145,6 @@ export default {
             this.getCateGoryQuery()
           })
         }
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          })         
         })
       },
       clearInput: function() {

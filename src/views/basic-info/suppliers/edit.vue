@@ -264,11 +264,6 @@ export default {
             _this.getSuppliers(_this.id)
           })
         }
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消'
-          })          
         })
       },
       getQueryStatus: function() {

@@ -139,11 +139,6 @@ export default {
             this.getSuppliersList()
           })
         }
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消'
-          })        
         })
       },
       clearInput: function() {

@@ -274,7 +274,7 @@ export default {
       statusChange: function() {
         // 修改仓库状态
         const self = this
-        this.$confirm('此操作将改变物流中心仓库状态, 是否继续?', '提示', {
+        this.$confirm('此操作将改变物流中心状态, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -300,11 +300,6 @@ export default {
             self.getDc(self.id)
           })
         }
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });          
         })
       },
       getQueryStatus: function() {

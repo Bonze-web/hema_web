@@ -121,7 +121,7 @@ export default {
         // 修改供应商状态
         console.log(status)
         const _this = this
-        this.$confirm('此操作将改变物流中心仓库状态, 是否继续?', '提示', {
+        this.$confirm('此操作将改变物流中心状态, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -147,12 +147,7 @@ export default {
             _this.getDcList()
           })
         }
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          })         
-        });
+        })
       },
       clearInput: function() {
         this.form = {
