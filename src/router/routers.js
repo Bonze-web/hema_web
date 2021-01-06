@@ -1167,7 +1167,7 @@ const outhousingAdm = {
     name: "PickingProcess",
     component: AModule,
     meta: {
-      title: '拣货流程',
+      title: '拣货单',
       icon: 'table'
       // permission: PermIds.WMS_DECINVBILL
     },
@@ -1179,7 +1179,7 @@ const outhousingAdm = {
           import('@/views/outhousing-adm/pickingProcess/index'),
         hidden: true,
         meta: {
-          title: '拣货流程',
+          title: '拣货单',
           icon: 'table'
           // permission: PermIds.WMS_DECINVBILL_VIEW
         }
@@ -1191,7 +1191,7 @@ const outhousingAdm = {
           import('@/views/outhousing-adm/pickingProcess/edit'),
         hidden: true,
         meta: {
-          title: '拣货流程详情',
+          title: '拣货单详情',
           icon: 'table'
           // permission: PermIds.WMS_DECINVBILL_VIEW
         }

@@ -153,10 +153,10 @@ export default {
       const data = {
         page: this.page,
         pageSize: this.pageSize,
-        billNumber: this.form.billNumber, // 单号
-        lockerId: this.form.lockerId, // 锁定人ID
-        billType: this.form.billType ? this.form.billType : null, // 单据类型
-        status: this.form.status ? this.form.status : null, // 状态
+        // billNumber: this.form.billNumber, // 单号
+        // lockerId: this.form.lockerId, // 锁定人ID
+        // billType: this.form.billType ? this.form.billType : null, // 单据类型
+        // status: this.form.status ? this.form.status : null, // 状态
         searchCount: true
       };
 

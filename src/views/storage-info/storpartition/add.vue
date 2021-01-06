@@ -39,7 +39,7 @@
                                     </el-col>
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="货位范围" prop="binScope">
-                                            <el-input v-model="form.binScope" maxlength="64"></el-input>
+                                            <el-input v-model="form.binScope" maxlength="256"></el-input>
                                         </el-form-item>
                                     </el-col>
                                 </el-row>
@@ -101,7 +101,7 @@ export default {
           ],
           binScope: [
             { required: true, message: '请填写货位范围', trigger: 'blur' },
-            { required: true, pattern: /^(([0-9a-zA-Z]+[-]+[0-9a-zA-Z]+){0,64}[0-9a-zA-Z]{0,64}([(]+[0-9]+\/[0-9]+[)]+)?[,]?[0-9a-zA-Z]{0,64}[,]?){0,64}$/, message: '格式10、10(1/2)、10-20，多个以逗号隔开', trigger: 'blur' }
+            { required: true, pattern: /^(([0-9a-zA-Z]+[-]+[0-9a-zA-Z]+){0,256}[0-9a-zA-Z]{0,256}([(]+[0-9]+\/[0-9]+[)]+)?[,]?[0-9a-zA-Z]{0,256}[,]?){0,256}$/, message: '格式10、10(1/2)、10-20，多个以逗号隔开', trigger: 'blur' }
           ]
         }
       }
