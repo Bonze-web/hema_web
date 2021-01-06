@@ -21,8 +21,8 @@
                     </el-switch>
                 </template> -->
                 <template>
-                  <el-button type="text" @click="statusChange" v-if="containerTypeInfo.status">禁用</el-button>
-                  <el-button type="text" @click="statusChange" v-if="!containerTypeInfo.status">启用</el-button>
+                  <el-button type="text" :disabled="!hasPermission(PermIds.WMS_CONTAINER_TYPE_MODIFY)" @click="statusChange" v-if="containerTypeInfo.status">禁用</el-button>
+                  <el-button type="text" :disabled="!hasPermission(PermIds.WMS_CONTAINER_TYPE_MODIFY)" @click="statusChange" v-if="!containerTypeInfo.status">启用</el-button>
                 </template>
             </div>
             <div>

@@ -64,8 +64,8 @@
                 <el-table-column
                 label="操作">
                 <template slot-scope="scope">
-                  <el-button :disabled="scope.row.status" size="mini" type="text" @click="statusChange(scope.row.status, scope.row.id, scope.row.version)">启用</el-button>
-                  <el-button :disabled="!scope.row.status" size="mini" type="text" @click="statusChange(scope.row.status, scope.row.id, scope.row.version)">禁用</el-button>
+                  <el-button :disabled="scope.row.status && hasPermission(PermIds.SYS_DC_ENABLE)" size="mini" type="text" @click="statusChange(scope.row.status, scope.row.id, scope.row.version)">启用</el-button>
+                  <el-button :disabled="!scope.row.status && hasPermission(PermIds.SYS_DC_DISABLE)" size="mini" type="text" @click="statusChange(scope.row.status, scope.row.id, scope.row.version)">禁用</el-button>
                 </template>
                 </el-table-column>
             </el-table>

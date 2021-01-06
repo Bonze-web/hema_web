@@ -366,7 +366,7 @@ const BasicInfoPackage = {
         meta: {
           title: '查看商品类别',
           icon: 'table',
-          permission: PermIds.PRODUCT_CATEGORY_UPDATE
+          permission: PermIds.PRODUCT_CATEGORY_VIEW
         }
       }, {
         path: "add",

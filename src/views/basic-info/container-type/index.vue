@@ -143,12 +143,7 @@ export default {
             _this.getContainerTypeList()
           })
         }
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          })         
-        });
+        })
       },
       clearInput: function() {
         this.form = {

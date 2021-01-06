@@ -21,8 +21,8 @@
                     </el-switch>
                 </template> -->
                 <template>
-                  <el-button type="text" @click="statusChange" v-if="dcInfo.status">禁用</el-button>
-                  <el-button type="text" @click="statusChange" v-if="!dcInfo.status">启用</el-button>
+                  <el-button type="text" @click="statusChange" :disabled="hasPermission(PermIds.SYS_DC_DISABLE)" v-if="dcInfo.status">禁用</el-button>
+                  <el-button type="text" @click="statusChange" :disabled="hasPermission(PermIds.SYS_DC_ENABLE)" v-if="!dcInfo.status">启用</el-button>
                 </template>
             </div>
             <div>
@@ -95,7 +95,7 @@
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
-                                        <el-form-item label="经营面积(m2)">
+                                        <el-form-item label="经营面积(㎡)">
                                             <el-input @change="areaChange" type="number" placeholder="0.000" v-model="form.operatingArea"></el-input>
                                         </el-form-item>
                                     </el-col>

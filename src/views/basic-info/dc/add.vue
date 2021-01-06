@@ -74,7 +74,7 @@
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6" class="info-box">
-                                        <el-form-item label="经营面积(m2)">
+                                        <el-form-item label="经营面积(㎡)">
                                             <el-input @change="areaChange" type="number" placeholder="0.000" v-model="form.operatingArea"></el-input>
                                         </el-form-item>
                                     </el-col>
