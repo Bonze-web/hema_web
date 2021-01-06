@@ -25,7 +25,7 @@
                     <el-tabs v-model="tabActiveName">
                         <el-tab-pane label="拣货分区" name="suppliers">
                             <div class="info-title">基本信息</div>
-                             <el-form :model="form" :rules="createRules" ref="form" label-width="100px" class="demo-ruleForm">
+                             <el-form :model="form" :rules="createRules" ref="form" label-width="120px" class="demo-ruleForm">
                                 <el-row :gutter="20">
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="代码" prop="code">
@@ -50,6 +50,7 @@
                                           </el-select>
                                         </el-form-item>
                                     </el-col>
+
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="上架规则" prop="putawayRule">
                                           <el-select v-model="form.putawayRule" placeholder="请选择上架规则">
@@ -58,6 +59,90 @@
                                           </el-select>
                                         </el-form-item>
                                     </el-col>
+
+                                    <!-- ================== -->
+
+                                    <el-col :span="6" class="info-box" v-if="blockList.length !== 0">
+                                        <el-form-item label="对应区块" prop="block">
+                                          <el-select v-model="form.block" placeholder="请选择对应区块">
+                                            <el-option v-for="(item, index) in blockList" :key="index" :label="item.name" :value="item.code"></el-option>
+                                          </el-select>
+                                        </el-form-item>
+                                    </el-col>
+
+                                    <el-col :span="6" class="info-box">
+                                      <!-- RUNTIME：作业运行时  -->
+                                        <el-form-item label="补货模式" prop="putawayRule">
+                                          <el-select v-model="form.putawayRule" placeholder="请选择补货模式">
+                                            <el-option label="作业运行时" value="RUNTIME"></el-option>
+                                          </el-select>
+                                        </el-form-item>
+                                    </el-col>
+
+                                    <el-col :span="6" class="info-box">
+                                        <el-form-item label="补货算法" prop="putawayRule">
+                                          <el-select v-model="form.putawayRule" placeholder="请选择补货算法">
+                                            <el-option label="T型" value="T"></el-option>
+                                            <el-option label="地堆 " value="STACK"></el-option>
+                                          </el-select>
+                                        </el-form-item>
+                                    </el-col>
+
+                                    <el-col :span="6" class="info-box">
+                                        <el-form-item label="补货设备" prop="putawayRule">
+                                          <el-select v-model="form.putawayRule" placeholder="请选择补货设备">
+                                            <el-option label="T型" value="T"></el-option>
+                                            <el-option label="地堆 " value="STACK"></el-option>
+                                          </el-select>
+                                        </el-form-item>
+                                    </el-col>
+
+                                    <el-col :span="6" class="info-box">
+                                        <el-form-item label="补货分单" prop="putawayRule">
+                                          <el-select v-model="form.putawayRule" placeholder="请选择补货分单">
+                                            <el-option label="T型" value="T"></el-option>
+                                            <el-option label="地堆 " value="STACK"></el-option>
+                                          </el-select>
+                                        </el-form-item>
+                                    </el-col>
+
+                                    <el-col :span="6" class="info-box">
+                                        <el-form-item label="拣货模式" prop="putawayRule">
+                                          <el-select v-model="form.putawayRule" placeholder="请选择拣货模式">
+                                            <el-option label="T型" value="T"></el-option>
+                                            <el-option label="地堆 " value="STACK"></el-option>
+                                          </el-select>
+                                        </el-form-item>
+                                    </el-col>
+
+                                    <el-col :span="6" class="info-box">
+                                        <el-form-item label="拣货设备" prop="putawayRule">
+                                          <el-select v-model="form.putawayRule" placeholder="请选择拣货设备">
+                                            <el-option label="T型" value="T"></el-option>
+                                            <el-option label="地堆 " value="STACK"></el-option>
+                                          </el-select>
+                                        </el-form-item>
+                                    </el-col>
+
+                                    <el-col :span="6" class="info-box">
+                                        <el-form-item label="拣货容器类型" prop="pickContainerTypeName">
+                                          <el-select v-model="form.pickContainerTypeName" placeholder="请选择拣货容器类型">
+                                            <el-option v-for="(item, index) in contentType" :key="index" :label="item.name" :value="item.code"></el-option>
+                                          </el-select>
+                                        </el-form-item>
+                                    </el-col>
+
+                                    <el-col :span="6" class="info-box">
+                                        <el-form-item label="拣货分单" prop="putawayRule">
+                                          <el-input v-model="form.code" maxlength="32"></el-input>
+                                        </el-form-item>
+                                    </el-col>
+
+
+                                    <!-- ========================== -->
+
+
+
                                 </el-row>
                             </el-form>
                         </el-tab-pane>
@@ -213,6 +298,8 @@ import SortdivisionService from "@/api/service/SortdivisionService";
 export default {
   data() {
       return {
+        contentType: [], // 容器类型
+        blockList: [], // 区块列表
         operationalData: [],
         tabActiveName: "suppliers",
         time: false,
@@ -254,6 +341,8 @@ export default {
           binScope: '',
           stockType: "",
           putawayRule: "",
+          pickContainerTypeName: "", // 容器类型
+          block: '', // 区块
           storageList: [
             {
               name: "rrr",
@@ -279,6 +368,9 @@ export default {
           ],
           putawayRule: [
             { required: true, message: '请填写上架规则', trigger: 'blur' }
+          ],
+          block: [
+            { required: true, message: '请选择区块', trigger: 'blur' }
           ]
         }
       }
@@ -487,10 +579,44 @@ export default {
             }
           }
         }
+      },
+      // 获取容器类型接口
+      getContainerTypeQuery() {
+        SortdivisionService.containerTypeQuery({
+          page: 1,
+          pageSize: 0,
+          statusEquals: 'ON',
+          searchCount: true
+        })
+        .then(res => {
+          console.log(res)
+          this.contentType = res.records
+        })
+        .catch(err => {
+          this.$message.error("容器类型列表获取失败" + err.message)
+        })
+      },
+      // 获取区块列表
+      getBlockQuery() {
+        SortdivisionService.getBlockQuery({
+          page: 1,
+          pageSize: 0,
+          searchCount: true,
+          isForQuery: true
+        })
+        .then(res => {
+          console.log(res)
+          this.blockList = res.records
+        })
+        .catch(err => {
+          this.$message.error("区块列表获取失败" + err.message)
+        })
       }
     },
     created() {
       this.getQueryStatus();
+      this.getContainerTypeQuery() // 获取容器类型
+      this.getBlockQuery() // 获取区块列表
     },
     filters: {
     

@@ -225,7 +225,7 @@ export default {
       deleteWmsBintype: function() {
         // 删除货位
         const _this = this;
-        this.$confirm('操作将删除此货位，是否继续?', '提示', {
+        this.$confirm('操作将删除此货位类型，是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'

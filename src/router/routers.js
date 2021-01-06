@@ -278,8 +278,8 @@ const BasicInfoPackage = {
       component: AModule,
       meta: {
         title: '区块',
-        icon: 'table'
-        // permission: PermIds.WMS_BLOCK
+        icon: 'table',
+        permission: PermIds.WMS_BLOCK
       },
       children: [{
         path: "",
@@ -289,8 +289,8 @@ const BasicInfoPackage = {
         hidden: true,
         meta: {
           title: '区块',
-          icon: 'table'
-          // permission: PermIds.WMS_BLOCK_VIEW
+          icon: 'table',
+          permission: PermIds.WMS_BLOCK_VIEW
         }
       }]
     },
