@@ -28,7 +28,7 @@
           <el-row>
             <router-link :to="{ path: '/storageinfo/wharf/add', query:{ status: 'create'} }">
             <!-- <span v-if="child.meta&&child.meta.title" :title="child.meta.title">{{child.meta.title}}</span> -->
-            <el-button style="margin:18px 10px" type="primary" size="mini"  v-if="hasPermission(PermIds.WMS_DOCK_CREATE) && workingOrg.type === 'DC'">新建</el-button>
+            <el-button style="margin:18px 10px" type="primary" size="mini"  v-if="hasPermission(PermIds.WMS_DOCK_CREATE)">新建</el-button>
             </router-link>
           </el-row>
             <el-table
@@ -60,7 +60,7 @@
                 </el-table-column>
                 <el-table-column
                 label="操作"
-                v-if="hasPermission(PermIds.WMS_DOCK_UPDATE) && workingOrg.type === 'DC'"
+                v-if="hasPermission(PermIds.WMS_DOCK_UPDATE)"
                 >
                   <template slot-scope="scope">
                     <!-- <div class="status-chnage-box">

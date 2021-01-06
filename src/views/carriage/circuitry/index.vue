@@ -310,14 +310,14 @@
             <el-button type="primary" @click="Cancellation">确 定</el-button>
           </div>
         </el-dialog>
-         <el-dialog title="添加线路" :visible.sync="establish" style="margin-top: 7vh" class="shuttle-box">
+         <el-dialog title="添加网格仓" :visible.sync="establish" style="margin-top: 7vh" class="shuttle-box">
             <div style="text-align: center; position: relative">
               <div class="shuttle">
                   <div class="shuttle-left">
                     <div class="shuttle-left-header">
                         {{leftSelect.length}}/{{storedContentTotalCount}} 项
                     </div>
-                    <el-input v-model="codeOrNameEquals" placeholder="请输入代码或名称" @change="searchDataLeftChange"><i slot="prefix" class="el-input__icon el-icon-search" style="right:0" @click="searchDataLeftChange"></i></el-input>
+                    <el-input v-model="nameOrCodeLike" placeholder="请输入代码或名称" @change="searchDataLeftChange"><i slot="prefix" class="el-input__icon el-icon-search" style="right:0" @click="searchDataLeftChange"></i></el-input>
                     <div style="margin-top:20px;">
                       <el-table
                         ref="multipleTable"
@@ -334,7 +334,7 @@
                           width="55">
                         </el-table-column>
                         <el-table-column
-                          label="线路"
+                          label="网格仓"
                           width="calc(100% - 55px)"
                           style="padding: 7px 0;">
                           <template slot-scope="scope">
@@ -392,7 +392,7 @@ export default {
         mySelfPage: 1,
         mySelfPageSize: 10,
         storedContent: [],
-        codeOrNameEquals: "",
+        nameOrCodeLike: "",
         storedContentTotalCount: 0,
         leftSelect: [],
         establish: false,
@@ -788,6 +788,7 @@ export default {
     storedContentChange() {
         this.storedContent = [];
         const mySelfData = {
+          nameOrCodeLike: this.nameOrCodeLike,
           dcId: this.editProjectsInfo.schemeList.dcId,
           page: this.mySelfPage,
           pageSize: this.mySelfPageSize,
@@ -795,8 +796,8 @@ export default {
         }
         CircuitryService.getFrontByDcId(mySelfData)
         .then((res) => {
-          this.storedContent = res;
-          this.storedContentTotalCount = res.length;
+          this.storedContent = res.records;
+          this.storedContentTotalCount = res.totalCount;
         }).catch((err) => {
           this.$message.error("获取信息失败" + err.message);
         })

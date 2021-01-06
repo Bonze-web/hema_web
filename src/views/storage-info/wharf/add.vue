@@ -19,7 +19,7 @@
             </div>
             <div>
                 <el-button @click="back">返回</el-button>
-                <el-button type="primary" v-if="hasPermission(PermIds.PRODUCT_PRODUCT_ENABLE) && workingOrg.type=== 'GROUP'" @click="editSupplier">编辑</el-button>
+                <el-button type="primary" v-if="hasPermission(PermIds.PRODUCT_PRODUCT_ENABLE)" @click="editSupplier">编辑</el-button>
             </div>
         </div>
         <div style="height:20px" />
