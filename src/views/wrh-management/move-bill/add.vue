@@ -187,6 +187,7 @@ export default {
         this.restaurants.forEach(item => {
           if (item.id === this.form.moverId) {
             this.form.moverId = item.id
+            // this.form.moveCode = 
           }
         })
       },

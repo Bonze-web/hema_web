@@ -239,9 +239,9 @@ export default {
         switch (status) {
           case "INITIAL":
             return "初始状态"
-          case "INPROGRESS":
+          case "RUNNING":
             return "移库中"
-          case "AUDITED":
+          case "FINISHED":
             return "已完成"
           default:
             return "未知"
@@ -260,7 +260,8 @@ export default {
   padding:18px 10px
 }
 /deep/ .el-table .cell{
-  line-height: 16px;
+  // line-height: 16px;
+  padding: 6px;
 }
 </style>
 <style lang="scss">

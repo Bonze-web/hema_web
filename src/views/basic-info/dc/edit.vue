@@ -386,6 +386,7 @@ export default {
       },
       editDc() {
         this.status = "edit"
+        this.tabActiveName = 'dc'
         this.form = Object.assign(this.form, this.dcInfo)
         console.log(this.form)
         this.getDcCenter()

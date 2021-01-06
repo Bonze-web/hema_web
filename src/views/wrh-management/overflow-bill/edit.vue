@@ -19,7 +19,7 @@
                 <el-button @click="back" >返回</el-button>
                 <!-- <el-button @click="statusChange" >打印</el-button> -->
                 <el-button @click="deleteOverflowBill" v-if="hasPermission(PermIds.WMS_INCINVBILL_DELETE)">删除</el-button>
-                <el-button v-if="form.status !== 'AUDITED' && hasPermission(PermIds.WMS_INCINVBILL_UPDATE)" @click="editLossBill" >编辑</el-button>
+                <el-button v-if="form.status !== 'AUDITED' && hasPermission(PermIds.WMS_INCINVBILL_UPDATE)" @click="editOverflowBill" >编辑</el-button>
                 <el-button type="primary" v-if="form.status !== 'AUDITED' && hasPermission(PermIds.WMS_INCINVBILL_AUDIT)" @click="check = true">审核</el-button>
                 <!-- <el-button type="primary" @click="editContainerType" :disabled="!billInfo.status" v-if="hasPermission(PermIds.WMS_CONTAINER_TYPE_UPDATE)">编辑</el-button> -->
             </div>
@@ -34,7 +34,7 @@
             <div>
                 <template>
                     <el-tabs v-model="tabActiveName" @tab-click="tabClick">
-                        <el-tab-pane label="溢余单" name="containerType">
+                        <el-tab-pane label="溢余单" name="overflowBill">
                             <div class="info-title">概要</div>
                             <el-col :span="6" class="info-box">
                                 <div>溢余类型:</div>
@@ -180,7 +180,7 @@
                                     </el-col>
                                 </el-row>
                                 <el-form-item label="备注">
-                                    <textarea rows="5" maxlength="200" v-model="form.remark"></textarea>
+                                    <textarea maxlength="200" v-model="form.remark"></textarea>
                                 </el-form-item>
                                 <div class="info-title">
                                     <div>
@@ -246,7 +246,7 @@
                                         </el-table-column>
                                         <el-table-column width="100" prop="remark" label="备注">
                                           <template slot-scope="scope">
-                                            <textarea rows="5" v-model="scope.row.remark"></textarea>
+                                            <textarea v-model="scope.row.remark"></textarea>
                                           </template>
                                         </el-table-column>
                                     </el-table>
@@ -275,7 +275,7 @@ export default {
         PermIds: PermIds,
         status: '', // 页面状态
         id: '', // 单据ID
-        tabActiveName: 'containerType', // tab栏名称
+        tabActiveName: 'overflowBill', // tab栏名称
         billInfo: '',
         wrhList: [], // 仓库列表
         deccerList: [], // 报告人列表
@@ -608,8 +608,9 @@ export default {
           this.$message.error('获取详情失败' + err.message)
         });
       },
-      editLossBill: function() {
+      editOverflowBill: function() {
         this.status = 'edit'
+        this.tabActiveName = "overflowBill"
         this.getWrhList()
         this.addSelection(this.productList)
       }

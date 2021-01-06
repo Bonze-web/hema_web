@@ -514,6 +514,7 @@ export default {
       },
       editContainerType() {
         this.status = "edit"
+        this.tabActiveName = 'containerType'
         this.form = Object.assign(this.form, this.containerTypeInfo)
         console.log(this.form)
       }

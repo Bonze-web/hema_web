@@ -272,6 +272,7 @@ export default {
       },
       editCategory() {
         this.status = "edit"
+        this.tabActiveName = "category"
         this.form = Object.assign(this.form, this.categoryInfo)
         console.log(this.form)
         if (this.level !== "one") {

@@ -295,7 +295,8 @@ export default {
   padding:18px 10px
 }
 /deep/ .el-table .cell{
-  line-height: 24px;
+  // line-height: 16px;
+  padding: 6px;
 }
 </style>
 <style lang="scss">

@@ -335,6 +335,7 @@ export default {
       },
       editSupplier() {
         this.status = "edit"
+        this.tabActiveName = 'suppliers'
         this.form = Object.assign(this.form, this.suppliersInfo)
         console.log(this.form)
       }

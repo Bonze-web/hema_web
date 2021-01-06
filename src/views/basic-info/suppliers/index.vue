@@ -92,7 +92,7 @@ export default {
         totalCount: 0,
         form: {
           nameOrCode: '',
-          status: ''
+          status: 'ON'
         },
         suppliersData: [],
         multipleSelection: [], // 选择的列表

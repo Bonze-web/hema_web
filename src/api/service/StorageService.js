@@ -226,7 +226,7 @@ export default {
   getAllFreightSpace(data) {
     const param = {
       page: 1,
-      pageSize: 0,
+      pageSize: 20,
       ...data
     }
     return request.get('/wms/bin/queryBin', {

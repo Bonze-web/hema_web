@@ -34,7 +34,7 @@
             <div>
                 <template>
                     <el-tabs v-model="tabActiveName" @tab-click="tabClick">
-                        <el-tab-pane label="损耗单" name="containerType">
+                        <el-tab-pane label="损耗单" name="lossBill">
                             <div class="info-title">概要</div>
                             <el-col :span="6" class="info-box">
                                 <div>损耗类型:</div>
@@ -266,7 +266,7 @@ export default {
         PermIds: PermIds,
         status: '', // 页面状态
         id: '', // 单据ID
-        tabActiveName: 'containerType', // tab栏名称
+        tabActiveName: 'lossBill', // tab栏名称
         billInfo: '',
         wrhList: [], // 仓库列表
         deccerList: [], // 报损人列表
@@ -610,6 +610,7 @@ export default {
       },
       editLossBill: function() {
         this.status = 'edit'
+        this.tabActiveName = "lossBill"
         this.getWrhList()
         this.addSelection(this.productList)
       }

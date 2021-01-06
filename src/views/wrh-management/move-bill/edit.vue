@@ -12,7 +12,7 @@
             <div>
                 <template>
                     <el-tabs v-model="tabActiveName">
-                        <el-tab-pane label="移库单" name="containerType">
+                        <el-tab-pane label="移库单" name="moveBill">
                             <div class="info-title">概要</div>
                             <el-col :span="6" class="info-box">
                                 <div>移库类型:</div>
@@ -38,42 +38,42 @@
                                             {{ scope.$index + 1 }}
                                           </template>
                                         </el-table-column>
-                                        <el-table-column width="120" prop="productName" label="商品/商品规格">
+                                        <el-table-column prop="productName" label="商品/商品规格">
                                           <template slot-scope="scope">
                                             {{ scope.row.productName + '/' + scope.row.productSpec }}
                                           </template>
                                         </el-table-column>
-                                        <el-table-column width="120" prop="qpcStr" label="商品包装/计量单位">
+                                        <el-table-column prop="qpcStr" label="商品包装/计量单位">
                                           <template slot-scope="scope">
                                             {{ scope.row.qpcStr + '/' + scope.row.productSpec }}
                                           </template>
                                         </el-table-column>
-                                        <el-table-column width="120" prop="fromBinCode" label="来源货位">
+                                        <el-table-column prop="fromBinCode" label="来源货位">
                                           <template slot-scope="scope">
                                             {{ '[' + scope.row.fromBinCode + ']' }}{{ scope.row.fromBinUsage | binUsage }}
                                           </template>
                                         </el-table-column>
-                                        <el-table-column width="120" prop="fromContainerBarcode" label="来源容器"></el-table-column>
-                                        <el-table-column width="120" prop="toBinCode" label="目标货位">
+                                        <el-table-column prop="fromContainerBarcode" label="来源容器"></el-table-column>
+                                        <el-table-column prop="toBinCode" label="目标货位">
                                           <template slot-scope="scope">
                                             {{ '[' + scope.row.toBinCode + ']' }}{{ scope.row.toBinUsage | binUsage }}
                                           </template>
                                         </el-table-column>
-                                        <el-table-column width="120" prop="validDate" label="目标容器">
+                                        <el-table-column prop="validDate" label="目标容器">
                                           <template slot-scope="scope">
                                             {{ scope.row.toContainerBarcode ? scope.row.toContainerBarcode : '&lt;空&gt;' }}
                                           </template>
                                         </el-table-column>
-                                        <el-table-column width="120" prop="productionBatch" label="批号"></el-table-column>
-                                        <el-table-column width="120" prop="stockBatch" label="批次"></el-table-column>
-                                        <el-table-column width="120" prop="consumeQtystr" label="生产日期"></el-table-column>
-                                        <el-table-column width="120" prop="validDate" label="到效日期"></el-table-column>
-                                        <el-table-column width="120" prop="vendorCode" label="供应商">
+                                        <!-- <el-table-column prop="productionBatch" label="批号"></el-table-column> -->
+                                        <!-- <el-table-column prop="stockBatch" label="批次"></el-table-column> -->
+                                        <!-- <el-table-column prop="consumeQtystr" label="生产日期"></el-table-column>
+                                        <el-table-column prop="validDate" label="到效日期"></el-table-column>
+                                        <el-table-column prop="vendorCode" label="供应商">
                                           <template slot-scope="scope">
                                             {{ '[' + scope.row.vendorCode + ']' + scope.row.vendorName }}
                                           </template>
-                                        </el-table-column>
-                                        <el-table-column width="120" prop="qty" label="数量"></el-table-column>
+                                        </el-table-column> -->
+                                        <el-table-column prop="qty" label="数量"></el-table-column>
                                     </el-table>
                         </el-tab-pane>
                         <!-- <el-tab-pane label="配送中心范围" name="range">配置管理</el-tab-pane> -->
@@ -95,7 +95,7 @@ import systemLog from "@/components/systemLog.vue";
 export default {
   data() {
       return {
-        tabActiveName: 'containerType',
+        tabActiveName: 'moveBill',
         id: '', // 移库单ID
         moveBillDetail: {},
         productList: []

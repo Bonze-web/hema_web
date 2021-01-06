@@ -136,15 +136,29 @@
             <el-dialog title="单个新增商品" width="600px" :visible.sync="addProductDialog">
 
               <el-form :model="product" :rules="rules" ref="product">
-                <el-form-item label="商品" :label-width="formLabelWidth" prop="productName">
-                  <el-autocomplete
+                <el-form-item label="商品" :label-width="formLabelWidth" prop="productUuid">
+                  <el-select
+                    v-model="product.productUuid"
+                    filterable
+                    remote
+                    placeholder="请输入商品"
+                    :remote-method="getProduct"
+                    @change="handleSelect1">
+                    <el-option
+                      v-for="item in allProducet"
+                      :key="item.id"
+                      :label="item.name"
+                      :value="item.id">
+                    </el-option>
+                  </el-select>
+                  <!-- <el-autocomplete
                     class="inline-input"
                     v-model="product.productName"
                     :fetch-suggestions="querySearchProduct"
                     placeholder="请输入商品"
                     :trigger-on-focus="false"
                     @select="handleSelect1"
-                ></el-autocomplete>
+                ></el-autocomplete> -->
                 </el-form-item>
                 <el-form-item label="生产批号" :label-width="formLabelWidth" prop="productBirthBatch">
                   <el-input v-model="product.productBirthBatch"></el-input> 
@@ -166,22 +180,48 @@
                   </el-date-picker>
                 </el-form-item>
                 <el-form-item label="货位" :label-width="formLabelWidth" prop="binCode">
-                  <el-autocomplete
+                  <el-select
+                    v-model="product.binCode"
+                    filterable
+                    remote
+                    placeholder="请输入货位"
+                    :remote-method="getBin">
+                    <el-option
+                      v-for="item in selectBin"
+                      :key="item.id"
+                      :label="item.code"
+                      :value="item.code">
+                    </el-option>
+                  </el-select>
+                  <!-- <el-autocomplete
                     class="inline-input"
                     v-model="product.binCode"
                     :fetch-suggestions="querySearchBin"
                     placeholder="请输入货位"
                     :trigger-on-focus="false"
-                ></el-autocomplete>
+                ></el-autocomplete> -->
                 </el-form-item>
                 <el-form-item label="容器" :label-width="formLabelWidth" prop="containerBarcode">
-                  <el-autocomplete
+                  <el-select
+                    v-model="product.containerBarcode"
+                    filterable
+                    remote
+                    placeholder="请输入容器编码"
+                    :remote-method="getContainer">
+                    <el-option
+                      v-for="item in selectContainer"
+                      :key="item.id"
+                      :label="item.barcode"
+                      :value="item.barcode">
+                    </el-option>
+                  </el-select>
+                  <!-- <el-autocomplete
                     class="inline-input"
                     v-model="product.containerBarcode"
                     :fetch-suggestions="querySearchContainer"
                     placeholder="请输入容器编码"
                     :trigger-on-focus="false"
-                ></el-autocomplete>
+                ></el-autocomplete> -->
                 </el-form-item>
                 <el-form-item label="件数" :label-width="formLabelWidth" prop="consumeQtystr">
                   <el-input v-model="product.consumeQtystr"></el-input>
@@ -385,48 +425,51 @@ export default {
               productBirthBatch: ''
             }
             this.addProductDialog = false
+            this.calcProduct()
           }
         })
       },
-      getProduct: function() {
-        ProductService.query(1, 0)
+      getProduct: function(query) {
+        ProductService.query(1, 20, {codeOrNameOrBarcodeLike: query})
         .then((result) => {
-          result.records.forEach((item) => {
-            const obj = {
-              value: item.name,
-              id: item.id
-            }
-            this.selectProduct.push(obj)
-          })
+          // result.records.forEach((item) => {
+          //   // const obj = {
+          //   //   value: item.name,
+          //   //   id: item.id
+          //   // }
+          //   // this.selectProduct.push(obj)
+          // })
           this.allProducet = result.records
         }).catch((err) => {
           this.$message.error('获取商品列表失败' + err.message)
         });
       },
-      getBin: function() {
-        StorageService.getAllFreightSpace()
+      getBin: function(query) {
+        StorageService.getAllFreightSpace({codeLike: query})
         .then((result) => {
-          result.records.forEach((item) => {
-            const obj = {
-              value: item.name,
-              id: item.id
-            }
-            this.selectBin.push(obj)
-          })
+          // result.records.forEach((item) => {
+          //   const obj = {
+          //     value: item.name,
+          //     id: item.id
+          //   }
+          //   this.selectBin.push(obj)
+          // })
+          this.selectBin = result.records
         }).catch((err) => {
           this.$message.error('获取货位列表失败' + err.message)
         });
       },
-      getContainer: function() {
-        BasicService.quertOcntainer({page: 1, pageSize: 0})
+      getContainer: function(query) {
+        BasicService.quertOcntainer({page: 1, pageSize: 20, barCodeLikes: query})
         .then((result) => {
-          result.records.forEach((item) => {
-            const obj = {
-              value: item.barcode,
-              id: item.id
-            }
-            this.selectContainer.push(obj)
-          })
+          // result.records.forEach((item) => {
+          //   const obj = {
+          //     value: item.barcode,
+          //     id: item.id
+          //   }
+          //   this.selectContainer.push(obj)
+          // })
+          this.selectContainer = result.records
         }).catch((err) => {
           this.$message.error('获取容器列表失败' + err.message)
         });
