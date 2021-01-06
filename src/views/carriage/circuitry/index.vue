@@ -3,7 +3,7 @@
         <el-container style="height: 500px; border: 1px solid #eee">
           <el-aside width="300px" style="background-color: #fff;padding: 0 20px;border: 1px #eee solid;">
             <div class="seriation-left-header" style="padding-top:20px;display:flex;align-items: center;">
-              <div class="seriation-left-title">方案</div>
+              <div class="seriation-left-title">路线方案</div>
               <el-button type="primary" @click.stop="newProjectsChange">新建方案</el-button>
             </div>
             <el-input v-model="codeEqOrNameLike" placeholder="请输入团点代码/名称" @change="searchScheme"><i slot="prefix" class="el-input__icon el-icon-search" style="right:0" @click="searchScheme"></i></el-input>
@@ -11,7 +11,7 @@
               <el-collapse-item v-for="(ele, idx) in storeAllSchemeAll" :key="idx">
                 <template slot="title">
                     <div class="sequential-programme" style="font-size:14px;">
-                      <span class="el-icon-folder" style="display:flex;align-items: center;max-width: 120px;overflow:hidden;color:#409EFF;cursor: pointer;"><span style="padding-left:15px;" @click.stop="schemeOrStore('scheme', ele.schemeList, ele)">{{'[' + ele.schemeList.code + ']' + ele.schemeList.name}}</span></span> 
+                      <span class="el-icon-folder" style="display:flex;align-items: center;max-width: 160px;overflow:hidden;color:#409EFF;cursor: pointer;"><span style="padding-left:10px;" @click.stop="schemeOrStore('scheme', ele.schemeList, ele)">{{'[' + ele.schemeList.code + ']' + ele.schemeList.name}}</span></span> 
                       <div class="operation-button">
                          <el-button
                             size="mini"
@@ -32,7 +32,7 @@
                 </template>
                 <div>
                   <div class="content-operation" v-for="(item, index) in ele.store" :key="index">
-                      <span class="el-icon-sort" style="display:flex;align-items: center;max-width: 100px;overflow:hidden;color:#409EFF;cursor: pointer;"><span style="padding-left:15px;" @click.stop="schemeOrStore('store', item, ele)">{{'[' + item.code + ']' + item.name}}</span></span> 
+                      <span class="el-icon-sort" style="display:flex;align-items: center;max-width: 150px;overflow:hidden;color:#409EFF;cursor: pointer;"><span style="padding-left:10px;" @click.stop="schemeOrStore('store', item, ele)">{{'[' + item.code + ']' + item.name}}</span></span> 
                       <div class="operation-button">
                          <el-button
                             size="mini"
@@ -102,7 +102,7 @@
                                   </el-col> -->
                               </el-tab-pane>
                               <el-tab-pane label="操作日志" name="operational">
-                                    <system-log :modular="'PICK_ORDER'"></system-log>
+                                    <system-log :modular="'PICK_ORDER'" :id="storeArmy.id"></system-log>
                               </el-tab-pane>
                           </el-tabs>
                       </template>
@@ -117,19 +117,19 @@
                         :data="storeOption"
                         style="width: 100%;text-align:center"
                     >
-                     <el-table-column label="序号">
+                     <!-- <el-table-column label="序号">
                           <template slot-scope="scope">
                               {{ scope.row.idx }}
+                          </template>
+                      </el-table-column> -->
+                      <el-table-column label="顺序">
+                          <template slot-scope="scope">
+                              {{ scope.row.storeOrder}}
                           </template>
                       </el-table-column>
                       <el-table-column label="团点">
                           <template slot-scope="scope">
                               <span style="color:#409EFF">{{ "[" + scope.row.storeCode + "]" + scope.row.storeName}}</span>
-                          </template>
-                      </el-table-column>
-                      <el-table-column label="顺序">
-                          <template slot-scope="scope">
-                              {{ scope.row.storeOrder}}
                           </template>
                       </el-table-column>
                       <el-table-column label="配送中心">
@@ -804,8 +804,11 @@ export default {
           storeOrder: idx
         })
       })
-      console.log(this.changeActive, this.storeArmy, this.editProjectsInfo);
-      CargosequenceService.addGrpItems(postData)
+      const postDataObj = {
+        createGrpItemDTOs: postData,
+        grpId: this.storeArmy.id
+      }
+      CargosequenceService.addGrpItems(postDataObj)
       .then((res) => {
         this.$message.success("添加成功");
         // this.schemeOrStore(this.changeActive, this.storeArmy, this.editProjectsInfo)
@@ -878,7 +881,7 @@ export default {
     align-items: center;
   }
   .content-operation {
-    padding-left: 40px;
+    padding-left: 20px;
     padding-right: 20px;
     display: flex;
     justify-content: space-between;
@@ -892,9 +895,9 @@ export default {
   // .seriation-left-title {
   //   padding: 9px 15px;
   // }
-  /deep/ .el-collapse-item__header {
-    padding-left: 30px;
-  }
+  // /deep/ .el-collapse-item__header {
+  //   padding-left: 30px;
+  // }
   /deep/ .el-collapse-item__header:hover {
     color: #409EFF;
     background-color: #ecf5ff !important;
