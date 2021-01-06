@@ -92,7 +92,7 @@
                                       <span>{{ scope.row.status | showStatusActive}}</span>
                                   </template>
                               </el-table-column>
-                              <el-table-column prop="vendorCode" label="供应商编号">
+                              <!-- <el-table-column prop="vendorCode" label="供应商编号">
                                   <template slot-scope="scope">
                                       <span>{{ scope.row.vendorCode }}</span>
                                   </template>
@@ -101,7 +101,7 @@
                                   <template slot-scope="scope">
                                       <span>{{ scope.row.vendorName }}</span>
                                   </template>
-                              </el-table-column>
+                              </el-table-column> -->
                               <el-table-column prop="binUsage" label="货位用途">
                                   <template slot-scope="scope">
                                       <span>{{ scope.row.binUsage | binUsageChange }}</span>
@@ -122,7 +122,7 @@
                                       <span>{{ scope.row.productName}}</span>
                                   </template>
                               </el-table-column>
-                              <el-table-column prop="productPrice" label="商品单件">
+                              <el-table-column prop="productPrice" label="库存单件">
                                   <template slot-scope="scope">
                                       <span>{{ scope.row.productPrice}}</span>
                                   </template>
@@ -137,7 +137,7 @@
                                       <span>{{ scope.row.productUnit}}</span>
                                   </template>
                               </el-table-column>
-                              <el-table-column prop="productVolume" label="商品体积">
+                              <!-- <el-table-column prop="productVolume" label="商品体积">
                                   <template slot-scope="scope">
                                       <span>{{ scope.row.productVolume}}</span>
                                   </template>
@@ -146,33 +146,33 @@
                                   <template slot-scope="scope">
                                       <span>{{ scope.row.productWeight}}</span>
                                   </template>
-                              </el-table-column>
+                              </el-table-column> -->
                               <el-table-column prop="productionBatch" label="批号">
                                   <template slot-scope="scope">
                                       <span>{{ scope.row.productionBatch}}</span>
                                   </template>
                               </el-table-column>
-                              <el-table-column prop="stockBatch" label="批次">
+                              <el-table-column prop="stockBatch" label="库存批次">
                                   <template slot-scope="scope">
                                       <span>{{ scope.row.stockBatch}}</span>
                                   </template>
                               </el-table-column>
-                              <el-table-column prop="productionDate" label="生产日期">
+                              <el-table-column prop="binCode" label="货位">
                                   <template slot-scope="scope">
-                                      <span>{{ scope.row.productionDate}}</span>
+                                      <span>{{ scope.row.binCode}}</span>
                                   </template>
                               </el-table-column>
-                              <el-table-column prop="validDate" label="到效日期">
+                              <el-table-column prop="qpc" label="包装件数">
                                   <template slot-scope="scope">
-                                      <span>{{ scope.row.validDate}}</span>
+                                      <span>{{ scope.row.qpc}}</span>
                                   </template>
-                              </el-table-column>
+                              </el-table-column> 
                               <el-table-column prop="qpcStr" label="商品包装">
                                   <template slot-scope="scope">
                                       <span>{{ scope.row.qpcStr}}</span>
                                   </template>
                               </el-table-column>
-                              <el-table-column prop="quantity" label="数量">
+                              <el-table-column prop="quantity" label="实盘数量">
                                   <template slot-scope="scope">
                                       <span v-if="statusNum === 'INPROGRESS'">
                                           <el-input type='text' style="width: 70px;padding:0;" placeholder="修改数量" v-model="scope.row.quantity" class="input-width" @change="reviseNum(scope.row)"></el-input>
@@ -180,7 +180,7 @@
                                       <span v-else>{{ scope.row.quantity }}</span>
                                   </template>
                               </el-table-column>
-                              <el-table-column prop="quantityStr" label="件数">
+                              <el-table-column prop="quantityStr" label="实盘件数">
                                   <template slot-scope="scope">
                                       <span>{{ scope.row.quantityStr}}</span>
                                   </template>
@@ -190,7 +190,7 @@
                                       <span>{{ scope.row.snapQuantity}}</span>
                                   </template>
                               </el-table-column>
-                              <el-table-column prop="snapQuantityStr" label="快照数量">
+                              <el-table-column prop="snapQuantityStr" label="快照件数">
                                   <template slot-scope="scope">
                                       <span>{{ scope.row.snapQuantityStr}}</span>
                                   </template>

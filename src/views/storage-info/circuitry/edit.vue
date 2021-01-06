@@ -15,7 +15,7 @@
             </div>
             <div>
                 <el-button @click="back">返回</el-button>
-                <el-button type="primary" @click="editSupplier" v-if="hasPermission(PermIds.WMS_PICKAREA_UPDATE)">编辑</el-button>
+                <el-button type="primary" @click="editSupplier">编辑</el-button>
             </div>
         </div>
         <div style="height:20px" />
@@ -40,22 +40,6 @@
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="货位范围" prop="binScope">
                                             <el-input v-model="form.binScope" maxlength="64"></el-input>
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col :span="6" class="info-box">
-                                        <el-form-item label="存储类型" prop="stockType">
-                                          <el-select v-model="form.stockType" placeholder="请选择存储类型">
-                                            <el-option label="整箱" value="CASE"></el-option>
-                                            <el-option label="拆零" value="SPLIT"></el-option>
-                                          </el-select>
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col :span="6" class="info-box">
-                                        <el-form-item label="上架规则" prop="putawayRule">
-                                          <el-select v-model="form.putawayRule" placeholder="请选择上架规则">
-                                            <el-option label="T型" value="T"></el-option>
-                                            <el-option label="地堆 " value="STACK"></el-option>
-                                          </el-select>
                                         </el-form-item>
                                     </el-col>
                                 </el-row>
@@ -83,36 +67,28 @@
                                 <div>货位范围:</div>
                                 <div>{{ suppliersInfo.binScope }}</div>
                             </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>存储类型:</div>
-                                <div>{{ suppliersInfo.stockType |stockTypeChange }}</div>
-                            </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>上架规则:</div>
-                                <div>{{ suppliersInfo.putawayRule | putawayRuleChange }}</div>
-                            </el-col>
                         </el-tab-pane>
-                    <el-tab-pane label="操作日志" name="operational">
-                          <system-log :modular="'PICKAREA'" :id="$route.query.id"></system-log>
-                    </el-tab-pane>
+                        <el-tab-pane label="操作日志" name="operational">
+                              <system-log :modular="'PICK_ORDER'"></system-log>
+                        </el-tab-pane>
                     </el-tabs>
                 </template>
             </div>
         </div>
         <div style="height:20px;background:#fff" />
-        <div style="background:#fff" class="table-index _table-index" v-if="status === 'read' && tabActiveName === 'suppliers'">
+        <div style="background:#fff" class="table-index" v-if="status === 'read' && tabActiveName === 'suppliers'">
           <el-row>
               <div style="padding:15px">
                 对应存储分区
               </div>
           </el-row>
           <el-table
-              :data="storageList"
+              :data="storageListRead"
               style="width: 100%;text-align:center"
           >
             <el-table-column prop="name" label="存储分区">
                 <template slot-scope="scope">
-                    <span style="color:#409EFF">{{ '[' + scope.row.code + ']' +  scope.row.name }}</span>
+                    <span style="color:#409EFF">{{ scope.row.name }}</span>
                 </template>
             </el-table-column>
             <el-table-column prop="orderNumber" label="顺序">
@@ -135,7 +111,7 @@
           >
             <el-table-column prop="name" label="存储分区">
                 <template slot-scope="scope">
-                     <span style="color:#409EFF">{{ '[' + scope.row.code + ']' + scope.row.name }}</span>
+                     <span style="color:#409EFF">{{ scope.row.name }}</span>
                 </template>
             </el-table-column>
             <el-table-column prop="orderNumber" label="顺序">
@@ -206,21 +182,21 @@
                         :page-sizes="[10, 20, 30, 50]"
                         :page-size="mySelfPageSize"
                         layout="prev, pager, next"
-                        :total="storedContentTotalCount">
+                        :total="1000">
                       </el-pagination>
                     </div>
                   </div>
               </div>
             </div>
             <div slot="footer" class="dialog-footer">
-              <el-button @click="establish = false;">取 消</el-button>
+              <el-button @click="establish = fasle;">取 消</el-button>
               <el-button type="primary" @click="leftHandleComfirm">确 定</el-button>
             </div>
         </el-dialog>
         <el-dialog title="存储方案调序" :visible.sync="dialogFormVisible">
-          <el-form :model="form" :rules="rulesNum">
+          <el-form :model="form">
             <el-form-item label="存储方案:" >
-              {{ storageObjzanshi.name }}
+              {{'[' + storageObjzanshi.code + ']' + storageObjzanshi.name}}
             </el-form-item>
             <el-form-item label="存储方案数量:">
               {{storageList.length}}
@@ -233,7 +209,7 @@
             </el-form-item>
           </el-form>
           <div slot="footer" class="dialog-footer">
-            <el-button @click="dialogFormVisible = false;">取 消</el-button>
+            <el-button @click="dialogFormVisible = fasle;">取 消</el-button>
             <el-button type="primary" @click="Cancellation">确 定</el-button>
           </div>
         </el-dialog>
@@ -243,19 +219,10 @@
 <script>
 import SortdivisionService from "@/api/service/SortdivisionService";
 import systemLog from "@/components/systemLog.vue"
-import PermIds from "@/api/permissionIds";
-import { mapGetters } from "vuex";
 export default {
   data() {
       return {
-        PermIds: PermIds,
-        rulesNum: {
-          afterNum: [
-            
-          ]
-        },
         storageListRead: [],
-        storageListReadLength: 0,
         tabActiveName: "suppliers",
         time: false,
         dialogFormVisible: false,
@@ -295,9 +262,13 @@ export default {
           code: '',
           name: '',
           binScope: '',
-          stockType: '',
-          putawayRule: '',
-          storageList: []
+          storageList: [
+            {
+              name: "rrr",
+              orderNumber: 0,
+              storageId: "666"
+            }
+          ]
         },
         suppliersInfo: {}, 
         createRules: {
@@ -308,14 +279,7 @@ export default {
             { required: true, message: '请输入拣货分区名称', trigger: 'blur' }
           ],
           binScope: [
-            { required: true, message: '请填写货位范围', trigger: 'blur' },
-            { required: true, pattern: /^(([0-9a-zA-Z]+[-]+[0-9a-zA-Z]+){0,64}[0-9a-zA-Z]{0,64}([(]+[0-9]+\/[0-9]+[)]+)?[,]?[0-9a-zA-Z]{0,64}[,]?){0,64}$/, message: '格式10、10(1/2)、10-20，多个以逗号隔开', trigger: 'blur' }
-          ],
-          stockType: [
-            { required: true, message: '请填写存储类型', trigger: 'blur' }
-          ],
-          putawayRule: [
-            { required: true, message: '请填写上架规则', trigger: 'blur' }
+            { required: true, message: '请填写货位范围', trigger: 'blur' }
           ]
         }
       }
@@ -333,41 +297,25 @@ export default {
       // 通过后台获取存储分区的内容 start
       clickstoredContentChange() {
           this.establish = true;
-          this.storageListReadLength = this.storageList.length;
-          this.storageList.forEach((ele, idx) => {
-            this.storageListRead.push(ele);
-          })
           this.storedContentChange();
       },
       leftHandleComfirm() {
-        if (this.storageListRead.length > 0) { 
-          this.leftSelect.forEach((ele, idx) => {
-            const storeObj = {};
-            storeObj.code = ele.code;
-            storeObj.name = ele.name;
-            storeObj.storageId = ele.id;
-            storeObj.orderNumber = this.storageListReadLength + idx;
-            this.storageListRead.push(storeObj);
-          })
-          
+        this.establish = false;
+        const lenthRecodes = this.storageList.length;
+        console.log(this.leftSelect);
+        if (this.storageList.length > 0) { 
+          this.storageList.push(...this.leftSelect)
           const newobj = {}; 
-          this.storageListRead = this.storageListRead.reduce((preVal, curVal) => {
-            newobj[curVal.storageId] ? '' : newobj[curVal.storageId] = preVal.push(curVal); 
+          this.storageList = this.storageList.reduce((preVal, curVal) => {
+            newobj[curVal.id] ? '' : newobj[curVal.id] = preVal.push(curVal); 
             return preVal 
-          }, []);
+          }, [])
         } else {
           this.leftSelect.forEach((ele, idx) => {
-            const storeObj = ele;
-            storeObj.storageId = ele.id;
-            storeObj.orderNumber = idx + 1;
-            this.storageListRead.push(storeObj);
+            this.storageList.push({id: ele.id, storageId: ele.id, name: ele.name, orderNumber: lenthRecodes + idx + 1, code: ele.code, version: ele.version});
           })
         }
         this.$refs.multipleTable.clearSelection();
-        this.establish = false;
-        console.log(this.storageListRead);
-        this.storageList = this.storageListRead;
-        this.updateStorageList();
       },
       storedContentChange() {
         this.storedContent = [];
@@ -411,10 +359,7 @@ export default {
       updateStorageList() {
         const objCurTt = [];
         this.storageList.forEach((ele, idx) => {
-          const storeObj = ele;
-          storeObj.orderNumber = idx + 1;
-          objCurTt.push(storeObj);
-          // objCurTt.push({storageId: ele.id, name: ele.name, orderNumber: idx + 1, code: ele.code});
+          objCurTt.push({storageId: ele.id, name: ele.name, orderNumber: idx + 1, code: ele.code});
         })
         this.storageList = objCurTt;
       },
@@ -461,9 +406,8 @@ export default {
         // 如果是只读的模式,就要调取后台的数据,将数据渲染到页面上
         SortdivisionService.getSuppliersDetail(id)
         .then((res) => {
-          console.log(res);
-          this.suppliersInfo = res;
-          this.storageList = this.suppliersInfo.storageList;
+          this.suppliersInfo = res.data;
+          this.storageListRead = this.suppliersInfo.storageList;
         })
         .catch((err) => {
           this.$message.error("获取详情失败" + err.message)
@@ -476,11 +420,11 @@ export default {
           if (valid) {
             if (this.status === 'create') {
               // 创建新的拣货分区的按钮
-              // const reg = /^([1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[,]+[1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[-]+[1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[(]+[1-9]+\/[1-9]+[)]+)$/;
-              // if (!reg.test(this.form.binScope)) {
-              //   this.$message.error("满足格式10、10(1/2)、10-20，多个以逗号隔开");
-              //   return false;
-              // }
+              const reg = /^([1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[,]+[1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[-]+[1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[(]+[1-9]+\/[1-9]+[)]+)$/;
+              if (!reg.test(this.form.binScope)) {
+                this.$message.error("满足格式10、10(1/2)、10-20，多个以逗号隔开");
+                return false;
+              }
               this.form.storageList = this.storageList;
               SortdivisionService.createSuppliers(this.form)
               .then(res => {
@@ -493,12 +437,10 @@ export default {
             } else {
               // 因为提交的时候,需要传递状态值,所以先转换一下,这里是编辑
               this.form.storageList = this.storageList;
-              console.log(this.form);
               SortdivisionService.updateSupplier(this.form)
               .then(res => {
                 console.log(res)
                 this.$message.success("更新成功")
-                this.$store.dispatch("tagsView/delView", this.$route);
                 this.$router.go(-1)
               })
               .catch(err => {
@@ -515,9 +457,8 @@ export default {
         this.status = "edit"
         // 这个form肯定就是编辑页面的数据,suppliersInfo是前一个页面传递过来的数据
         // 传递的是form是用户填写的数据
-        // this.storageList = this.storageListRead;
-        this.form = Object.assign(this.form, this.suppliersInfo);
-        console.log(this.form);
+        this.storageList = this.storageListRead;
+        this.form = Object.assign(this.form, this.suppliersInfo)
       },
       // 弹出界面的方法
       handleSizeChangeOne(e) {
@@ -548,27 +489,6 @@ export default {
     },
     components: {
       "system-log": systemLog
-    },
-     computed: {
-       ...mapGetters(["hasPermission", "workingOrg"])
-    },
-    filters: {
-      stockTypeChange(type) {
-      switch (type) {
-        case "CASE":
-          return "整箱"
-        case "SPLIT":
-          return "拆零"
-      }
-      },
-      putawayRuleChange(status) {
-        switch (status) {
-          case "T":
-            return "T型"
-          case "STACK":
-            return "地堆"
-        }
-      }
     }
 };
 </script>
@@ -656,9 +576,7 @@ export default {
 /deep/ .el-transfer__buttons {
   padding: 0 10px;
 }
-/deep/ ._table-index .el-table .cell {
-  padding: 7px 0;
-}
+
 
 .shuttle-box {
   margin-top: -10vh !important;
@@ -668,7 +586,7 @@ export default {
   }
   .shuttle {
     width: 100%;
-    height: 530px;
+    height: 510px;
     display: flex;
     justify-content: space-between;
     border: 1px solid #eee;

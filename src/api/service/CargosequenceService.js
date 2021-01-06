@@ -63,6 +63,9 @@ export default {
   addGrpItems(postData) {
     return request.post('/wms/pickOrder/addGrpItems', postData)
   },
+  adjustOrder(postData) {
+    return request.post('/wms/pickOrder/adjustOrder', postData)
+  },
   /**
    * 启用状态
    */
