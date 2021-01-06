@@ -19,13 +19,14 @@
             </div>
         </div>
         <div style="height:20px" />
+
         <div class="info-content" v-if="status === 'create' || status === 'edit'">
             <div>
                 <template>
                     <el-tabs v-model="tabActiveName">
                         <el-tab-pane label="拣货分区" name="suppliers">
                             <div class="info-title">基本信息</div>
-                             <el-form :model="form" :rules="createRules" ref="form" label-width="100px" class="demo-ruleForm">
+                             <el-form :model="form" :rules="createRules" ref="form" label-width="120px" class="demo-ruleForm">
                                 <el-row :gutter="20">
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="代码" prop="code">
@@ -42,14 +43,21 @@
                                             <el-input v-model="form.binScope" maxlength="64"></el-input>
                                         </el-form-item>
                                     </el-col>
+                                  </el-row>
+
+                                  <el-row :gutter="20">
+
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="存储类型" prop="stockType">
-                                          <el-select v-model="form.stockType" placeholder="请选择存储类型">
+                                          <el-select v-model="form.stockType" @change="stockTypeChange" placeholder="请选择存储类型">
                                             <el-option label="整箱" value="CASE"></el-option>
                                             <el-option label="拆零" value="SPLIT"></el-option>
                                           </el-select>
                                         </el-form-item>
                                     </el-col>
+
+                                    <!-- ================== -->
+
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="上架规则" prop="putawayRule">
                                           <el-select v-model="form.putawayRule" placeholder="请选择上架规则">
@@ -58,6 +66,98 @@
                                           </el-select>
                                         </el-form-item>
                                     </el-col>
+
+                                  </el-row>
+
+                                  <el-row :gutter="20">
+
+                                    <el-col :span="6" class="info-box" v-if="blockList.length !== 0">
+                                        <el-form-item label="对应区块" prop="block">
+                                          <el-select v-model="form.block" placeholder="请选择对应区块">
+                                            <el-option v-for="(item, index) in blockList" :key="index" :label="item.name" :value="item.code"></el-option>
+                                          </el-select>
+                                        </el-form-item>
+                                    </el-col>
+
+                                    <el-col :span="6" class="info-box">
+                                      <!-- RUNTIME：作业运行时  -->
+                                        <el-form-item label="补货模式" prop="rplMethod">
+                                          <el-select v-model="form.rplMethod" placeholder="请选择补货模式">
+                                            <el-option label="作业运行时" value="RUNTIME"></el-option>
+                                          </el-select>
+                                        </el-form-item>
+                                    </el-col>
+
+                                    <el-col :span="6" class="info-box">
+                                        <el-form-item label="补货算法" prop="rplMath">
+                                          <el-select v-model="form.rplMath" placeholder="请选择补货算法">
+                                            <el-option v-for="(item, index) in rplMathList" :key="index" :label="item.label" :value="item.value"></el-option>
+                                          </el-select>
+                                        </el-form-item>
+                                    </el-col>
+
+                                    <!-- 补货设备： RF：RF； MANUAL：手工   -->
+                                    <el-col :span="6" class="info-box">
+                                        <el-form-item label="补货设备" prop="rplDevice">
+                                          <el-select v-model="form.rplDevice" placeholder="请选择补货设备">
+                                            <el-option label="RF" value="RF"></el-option>
+                                            <el-option label="手工 " value="MANUAL"></el-option>
+                                          </el-select>
+                                        </el-form-item>
+                                    </el-col>
+
+                                    <!-- 补货分单：BY_PICK_PATH：按取货通道； BY_RPL_PATH：按补货通道 -->
+                                   <el-col :span="6" class="info-box">
+                                        <el-form-item label="补货分单" prop="rplBillSplit">
+                                          <el-select v-model="form.rplBillSplit" placeholder="请选择补货分单">
+                                            <el-option label="按取货通道" value="BY_PICK_PATH"></el-option>
+                                            <el-option label="按补货通道 " value="BY_RPL_PATH"></el-option>
+                                          </el-select>
+                                        </el-form-item>
+                                    </el-col>
+
+                                    <!-- 拣货模式:  PICK: 摘果；SOW: 播种 -->
+                                    <el-col :span="6" class="info-box">
+                                        <el-form-item label="拣货模式" prop="pickMethod">
+                                          <el-select v-model="form.pickMethod" placeholder="请选择拣货模式">
+                                            <el-option label="摘果" value="PICK"></el-option>
+                                            <el-option label="播种 " value="SOW"></el-option>
+                                          </el-select>
+                                        </el-form-item>
+                                    </el-col>
+
+                                    <!-- 拣货设备: RF:RF  DPS:DPS  MANUAL：手工   BILL: 单据  LABLE 打印标签 -->
+                                     <el-col :span="6" class="info-box">
+                                        <el-form-item label="拣货设备" prop="pickDevice">
+                                          <el-select v-model="form.pickDevice" placeholder="请选择拣货设备">
+                                            <el-option label="RF" value="RF"></el-option>
+                                            <el-option label="DPS " value="DPS"></el-option>
+                                            <el-option label="手工 " value="MANUAL"></el-option>
+                                            <el-option label="单据 " value="BILL"></el-option>
+                                            <el-option label="打印标签 " value="LABLE"></el-option>
+                                          </el-select>
+                                        </el-form-item>
+                                    </el-col>
+
+                                    <el-col :span="6" class="info-box">
+                                        <el-form-item label="拣货容器类型" prop="pickContainerTypeName">
+                                          <el-select v-model="form.pickContainerTypeName" placeholder="请选择拣货容器类型">
+                                            <el-option v-for="(item, index) in contentType" :key="index" :label="item.name" :value="item.code"></el-option>
+                                          </el-select>
+                                        </el-form-item>
+                                    </el-col>
+
+                                    <el-col :span="6" class="info-box">
+                                        <el-form-item label="拣货分单" prop="pickBillSplit">
+                                          <el-input v-model="form.pickBillSplit" maxlength="6"></el-input>
+                                        </el-form-item>
+                                    </el-col>
+
+
+                                    <!-- ========================== -->
+
+
+
                                 </el-row>
                             </el-form>
                         </el-tab-pane>
@@ -65,6 +165,7 @@
                 </template>
             </div>
         </div>
+
         <div class="info-content" v-if="status === 'read'">
             <div>
                 <template>
@@ -213,6 +314,9 @@ import SortdivisionService from "@/api/service/SortdivisionService";
 export default {
   data() {
       return {
+        contentType: [], // 容器类型
+        blockList: [], // 区块列表
+        rplMathList: [], // 补货算法
         operationalData: [],
         tabActiveName: "suppliers",
         time: false,
@@ -254,6 +358,15 @@ export default {
           binScope: '',
           stockType: "",
           putawayRule: "",
+          pickContainerTypeName: "", // 容器类型
+          block: '', // 区块
+          rplMath: '', // 补货算法
+          rplMethod: 'RUNTIME', // 作业运行时
+          rplDevice: '', // 补货设备
+          rplBillSplit: '', // 补货分单
+          pickMethod: '', // 拣货模式
+          pickDevice: '', // 拣货设备
+          pickBillSplit: '', // 拣货分单
           storageList: [
             {
               name: "rrr",
@@ -279,6 +392,34 @@ export default {
           ],
           putawayRule: [
             { required: true, message: '请填写上架规则', trigger: 'blur' }
+          ],
+          pickContainerTypeName: [
+            { required: true, message: '请选择容器类型', trigger: 'blur' }
+          ],
+          block: [
+            { required: true, message: '请选择区块', trigger: 'blur' }
+          ],
+          rplMath: [
+            { required: true, message: '请选择补货算法', trigger: 'blur' }
+          ],
+          rplMethod: [
+            { required: true, message: '请选择作业运行时', trigger: 'blur' }
+          ],
+          rplDevice: [
+            { required: true, message: '请选择补货设备', trigger: 'blur' }
+          ],
+          rplBillSplit: [
+            { required: true, message: '请选择补货分单', trigger: 'blur' }
+          ],
+          pickMethod: [
+            { required: true, message: '请选择拣货模式', trigger: 'blur' }
+          ],
+          pickDevice: [
+            { required: true, message: '请选择拣货设备', trigger: 'blur' }
+          ],
+          pickBillSplit: [
+            { required: true, message: '请输入拣货分单', trigger: 'blur' },
+            { pattern: /^\d{1,6}$/, message: '请输入1-6位之间的数字', trigger: 'change' }
           ]
         }
       }
@@ -414,6 +555,7 @@ export default {
       },
       // 创建拣货分区
       createSuppliers: function() {
+        console.log(this.form)
         // 创建新的拣货分区的按钮
         this.$refs.form.validate(valid => {
           if (valid) {
@@ -487,10 +629,58 @@ export default {
             }
           }
         }
+      },
+      // 获取容器类型接口
+      getContainerTypeQuery() {
+        SortdivisionService.containerTypeQuery({
+          page: 1,
+          pageSize: 0,
+          statusEquals: 'ON',
+          searchCount: true
+        })
+        .then(res => {
+          console.log(res)
+          this.contentType = res.records
+        })
+        .catch(err => {
+          this.$message.error("容器类型列表获取失败" + err.message)
+        })
+      },
+      // 获取区块列表
+      getBlockQuery() {
+        SortdivisionService.getBlockQuery({
+          page: 1,
+          pageSize: 0,
+          searchCount: true,
+          isForQuery: true
+        })
+        .then(res => {
+          console.log(res)
+          this.blockList = res.records
+        })
+        .catch(err => {
+          this.$message.error("区块列表获取失败" + err.message)
+        })
+      },
+      stockTypeChange(item) {
+        // CASE 整箱  SPLIT 拆零
+        // 补货算法： 整箱          BY_MIN_STOCK 按最低库存补
+        //           拆零          BY_MAX_STOCK 按最高库存补
+        if (item === 'CASE') {
+          this.rplMathList = [{label: '按最低库存补', value: 'BY_MIN_STOCK'}]
+        } else if (item === 'SPLIT') {
+          this.rplMathList = [{label: '按最高库存补', value: 'BY_MAX_STOCK'}]
+        } else {
+          this.rplMathList = [{label: '', value: ''}]
+        }
+
+        this.form.rplMath = this.rplMathList[0].value
       }
     },
     created() {
       this.getQueryStatus();
+      this.getContainerTypeQuery() // 获取容器类型
+      this.getBlockQuery() // 获取区块列表
     },
     filters: {
     

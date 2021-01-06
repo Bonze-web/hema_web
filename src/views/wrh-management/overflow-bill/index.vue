@@ -5,8 +5,8 @@
                 <el-form-item label="单号">
                     <el-input type='text' clearable placeholder="请输入溢余单号" v-model="form.billNumLikes" class="input-width"></el-input>
                 </el-form-item>
-                <el-form-item label="仓库">
-                    <el-input type='text' clearable placeholder="请输入仓库编号" v-model="form.wareCodeOrNameLikes" class="input-width"></el-input>
+                <el-form-item label="仓区">
+                    <el-input type='text' clearable placeholder="请输入仓区编号" v-model="form.wareCodeOrNameLikes" class="input-width"></el-input>
                 </el-form-item>
                 <el-form-item label="报告员">
                     <el-autocomplete
@@ -63,7 +63,7 @@
               </router-link>
             </el-row>
             <el-row style="margin-left:12px">
-              <el-button type="primary" size="mini" @click="table = true">管理溢余类型</el-button>
+              <el-button type="primary" size="mini" @click="table = true" v-if="hasPermission(PermIds.WMS_PRETYPE)">管理溢余类型</el-button>
             </el-row>
           </div>
           <el-table
@@ -80,7 +80,7 @@
                     </template>
                 </el-table-column>
                 <el-table-column prop="billType" label="溢余类型"></el-table-column>
-                <el-table-column prop="wrhCode" label="仓库">
+                <el-table-column prop="wrhCode" label="仓区">
                   <template slot-scope="scope">
                     {{ '[' + scope.row.wrhCode + ']' + scope.row.wrhName }}
                   </template>

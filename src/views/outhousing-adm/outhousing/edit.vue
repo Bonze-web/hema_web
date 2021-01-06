@@ -12,7 +12,7 @@
         <div class="head">
             <div class="head-title" style="display:flex;align-items: center;">
                 <!-- <div style="margin:8px">{{ '[' + suppliersInfo.code + ']' + suppliersInfo.name }}</div> -->
-                仓库作业单详情
+                仓区作业单详情
             </div>
             <div>
                 <el-button @click="back">返回</el-button>
@@ -23,7 +23,7 @@
             <div>
                 <template>
                     <el-tabs v-model="tabActiveName">
-                        <el-tab-pane label="仓库作业单" name="suppliers">
+                        <el-tab-pane label="仓区作业单" name="suppliers">
                             <div class="info-title">基本信息</div>
                             <el-col :span="6" class="info-box">
                                 <div>盘点单号:</div>
@@ -58,7 +58,7 @@
                                 <div>{{ '[' + suppliersInfo.storeCode + ']' + suppliersInfo.storeName }}</div>
                             </el-col>
                             <el-col class="info-box">
-                                <div>仓库:</div>
+                                <div>仓区:</div>
                                 <div>{{ '[' + suppliersInfo.wrhCode + ']' + suppliersInfo.wrhName }}</div>
                             </el-col>
                             <el-col class="info-box">
@@ -73,7 +73,7 @@
         <div style="height:20px;background:#fff" />
         <div style="background:#fff" class="table-index">
           <el-table
-              lable="仓库作业单"
+              lable="仓区作业单"
               :data="storageList"
               style="width: 100%;text-align:center"
           >

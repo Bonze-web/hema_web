@@ -2,8 +2,8 @@
     <div class="table-index _table-index">        
         <div class="select-head">
             <el-form ref="form" style="display:flex;flex-wrap:wrap;" :model="form" label-width="130px" label-position="right">
-                <el-form-item label="仓库作业单">
-                    <!-- 输入仓库作业单的id,方便后面的查找,查找和一开始获取数据的接口是同一个 -->
+                <el-form-item label="仓区作业单">
+                    <!-- 输入仓区作业单的id,方便后面的查找,查找和一开始获取数据的接口是同一个 -->
                     <el-input type='text' placeholder="请输入代码/名称" v-model="form.billNumber" class="input-width"></el-input>
                     <!-- <el-input type='text' placeholder="请输入名称" v-model="form.name" class="input-width"></el-input> -->
                 </el-form-item>
@@ -16,8 +16,8 @@
                 <el-form-item label="门店信息">
                     <el-input type='text' placeholder="请输入门店信息" v-model="form.storeInfo" class="input-width"></el-input>
                 </el-form-item>
-                <el-form-item label="仓库信息">
-                    <el-input type='text' placeholder="请输入仓库信息" v-model="form.wrhInfo" class="input-width"></el-input>
+                <el-form-item label="仓区信息">
+                    <el-input type='text' placeholder="请输入仓区信息" v-model="form.wrhInfo" class="input-width"></el-input>
                 </el-form-item>
                 <el-form-item label="外部单号(物流号)">
                     <el-input type='text' placeholder="请输入外部单号" v-model="form.sourceBillId" class="input-width"></el-input>
@@ -89,7 +89,7 @@
                         {{ scope.row.isTest | isTestType }}
                     </template>
                 </el-table-column>
-                <el-table-column prop="wrhCode" label="仓库">
+                <el-table-column prop="wrhCode" label="仓区">
                     <template slot-scope="scope">
                         {{ '[' + scope.row.wrhCode + ']' + scope.row.wrhName }}
                     </template>
@@ -182,7 +182,7 @@ export default {
       },
       // 向后台请求数据,这里是查询功能和一开始就调取数据列表
       getSuppliersList: function() {
-       // 请求仓库作业单的数据
+       // 请求仓区作业单的数据
         const _this = this;    
         // 将当前组件的实例记录起来，这些都是我在data中自己写的数据
         this.form.page = this.page;

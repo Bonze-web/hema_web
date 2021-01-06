@@ -4,24 +4,24 @@
       <el-form ref="form" style="display: flex;flex-wrap:wrap;" :model="form" label-width="90px" label-position="right" >
 
         <el-form-item label="区块代码：">
-          <el-input type="text" placeholder="请输入区块代码" v-model="form.barCodeLikes" class="input-width" ></el-input>
+          <el-input type="text" maxlength="32" placeholder="请输入区块代码" v-model="form.codeLikes" class="input-width" ></el-input>
         </el-form-item>
 
         <el-form-item label="中心仓：">
-          <el-input type="text" placeholder="请输入中心仓" v-model="form.barCodeLikes" class="input-width" ></el-input>
+          <el-input type="text"  maxlength="32" placeholder="请输入中心仓" v-model="form.centerCodeOrNameLikes" class="input-width" ></el-input>
         </el-form-item>
 
         <el-form-item label="网格仓：">
-          <el-input type="text" placeholder="请输入网格仓" v-model="form.barCodeLikes" class="input-width" ></el-input>
+          <el-input type="text"  maxlength="32" placeholder="请输入网格仓" v-model="form.frontCodeOrNameLikes" class="input-width" ></el-input>
         </el-form-item>
 
         <el-form-item label="来源：">
-          <el-select v-model="form.useStatusEquals" placeholder="请选择来源">
+          <!-- 全部; 手工新建MANUAL、接口导入API、文件导入EXCEL -->
+          <el-select v-model="form.sourceWayEquals" placeholder="请选择来源">
             <el-option label="全部" value=""></el-option>
-            <el-option value="idle" label="空闲"></el-option>
-            <el-option value="locked" label="已锁定"></el-option>
-            <el-option value="receiving" label="收货中"></el-option>
-            <el-option value="rtnwrhreceiving" label="好退退仓收货中"></el-option>
+            <el-option value="MANUAL" label="手工新建"></el-option>
+            <el-option value="API" label="接口导入"></el-option>
+            <el-option value="EXCEL" label="文件导入"></el-option>
           </el-select>
         </el-form-item>
 
@@ -45,36 +45,48 @@
 
 
       <el-table :data="listData" @selection-change="handleSelectionChange"  style="width: 100%; text-align: center" :row-style="{ height: '16px', padding: '-4px' }" >
-        <el-table-column prop="barcode" label="区块代码" style="height: 20px">
+        <!-- <el-table-column prop="barcode" label="区块代码" style="height: 20px">
           <template slot-scope="scope">
             <router-link style="color: #409eff" :to="{ path: '/basicinfo/container/edit', query:{ id: scope.row.id} }" >
               <span>{{ scope.row.barcode }}</span>
             </router-link>
           </template>
+        </el-table-column> -->
+
+  
+        <el-table-column prop="scope" label="中心仓代码">
+          <template slot-scope="scope">
+            {{ scope.row.centerDcCode !== ' ' ? scope.row.centerDcCode : "&lt;空&gt;" }}
+          </template>
         </el-table-column>
 
-        <el-table-column prop="useStatus" label="网格仓" style="height: 20px">
+        <el-table-column prop="scope" label="中心仓名称">
           <template slot-scope="scope">
-            <router-link style="color: #409eff" :to="{ path: '/basicinfo/containertype/edit', query:{ status: 'read', id: scope.row.containerTypeId} }">
-              <span>{{ '[' + scope.row.containerTypeCode + ']' + scope.row.containerTypeName }}</span>
-            </router-link>
+            {{ scope.row.centerDcName !== ' ' ? scope.row.centerDcName : "&lt;空&gt;" }}
           </template>
         </el-table-column>
-  
-        <el-table-column prop="scope" label="中心仓">
+
+        <el-table-column prop="scope" label="区块代码">
           <template slot-scope="scope">
-            {{ scope.row.positionCode !== ' ' ? scope.row.positionCode : "&lt;空&gt;" }}
+            {{ scope.row.code !== ' ' ? scope.row.code : "&lt;空&gt;" }}
           </template>
         </el-table-column>
+
+        <el-table-column prop="scope" label="所属网格仓">
+          <template slot-scope="scope">
+            {{ scope.row.frontDcName !== ' ' ? scope.row.frontDcName : "&lt;空&gt;" }}
+          </template>
+        </el-table-column>
+
         <el-table-column prop="scope" label="来源">
           <template slot-scope="scope">
-            {{ scope.row.toPositionCode !== ' ' ? scope.row.toPositionCode : "&lt;空&gt;" }}
+            {{ scope.row.sourceWay | setSourceWay }}
           </template>
         </el-table-column>
 
-        <el-table-column prop="useStatus" label="状态">
+        <el-table-column prop="scope" label="备注">
           <template slot-scope="scope">
-            {{ scope.row.useStatus | dcStatus }}
+            {{ scope.row.remark !== ' ' ? scope.row.remark : "&lt;空&gt;" }}
           </template>
         </el-table-column>
 
@@ -95,7 +107,7 @@
 </template>
 
 <script>
-import BasicService from "@/api/service/BasicService";
+import request from '@/utils/request'
 import PermIds from "@/api/permissionIds";
 import { mapGetters } from "vuex";
 
@@ -106,12 +118,10 @@ export default {
       listData: [], // 列表数据
       containerType: [], // 容器类型
       form: {
-        barCodeLikes: '', // 条码
-        useStatusEquals: '', // 状态
-        positionCodeOrNameEquals: '', // 当前位置
-        // parentBarcodeLikes: '', // 父容器
-        containerTypeCodeEquals: '', // 容器类型code值
-        useNameOrCodeLikes: '' // 使用对象名称或者代码的值
+        codeLikes: '', // 区块代码
+        centerCodeOrNameLikes: '', // 中心仓
+        frontCodeOrNameLikes: '', // 网格仓
+        sourceWayEquals: '' // 来源
       },
       page: 1,
       pageSize: 10,
@@ -135,67 +145,35 @@ export default {
         }
       });
     },
-    // deleteWmsBintype: function(id, version) {
-    //   // 删除
-    //   // const _this = this;
-    //   this.$confirm('此操作将删除货位，是否继续?', '提示', {
-    //     confirmButtonText: '确定',
-    //     cancelButtonText: '取消',
-    //     type: 'warning'
-    //   }).then(() => {
-    //     // BasicService.deleteWmsBintype(id, version)
-    //     // .then(res => {
-    //     //   this.$message.success("删除成功")
-    //     //   _this.quertOcntainer()
-    //     // })
-    //     // .catch(err => {
-    //     //   this.$message.error("删除失败" + err.message)
-    //     // })
-    //   }).catch(() => {
-    //     this.$message({
-    //       type: 'info',
-    //       message: '已取消'
-    //     })        
-    //   })
-    // },
     clearInput: function() {
       this.form = {
-        barCodeLikes: '',
-        useStatusEquals: '',
-        positionCodeOrNameEquals: '',
-        // parentBarcodeLikes: '',
-        containerTypeCodeEquals: '',
-        useNameOrCodeLikes: ''
+        codeLikes: '', // 区块代码
+        centerCodeOrNameLikes: '', // 中心仓
+        frontCodeOrNameLikes: '', // 网格仓
+        sourceWayEquals: '' // 来源
       };
 
       this.quertOcntainer();
     },
     quertOcntainer: function() {
-      // 获取容器列表
-      this.suppliersData = []
-
-      const _this = this;
-
       const data = {
         page: this.page,
         pageSize: this.pageSize,
-        barCodeLikes: this.form.barCodeLikes,
-        useStatusEquals: this.form.useStatusEquals.toUpperCase(),
-        positionCodeOrNameEquals: this.form.positionCodeOrNameEquals,
-        // parentBarcodeLikes: this.form.parentBarcodeLikes,
-        containerTypeCodeEquals: this.form.containerTypeCodeEquals,
-        useNameOrCodeLikes: this.form.useNameOrCodeLikes,
-        searchCount: true
+        searchCount: true,
+        codeLikes: this.form.codeLikes, // 区块代码
+        centerCodeOrNameLikes: this.form.centerCodeOrNameLikes, // 中心仓
+        frontCodeOrNameLikes: this.form.frontCodeOrNameLikes, // 网格仓
+        sourceWayEquals: this.form.sourceWayEquals ? this.form.sourceWayEquals : null // 来源
       };
 
-      BasicService.quertOcntainer(data).then((res) => {
+      request.get('/wms/block/query', { params: data })
+      .then((res) => {
+        console.log(res)
         const records = res.records;
 
         this.totalCount = res.totalCount;
 
-        console.log(records)
-
-        _this.listData = records;
+        this.listData = records;
       }).catch(err => {
         this.$message.error("数据请求失败" + err.message)
       });
@@ -209,27 +187,12 @@ export default {
       this.page = 1;
       this.quertOcntainer(true);
     },
-    getContainerType: function() {
-      // 获取容器类型
-      BasicService.getContainerTypeList({
-        page: 1,
-        pageSize: 0,
-        statusEquals: 'ON'
-      })
-      .then(res => {
-        this.containerType = res.records
-      })
-      .catch(err => {
-        this.$message.error("获取容器类型失败" + err.message)
-      })
-    },
     printingBtn() {
       this.$message.error("打印功能还未开通")
     }
   },
   created() {
     this.quertOcntainer();
-    this.getContainerType() // 获容器类型
   },
   beforeRouteEnter(to, from, next) {
     next(vm => {
@@ -238,16 +201,15 @@ export default {
     })
   },
   filters: {
-    dcStatus(useStatus) {
-      const useStatu = useStatus.toLowerCase();
-
-      switch (useStatu) {
-        case 'idle':
-          return "空闲"
-        case 'locked':
-          return "已锁定"
-        case 'receiving':
-          return "收货中"
+    setSourceWay(type) {
+      // 来源:手工新建MANUAL、接口导入API、文件导入EXCEL
+      switch (type) {
+        case 'MANUAL':
+          return "手工新建"
+        case 'API':
+          return "接口导入"
+        case 'EXCEL':
+          return "文件导入"
         default:
           return '未知';
       }

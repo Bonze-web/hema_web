@@ -41,7 +41,7 @@
                                 <div>{{ billInfo.billTypeName }}</div>
                             </el-col>
                             <el-col :span="6" class="info-box">
-                                <div>仓库:</div>
+                                <div>仓区:</div>
                                 <div>{{ billInfo.wrhName }}</div>
                             </el-col>
                             <el-col :span="6" class="info-box">
@@ -150,8 +150,8 @@
                                         </el-form-item>
                                     </el-col>
                                     <!-- <el-col :span="6" class="info-box">
-                                        <el-form-item label="仓库" prop="wrhId">
-                                          <el-select v-model="form.wrhId" placeholder="请选择仓库" @visible-change="selectWrh">
+                                        <el-form-item label="仓区" prop="wrhId">
+                                          <el-select v-model="form.wrhId" placeholder="请选择仓区" @visible-change="selectWrh">
                                             <el-option v-for="item in wrhList" :key="item.id" :label="'[' + item.code + ']' + item.name" :value="item.id"></el-option>
                                           </el-select>
                                         </el-form-item>
@@ -281,7 +281,7 @@ export default {
         id: '', // 单据ID
         tabActiveName: 'overflowBill', // tab栏名称
         billInfo: '',
-        wrhList: [], // 仓库列表
+        wrhList: [], // 仓区列表
         deccerList: [], // 报告人列表
         dcList: [], // 中心仓列表
         form: {
@@ -317,7 +317,7 @@ export default {
             { required: true, message: '请选择溢余单类型', trigger: 'blur'}
           ],
           // wrhId: [
-          //   { required: true, message: '请选择所属仓库', trigger: 'blur'}
+          //   { required: true, message: '请选择所属仓区', trigger: 'blur'}
           // ],
           incerId: [
             { required: true, message: '请选择报告人', trigger: 'blur'}
@@ -358,7 +358,7 @@ export default {
       },
       selectWrh: function(e) {
         if (e && this.form.wrhId) {
-          this.$confirm('更换仓库将会清空商品明细, 是否继续?', '提示', {
+          this.$confirm('更换仓区将会清空商品明细, 是否继续?', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning'
@@ -395,7 +395,7 @@ export default {
       ...mapActions(["deleteSelection", "addSelection", "clearSelection"]),
       batchAddProduct: function() {
         // if (!this.form.wrhId) {
-        //   this.$message.error('请选择仓库')
+        //   this.$message.error('请选择仓区')
         //   return
         // }
         this.$router.push({path: '/wrhmanagement/overflowbill/batchAdd'})
@@ -521,7 +521,7 @@ export default {
           this.wrhList = res.records
         })
         .catch((err) => {
-          this.$message.error('加载仓库失败' + err.message)
+          this.$message.error('加载仓区失败' + err.message)
         })
       },
       calcProduct: function(productList) {

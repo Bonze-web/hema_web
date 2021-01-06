@@ -108,7 +108,7 @@
                                 <div>{{ dataList.isLogisticMode | setIsLogisticMode }}</div>
                             </el-col>
                             <!-- <el-col :span="6" class="info-box">
-                                <div>入库仓库:</div>
+                                <div>入库仓区:</div>
                                 <div>{{ '[' + dataList.wrhId + ']' + dataList.wrhName }}</div>
                             </el-col> -->
 

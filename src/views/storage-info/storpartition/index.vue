@@ -152,7 +152,7 @@ export default {
         })
       },
       statusChange: function(status, id, version) {
-      // 修改仓库状态
+      // 修改仓区状态
       const _this = this;
       this.$confirm('是否继续?', '提示', {
         confirmButtonText: '确定',

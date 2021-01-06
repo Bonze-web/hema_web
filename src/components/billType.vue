@@ -18,8 +18,8 @@
           <el-table-column
             label="操作">
             <template slot-scope="scope">
-              <el-button size="mini" type="text" @click="removeType(scope.row.id, scope.row.version)" v-if="hasPermission(PermIds.WMS_PRETYPE_DELETE)">删除</el-button>
-              <el-button size="mini" type="text" @click="editType(scope.row.id)" v-if="hasPermission(PermIds.WMS_PRETYPE_UPDATE)">编辑</el-button>
+              <el-button size="mini" type="text" @click="removeType(scope.row.id, scope.row.version)" :disabled="!hasPermission(PermIds.WMS_PRETYPE_DELETE)">删除</el-button>
+              <el-button size="mini" type="text" @click="editType(scope.row.id)" :disabled="!hasPermission(PermIds.WMS_PRETYPE_UPDATE)">编辑</el-button>
             </template>
           </el-table-column>
         </el-table>

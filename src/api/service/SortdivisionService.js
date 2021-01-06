@@ -66,6 +66,19 @@ export default {
     //   pageSize: 0
     // }
     return request.get('/wms/storagearea/query', {params: postData});
+  },
+
+  /**
+   * 分页查询容器类型
+   */
+  containerTypeQuery(postData) {
+    return request.get('/wms/containerType/query', {params: postData});
+  },
+  /**
+   * 区块查询
+   */
+  getBlockQuery(postData) {
+    return request.get('/wms/block/query', {params: postData});
   }
 }
 

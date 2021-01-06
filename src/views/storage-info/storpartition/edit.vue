@@ -63,10 +63,12 @@
                                 <div>名称:</div>
                                 <div>{{ suppliersInfo.name }}</div>
                             </el-col>
-                            <el-col :span="6" class="info-box">
-                                <div>货位范围:</div>
-                                <div>{{ suppliersInfo.binScope }}</div>
+
+                            <el-col :span="12" class="info-box">
+                              <div style="width: 54px">货位范围:</div>
+                              <div style="flex: 1">{{ suppliersInfo.binScope }}</div>
                             </el-col>
+
                         </el-tab-pane>
                         <el-tab-pane label="操作日志" name="operational">
                             <system-log :modular="'STORAGEAREA'" :id="id"></system-log>

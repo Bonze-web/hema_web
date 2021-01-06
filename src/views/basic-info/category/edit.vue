@@ -21,8 +21,8 @@
                     </el-switch>
                 </template> -->
                 <template>
-                  <el-button type="text" @click="statusChange" v-if="categoryInfo.status">禁用</el-button>
-                  <el-button type="text" @click="statusChange" v-if="!categoryInfo.status">启用</el-button>
+                  <el-button type="text" @click="statusChange" :disabled="!hasPermission(PermIds.PRODUCT_CATEGORY_DISABLE)" v-if="categoryInfo.status">禁用</el-button>
+                  <el-button type="text" @click="statusChange" :disabled="!hasPermission(PermIds.PRODUCT_CATEGORY_ENABLE)" v-if="!categoryInfo.status">启用</el-button>
                 </template>
             </div>
             <div>
@@ -73,7 +73,7 @@
                             </el-form>
                         </el-tab-pane>
                         <!-- <el-tab-pane label="配送中心范围" name="range">配置管理</el-tab-pane> -->
-                        <el-tab-pane label="操作日志" name="log">角色管理</el-tab-pane>
+                        <!-- <el-tab-pane label="操作日志" name="log">角色管理</el-tab-pane> -->
                     </el-tabs>
                 </template>
             </div>
@@ -173,7 +173,7 @@ export default {
       statusChange: function() {
         // 修改供应商状态
         const _this = this
-        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        this.$confirm('此操作将改变商品类别状态, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'

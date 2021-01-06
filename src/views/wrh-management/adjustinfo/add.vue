@@ -25,7 +25,7 @@
                                       </el-form-item>
                                   </el-col>
                                   <el-col :span="6" class="info-box">
-                                      <el-form-item label="仓库" prop="name">
+                                      <el-form-item label="仓区" prop="name">
                                           <el-input v-model="form.name"></el-input>
                                       </el-form-item>
                                   </el-col>
