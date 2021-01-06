@@ -149,10 +149,12 @@ export default {
         restaurants: [], // 移库员列表
         PermIds: PermIds,
         form: {
+          moveMode: 'MANUAL', // 移库方式
           moveType: '', // 移库类型
           moveBillItemList: [], // 商品明细
           moverId: '', // 移库员ID
           moverName: '', // 移库员姓名
+          moverCode: '', // 移库员代码
           fromWarehouseCode: '', // 来源仓编码
           fromWarehouseId: '', // 来源仓id
           fromWarehouseName: '', // 来源仓名称
@@ -232,16 +234,16 @@ export default {
           this.productList.forEach(value => {
             if (item.id === value.toBinId) {
               console.log(value)
+              value.fromBinId = value.binId
+              value.fromBinCode = value.binCode
+              value.fromBinUsage = value.binUsage
+              value.fromContainerBarcode = value.containerBarcode
               value.toBinCode = item.code
               value.toBinUsage = item.binusage
               value.toWarehouseId = item.wrhId
               value.toWarehouseName = item.wrhName
               value.toWarehouseCode = item.wrhCode
-              value.fromBinId = value.binId
-              value.fromBinCode = value.binCode
-              value.fromBinUsage = value.binUsage
               value.stockBatch = value.batch
-              value.fromContainerBarcode = value.containerBarcode
               value.fromContainerId = value.containerId
             }
           })
