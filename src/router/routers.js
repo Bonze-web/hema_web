@@ -703,7 +703,6 @@ const StorageInfoPackage = {
           icon: 'table',
           permission: PermIds.WMS_PICKAREA_VIEW
         }
-<<<<<<< HEAD
       }, {
         path: "edit",
         name: "SortdivisionEdit",
@@ -774,108 +773,97 @@ const StorageInfoPackage = {
           }
         }] 
     },
-    {
-      path: "cargosequence",
-      name: "Cargosequence",
-      component: AModule,
-      meta: {
-        title: '网格仓线路设置',
-        icon: 'table',
-        permission: PermIds.WMS_PICKORDER
-      },
-      children: [{
-        path: "",
-        name: "CargosequenceView",
-        component: () =>
-          import('@/views/storage-info/cargosequence/index'),
-          hidden: true,
-        meta: {
-          title: '网格仓线路设置',
-          icon: 'table',
-          permission: PermIds.WMS_PICKORDER_VIEW 
-        }
-      }, {
-        path: "edit",
-        name: "CargosequenceEdit",
-        component: () =>
-          import('@/views/storage-info/cargosequence/edit'),
-          hidden: true,
-          meta: {
-            title: '编辑网格仓线路',
-            icon: 'table',
-            permission: PermIds.WMS_PICKORDER_VIEW
-          }
-        },
-        {
-          path: "add",
-          name: "CargosequenceAdd",
-          component: () =>
-            import('@/views/storage-info/cargosequence/add'),
-          hidden: true,
-          meta: {
-            title: '新建网格仓线路',
-            icon: 'table',
-            permission: PermIds.WMS_PICKORDER_CREATE
-          }
-        }] 
-    },
-    {
-      path: "circuitry",
-      name: "Circuitry",
-      component: AModule,
-      meta: {
-        title: '中心仓线路设置',
-        icon: 'table',
-        permission: PermIds.WMS_PICKORDER
-      },
-      children: [{
-        path: "",
-        name: "CircuitryView",
-        component: () =>
-          import('@/views/storage-info/circuitry/index'),
-          hidden: true,
-        meta: {
-          title: '中心仓线路设置',
-          icon: 'table',
-          permission: PermIds.WMS_PICKORDER_VIEW 
-        }
-      }, {
-        path: "edit",
-        name: "CircuitryEdit",
-        component: () =>
-          import('@/views/storage-info/circuitry/edit'),
-          hidden: true,
-          meta: {
-            title: '编辑中心仓线路',
-            icon: 'table',
-            permission: PermIds.WMS_PICKORDER_VIEW
-          }
-        },
-        {
-          path: "add",
-          name: "CircuitryAdd",
-          component: () =>
-            import('@/views/storage-info/circuitry/add'),
-          hidden: true,
-          meta: {
-            title: '新建中心仓线路',
-            icon: 'table',
-            permission: PermIds.WMS_PICKORDER_CREATE
-          }
-        }] 
-=======
-      }] 
-  },
-  {
-    path: "storpartition",
-    name: "Storpartition",
-    component: AModule,
-    meta: {
-      title: '存储分区',
-      icon: 'table',
-      permission: PermIds.WMS_STORAGEAREA
->>>>>>> 55b39a0e5663afdc69c7bbb989970830e43b2eb7
-    },
+    // {
+    //   path: "cargosequence",
+    //   name: "Cargosequence",
+    //   component: AModule,
+    //   meta: {
+    //     title: '网格仓线路设置',
+    //     icon: 'table',
+    //     permission: PermIds.WMS_PICKORDER
+    //   },
+    //   children: [{
+    //     path: "",
+    //     name: "CargosequenceView",
+    //     component: () =>
+    //       import('@/views/storage-info/cargosequence/index'),
+    //       hidden: true,
+    //     meta: {
+    //       title: '网格仓线路设置',
+    //       icon: 'table',
+    //       permission: PermIds.WMS_PICKORDER_VIEW 
+    //     }
+    //   }, {
+    //     path: "edit",
+    //     name: "CargosequenceEdit",
+    //     component: () =>
+    //       import('@/views/storage-info/cargosequence/edit'),
+    //       hidden: true,
+    //       meta: {
+    //         title: '编辑网格仓线路',
+    //         icon: 'table',
+    //         permission: PermIds.WMS_PICKORDER_VIEW
+    //       }
+    //     },
+    //     {
+    //       path: "add",
+    //       name: "CargosequenceAdd",
+    //       component: () =>
+    //         import('@/views/storage-info/cargosequence/add'),
+    //       hidden: true,
+    //       meta: {
+    //         title: '新建网格仓线路',
+    //         icon: 'table',
+    //         permission: PermIds.WMS_PICKORDER_CREATE
+    //       }
+    //     }] 
+    // },
+    // {
+    //   path: "circuitry",
+    //   name: "Circuitry",
+    //   component: AModule,
+    //   meta: {
+    //     title: '中心仓线路设置',
+    //     icon: 'table',
+    //     permission: PermIds.WMS_PICKORDER
+    //   },
+    //   children: [{
+    //     path: "",
+    //     name: "CircuitryView",
+    //     component: () =>
+    //       import('@/views/storage-info/circuitry/index'),
+    //       hidden: true,
+    //     meta: {
+    //       title: '中心仓线路设置',
+    //       icon: 'table',
+    //       permission: PermIds.WMS_PICKORDER_VIEW 
+    //     }
+    //   }, {
+    //     path: "edit",
+    //     name: "CircuitryEdit",
+    //     component: () =>
+    //       import('@/views/storage-info/circuitry/edit'),
+    //       hidden: true,
+    //       meta: {
+    //         title: '编辑中心仓线路',
+    //         icon: 'table',
+    //         permission: PermIds.WMS_PICKORDER_VIEW
+    //       }
+    //     },
+    //     {
+    //       path: "add",
+    //       name: "CircuitryAdd",
+    //       component: () =>
+    //         import('@/views/storage-info/circuitry/add'),
+    //       hidden: true,
+    //       meta: {
+    //         title: '新建中心仓线路',
+    //         icon: 'table',
+    //         permission: PermIds.WMS_PICKORDER_CREATE
+    //       }
+    //     }
+    //   ] 
+    // },
     {
       path: "storpartition",
       name: "Storpartition",
@@ -1017,18 +1005,6 @@ const warehousingAdm = {
         permission: PermIds.WMS_ORDERBILL_VIEW
       }
     }
-    // {
-    //   path: "add",
-    //   name: "SuppliersAdd",
-    //   component: () =>
-    //     import('@/views/warehousing-adm/order/add'),
-    //   hidden: true,
-    //   meta: {
-    //     title: '新建供应商',
-    //     icon: 'table'
-    //     // permission: PermIds.PRODUCT_SUPPLIER_CREATE
-    //   }
-    // }
   ]
     },
     {
@@ -1684,51 +1660,6 @@ const carriage = {
           hidden: true,
           meta: {
             title: '新建网格仓线路',
-            icon: 'table'
-            // permission: PermIds.WMS_PICKORDER_CREATE
-          }
-        }] 
-    },
-    {
-      path: "circuitry",
-      name: "Circuitry",
-      component: AModule,
-      meta: {
-        title: '中心仓线路设置',
-        icon: 'table'
-        // permission: PermIds.WMS_PICKORDER
-      },
-      children: [{
-        path: "",
-        name: "CircuitryView",
-        component: () =>
-          import('@/views/carriage/circuitry/index'),
-          hidden: true,
-        meta: {
-          title: '中心仓线路设置',
-          icon: 'table'
-          // permission: PermIds.WMS_PICKORDER_VIEW 
-        }
-      }, {
-        path: "edit",
-        name: "CircuitryEdit",
-        component: () =>
-          import('@/views/carriage/circuitry/edit'),
-          hidden: true,
-          meta: {
-            title: '编辑中心仓线路',
-            icon: 'table'
-            // permission: PermIds.WMS_PICKORDER_VIEW
-          }
-        },
-        {
-          path: "add",
-          name: "CircuitryAdd",
-          component: () =>
-            import('@/views/carriage/circuitry/add'),
-          hidden: true,
-          meta: {
-            title: '新建中心仓线路',
             icon: 'table'
             // permission: PermIds.WMS_PICKORDER_CREATE
           }
