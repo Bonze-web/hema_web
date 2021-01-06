@@ -54,7 +54,7 @@ export default {
         return request.put('/stock-take-bill-item-check/updateQuantityById', postData)
     },
     stockDownload() {
-        return request.put('/stock-take-bill/download');
+        return request.get('/stock-take-bill/download');
     },
     
     /**

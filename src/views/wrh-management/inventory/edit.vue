@@ -55,11 +55,11 @@
                             </el-col>
                             <el-col :span="6" class="info-box">
                                 <div>修改时间:</div>
-                                <div>{{ suppliersInfo.updateTime}}</div>
+                                <div>{{ suppliersInfo.updateTime }}</div>
                             </el-col>
                             <el-col :span="6" class="info-box">
                               <div>创建时间:</div>
-                              <div>{{ suppliersInfo.createTime}}</div>
+                              <div>{{ suppliersInfo.createTime }}</div>
                             </el-col>
                         </el-tab-pane>
                     </el-tabs>
@@ -604,6 +604,9 @@ export default {
         }
       },
       timeChange(val) {
+        console.log(val);
+      },
+      updateTimeType(val) {
         console.log(val);
       }
     },

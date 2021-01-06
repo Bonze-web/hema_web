@@ -797,11 +797,11 @@ export default {
       const postData = [];
       this.leftSelect.forEach((ele, idx) => {
         postData.push({
-          pickOrderId: this.editProjectsInfo.schemeList.id,
+          pickorderId: this.editProjectsInfo.schemeList.id,
           grpId: this.storeArmy.id,
           storeCode: ele.code,
           storeName: ele.name,
-          storeOrder: idx
+          storeOrder: idx + 1
         })
       })
       const postDataObj = {
