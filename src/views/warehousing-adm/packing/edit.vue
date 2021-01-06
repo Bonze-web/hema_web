@@ -2,7 +2,7 @@
     <div>
         <div class="head">
             <div class="head-title">
-                <div style="margin:8px">{{ '[' + dataList.wrhCode  +']' + dataList.wrhName  }}</div>
+                <div style="margin:8px">{{ dataList.billNumber }}</div>
                 <div style="margin:11px 0 5px 0; font-size: 12px; color: #999">{{ dataList.status | setStatus }}</div>
             </div>
             <div>

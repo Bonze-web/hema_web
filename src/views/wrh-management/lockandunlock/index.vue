@@ -263,10 +263,10 @@ export default {
   },
   filters: {
     setStatus(type) {
-      // SAVED:已保存，AUDITED:已审核
+      // INITIAL: 初始；AUDITED：已审核，ABORTED: 已作废
       switch (type) {
-        case 'SAVED':
-          return "已保存"
+        case 'INITIAL':
+          return "已作废"
         case 'AUDITED':
           return "已审核"
         default:

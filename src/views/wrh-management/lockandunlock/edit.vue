@@ -150,7 +150,7 @@
 
                         <!-- USER, DOCK, Inbound_Outbound, PRETYPE, PICK_ORDER, USER_PICKAREA, OTHER, SUPPLIER, CONTAINER, CONTAINERTYPE, DECINVBILL, INCINVBILL, PICKAREA, STORAGEAREA, PRODUCT, PRODUCTCATEGORY, BINTYPE, ZONE, PATH, SHELF, BIN, QUALITY, MOVESTOCK, LOCKSTOCK, VENDORRETURNBILL, ORDERBILL -->
                         <el-tab-pane label="操作日志" name="log">
-                          <system-log modular="LOCKBILL"></system-log>
+                          <system-log modular="LOCKBILL" :id=id></system-log>
                         </el-tab-pane>
                     </el-tabs>
                 </template>
@@ -273,16 +273,16 @@ export default {
     },
     filters: {
       setStatus(type) {
-        // SAVED:已保存，AUDITED:已审核
-        switch (type) {
-          case 'SAVED':
-            return "已保存"
-          case 'AUDITED':
-            return "已审核"
-          default:
-            return '未知';
-        }
-      },
+      // INITIAL: 初始；AUDITED：已审核，ABORTED: 已作废
+      switch (type) {
+        case 'INITIAL':
+          return "已作废"
+        case 'AUDITED':
+          return "已审核"
+        default:
+          return '未知';
+      }
+    },
       setBillType(type) {
         // LOCK:锁定 UNLOCK:解锁
         switch (type) {

@@ -72,9 +72,9 @@
                                   <el-row :gutter="20">
 
                                     <el-col :span="6" class="info-box" v-if="blockList.length !== 0">
-                                        <el-form-item label="对应区块" prop="block">
-                                          <el-select v-model="form.block" placeholder="请选择对应区块">
-                                            <el-option v-for="(item, index) in blockList" :key="index" :label="item.name" :value="item.code"></el-option>
+                                        <el-form-item label="对应区块" prop="blockId">
+                                          <el-select v-model="form.blockId" placeholder="请选择对应区块">
+                                            <el-option v-for="(item, index) in blockList" :key="index" :label="item.name" :value="item.id"></el-option>
                                           </el-select>
                                         </el-form-item>
                                     </el-col>
@@ -140,9 +140,9 @@
                                     </el-col>
 
                                     <el-col :span="6" class="info-box">
-                                        <el-form-item label="拣货容器类型" prop="pickContainerTypeName">
-                                          <el-select v-model="form.pickContainerTypeName" placeholder="请选择拣货容器类型">
-                                            <el-option v-for="(item, index) in contentType" :key="index" :label="item.name" :value="item.code"></el-option>
+                                        <el-form-item label="拣货容器类型" prop="pickContainerTypeId">
+                                          <el-select v-model="form.pickContainerTypeId" placeholder="请选择拣货容器类型">
+                                            <el-option v-for="(item, index) in contentType" :key="index" :label="item.name" :value="item.id"></el-option>
                                           </el-select>
                                         </el-form-item>
                                     </el-col>
@@ -358,11 +358,11 @@ export default {
           binScope: '',
           stockType: "",
           putawayRule: "",
-          pickContainerTypeName: "", // 容器类型
-          block: '', // 区块
-          rplMath: '', // 补货算法
+          pickContainerTypeId: "", // 容器类型  
+          // blockId: '', // 区块 ==
+          rplMath: '', // 补货算法 rplMath
           rplMethod: 'RUNTIME', // 作业运行时
-          rplDevice: '', // 补货设备
+          rplDevice: '', // 补货设备  rplDevice
           rplBillSplit: '', // 补货分单
           pickMethod: '', // 拣货模式
           pickDevice: '', // 拣货设备
@@ -393,10 +393,10 @@ export default {
           putawayRule: [
             { required: true, message: '请填写上架规则', trigger: 'blur' }
           ],
-          pickContainerTypeName: [
+          pickContainerTypeId: [
             { required: true, message: '请选择容器类型', trigger: 'blur' }
           ],
-          block: [
+          blockId: [
             { required: true, message: '请选择区块', trigger: 'blur' }
           ],
           rplMath: [
@@ -555,17 +555,19 @@ export default {
       },
       // 创建拣货分区
       createSuppliers: function() {
-        console.log(this.form)
         // 创建新的拣货分区的按钮
         this.$refs.form.validate(valid => {
           if (valid) {
             if (this.status === 'create') {
               // 创建新的拣货分区的按钮
-              // const reg = /^([1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[,]+[1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[-]+[1-9a-zA-Z]{1,64})$|^([1-9a-zA-Z]{1,64}[(]+[1-9]+\/[1-9]+[)]+)$/;
-              // if (!reg.test(this.form.binScope)) {
-              //   this.$message.error("满足格式10、10(1/2)、10-20，多个以逗号隔开");
-              //   return false;
-              // }
+              // const idx = this.form.pickContainerIndex;
+              // const content = this.contentType[idx];
+
+              // this.form.pickContainerTypeCode = content.code;
+              // this.form.pickContainerTypeId = content.id;
+              // this.form.pickContainerTypeName = content.name;
+
+              // contentType
               this.form.storageList = this.storageList;
               SortdivisionService.createSuppliers(this.form)
               .then(res => {
@@ -655,8 +657,9 @@ export default {
           isForQuery: true
         })
         .then(res => {
-          console.log(res)
-          this.blockList = res.records
+          this.blockList = res.records;
+          if (this.blockList.length !== 0) return;
+          this.form.blockId = null;
         })
         .catch(err => {
           this.$message.error("区块列表获取失败" + err.message)
