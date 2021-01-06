@@ -234,7 +234,7 @@ export default {
             return "空闲"
           case 'LOCKED':
             return "已锁定"
-          case 'USEING':
+          case 'USING':
             return "已使用"
           case 'ABORTED':
             return "已作废"

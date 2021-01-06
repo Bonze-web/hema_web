@@ -13,8 +13,8 @@ module.exports = {
     proxyTable: {
       /** 服务接口 */
       '/wms/': {
-        target: 'http://localhost:8080', // 本地环境
-        // target: 'http://101.133.169.189', // 测试环境
+        // target: 'http://localhost:8080', // 本地环境
+        target: 'http://101.133.169.189', // 测试环境
         // target: 'http://192.168.1.113:8088', // 测试环境
         changeOrigin: true,
         secure: false,
