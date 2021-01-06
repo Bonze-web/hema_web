@@ -32,7 +32,7 @@
             <el-input v-model="form.typeName" maxlength="32" placeholder="请输入单据类型的名称" autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item label="说明"  label-width="120px">
-            <textarea v-model="form.remark" maxlength="200" autocomplete="off"></textarea>
+            <textarea rows="5" v-model="form.remark" maxlength="200" autocomplete="off"></textarea>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -48,7 +48,7 @@
             <el-input v-model="editForm.typeName" maxlength="32" placeholder="请输入单据类型的名称" autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item label="说明"  label-width="120px">
-            <textarea v-model="editForm.remark" maxlength="200" autocomplete="off"></textarea>
+            <textarea rows="5" v-model="editForm.remark" maxlength="200" autocomplete="off"></textarea>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">

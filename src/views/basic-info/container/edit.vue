@@ -43,7 +43,7 @@
                                     </el-col>
                                 </el-row>
                                 <el-form-item label="备注" prop="remark">
-                                    <textarea v-model="form.remark"></textarea>
+                                    <textarea rows="5" v-model="form.remark"></textarea>
                                 </el-form-item>
 
                              <div class="info-title">规格信息</div>
@@ -229,47 +229,15 @@ export default {
     filters: {
       dcStatus(useStatus) {
         if (useStatus === undefined) return;
-        const useStatu = useStatus.toLowerCase();
-
-        switch (useStatu) {
-          case 'idle':
+        switch (useStatus) {
+          case 'IDLE':
             return "空闲"
-          case 'locked':
+          case 'LOCKED':
             return "已锁定"
-          case 'receiving':
-            return "收货中"
-          case 'rtnwrhreceiving':
-            return "好退退仓收货中"
-          case 'rtnvendorreceiving':
-            return "返厂退仓收货中"
-          case 'moving':
-            return "平移中"
-          case 'allocating':
-            return "分播中"
-          case 'putawaying':
-            return "上架中"
-          case 'rtnputawaying':
-            return "退仓上架中"
-          case 'mergering':
-            return "拆并中"
-          case 'shifting':
-            return "移库中"
-          case 'aborted':
-            return "已作废"
-          case 'stacontainermovelocked':
-            return "移库锁定"
-          case 'using':
+          case 'USING':
             return "已使用"
-          case 'pickuping':
-            return "拣货中"
-          case 'handovering':
-            return "交接中"
-          case 'shiping':
-            return "装车中"
-          case 'shiped':
-            return "已装车"
-          case 'instore':
-            return "在门店"
+          case 'ABORTED':
+            return "已作废"
           default:
             return '未知';
         }

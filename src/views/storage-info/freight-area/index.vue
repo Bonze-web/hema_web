@@ -96,7 +96,7 @@
             </el-select>
           </el-form-item>
           <el-form-item label="备注" :label-width="formLabelWidth">
-            <textarea v-model="formArea.remark"></textarea>
+            <textarea rows="5" v-model="formArea.remark"></textarea>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -205,7 +205,7 @@
           </el-form-item>
           
           <el-form-item label="备注" :label-width="formLabelWidth">
-            <textarea v-model="formSpace.remark"  placeholder="请输入备注"></textarea>
+            <textarea rows="5" v-model="formSpace.remark"  placeholder="请输入备注"></textarea>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">

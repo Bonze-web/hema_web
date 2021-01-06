@@ -24,13 +24,13 @@
                                           </el-select>
                                         </el-form-item>
                                     </el-col>
-                                    <el-col :span="6" class="info-box">
+                                    <!-- <el-col :span="6" class="info-box">
                                         <el-form-item label="仓库" prop="wrhId">
                                           <el-select v-model="form.wrhId" placeholder="请选择仓库" @visible-change="selectWrh">
                                             <el-option v-for="item in wrhList" :key="item.id" :label="'[' + item.code + ']' + item.name" :value="item.id"></el-option>
                                           </el-select>
                                         </el-form-item>
-                                    </el-col>
+                                    </el-col> -->
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="报告人" prop="decerName">
                                           <el-select
@@ -59,7 +59,7 @@
                                     </el-col>
                                 </el-row>
                                 <el-form-item label="备注">
-                                    <textarea maxlength="200" v-model="form.remark"></textarea>
+                                    <textarea rows="5" maxlength="200" v-model="form.remark"></textarea>
                                 </el-form-item>
                                 <div class="info-title">
                                     <div>
@@ -126,7 +126,7 @@
                                         </el-table-column>
                                         <el-table-column width="100" prop="remark" label="备注">
                                           <template slot-scope="scope">
-                                            <textarea v-model="scope.row.remark"></textarea>
+                                            <textarea rows="5" v-model="scope.row.remark"></textarea>
                                           </template>
                                         </el-table-column>
                                     </el-table>
@@ -193,7 +193,7 @@
                   <div>{{ Number(product.consumeQtystr) + '+' + Number(product.consumeQty) }}</div>
                 </el-form-item>
                 <el-form-item label="备注" :label-width="formLabelWidth">
-                  <textarea v-model="product.remark"></textarea>
+                  <textarea rows="5" v-model="product.remark"></textarea>
                 </el-form-item>
               </el-form>
               <div slot="footer" class="dialog-footer">
@@ -269,7 +269,7 @@ export default {
           id: '',
           code: '',
           billType: '', // 溢余单据类型
-          wrhId: '',
+          // wrhId: '',
           decerName: '',
           incerId: '', // 报告员
           remark: '',
@@ -297,9 +297,9 @@ export default {
           billTypeId: [
             { required: true, message: '请选择溢余单类型', trigger: 'blur'}
           ],
-          wrhId: [
-            { required: true, message: '请选择所属仓库', trigger: 'blur'}
-          ],
+          // wrhId: [
+          //   { required: true, message: '请选择所属仓库', trigger: 'blur'}
+          // ],
           decerName: [
             { required: true, message: '请选择报告人', trigger: 'blur'}
           ]
@@ -456,11 +456,11 @@ export default {
         this.getContainer()
       },
       batchAddProduct: function() {
-        if (!this.form.wrhId) {
-          this.$message.error('请选择仓库')
-          return
-        }
-        this.$router.push({path: '/wrhmanagement/overflowbill/batchAdd', query: {id: this.form.wrhId}})
+        // if (!this.form.wrhId) {
+        //   this.$message.error('请选择仓库')
+        //   return
+        // }
+        this.$router.push({path: '/wrhmanagement/overflowbill/batchAdd'})
       },
       handleSelect: function(e) {
         console.log(e)

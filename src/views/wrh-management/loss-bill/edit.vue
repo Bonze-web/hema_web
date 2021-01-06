@@ -136,13 +136,13 @@
                                           </el-select>
                                         </el-form-item>
                                     </el-col>
-                                    <el-col :span="6" class="info-box">
+                                    <!-- <el-col :span="6" class="info-box">
                                         <el-form-item label="仓库" prop="wrhId">
                                           <el-select v-model="form.wrhId" placeholder="请选择仓库" @visible-change="selectWrh">
                                             <el-option v-for="item in wrhList" :key="item.id" :label="'[' + item.code + ']' + item.name" :value="item.id"></el-option>
                                           </el-select>
                                         </el-form-item>
-                                    </el-col>
+                                    </el-col> -->
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="报损人" prop="decerName">
                                           <el-select
@@ -171,7 +171,7 @@
                                     </el-col>
                                 </el-row>
                                 <el-form-item label="备注">
-                                    <textarea maxlength="200" v-model="form.remark"></textarea>
+                                    <textarea rows="5" maxlength="200" v-model="form.remark"></textarea>
                                 </el-form-item>
                                 <div class="info-title">
                                     <div>
@@ -237,7 +237,7 @@
                                         </el-table-column>
                                         <el-table-column width="100" prop="itemRemark" label="备注">
                                           <template slot-scope="scope">
-                                            <textarea v-model="scope.row.itemRemark"></textarea>
+                                            <textarea rows="5" v-model="scope.row.itemRemark"></textarea>
                                           </template>
                                         </el-table-column>
                                     </el-table>
@@ -275,7 +275,7 @@ export default {
           id: '',
           code: '',
           billType: '', // 损耗单据类型
-          wrhId: '',
+          // wrhId: '',
           decerId: '', // 报损员
           remark: '',
           version: '',
@@ -303,9 +303,9 @@ export default {
           billType: [
             { required: true, message: '请选择损耗单类型', trigger: 'blur'}
           ],
-          wrhId: [
-            { required: true, message: '请选择所属仓库', trigger: 'blur'}
-          ],
+          // wrhId: [
+          //   { required: true, message: '请选择所属仓库', trigger: 'blur'}
+          // ],
           decerId: [
             { required: true, message: '请选择报损人', trigger: 'blur'}
           ]
@@ -381,11 +381,11 @@ export default {
       },
       ...mapActions(["deleteSelection", "addSelection", "clearSelection"]),
       batchAddProduct: function() {
-        if (!this.form.wrhId) {
-          this.$message.error('请选择仓库')
-          return
-        }
-        this.$router.push({path: '/wrhmanagement/lossbill/batchAdd', query: {id: this.form.wrhId}})
+        // if (!this.form.wrhId) {
+        //   this.$message.error('请选择仓库')
+        //   return
+        // }
+        this.$router.push({path: '/wrhmanagement/lossbill/batchAdd'})
       },
       handleSelect: function(e) {
         this.form.decerId = e.id

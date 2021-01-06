@@ -1206,6 +1206,42 @@ const outhousingAdm = {
         }
       }
     ]
+  },
+  {
+    path: "pickingProcess",
+    name: "PickingProcess",
+    component: AModule,
+    meta: {
+      title: '拣货单',
+      icon: 'table'
+      // permission: PermIds.WMS_DECINVBILL
+    },
+    children: [
+      {
+        path: "",
+        name: "PickingProcessView",
+        component: () =>
+          import('@/views/outhousing-adm/pickingProcess/index'),
+        hidden: true,
+        meta: {
+          title: '拣货单',
+          icon: 'table'
+          // permission: PermIds.WMS_DECINVBILL_VIEW
+        }
+      },
+      {
+        path: "edit",
+        name: "PickingProcessEdit",
+        component: () =>
+          import('@/views/outhousing-adm/pickingProcess/edit'),
+        hidden: true,
+        meta: {
+          title: '拣货单详情',
+          icon: 'table'
+          // permission: PermIds.WMS_DECINVBILL_VIEW
+        }
+      }
+    ]
   }
 ]}
   
@@ -1581,58 +1617,6 @@ const BillManagement = {
   ]
 }
 
-  /*
- * 出库管理
- */
-const Delivery = {
-  path: '/delivery',
-  component: Layout,
-  name: 'Delivery',
-  alwaysShow: true,
-  meta: {
-    title: '出库管理'
-    // icon: 'bill'
-  },
-  children: [
-    {
-      path: "pickingProcess",
-      name: "PickingProcess",
-      component: AModule,
-      meta: {
-        title: '拣货流程',
-        icon: 'table'
-        // permission: PermIds.WMS_DECINVBILL
-      },
-      children: [
-        {
-          path: "",
-          name: "PickingProcessView",
-          component: () =>
-            import('@/views/delivery/pickingProcess/index'),
-          hidden: true,
-          meta: {
-            title: '拣货流程',
-            icon: 'table'
-            // permission: PermIds.WMS_DECINVBILL_VIEW
-          }
-        },
-        {
-          path: "edit",
-          name: "PickingProcessEdit",
-          component: () =>
-            import('@/views/delivery/pickingProcess/edit'),
-          hidden: true,
-          meta: {
-            title: '拣货流程详情',
-            icon: 'table'
-            // permission: PermIds.WMS_DECINVBILL_VIEW
-          }
-        }
-      ]
-    }
-  ]
-}
-
 /**
  * 动态路由
  */
@@ -1644,7 +1628,6 @@ export const asyncRouterMap = [
   warehousingAdm,
   BillManagement,
   outhousingAdm,
-  Delivery,
   {
     path: '*',
     redirect: '/dashboard',

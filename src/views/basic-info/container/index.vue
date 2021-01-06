@@ -7,13 +7,13 @@
           <el-input type="text" placeholder="请输入条码" v-model="form.barCodeLikes" class="input-width" ></el-input>
         </el-form-item>
 
-        <!-- 全部; IDLE 空闲; LOCKED 已锁定; USEING 已使用;ABORTED 已作废;  -->
+        <!-- 全部; IDLE 空闲; LOCKED 已锁定; USING 已使用;ABORTED 已作废;  -->
         <el-form-item label="状态：">
           <el-select v-model="form.useStatusEquals" placeholder="请选择状态">
             <el-option label="全部" value=""></el-option>
             <el-option value="IDLE" label="空闲"></el-option>
             <el-option value="LOCKED" label="已锁定"></el-option>
-            <el-option value="USEING" label="已使用"></el-option>
+            <el-option value="USING" label="已使用"></el-option>
             <el-option value="ABORTED" label="已作废"></el-option>
           </el-select>
         </el-form-item>
@@ -257,15 +257,16 @@ export default {
   },
   filters: {
     dcStatus(useStatus) {
-      // 全部; IDLE 空闲; LOCKED 已锁定; USEING 已使用;ABORTED 已作废; 
-      const useStatu = useStatus.toLowerCase();
+      // 全部; IDLE 空闲; LOCKED 已锁定; USING 已使用;ABORTED 已作废; 
+      // const useStatu = useStatus.toLowerCase();
+      console.log(useStatus)
 
-      switch (useStatu) {
+      switch (useStatus) {
         case 'IDLE':
           return "空闲"
         case 'LOCKED':
           return "已锁定"
-        case 'USEING':
+        case 'USING':
           return "已使用"
         case 'ABORTED':
           return "已作废"

@@ -113,7 +113,7 @@ export default {
   },
   deleteStockLocjBill(opt) {
     // 锁定解锁单  作废接口
-    return request.post('/wms/lock-bill/delete', opt)
+    return request.post('/wms/lock-bill/aborted', opt)
   },
   nauditStockLocjBill(opt) {
     // 锁定解锁单 审核接口

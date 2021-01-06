@@ -42,7 +42,7 @@
                               </el-row>
 
                               <el-form-item label="备注" prop="remark">
-                                  <textarea v-model="form.remark"></textarea>
+                                  <textarea rows="5" v-model="form.remark"></textarea>
                               </el-form-item> -->
 
                                <div class="info-title">
