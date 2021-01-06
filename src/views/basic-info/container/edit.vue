@@ -171,7 +171,7 @@
                         </el-tab-pane>
                         <!-- USER, DOCK, Inbound_Outbound, PRETYPE, PICK_ORDER, USER_PICKAREA, OTHER, SUPPLIER, CONTAINER, CONTAINERTYPE, DECINVBILL, INCINVBILL, PICKAREA, STORAGEAREA, PRODUCT, PRODUCTCATEGORY, BINTYPE, ZONE, PATH, SHELF, BIN, QUALITY, MOVESTOCK, LOCKSTOCK, VENDORRETURNBILL, ORDERBILL -->
                         <el-tab-pane label="操作日志" name="log">
-                          <system-log modular="CONTAINER"></system-log>
+                          <system-log modular="CONTAINER" :id="id"></system-log>
                         </el-tab-pane>
                     </el-tabs>
                 </template>
