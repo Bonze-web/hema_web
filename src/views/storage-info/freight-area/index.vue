@@ -90,8 +90,8 @@
           <el-form-item label="名称" :label-width="formLabelWidth" prop="name">
             <el-input v-model="formArea.name" placeholder="请输入名称" autocomplete="off"></el-input>
           </el-form-item>
-          <el-form-item label="所属仓库" :label-width="formLabelWidth" prop="wrhId">
-            <el-select v-model="formArea.wrhId" placeholder="请选择所属仓库">
+          <el-form-item label="所属仓区" :label-width="formLabelWidth" prop="wrhId">
+            <el-select v-model="formArea.wrhId" placeholder="请选择所属仓区">
               <el-option v-for="item in wrhList" :key="item.id" :label="'[' + item.code + ']' + item.name" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
@@ -310,7 +310,7 @@ import PermIds from "@/api/permissionIds";
           { name: "供应商退货位", value: "VENDORRTN" },
           { name: "供应商集货位", value: "VENDORCOLLECT" }
         ], // 货位用途
-        wrhList: [], // 仓库列表
+        wrhList: [], // 仓区列表
         formLabelWidth: '120px',
         props: {
           label: 'label',
@@ -336,7 +336,7 @@ import PermIds from "@/api/permissionIds";
             { required: true, max: 40, message: '请输入最多40位字符' }
           ],
           wrhId: [
-            { required: true, message: '请选择所属仓库', trigger: 'blur' }
+            { required: true, message: '请选择所属仓区', trigger: 'blur' }
           ]
         },
         dialogFormArea: false,
@@ -728,7 +728,7 @@ import PermIds from "@/api/permissionIds";
         }
       })
     },
-    // 货区所有仓库
+    // 货区所有仓区
     getWrhQuery: function() {
       const data = {
         page: 1,
@@ -740,7 +740,7 @@ import PermIds from "@/api/permissionIds";
         this.wrhList = res.records
       })
       .catch((err) => {
-        this.$message('获取仓库列表失败' + err.message)
+        this.$message('获取仓区列表失败' + err.message)
       })
     },
     // 货区货位类型

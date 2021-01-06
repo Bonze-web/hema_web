@@ -848,7 +848,7 @@ export default {
       }
     },
     statusChange: function() {
-      // 修改仓库状态
+      // 修改仓区状态
       const self = this;
       this.$confirm("此操作将改变商品状态, 是否继续?", "提示", {
         confirmButtonText: "确定",

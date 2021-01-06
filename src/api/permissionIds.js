@@ -276,7 +276,7 @@ export default {
   WMS_CONTAINER_MERGER_BILL_PRODUCT_MERGER: "wms:container_merger_bill:product_merger",
 
   /**
-   * 仓库模块
+   * 仓区模块
    */
   WMS_WAREHOUSE: "wms:warehouse",
   WMS_WAREHOUSE_CREATE: "wms:warehouse:create",
@@ -310,7 +310,7 @@ export default {
   WMS_QUALITY_INSPECTION_ORDER_VIEW: "wms:quality-inspection-order:view",
   
   /**
-   * 仓库作业单
+   * 仓区作业单
    */
   WMS_OPERATE_BILL: "wms:operate_bill",
   WMS_OPERATE_BILL_VIEW: "wms:operate_bill:view",

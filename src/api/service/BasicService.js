@@ -209,28 +209,28 @@ export default {
    */
 
   /**
-   * 仓库资料接口 
+   * 仓区资料接口 
    */
   /**
-   * 获取所有仓库资料
+   * 获取所有仓区资料
    */
   getWrhQuery(data) {
     return request.get('/sys/dc/query', {params: data})
   },
   /**
-   * 仓库启用
+   * 仓区启用
    */
   openDc(id, version) {
     return request.get('/sys/dc/on?id=' + id + '&version=' + version)
   },
   /**
-   * 仓库禁用
+   * 仓区禁用
    */
   closeDc(id, version) {
     return request.get('/sys/dc/off?id=' + id + '&version=' + version)
   },
   /**
-   * 新建仓库
+   * 新建仓区
    */
   creatDc(postData) {
     const param = {
@@ -239,7 +239,7 @@ export default {
     return request.post('/sys/dc/create', param)
   },
   /**
-   * 查询仓库详情
+   * 查询仓区详情
    */
   getDcDetail(id) {
     return request.get('/sys/dc/getById?id=' + id)

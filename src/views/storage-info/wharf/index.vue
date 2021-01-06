@@ -145,7 +145,7 @@ export default {
         })
       },
       statusChange: function(command) {
-      // 修改仓库状态
+      // 修改仓区状态
       const _this = this;
       this.$confirm('此操作将改变码头状态,是否继续?', '提示', {
         confirmButtonText: '确定',

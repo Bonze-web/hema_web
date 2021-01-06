@@ -52,7 +52,7 @@
                     </template>
                 </el-table-column>
                 <el-table-column prop="moveType" label="移库类型"></el-table-column>
-                <!-- <el-table-column prop="wrhCode" label="仓库">
+                <!-- <el-table-column prop="wrhCode" label="仓区">
                   <template slot-scope="scope">
                     {{ '[' + scope.row.wrhCode + ']' + scope.row.wrhName }}
                   </template>

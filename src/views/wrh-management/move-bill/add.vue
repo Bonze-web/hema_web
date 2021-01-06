@@ -81,7 +81,7 @@
                                         <el-input type="number" style="width:80px" max="100" @change="calcProduct" size="mini" v-model="scope.row.consumeQtystr"></el-input>
                                       </template>
                                     </el-table-column>
-                                    <el-table-column label="目标仓库" width="120" prop="toWarehouseCode">
+                                    <el-table-column label="目标仓区" width="120" prop="toWarehouseCode">
                                       <template slot-scope="scope">
                                         {{ scope.row.toWarehouseCode ? '[' + scope.row.toWarehouseCode + ']' + scope.row.toWarehouseName : ''}}
                                       </template>
@@ -357,7 +357,7 @@ export default {
           this.wrhList = res.records
         })
         .catch((err) => {
-          this.$message.error('加载仓库失败' + err.message)
+          this.$message.error('加载仓区失败' + err.message)
         })
       },
       calcProduct: function(productList) {

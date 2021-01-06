@@ -196,7 +196,7 @@ export default {
         billNumberOrSrcBillNumberLike: '', // 单号
         srcBillNumberLike: '', //  来源单号
         vendorCodeEqualsOrNameLike: '', // 供应商代码等于或者名称类似于
-        wrhCodeEqualsOrNameLike: '', // 入库仓库
+        wrhCodeEqualsOrNameLike: '', // 入库仓区
         typeEquals: '', // 收货方式
         srcWayEquals: '', // 订单来源
         productCodeOrNameLike: '', // 商品代码等于或者名称类似于
@@ -227,7 +227,7 @@ export default {
         billNumberOrSrcBillNumberLike: '', // 单号
         srcBillNumberLike: '', //  来源单号
         vendorCodeEqualsOrNameLike: '', // 供应商代码等于或者名称类似于
-        wrhCodeEqualsOrNameLike: '', // 入库仓库
+        wrhCodeEqualsOrNameLike: '', // 入库仓区
         typeEquals: '', // 收货方式
         srcWayEquals: '', // 订单来源
         productCodeOrNameLike: '', // 商品代码等于或者名称类似于
@@ -279,7 +279,7 @@ export default {
         billNumberOrSrcBillNumberLike: this.form.billNumberOrSrcBillNumberLike, // 单号
         srcBillNumberLike: this.form.srcBillNumberLike, //  来源单号
         vendorCodeEqualsOrNameLike: this.form.vendorCodeEqualsOrNameLike, // 供应商代码等于或者名称类似于
-        wrhCodeEqualsOrNameLike: this.form.wrhCodeEqualsOrNameLike, // 入库仓库
+        wrhCodeEqualsOrNameLike: this.form.wrhCodeEqualsOrNameLike, // 入库仓区
         typeEquals: this.form.typeEquals ? this.form.typeEquals : null, // 收货方式
         productCodeOrNameLike: this.form.productCodeOrNameLike, // 商品代码等于或者名称类似于
         srcWayEquals: this.form.srcWayEquals ? this.form.srcWayEquals : null, // 订单来源
@@ -347,9 +347,9 @@ export default {
     //         vendorCode: '111',
     //         vendorId: '1111',
     //         vendorName: '名称',
-    //         wrhCode: '仓库代码',
+    //         wrhCode: '仓区代码',
     //         wrhId: '2002',
-    //         wrhName: '13号仓库'
+    //         wrhName: '13号仓区'
     // })
   },
   beforeRouteEnter(to, from, next) {
