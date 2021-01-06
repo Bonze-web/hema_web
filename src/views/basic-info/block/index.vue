@@ -166,7 +166,7 @@ export default {
         sourceWayEquals: this.form.sourceWayEquals ? this.form.sourceWayEquals : null // 来源
       };
 
-      request.get('/api/wms/block/query', { params: data })
+      request.get('/wms/block/query', { params: data })
       .then((res) => {
         console.log(res)
         const records = res.records;
