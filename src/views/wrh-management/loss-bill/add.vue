@@ -174,7 +174,7 @@ export default {
           stockList: [], // 损耗集合
           totalAmount: '', // 总金额
           totalProductCount: '', // 总品相数
-          totalQtystr: '', // 总件数（1+1）
+          totalQtystr: '' // 总件数（1+1）
         },
         createRules: {
           billTypeId: [
