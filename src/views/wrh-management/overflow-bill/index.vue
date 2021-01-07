@@ -79,13 +79,13 @@
                         </router-link>
                     </template>
                 </el-table-column>
-                <el-table-column prop="billType" label="溢余类型"></el-table-column>
+                <el-table-column prop="billTypeName" label="溢余类型"></el-table-column>
                 <!-- <el-table-column prop="wrhCode" label="仓区">
                   <template slot-scope="scope">
                     {{ '[' + scope.row.wrhCode + ']' + scope.row.wrhName }}
                   </template>
                 </el-table-column> -->
-                <el-table-column prop="incerName" label="报告员">
+                <el-table-column prop="incerName" label="报溢员">
                   <template slot-scope="scope">
                     {{ scope.row.incerName }}
                   </template>
