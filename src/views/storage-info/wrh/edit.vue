@@ -94,8 +94,8 @@
                             </el-col>
                         </el-tab-pane>
 
-                        <el-tab-pane label="操作日志" :id="id" name="log">
-                          <system-log modular="WAREHOUSE"></system-log>
+                        <el-tab-pane label="操作日志" name="log">
+                          <system-log modular="WAREHOUSE" :id="id"></system-log>
                         </el-tab-pane>
                     </el-tabs>
                 </template>
