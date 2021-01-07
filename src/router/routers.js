@@ -1276,7 +1276,7 @@ const BillManagement = {
       meta: {
         title: '移库单',
         icon: 'table',
-        permission: PermIds.WMS_INCINVBILL
+        permission: PermIds.WMS_MOVE_BILL
       },
       children: [{
         path: "",
@@ -1287,7 +1287,7 @@ const BillManagement = {
         meta: {
           title: '移库单',
           icon: 'table',
-          permission: PermIds.WMS_INCINVBILL_VIEW
+          permission: PermIds.WMS_MOVE_BILL_VIEW
         }
       }, {
         path: "edit",
@@ -1298,7 +1298,7 @@ const BillManagement = {
         meta: {
           title: '查看移库单',
           icon: 'table',
-          permission: PermIds.WMS_INCINVBILL_VIEW
+          permission: PermIds.WMS_MOVE_BILL_VIEW
         }
       }, {
         path: "add",
@@ -1309,7 +1309,7 @@ const BillManagement = {
         meta: {
           title: '新建移库单',
           icon: 'table',
-          permission: PermIds.WMS_INCINVBILL_CREATE
+          permission: PermIds.WMS_MOVE_BILL_CREATE
         }
       }, {
         path: "batchadd",

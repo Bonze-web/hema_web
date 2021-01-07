@@ -97,13 +97,13 @@
                                           </template>
                                         </el-table-column>
                                         <el-table-column width="100" prop="containerBarcode" label="容器"></el-table-column>
-                                        <el-table-column width="100" prop="vendorName" label="供应商"></el-table-column>
+                                        <!-- <el-table-column width="100" prop="vendorName" label="供应商"></el-table-column>
                                         <el-table-column width="100" prop="productionBatch" label="批号"></el-table-column>
                                         <el-table-column width="100" prop="productionDate" label="生产日期"></el-table-column>
-                                        <el-table-column width="100" prop="validDate" label="到效日期"></el-table-column>
+                                        <el-table-column width="100" prop="validDate" label="到效日期"></el-table-column> -->
                                         <el-table-column width="100" prop="qpcStr" label="商品包装/计量单位"></el-table-column>
-                                        <el-table-column width="100" prop="price" label="单价"></el-table-column>
-                                        <el-table-column width="100" prop="batch" label="批次"></el-table-column>
+                                        <!-- <el-table-column width="100" prop="price" label="单价"></el-table-column> -->
+                                        <!-- <el-table-column width="100" prop="batch" label="批次"></el-table-column> -->
                                         <el-table-column width="100" prop="qty" label="数量"></el-table-column>
                                         <el-table-column width="100" prop="consumeQtystr" label="损耗件数">
                                           <template slot-scope="scope">
@@ -167,8 +167,6 @@ export default {
           realTotalAmount: '', // 实际总金额
           realTotalProductCount: '', // 实际总品项数
           realTotalQtystr: '', // 实际总件数
-          realTotalVolume: '', // 实际总体积
-          realTotalWeight: '', // 实际总质量
           srcBillId: '', // 来源单据
           srcBillNumber: '', // 来源单号
           srcBillType: '', // 来源单据类型
@@ -177,8 +175,6 @@ export default {
           totalAmount: '', // 总金额
           totalProductCount: '', // 总品相数
           totalQtystr: '', // 总件数（1+1）
-          totalVolume: '', // 总体积
-          totalWeight: '' // 总质量
         },
         createRules: {
           billTypeId: [
@@ -280,7 +276,7 @@ export default {
           if (valid) {
             if (reset) {
               _this.form.realTotalAmount = _this.form.totalAmount
-              _this.form.realTotalProductCount = _this.form.totalProductCount
+              // _this.form.realTotalProductCount = _this.form.totalProductCount
             }
             BillService.createLossBill(this.form)
             .then((res) => {

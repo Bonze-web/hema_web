@@ -37,7 +37,7 @@
                                               v-model="form.decerName"
                                               filterable
                                               remote
-                                              placeholder="请输入移库员名称"
+                                              placeholder="请输入报溢员名称"
                                               :remote-method="getUsers"
                                               @change="handleSelect">
                                               <el-option
@@ -97,17 +97,17 @@
                                           </template>
                                         </el-table-column>
                                         <el-table-column width="100" prop="containerBarcode" label="容器"></el-table-column>
-                                        <el-table-column width="100" prop="vendorName" label="供应商"></el-table-column>
-                                        <el-table-column width="100" prop="productionBatch" label="批号"></el-table-column>
-                                        <el-table-column width="100" prop="productionDate" label="生产日期"></el-table-column>
-                                        <el-table-column width="100" prop="validDate" label="到效日期"></el-table-column>
+                                        <!-- <el-table-column width="100" prop="vendorName" label="供应商"></el-table-column> -->
+                                        <!-- <el-table-column width="100" prop="productionBatch" label="批号"></el-table-column> -->
+                                        <!-- <el-table-column width="100" prop="productionDate" label="生产日期"></el-table-column> -->
+                                        <!-- <el-table-column width="100" prop="validDate" label="到效日期"></el-table-column> -->
                                         <el-table-column width="100" prop="qpcStr" label="商品包装/计量单位">
                                           <template slot-scope="scope">
                                             {{ scope.row.spec ? scope.row.spec : scope.row.qpcStr }}
                                           </template>
                                         </el-table-column>
-                                        <el-table-column width="100" prop="price" label="单价"></el-table-column>
-                                        <el-table-column width="100" prop="batch" label="批次"></el-table-column>
+                                        <!-- <el-table-column width="100" prop="price" label="单价"></el-table-column> -->
+                                        <!-- <el-table-column width="100" prop="batch" label="批次"></el-table-column> -->
                                         <el-table-column width="100" prop="qty" label="数量"></el-table-column>
                                         <el-table-column width="100" prop="consumeQtystr" label="溢余件数">
                                           <template slot-scope="scope">

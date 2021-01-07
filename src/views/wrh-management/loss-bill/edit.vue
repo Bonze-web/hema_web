@@ -40,10 +40,10 @@
                                 <div>损耗类型:</div>
                                 <div>{{ billInfo.billTypeName }}</div>
                             </el-col>
-                            <el-col :span="6" class="info-box">
+                            <!-- <el-col :span="6" class="info-box">
                                 <div>仓区:</div>
                                 <div>{{ billInfo.wrhName }}</div>
-                            </el-col>
+                            </el-col> -->
                             <el-col :span="6" class="info-box">
                                 <div>报损员:</div>
                                 <div>{{ billInfo.decerName }}</div>
@@ -74,36 +74,36 @@
                                             {{ scope.$index + 1 }}
                                           </template>
                                         </el-table-column>
-                                        <el-table-column width="100" prop="productName" label="商品/商品规格">
+                                        <!-- <el-table-column width="100" prop="productName" label="商品/商品规格">
                                           {{ scope.row.productName + '/' + scope.row.productSpec }}
                                         </el-table-column>
                                         <el-table-column width="100" prop="qpcStr" label="商品包装/计量单位">
                                           {{ scope.row.qpcStr + '/' + scope.row.munit }}
-                                        </el-table-column>
-                                        <el-table-column width="100" prop="binCode" label="货位"></el-table-column>
-                                        <el-table-column width="100" prop="containerBarcode" label="容器"></el-table-column>
-                                        <el-table-column width="100" prop="productionDate" label="生产日期"></el-table-column>
-                                        <el-table-column width="100" prop="validDate" label="到效日期"></el-table-column>
-                                        <el-table-column width="100" prop="productionBatch" label="批号"></el-table-column>
-                                        <el-table-column width="100" prop="batch" label="批次"></el-table-column>
-                                        <el-table-column width="100" prop="consumeQtystr" label="损耗件数"></el-table-column>
-                                        <el-table-column width="100" prop="consumeQty" label="损耗数量"></el-table-column>
-                                        <el-table-column width="100" prop="realQtystr" label="实际件数" v-if="form.status === 'AUDITED'"></el-table-column>
-                                        <el-table-column width="100" prop="realQty" label="实际数量"  v-if="form.status === 'AUDITED'"></el-table-column>
-                                        <el-table-column width="100" prop="realQtystr" label="实际件数" v-if="check">
+                                        </el-table-column> -->
+                                        <el-table-column prop="binCode" label="货位"></el-table-column>
+                                        <el-table-column prop="containerBarcode" label="容器"></el-table-column>
+                                        <!-- <el-table-column prop="productionDate" label="生产日期"></el-table-column>
+                                        <el-table-column prop="validDate" label="到效日期"></el-table-column> -->
+                                        <!-- <el-table-column prop="productionBatch" label="批号"></el-table-column> -->
+                                        <!-- <el-table-column prop="batch" label="批次"></el-table-column> -->
+                                        <el-table-column prop="consumeQtystr" label="损耗件数"></el-table-column>
+                                        <el-table-column prop="consumeQty" label="损耗数量"></el-table-column>
+                                        <el-table-column prop="realQtystr" label="实际件数" v-if="form.status === 'AUDITED'"></el-table-column>
+                                        <el-table-column prop="realQty" label="实际数量"  v-if="form.status === 'AUDITED'"></el-table-column>
+                                        <el-table-column prop="realQtystr" label="实际件数" v-if="check">
                                           <template slot-scope="scope">
                                             <el-input type="number" max="100" @input="calcProduct" size="mini" v-model="scope.row.realQtystr"></el-input>
                                           </template>
                                         </el-table-column>
-                                        <el-table-column width="100" prop="realQty" label="实际数量" v-if="check">
+                                        <el-table-column prop="realQty" label="实际数量" v-if="check">
                                           <template slot-scope="scope">
                                             <el-input type="number" max="100" @input="calcProduct" size="mini" v-model="scope.row.realQty"></el-input>
                                           </template>
                                         </el-table-column>
-                                        <el-table-column width="100" prop="price" label="单价"></el-table-column>
-                                        <el-table-column width="100" prop="consumeAmount" label="损耗金额"></el-table-column>
-                                        <el-table-column width="100" prop="realAmount" label="实际损耗金额"></el-table-column>
-                                        <el-table-column width="100" prop="itemRemark" label="备注"></el-table-column>
+                                        <!-- <el-table-column prop="price" label="单价"></el-table-column> -->
+                                        <!-- <el-table-column prop="consumeAmount" label="损耗金额"></el-table-column> -->
+                                        <el-table-column prop="realAmount" label="实际损耗金额"></el-table-column>
+                                        <el-table-column prop="itemRemark" label="备注"></el-table-column>
                                     </el-table>
                         </el-tab-pane>
                         <!-- <el-tab-pane label="配送中心范围" name="range">配置管理</el-tab-pane> -->

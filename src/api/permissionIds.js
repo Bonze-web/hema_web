@@ -478,5 +478,13 @@ export default {
   WMS_PRETYPE_CREATE: "wms:pretype:create",
   WMS_PRETYPE_UPDATE: "wms:pretype:update",
   WMS_PRETYPE_DELETE: "wms:pretype:delete",
-  WMS_PRETYPE_VIEW: "wms:pretype:view"
+  WMS_PRETYPE_VIEW: "wms:pretype:view",
+  /**
+   * 移库模块
+   */
+  WMS_MOVE_BILL: "wms:move-bill",
+  WMS_MOVE_BILL_CREATE: "wms:move-bill:create",
+  WMS_MOVE_BILL_UPDATE: "wms:move-bill:update",
+  WMS_MOVE_BILL_VIEW: "wms:move-bill:view",
+  WMS_MOVE_BILL_DELETE: "wms:move-bill:delete"
 }

@@ -74,44 +74,44 @@
                                             {{ scope.$index + 1 }}
                                           </template>
                                         </el-table-column>
-                                        <el-table-column width="100" prop="productName" label="商品/商品规格">
+                                        <el-table-column prop="productName" label="商品/商品规格">
                                           {{ scope.row.productName + '/' + scope.row.productSpec }}
                                         </el-table-column>
-                                        <el-table-column width="100" prop="qpcStr" label="商品包装/计量单位">
+                                        <el-table-column prop="qpcStr" label="商品包装/计量单位">
                                           {{ scope.row.qpcStr + '/' + scope.row.munit }}
                                         </el-table-column>
-                                        <el-table-column width="100" prop="binCode" label="货位"></el-table-column>
-                                        <el-table-column width="100" prop="containerBarcode" label="容器"></el-table-column>
-                                        <el-table-column width="100" prop="productionDate" label="生产日期"></el-table-column>
-                                        <el-table-column width="100" prop="validDate" label="到效日期"></el-table-column>
-                                        <el-table-column width="100" prop="productionBatch" label="批号"></el-table-column>
-                                        <el-table-column width="100" prop="batch" label="批次"></el-table-column>
-                                        <el-table-column width="100" prop="consumeQtystr" label="溢余件数"></el-table-column>
-                                        <el-table-column width="100" prop="consumeQty" label="溢余数量"></el-table-column>
-                                        <el-table-column width="100" prop="realQtystr" label="实际件数" v-if="form.status === 'AUDITED'">
+                                        <el-table-column prop="binCode" label="货位"></el-table-column>
+                                        <el-table-column prop="containerBarcode" label="容器"></el-table-column>
+                                        <!-- <el-table-column prop="productionDate" label="生产日期"></el-table-column> -->
+                                        <!-- <el-table-column prop="validDate" label="到效日期"></el-table-column> -->
+                                        <!-- <el-table-column prop="productionBatch" label="批号"></el-table-column> -->
+                                        <!-- <el-table-column prop="batch" label="批次"></el-table-column> -->
+                                        <el-table-column prop="consumeQtystr" label="溢余件数"></el-table-column>
+                                        <el-table-column prop="consumeQty" label="溢余数量"></el-table-column>
+                                        <el-table-column prop="realQtystr" label="实际件数" v-if="form.status === 'AUDITED'">
                                           <template slot-scope="scope">
                                             {{ scope.row.realQtystr }}
                                           </template>
                                         </el-table-column>
-                                        <el-table-column width="100" prop="realQty" label="实际数量"  v-if="form.status === 'AUDITED'">
+                                        <el-table-column prop="realQty" label="实际数量"  v-if="form.status === 'AUDITED'">
                                           <template slot-scope="scope">
                                             {{ scope.row.realQty }}
                                           </template>
                                         </el-table-column>
-                                        <el-table-column width="100" prop="realQtystr" label="实际件数" v-if="check">
+                                        <el-table-column prop="realQtystr" label="实际件数" v-if="check">
                                           <template slot-scope="scope">
                                             <el-input type="number" max="100" @input="calcProduct" size="mini" v-model="scope.row.realQtystr"></el-input>
                                           </template>
                                         </el-table-column>
-                                        <el-table-column width="100" prop="realQty" label="实际数量" v-if="check">
+                                        <el-table-column prop="realQty" label="实际数量" v-if="check">
                                           <template slot-scope="scope">
                                             <el-input type="number" max="100" @input="calcProduct" size="mini" v-model="scope.row.realQty"></el-input>
                                           </template>
                                         </el-table-column>
-                                        <el-table-column width="100" prop="price" label="单价"></el-table-column>
-                                        <el-table-column width="100" prop="consumeAmount" label="溢余金额"></el-table-column>
-                                        <el-table-column width="100" prop="realAmount" label="实际溢余金额"></el-table-column>
-                                        <el-table-column width="100" prop="remark" label="备注"></el-table-column>
+                                        <!-- <el-table-column prop="price" label="单价"></el-table-column> -->
+                                        <!-- <el-table-column prop="consumeAmount" label="溢余金额"></el-table-column> -->
+                                        <el-table-column prop="realAmount" label="实际溢余金额"></el-table-column>
+                                        <el-table-column prop="remark" label="备注"></el-table-column>
                                     </el-table>
                         </el-tab-pane>
                         <!-- <el-tab-pane label="配送中心范围" name="range">配置管理</el-tab-pane> -->
@@ -157,12 +157,12 @@
                                         </el-form-item>
                                     </el-col> -->
                                     <el-col :span="6" class="info-box">
-                                        <el-form-item label="报告人" prop="incerName">
+                                        <el-form-item label="报溢员" prop="incerName">
                                           <el-select
                                               v-model="form.incerName"
                                               filterable
                                               remote
-                                              placeholder="请输入移库员名称"
+                                              placeholder="请输入报溢员名称"
                                               :remote-method="getUsers"
                                               @change="handleSelect">
                                               <el-option
@@ -176,7 +176,7 @@
                                                 class="inline-input"
                                                 v-model="form.incerName"
                                                 :fetch-suggestions="querySearch"
-                                                placeholder="请输入报告人"
+                                                placeholder="请输入报溢员"
                                                 :trigger-on-focus="false"
                                                 @select="handleSelect"
                                             ></el-autocomplete>
@@ -221,12 +221,12 @@
                                           </template>
                                         </el-table-column>
                                         <el-table-column width="100" prop="containerBarcode" label="容器"></el-table-column>
-                                        <el-table-column width="100" prop="vendorName" label="供应商"></el-table-column>
-                                        <el-table-column width="100" prop="productionBatch" label="批号"></el-table-column>
-                                        <el-table-column width="100" prop="productionDate" label="生产日期"></el-table-column>
-                                        <el-table-column width="100" prop="validDate" label="到效日期"></el-table-column>
+                                        <!-- <el-table-column width="100" prop="vendorName" label="供应商"></el-table-column> -->
+                                        <!-- <el-table-column width="100" prop="productionBatch" label="批号"></el-table-column> -->
+                                        <!-- <el-table-column width="100" prop="productionDate" label="生产日期"></el-table-column> -->
+                                        <!-- <el-table-column width="100" prop="validDate" label="到效日期"></el-table-column> -->
                                         <el-table-column width="100" prop="qpcStr" label="商品包装/计量单位"></el-table-column>
-                                        <el-table-column width="100" prop="price" label="单价"></el-table-column>
+                                        <!-- <el-table-column width="100" prop="price" label="单价"></el-table-column> -->
                                         <el-table-column width="100" prop="batch" label="批次"></el-table-column>
                                         <el-table-column width="100" prop="stockQty" label="数量">
                                           <template slot-scope="scope">
