@@ -138,6 +138,18 @@
                                           </el-select>
                                         </el-form-item>
                                     </el-col>
+                                    
+                                    <!-- 拆分拣货单规则:  FRONT: 按网格仓聚合；BLOCK: 按区块聚合 -->
+                                    <el-col :span="6" class="info-box">
+                                        <el-form-item label="拆分拣货单规则" prop="pickFrontType">
+                                          <el-select v-model="form.pickFrontType" placeholder="请选择拆分拣货单规则">
+                                            <el-option label="按网格仓聚合" value="FRONT"></el-option>
+                                            <el-option label="按区块聚合 " value="BLOCK"></el-option>
+                                          </el-select>
+                                        </el-form-item>
+                                    </el-col>
+
+                                   
 
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="拣货容器类型" prop="pickContainerTypeId">
@@ -156,6 +168,28 @@
 
                                     <!-- ========================== -->
 
+
+                                    <!-- 中心仓,一对一的关系 -->
+                                    <el-col :span="6" class="info-box" v-if="getLoginUserMessage === 'CENTER'">
+                                        <el-form-item label="分播类型" prop="sowingTypeList">
+                                          <el-select v-model="form.sowingTypeList" placeholder="请选择用途">
+                                            <el-option label="标准拆零" value="NORMAL"></el-option>
+                                            <el-option label="冻品" value="COLD"></el-option>
+                                            <el-option label="中件" value="MIDDLE"></el-option>
+                                          </el-select>
+                                        </el-form-item>
+                                    </el-col>
+
+                                    <!-- 网格仓,多对多的关系 -->
+                                    <el-col :span="6" class="info-box" v-if="getLoginUserMessage === 'FRONT'">
+                                        <el-form-item label="分播类型" prop="sowingTypeList">
+                                          <el-select v-model="form.sowingTypeList" multiple placeholder="请选择用途">
+                                            <el-option label="标准拆零" value="NORMAL"></el-option>
+                                            <el-option label="冻品" value="COLD"></el-option>
+                                            <el-option label="中件" value="MIDDLE"></el-option>
+                                          </el-select>
+                                        </el-form-item>
+                                    </el-col>
 
 
                                 </el-row>
@@ -314,6 +348,7 @@ import SortdivisionService from "@/api/service/SortdivisionService";
 export default {
   data() {
       return {
+        getLoginUserMessage: {},
         contentType: [], // 容器类型
         blockList: [], // 区块列表
         rplMathList: [], // 补货算法
@@ -366,7 +401,9 @@ export default {
           rplBillSplit: '', // 补货分单
           pickMethod: '', // 拣货模式
           pickDevice: '', // 拣货设备
+          pickFrontType: '',
           pickBillSplit: '', // 拣货分单
+          sowingTypeList: [],
           storageList: [
             {
               name: "rrr",
@@ -408,6 +445,9 @@ export default {
           rplDevice: [
             { required: true, message: '请选择补货设备', trigger: 'blur' }
           ],
+          pickFrontType: [
+            { required: true, message: '拆分拣货单规则', trigger: 'blur' }
+          ],
           rplBillSplit: [
             { required: true, message: '请选择补货分单', trigger: 'blur' }
           ],
@@ -416,6 +456,9 @@ export default {
           ],
           pickDevice: [
             { required: true, message: '请选择拣货设备', trigger: 'blur' }
+          ],
+          sowingTypeList: [
+            { required: true, message: '请选择分播类型', trigger: 'blur' }
           ],
           pickBillSplit: [
             { required: true, message: '请输入拣货分单', trigger: 'blur' },
@@ -684,6 +727,13 @@ export default {
       this.getQueryStatus();
       this.getContainerTypeQuery() // 获取容器类型
       this.getBlockQuery() // 获取区块列表
+      SortdivisionService.getLoginUser()      
+      .then((res) => {
+        this.getLoginUserMessage = res.workingOrg.dcType;
+      })
+      .catch((err) => {
+        this.$message.error("获取用户信息失败" + err.message)
+      })
     },
     filters: {
     

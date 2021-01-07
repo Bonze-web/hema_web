@@ -41,6 +41,7 @@
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="货位范围" prop="binScope">
                                             <el-input v-model="form.binScope" maxlength="64"></el-input>
+                                            <!-- <div>格式10、10(1/2)、10-20，多个以逗号隔开</div> -->
                                         </el-form-item>
                                     </el-col>
                                   </el-row>
@@ -128,7 +129,7 @@
                                     </el-col>
 
                                     <!-- 拣货设备: RF:RF  DPS:DPS  MANUAL：手工   BILL: 单据  LABLE 打印标签 -->
-                                     <el-col :span="6" class="info-box">
+                                    <el-col :span="6" class="info-box">
                                         <el-form-item label="拣货设备" prop="pickDevice">
                                           <el-select v-model="form.pickDevice" placeholder="请选择拣货设备">
                                             <el-option label="RF" value="RF"></el-option>
@@ -136,6 +137,16 @@
                                             <el-option label="手工 " value="MANUAL"></el-option>
                                             <el-option label="单据 " value="BILL"></el-option>
                                             <el-option label="打印标签 " value="LABLE"></el-option>
+                                          </el-select>
+                                        </el-form-item>
+                                    </el-col>
+
+                                    <!-- 拆分拣货单规则:  FRONT: 按网格仓聚合；BLOCK: 按区块聚合 -->
+                                    <el-col :span="6" class="info-box">
+                                        <el-form-item label="拆分拣货单规则" prop="pickFrontType">
+                                          <el-select v-model="form.pickFrontType" placeholder="请选择拆分拣货单规则">
+                                            <el-option label="FRONT" value="按网格仓聚合"></el-option>
+                                            <el-option label="BLOCK " value="按区块聚合"></el-option>
                                           </el-select>
                                         </el-form-item>
                                     </el-col>
@@ -157,7 +168,27 @@
 
                                     <!-- ========================== -->
 
+                                     <!-- 中心仓,一对一的关系 -->
+                                    <el-col :span="6" class="info-box" v-if="getLoginUserMessage === 'CENTER'">
+                                        <el-form-item label="分播类型" prop="sowingTypeList">
+                                          <el-select v-model="form.sowingTypeList" placeholder="请选择用途">
+                                            <el-option label="标准拆零" value="NORMAL"></el-option>
+                                            <el-option label="冻品" value="COLD"></el-option>
+                                            <el-option label="中件" value="MIDDLE"></el-option>
+                                          </el-select>
+                                        </el-form-item>
+                                    </el-col>
 
+                                    <!-- 网格仓,多对多的关系 -->
+                                    <el-col :span="6" class="info-box" v-if="getLoginUserMessage === 'FRONT'">
+                                        <el-form-item label="分播类型" prop="sowingTypeList">
+                                          <el-select v-model="form.sowingTypeList" multiple placeholder="请选择用途">
+                                            <el-option label="标准拆零" value="NORMAL"></el-option>
+                                            <el-option label="冻品" value="COLD"></el-option>
+                                            <el-option label="中件" value="MIDDLE"></el-option>
+                                          </el-select>
+                                        </el-form-item>
+                                    </el-col>
 
                                 </el-row>
                             </el-form>
@@ -192,6 +223,50 @@
                             <el-col :span="6" class="info-box">
                                 <div>上架规则:</div>
                                 <div>{{ suppliersInfo.putawayRule | putawayRuleChange }}</div>
+                            </el-col>
+                            <el-col :span="6" class="info-box">
+                                <div>对应区块:</div>
+                                <div>{{ suppliersInfo.blockCode }}</div>
+                            </el-col>
+                            <el-col :span="6" class="info-box">
+                                <div>补货模式:</div>
+                                <div>{{ suppliersInfo.rplMethod | modelChange }}</div>
+                            </el-col>
+                            <el-col :span="6" class="info-box">
+                                <div>补货算法:</div>
+                                <div>{{ suppliersInfo.rplMath | rplMathChange }}</div>
+                            </el-col>
+                            <el-col :span="6" class="info-box">
+                                <div>补货设备:</div>
+                                <div>{{ suppliersInfo.rplDevice | rplDeviceChange }}</div>
+                            </el-col>
+                            <el-col :span="6" class="info-box">
+                                <div>补货分单:</div>
+                                <div>{{ suppliersInfo.rplBillSplit | rplBillSplitChange }}</div>
+                            </el-col>
+                            <el-col :span="6" class="info-box">
+                                <div>拣货模式:</div>
+                                <div>{{ suppliersInfo.pickMethod | pickMethodChange }}</div>
+                            </el-col>
+                            <el-col :span="6" class="info-box">
+                                <div>拣货设备:</div>
+                                <div>{{ suppliersInfo.pickDevice | pickDeviceChange }}</div>
+                            </el-col>
+                            <el-col :span="6" class="info-box">
+                                <div>拆分拣货单规则:</div>
+                                <div>{{ suppliersInfo.pickFrontType | pickFrontTypeChange }}</div>
+                            </el-col>
+                            <el-col :span="6" class="info-box">
+                                <div>拣货容器类型:</div>
+                                <div>{{ '[' + suppliersInfo.pickContainerTypeCode + ']' + suppliersInfo.pickContainerTypeName }}</div>
+                            </el-col>
+                            <el-col :span="6" class="info-box">
+                                <div>拣货分单:</div>
+                                <div>{{ suppliersInfo.pickBillSplit }}</div>
+                            </el-col>
+                            <el-col :span="6" class="info-box">
+                                <div>分播类型:</div>
+                                <div>{{ suppliersInfo.sowingTypeList | sowingTypeListChange}}</div>
                             </el-col>
                         </el-tab-pane>
                     <el-tab-pane label="操作日志" name="operational">
@@ -350,6 +425,7 @@ import { mapGetters } from "vuex";
 export default {
   data() {
       return {
+        getLoginUserMessage: '',
         contentType: [], // 容器类型
         blockList: [], // 区块列表
         rplMathList: [], // 补货算法
@@ -422,8 +498,8 @@ export default {
             { required: true, message: '请输入拣货分区名称', trigger: 'blur' }
           ],
           binScope: [
-            { required: true, message: '请填写货位范围', trigger: 'blur' },
-            { required: true, pattern: /^(([0-9a-zA-Z]+[-]+[0-9a-zA-Z]+){0,64}[0-9a-zA-Z]{0,64}([(]+[0-9]+\/[0-9]+[)]+)?[,]?[0-9a-zA-Z]{0,64}[,]?){0,64}$/, message: '格式10、10(1/2)、10-20，多个以逗号隔开', trigger: 'blur' }
+            { required: true, showMessage: true, message: '请填写货位范围', trigger: 'blur' },
+            { required: true, showMessage: true, pattern: /^(([0-9a-zA-Z]+[-]+[0-9a-zA-Z]+){0,64}[0-9a-zA-Z]{0,64}([(]+[0-9]+\/[0-9]+[)]+)?[,]?[0-9a-zA-Z]{0,64}[,]?){0,64}$/, message: '格式10、10(1/2)、10-20，多个以逗号隔开', trigger: 'blur' }
           ],
           stockType: [
             { required: true, message: '请填写存储类型', trigger: 'blur' }
@@ -741,6 +817,13 @@ export default {
       this.getQueryStatus();
       this.getContainerTypeQuery() // 获取容器类型
       this.getBlockQuery() // 获取区块列表
+      SortdivisionService.getLoginUser()      
+      .then((res) => {
+        this.getLoginUserMessage = res.workingOrg.dcType;
+      })
+      .catch((err) => {
+        this.$message.error("获取用户信息失败" + err.message)
+      })
     },
     components: {
       "system-log": systemLog
@@ -764,6 +847,81 @@ export default {
           case "STACK":
             return "地堆"
         }
+      },
+      modelChange(status) {
+        switch (status) {
+          case "RUNTIME":
+            return "作业运行时"
+        }
+      },
+      rplMathChange(status) {
+        switch (status) {
+          case "BY_MIN_STOCK":
+            return "整箱"
+          case "BY_MAX_STOCK":
+            return "拆零"
+        }
+      },
+      rplDeviceChange(status) {
+        switch (status) {
+          case "RF":
+            return "RF"
+          case "MANUAL":
+            return "手工"
+        }
+      },
+      rplBillSplitChange(status) {
+        switch (status) {
+          case "BY_PICK_PATH":
+            return "按取货通道"
+          case "BY_RPL_PATH":
+            return "按补货通道"
+        }
+      },
+      pickMethodChange(status) {
+        switch (status) {
+          case "PICK":
+            return "摘果"
+          case "SOW":
+            return "播种"
+        }
+      },
+      pickDeviceChange(status) {
+        switch (status) {
+          case "RF":
+            return "RF"
+          case "DPS":
+            return "DPS"
+          case "MANUAL":
+            return "手工"
+          case "BILL":
+            return "单据"
+          case "LABLE":
+            return "打印标签"
+        }
+      },
+      pickFrontTypeChange(status) {
+        switch (status) {
+          case "FRONT":
+            return "按网格仓聚合"
+          case "BLOCK":
+            return "按区块聚合"
+        }
+      },
+      sowingTypeListChange(status) {
+        let str = '';
+        if (status) {
+          status.forEach((ele, idx) => {
+            if (ele === "NORMAL") {
+                str += "标准拆零";
+            } else if (ele === "COLD") {
+                str += "冻品";
+            } else if (ele === "MIDDLE") {
+                str += "中件";
+            }
+          })
+        } 
+        return str;
       }
     }
 };
