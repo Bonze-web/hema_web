@@ -79,6 +79,13 @@ export default {
    */
   getBlockQuery(postData) {
     return request.get('/wms/block/query', {params: postData});
+  },
+
+  /**
+   * 取得当前登录用户
+   */
+  getLoginUser() {
+    return request.get('/sys/user/getLoginUser');
   }
 }
 

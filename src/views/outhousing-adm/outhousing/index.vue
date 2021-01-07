@@ -52,7 +52,7 @@
                 :data="suppliersData"
                 style="width: 100%"
             >
-                <el-table-column prop="billNumber" label="盘点单号">
+                <el-table-column prop="billNumber" label="作业单号">
                     <template slot-scope="scope">
                         <router-link style="color:#409EFF" :to="{ path: '/outhousing-adm/outhousing/edit', query:{ status: 'read', id: scope.row.id} }">
                             <span>{{ scope.row.billNumber }}</span>
