@@ -89,42 +89,42 @@
                                             {{ scope.$index + 1 }}
                                           </template>
                                         </el-table-column>
-                                        <el-table-column width="100" prop="productName" label="商品"></el-table-column>
-                                        <el-table-column width="100" prop="binCode" label="货位"></el-table-column>
-                                        <el-table-column width="100" prop="binUsage" label="货位用途">
+                                        <el-table-column prop="productName" label="商品"></el-table-column>
+                                        <el-table-column prop="binCode" label="货位"></el-table-column>
+                                        <el-table-column prop="binUsage" label="货位用途">
                                           <template slot-scope="scope">
                                             {{ scope.row.binUsage | binUsage }}
                                           </template>
                                         </el-table-column>
-                                        <el-table-column width="100" prop="containerBarcode" label="容器"></el-table-column>
-                                        <!-- <el-table-column width="100" prop="vendorName" label="供应商"></el-table-column> -->
-                                        <!-- <el-table-column width="100" prop="productionBatch" label="批号"></el-table-column> -->
-                                        <!-- <el-table-column width="100" prop="productionDate" label="生产日期"></el-table-column> -->
-                                        <!-- <el-table-column width="100" prop="validDate" label="到效日期"></el-table-column> -->
-                                        <el-table-column width="100" prop="qpcStr" label="商品包装/计量单位">
+                                        <el-table-column prop="containerBarcode" label="容器"></el-table-column>
+                                        <!-- <el-table-column prop="vendorName" label="供应商"></el-table-column> -->
+                                        <!-- <el-table-column prop="productionBatch" label="批号"></el-table-column> -->
+                                        <!-- <el-table-column prop="productionDate" label="生产日期"></el-table-column> -->
+                                        <!-- <el-table-column prop="validDate" label="到效日期"></el-table-column> -->
+                                        <el-table-column prop="qpcStr" label="商品包装/计量单位">
                                           <template slot-scope="scope">
-                                            {{ scope.row.spec ? scope.row.spec : scope.row.qpcStr }}
+                                            {{ scope.row.qpcStr + '/' + scope.row.munit }}
                                           </template>
                                         </el-table-column>
-                                        <!-- <el-table-column width="100" prop="price" label="单价"></el-table-column> -->
-                                        <!-- <el-table-column width="100" prop="batch" label="批次"></el-table-column> -->
-                                        <el-table-column width="100" prop="qty" label="数量"></el-table-column>
-                                        <el-table-column width="100" prop="consumeQtystr" label="溢余件数">
+                                        <!-- <el-table-column prop="price" label="单价"></el-table-column> -->
+                                        <!-- <el-table-column prop="batch" label="批次"></el-table-column> -->
+                                        <el-table-column prop="qty" label="数量"></el-table-column>
+                                        <el-table-column prop="consumeQtystr" label="溢余件数">
                                           <template slot-scope="scope">
                                             <el-input type="number" max="100" @change="calcProduct" size="mini" v-model="scope.row.consumeQtystr"></el-input>
                                           </template>
                                         </el-table-column>
-                                        <el-table-column width="100" prop="consumeQty" label="溢余数量">
+                                        <el-table-column prop="consumeQty" label="溢余数量">
                                           <template slot-scope="scope">
                                             <el-input type="number" max="100" @change="calcProduct" size="mini" v-model="scope.row.consumeQty"></el-input>
                                           </template>
                                         </el-table-column>
-                                        <el-table-column width="100" prop="amount" label="溢余金额">
+                                        <el-table-column prop="amount" label="溢余金额">
                                           <template slot-scope="scope">
                                             {{ (Number(scope.row.consumeQtystr) + Number(scope.row.consumeQty)) * scope.row.price ? ((Number(scope.row.consumeQtystr) + Number(scope.row.consumeQty)) * scope.row.price).toFixed(2) : 0 }}
                                           </template>
                                         </el-table-column>
-                                        <el-table-column width="100" prop="remark" label="备注">
+                                        <el-table-column prop="remark" label="备注">
                                           <template slot-scope="scope">
                                             <textarea rows="5" v-model="scope.row.remark"></textarea>
                                           </template>

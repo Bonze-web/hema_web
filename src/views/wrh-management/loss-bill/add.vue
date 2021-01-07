@@ -89,38 +89,42 @@
                                             {{ scope.$index + 1 }}
                                           </template>
                                         </el-table-column>
-                                        <el-table-column width="100" prop="productName" label="商品"></el-table-column>
-                                        <el-table-column width="100" prop="binCode" label="货位"></el-table-column>
-                                        <el-table-column width="100" prop="binUsage" label="货位用途">
+                                        <el-table-column prop="productName" label="商品"></el-table-column>
+                                        <el-table-column prop="binCode" label="货位"></el-table-column>
+                                        <el-table-column prop="binUsage" label="货位用途">
                                           <template slot-scope="scope">
                                             {{ scope.row.binUsage | binUsage }}
                                           </template>
                                         </el-table-column>
-                                        <el-table-column width="100" prop="containerBarcode" label="容器"></el-table-column>
-                                        <!-- <el-table-column width="100" prop="vendorName" label="供应商"></el-table-column>
-                                        <el-table-column width="100" prop="productionBatch" label="批号"></el-table-column>
-                                        <el-table-column width="100" prop="productionDate" label="生产日期"></el-table-column>
-                                        <el-table-column width="100" prop="validDate" label="到效日期"></el-table-column> -->
-                                        <el-table-column width="100" prop="qpcStr" label="商品包装/计量单位"></el-table-column>
-                                        <!-- <el-table-column width="100" prop="price" label="单价"></el-table-column> -->
-                                        <!-- <el-table-column width="100" prop="batch" label="批次"></el-table-column> -->
-                                        <el-table-column width="100" prop="qty" label="数量"></el-table-column>
-                                        <el-table-column width="100" prop="consumeQtystr" label="损耗件数">
+                                        <el-table-column prop="containerBarcode" label="容器"></el-table-column>
+                                        <!-- <el-table-column prop="vendorName" label="供应商"></el-table-column>
+                                        <el-table-column prop="productionBatch" label="批号"></el-table-column>
+                                        <el-table-column prop="productionDate" label="生产日期"></el-table-column>
+                                        <el-table-column prop="validDate" label="到效日期"></el-table-column> -->
+                                        <el-table-column prop="qpcStr" label="商品包装/计量单位">
+                                          <template slot-scope="scope">
+                                            {{ scope.row.qpcStr + '/' + scope.row.munit }}
+                                          </template>
+                                        </el-table-column>
+                                        <!-- <el-table-column prop="price" label="单价"></el-table-column> -->
+                                        <!-- <el-table-column prop="batch" label="批次"></el-table-column> -->
+                                        <el-table-column prop="qty" label="数量"></el-table-column>
+                                        <el-table-column prop="consumeQtystr" label="损耗件数">
                                           <template slot-scope="scope">
                                             <el-input type="number" max="100" @change="calcProduct" size="mini" v-model="scope.row.consumeQtystr"></el-input>
                                           </template>
                                         </el-table-column>
-                                        <el-table-column width="100" prop="consumeQty" label="损耗数量">
+                                        <el-table-column prop="consumeQty" label="损耗数量">
                                           <template slot-scope="scope">
                                             <el-input type="number" max="100" @change="calcProduct" size="mini" v-model="scope.row.consumeQty"></el-input>
                                           </template>
                                         </el-table-column>
-                                        <el-table-column width="100" prop="amount" label="损耗金额">
+                                        <el-table-column prop="amount" label="损耗金额">
                                           <template slot-scope="scope">
                                             {{ ((Number(scope.row.consumeQtystr) * (scope.row.qpc) ? Number(scope.row.consumeQtystr) * (scope.row.qpc) : 0)  + (Number(scope.row.consumeQty) ? Number(scope.row.consumeQty) : 0)) * scope.row.price ? (((Number(scope.row.consumeQtystr) * (scope.row.qpc) ? Number(scope.row.consumeQtystr) * (scope.row.qpc) : 0)  + (Number(scope.row.consumeQty) ? Number(scope.row.consumeQty) : 0)) * scope.row.price).toFixed(2) : 0 }}
                                           </template>
                                         </el-table-column>
-                                        <el-table-column width="100" prop="itemRemark" label="备注">
+                                        <el-table-column prop="itemRemark" label="备注">
                                           <template slot-scope="scope">
                                             <textarea rows="5" v-model="scope.row.itemRemark"></textarea>
                                           </template>
