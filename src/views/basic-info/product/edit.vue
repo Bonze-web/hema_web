@@ -511,6 +511,17 @@
                 <pick-bin-select stockType="CASE" :selectValue.sync="businessForm.splitPickBin" @onselected="onSplitPickBinSelected"></pick-bin-select>
               </el-form-item>
             </el-col>
+
+            <!-- 包装类型，可选值：ORIGINAL（原箱）、STANDAD（标准箱） -->
+            <el-col :span="6" class="info-box">
+              <el-form-item label="包装类型" prop="packType">
+                <el-select v-model="businessForm.packType" placeholder="请选择">
+                  <el-option label="原箱" value="ORIGINAL"></el-option>
+                  <el-option label="标准箱" value="STANDAD"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+
             <el-col :span="6" class="info-box">
               <el-form-item label="收货后加工" prop="processe">
                 <el-checkbox v-model="businessForm.processe"></el-checkbox>
@@ -776,7 +787,8 @@ export default {
         splitPickAreaCode: "",
         splitPickAreaId: "",
         splitPickAreaName: "",
-        splitPickBin: ""
+        splitPickBin: "",
+        packType: '' // 包装类型
       },
       businessFormRules: {
         putawayBin: [
@@ -787,6 +799,9 @@ export default {
         ],
         settleQpcStr: [
           { required: true, message: "请输入标准规格", trigger: "change" }
+        ],
+        packType: [
+          { required: true, message: "请选择包装类型", trigger: "change" }
         ],
         overReceiveRate: [
           {
@@ -1183,13 +1198,15 @@ export default {
           splitPickAreaName: this.businessForm.splitPickAreaName,
           splitPickBin: this.businessForm.splitPickBin
         };
+
         // 业务信息
         if (this.businessForm.settleUnit === "WEIGHT") {
           postData = {
             ...postData,
             settleQpcStr: this.businessForm.settleQpcStr,
             overDeliveryRate: this.businessForm.overDeliveryRate,
-            overReceiveRate: this.businessForm.overReceiveRate
+            overReceiveRate: this.businessForm.overReceiveRate,
+            packType: this.businessForm.packType
           };
         } else {
           postData = {
@@ -1200,6 +1217,7 @@ export default {
           };
         }
       }
+
       if (this.businessInfo.id) {
         postData.id = this.businessInfo.id;
         postData.version = this.businessInfo.version;
