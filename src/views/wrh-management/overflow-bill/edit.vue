@@ -40,12 +40,12 @@
                                 <div>溢余类型:</div>
                                 <div>{{ billInfo.billTypeName }}</div>
                             </el-col>
-                            <el-col :span="6" class="info-box">
+                            <!-- <el-col :span="6" class="info-box">
                                 <div>仓区:</div>
                                 <div>{{ billInfo.wrhName }}</div>
-                            </el-col>
+                            </el-col> -->
                             <el-col :span="6" class="info-box">
-                                <div>报告员:</div>
+                                <div>报溢员:</div>
                                 <div>{{ billInfo.incerName }}</div>
                             </el-col>
                             <el-col :span="6" class="info-box">

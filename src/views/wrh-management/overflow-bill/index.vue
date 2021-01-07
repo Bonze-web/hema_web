@@ -85,9 +85,9 @@
                     {{ '[' + scope.row.wrhCode + ']' + scope.row.wrhName }}
                   </template>
                 </el-table-column> -->
-                <el-table-column prop="decerCode" label="报告员">
+                <el-table-column prop="incerName" label="报告员">
                   <template slot-scope="scope">
-                    {{ scope.row.decerName }}
+                    {{ scope.row.incerName }}
                   </template>
                 </el-table-column>
                 <el-table-column prop="createTime" label="创建时间"></el-table-column>
