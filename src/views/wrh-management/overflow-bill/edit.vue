@@ -188,7 +188,7 @@
                                     </el-col>
                                 </el-row>
                                 <el-form-item label="备注">
-                                    <textarea maxlength="200" v-model="form.remark"></textarea>
+                                    <textarea rows="5" maxlength="200" v-model="form.remark"></textarea>
                                 </el-form-item>
                                 <div class="info-title">
                                     <div>
@@ -235,7 +235,7 @@
                                           </template>
                                         </el-table-column>
                                         <!-- <el-table-column prop="price" label="单价"></el-table-column> -->
-                                        <el-table-column prop="batch" label="批次"></el-table-column>
+                                        <!-- <el-table-column prop="batch" label="批次"></el-table-column> -->
                                         <el-table-column prop="stockQty" label="数量">
                                           <template slot-scope="scope">
                                             {{ scope.row.qty ? scope.row.qty : scope.row.stockQty }}
@@ -258,7 +258,7 @@
                                         </el-table-column>
                                         <el-table-column prop="remark" label="备注">
                                           <template slot-scope="scope">
-                                            <textarea v-model="scope.row.remark"></textarea>
+                                            <textarea rows="2" maxlength="50" v-model="scope.row.remark"></textarea>
                                           </template>
                                         </el-table-column>
                                     </el-table>

@@ -216,17 +216,17 @@
                                           </template>
                                         </el-table-column>
                                         <el-table-column prop="containerBarcode" label="容器"></el-table-column>
-                                        <el-table-column prop="vendorName" label="供应商"></el-table-column>
-                                        <el-table-column prop="productionBatch" label="批号"></el-table-column>
-                                        <el-table-column prop="productionDate" label="生产日期"></el-table-column>
-                                        <el-table-column prop="validDate" label="到效日期"></el-table-column>
+                                        <!-- <el-table-column prop="vendorName" label="供应商"></el-table-column> -->
+                                        <!-- <el-table-column prop="productionBatch" label="批号"></el-table-column> -->
+                                        <!-- <el-table-column prop="productionDate" label="生产日期"></el-table-column> -->
+                                        <!-- <el-table-column prop="validDate" label="到效日期"></el-table-column> -->
                                         <el-table-column prop="qpcStr" label="商品包装/计量单位">
                                           <template slot-scope="scope">
                                             {{ scope.row.qpcStr + '/' + scope.row.munit }}
                                           </template>
                                         </el-table-column>
-                                        <el-table-column prop="price" label="单价"></el-table-column>
-                                        <el-table-column prop="batch" label="批次"></el-table-column>
+                                        <!-- <el-table-column prop="price" label="单价"></el-table-column> -->
+                                        <!-- <el-table-column prop="batch" label="批次"></el-table-column> -->
                                         <el-table-column prop="stockQty" label="可用库存数量">
                                           <template slot-scope="scope">
                                             {{ scope.row.qty ? scope.row.qty : scope.row.stockQty }}
@@ -249,7 +249,7 @@
                                         </el-table-column>
                                         <el-table-column prop="itemRemark" label="备注">
                                           <template slot-scope="scope">
-                                            <textarea rows="5" v-model="scope.row.itemRemark"></textarea>
+                                            <textarea rows="2" v-model="scope.row.itemRemark"></textarea>
                                           </template>
                                         </el-table-column>
                                     </el-table>

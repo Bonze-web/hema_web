@@ -126,7 +126,7 @@
                                         </el-table-column>
                                         <el-table-column prop="itemRemark" label="备注">
                                           <template slot-scope="scope">
-                                            <textarea rows="5" v-model="scope.row.itemRemark"></textarea>
+                                            <textarea rows="2" v-model="scope.row.itemRemark"></textarea>
                                           </template>
                                         </el-table-column>
                                     </el-table>
