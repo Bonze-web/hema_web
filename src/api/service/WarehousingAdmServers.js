@@ -114,7 +114,7 @@ export default {
 
     detailsqualityInspection(id) {
         return request.get('/wms/quality-inspection-order/getById?id=' + id)
-    }
+    },
      /**
      * 
      * 
@@ -128,5 +128,29 @@ export default {
      * 
      * 
      * 
+     */
+
+     /**
+     * 供应商退货开始
+     */
+    vendorReturnBillQuery(postData) {
+        // 供应商退货列表 查询
+        return request.get('/wms/vendorReturnBill/query', { params: postData })
+    },
+    vendorReturnBillDetails(id) {
+        // 供应商退货 详情
+        return request.get('/wms/vendorReturnBill/getById?id=' + id)
+    },
+    vendorReturnBillAudit(postData) {
+        // 供应商退货 审核
+        return request.put('/wms/vendorReturnBill/audit', postData)
+    },
+    vendorReturnBillFinish(id, version) {
+        // 供应商退货 完成
+        return request.put('/wms/vendorReturnBill/finish?id=' + id + "&version=" + version)
+    }
+
+     /**
+     * 供应商退货结束
      */
 }

@@ -467,7 +467,8 @@ const BasicInfoPackage = {
           permission: PermIds.WMS_CONTAINER_TYPE_CREATE
         }
       }]
-    }, {
+    }, 
+    {
       path: "container",
       name: "Container",
       component: AModule,
@@ -511,7 +512,8 @@ const BasicInfoPackage = {
           permission: PermIds.WMS_CONTAINER_CREATE
         }
       }] 
-    }, {
+    }, 
+    {
       path: "accumulpoint",
       name: "Accumulpoint",
       component: AModule,
@@ -1055,6 +1057,42 @@ const warehousingAdm = {
             title: '质检详情',
             icon: 'table',
             permission: PermIds.WMS_QUALITY_INSPECTION_ORDER_VIEW
+          }
+        }
+      ]
+    },
+    {
+      path: "supplier",
+      name: "Supplier",
+      component: AModule,
+      meta: {
+        title: '供应商退货单',
+        icon: 'table',
+        permission: PermIds.WMS_VENDOR_RETURN_BILL
+      },
+      children: [
+        {
+          path: "",
+          name: "View",
+          component: () =>
+            import('@/views/warehousing-adm/supplier/index'),
+          hidden: true,
+          meta: {
+            title: '供应商退货单',
+            icon: 'table',
+            permission: PermIds.WMS_VENDOR_RETURN_BILL_VIEW
+          }
+        },
+        {
+          path: "edit",
+          name: "Edit",
+          component: () =>
+            import('@/views/warehousing-adm/supplier/edit'),
+          hidden: true,
+          meta: {
+            title: '供应商退货单详情',
+            icon: 'table',
+            permission: PermIds.WMS_VENDOR_RETURN_BILL_VIEW
           }
         }
       ]

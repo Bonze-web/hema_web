@@ -53,7 +53,12 @@
           </template>
         </el-table-column> -->
 
-  
+        <el-table-column prop="scope" label="区块代码">
+          <template slot-scope="scope">
+            {{ scope.row.code !== ' ' ? scope.row.code : "&lt;空&gt;" }}
+          </template>
+        </el-table-column>
+
         <el-table-column prop="scope" label="中心仓代码">
           <template slot-scope="scope">
             {{ scope.row.centerDcCode !== ' ' ? scope.row.centerDcCode : "&lt;空&gt;" }}
@@ -63,12 +68,6 @@
         <el-table-column prop="scope" label="中心仓名称">
           <template slot-scope="scope">
             {{ scope.row.centerDcName !== ' ' ? scope.row.centerDcName : "&lt;空&gt;" }}
-          </template>
-        </el-table-column>
-
-        <el-table-column prop="scope" label="区块代码">
-          <template slot-scope="scope">
-            {{ scope.row.code !== ' ' ? scope.row.code : "&lt;空&gt;" }}
           </template>
         </el-table-column>
 

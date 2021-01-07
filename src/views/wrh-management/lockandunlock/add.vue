@@ -140,7 +140,7 @@ export default {
             const addStockLockBillDTO = {
               lockerId: this.restaurants[index].id,
               lockerName: this.restaurants[index].username,
-              // lockerCode: this.restaurants[index].code,
+              lockerCode: this.restaurants[index].username,
               billType: billType,
               reason: this.form.reason,
               note: this.form.note

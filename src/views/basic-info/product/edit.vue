@@ -39,7 +39,6 @@
                 <el-col :span="6" class="info-box">
                   <el-form-item label="代码" prop="code">
                     <span>{{form.code}}</span>
-                    <!-- <el-input v-model="form.code"></el-input> -->
                   </el-form-item>
                 </el-col>
                 <el-col :span="6" class="info-box">
@@ -140,6 +139,7 @@
       <div>
         <template>
           <el-tabs v-model="tabActiveName" @tab-click="tabClick">
+            
             <el-tab-pane label="商品信息" name="product">
               <div class="info-title">基本信息</div>
               <el-row :gutter="20">
@@ -308,6 +308,7 @@
                 </el-col>
               </el-row>
             </el-tab-pane>
+
             <el-tab-pane label="包装数量" name="qpc">
               <el-button icon="el-icon-circle-plus-outline" type="text" @click="addSpec" v-if="workingOrg.type==='GROUP'">新增</el-button>
               <el-table :data="specList" style="width: 100%; text-align: center" :row-style="{ height: '16px', padding: '-4px' }">
@@ -458,10 +459,15 @@
                     <el-input v-else v-model="scope.row.defaultReturnPrice"></el-input>
                   </template>
                 </el-table-column>
+
                 <el-table-column prop="defaultReceive" label="默认供应商">
                   <template slot-scope="scope">
-                    <span v-if="productInfo.defaultVendorCode === scope.row.vendorCode">是</span>
-                    <span v-else>否</span>
+                    <!-- <div v-if="scope.row.id && !scope.row.isEdit"> -->
+                      <span v-if="productInfo.defaultVendorCode === scope.row.vendorCode">是</span>
+                      <span v-else>否</span>
+                    <!-- </div>
+                    <div v-else>修改</div> -->
+                    
                   </template>
                 </el-table-column>
 

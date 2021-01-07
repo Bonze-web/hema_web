@@ -224,6 +224,14 @@ export default {
   PRODUCT_VENDOR_SET_RECEIVE_DEFAULT: "product:vendor:set_receive_default",
   PRODUCT_VENDOR_SET_RETURN_DEFAULT: "product:vendor:cancel_return_default",
 
+    /**
+   * 供应商退货单模块
+   */
+  WMS_VENDOR_RETURN_BILL: "wms:vendor_return_bill",
+  WMS_VENDOR_RETURN_BILL_VIEW: "wms:vendor_return_bill:view",
+  WMS_VENDOR_RETURN_BILL_AUDIT: "wms:vendor_return_bill:audit",
+  WMS_VENDOR_RETURN_BILL_FINISH: "wms:vendor_return_bill:finish",
+
   /**
    * 商品业务模块
    */
