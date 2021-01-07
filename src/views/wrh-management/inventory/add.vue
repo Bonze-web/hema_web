@@ -19,12 +19,12 @@
                       <el-row :gutter="20">
                           <el-col :span="6" class="info-box">
                               <el-form-item label="货位范围" prop="binRange">
-                                  <el-input type='text' placeholder="请输入单号编号" v-model="form.binRange" class="input-width"></el-input>
+                                  <el-input type='text' placeholder="请输入货位范围" v-model="form.binRange" class="input-width"></el-input>
                               </el-form-item>
                           </el-col>
                           <el-col :span="6" class="info-box">
                               <el-form-item label="货位用途" prop="binUsage">
-                                    <el-select v-model="form.binUsage" placeholder="请选择实盘默认值">
+                                    <el-select v-model="form.binUsage" placeholder="请选择货位用途">
                                     <el-option label="统配收货暂存位" value="UNIFYRECEIVE"></el-option>
                                     <el-option label="上架中转位" value="PUTAWAY"></el-option>
                                     <el-option label="拣货位" value="PICK"></el-option>
