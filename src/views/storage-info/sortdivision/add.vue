@@ -171,8 +171,8 @@
 
                                     <!-- 中心仓,一对一的关系 -->
                                     <el-col :span="6" class="info-box" v-if="getLoginUserMessage === 'CENTER'">
-                                        <el-form-item label="分播类型" prop="sowingTypeList">
-                                          <el-select v-model="form.sowingTypeList" placeholder="请选择用途">
+                                        <el-form-item label="分播类型" prop="sowingTypeListOne">
+                                          <el-select v-model="form.sowingTypeListOne" placeholder="请选择用途">
                                             <el-option label="标准拆零" value="NORMAL"></el-option>
                                             <el-option label="冻品" value="COLD"></el-option>
                                             <el-option label="中件" value="MIDDLE"></el-option>
@@ -182,8 +182,8 @@
 
                                     <!-- 网格仓,多对多的关系 -->
                                     <el-col :span="6" class="info-box" v-if="getLoginUserMessage === 'FRONT'">
-                                        <el-form-item label="分播类型" prop="sowingTypeList">
-                                          <el-select v-model="form.sowingTypeList" multiple placeholder="请选择用途">
+                                        <el-form-item label="分播类型" prop="sowingTypeListTwo">
+                                          <el-select v-model="form.sowingTypeListTwo" multiple placeholder="请选择用途">
                                             <el-option label="标准拆零" value="NORMAL"></el-option>
                                             <el-option label="冻品" value="COLD"></el-option>
                                             <el-option label="中件" value="MIDDLE"></el-option>
@@ -386,6 +386,8 @@ export default {
         searchDataRight: "",
         searchDataRightStor: [],
         storageObjzanshi: {},
+        sowingTypeListOne: "",
+        sowingTypeListTwo: [],
         // 弹出来的存储选项 end
         form: {
           code: '',
@@ -457,7 +459,10 @@ export default {
           pickDevice: [
             { required: true, message: '请选择拣货设备', trigger: 'blur' }
           ],
-          sowingTypeList: [
+          sowingTypeListOne: [
+            { required: true, message: '请选择分播类型', trigger: 'blur' }
+          ],
+          sowingTypeListTwo: [
             { required: true, message: '请选择分播类型', trigger: 'blur' }
           ],
           pickBillSplit: [
@@ -611,6 +616,11 @@ export default {
               // this.form.pickContainerTypeName = content.name;
 
               // contentType
+              if (this.getLoginUserMessage === 'CENTER') {
+                this.form.sowingTypeList = [this.form.sowingTypeListOne];
+              } else if (this.getLoginUserMessage === 'FRONT') {
+                this.form.sowingTypeList = this.form.sowingTypeListTwo;
+              }
               this.form.storageList = this.storageList;
               SortdivisionService.createSuppliers(this.form)
               .then(res => {
@@ -729,6 +739,7 @@ export default {
       this.getBlockQuery() // 获取区块列表
       SortdivisionService.getLoginUser()      
       .then((res) => {
+        console.log(res);
         this.getLoginUserMessage = res.workingOrg.dcType;
       })
       .catch((err) => {

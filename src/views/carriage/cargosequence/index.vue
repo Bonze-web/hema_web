@@ -1,17 +1,17 @@
 <template>
     <div class="table-index _table-index">   
         <el-container style="height: 500px; border: 1px solid #eee">
-          <el-aside width="300px" style="background-color: #fff;padding: 0 20px;border: 1px #eee solid;">
+          <el-aside width="350px" style="background-color: #fff;padding: 0 20px;border: 1px #eee solid;">
             <div class="seriation-left-header" style="padding-top:20px;display:flex;align-items: center;">
               <div class="seriation-left-title">路线方案</div>
               <el-button type="primary" @click.stop="newProjectsChange">新建方案</el-button>
             </div>
-            <el-input v-model="codeEqOrNameLike" placeholder="请输入团点代码/名称" @change="searchScheme"><i slot="prefix" class="el-input__icon el-icon-search" style="right:0" @click="searchScheme"></i></el-input>
+            <el-input v-model="codeEqOrNameLike" placeholder="请输入团点代码/名称" @change="getAllPickOrder"><i slot="prefix" class="el-input__icon el-icon-search" style="right:0" @click="getAllPickOrder"></i></el-input>
             <el-collapse accordion style="margin-top:15px;">
               <el-collapse-item v-for="(ele, idx) in storeAllSchemeAll" :key="idx">
                 <template slot="title">
-                    <div class="sequential-programme" style="font-size:14px;">
-                      <span class="el-icon-folder" style="display:flex;align-items: center;max-width: 160px;overflow:hidden;color:#409EFF;cursor: pointer;"><span style="padding-left:10px;" @click.stop="schemeOrStore('scheme', ele.schemeList, ele)">{{'[' + ele.schemeList.code + ']' + ele.schemeList.name}}</span></span> 
+                    <div class="sequential-programme" style="font-size:14px;display:flex;justify-content: space-between;">
+                      <span class="el-icon-folder" style="display:flex;align-items: center;max-width: 188px;overflow:hidden;color:#409EFF;cursor: pointer;"><span style="padding-left:10px;" @click.stop="schemeOrStore('scheme', ele.schemeList, ele)">{{'[' + ele.schemeList.code + ']' + ele.schemeList.name}}</span></span> 
                       <div class="operation-button">
                          <el-button
                             size="mini"
@@ -32,7 +32,7 @@
                 </template>
                 <div>
                   <div class="content-operation" v-for="(item, index) in ele.store" :key="index">
-                      <span class="el-icon-sort" style="display:flex;align-items: center;max-width: 150px;overflow:hidden;color:#409EFF;cursor: pointer;"><span style="padding-left:10px;" @click.stop="schemeOrStore('store', item, ele)">{{'[' + item.code + ']' + item.name}}</span></span> 
+                      <span class="el-icon-sort" style="display:flex;align-items: center;max-width: 170px;overflow:hidden;color:#409EFF;cursor: pointer;"><span style="padding-left:10px;" @click.stop="schemeOrStore('store', item, ele)">{{'[' + item.code + ']' + item.name}}</span></span> 
                       <div class="operation-button">
                          <el-button
                             size="mini"
@@ -75,6 +75,10 @@
                       <el-row>
                         <el-col :span="6" style="text-align: right;padding-right:20px;"><div>方案名称: </div></el-col>
                         <el-col :span="18"><div>{{getByIdDetail.name}}</div></el-col>
+                      </el-row>
+                      <el-row>
+                        <el-col :span="6" style="text-align: right;padding-right:20px;"><div>是否为默认: </div></el-col>
+                        <el-col :span="18"><div>{{getByIdDetail.def | defChange}}</div></el-col>
                       </el-row>
                       <el-row>
                         <el-col :span="6" style="text-align: right;padding-right:20px;"><div>备注: </div></el-col>
@@ -284,7 +288,7 @@
             <el-button type="primary" @click.stop="submitEditStoreChange">确 定</el-button>
           </div>
         </el-dialog>
-        <el-dialog title="线路调序" :visible.sync="dialogFormVisible">
+        <el-dialog title="团点调序" :visible.sync="dialogFormVisible">
           <el-form :model="storeMesAll">
             <el-form-item label="方案:" >
               {{storeMesAll.getByIdMesName}}
@@ -502,7 +506,7 @@ export default {
    // 通过搜索接口来所有方案
    searchScheme() {
       const searchData = {
-        codeEqOrNameLike: this.codeEqOrNameLike,
+        itemCodeEqOrNameLk: this.codeEqOrNameLike,
         page: 1,
         pageSize: 0
       }
@@ -516,10 +520,15 @@ export default {
    },
    getAllPickOrder() {
      const postData = {
-       storeCodeEqOrNameLk: this.codeEqOrNameLike || null
+       itemCodeEqOrNameLk: this.codeEqOrNameLike || null
      }
      CargosequenceService.getAllPickOrder(postData)
       .then((res) => {
+        console.log(res);
+        // 排序
+        res.sort(function(a, b) {
+          return a.updateTime < b.updateTime ? 1 : -1
+        });
         this.getAllGrpByPickId(res);
       }).catch((err) => {
         this.$message.error("请求失败" + err.message)
@@ -528,9 +537,12 @@ export default {
    // 获取指定方案顺序下的门店组
    getAllGrpByPickId(schemeArr) {
      // schemeArr是所有方案的信息
-        if (schemeArr.length <= 0) return false;
-        this.storeAllSchemeAll = [];
+        if (schemeArr.length <= 0) {
+          this.storeAllSchemeAll = [];
+          return false;
+        }
         schemeArr.forEach((ele, idx) => {
+          this.storeAllSchemeAll = [];
           CargosequenceService.getAllGrpByPickId(ele.id)
           .then((res) => {
             // 这里是所有的门店组的信息
@@ -859,6 +871,14 @@ export default {
         case "OFF":
           return "禁用"
       }
+    },
+    defChange(status) {
+      switch (status) {
+        case true:
+          return "是"
+        case false:
+          return "否"
+      }
     }
   },
   components: {
@@ -879,7 +899,7 @@ export default {
     margin-bottom: 15px;
   }
   .sequential-programme {
-    width: 230px;
+    width: 280px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -898,8 +918,8 @@ export default {
     align-items: center;
   }
   .content-operation {
-    padding-left: 20px;
-    padding-right: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
     display: flex;
     justify-content: space-between;
     align-items: center;

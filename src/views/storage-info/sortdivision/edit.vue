@@ -145,8 +145,8 @@
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="拆分拣货单规则" prop="pickFrontType">
                                           <el-select v-model="form.pickFrontType" placeholder="请选择拆分拣货单规则">
-                                            <el-option label="FRONT" value="按网格仓聚合"></el-option>
-                                            <el-option label="BLOCK " value="按区块聚合"></el-option>
+                                            <el-option label="按网格仓聚合" value="FRONT"></el-option>
+                                            <el-option label="按区块聚合" value="BLOCK"></el-option>
                                           </el-select>
                                         </el-form-item>
                                     </el-col>
@@ -168,10 +168,10 @@
 
                                     <!-- ========================== -->
 
-                                     <!-- 中心仓,一对一的关系 -->
+                                      <!-- 中心仓,一对一的关系 -->
                                     <el-col :span="6" class="info-box" v-if="getLoginUserMessage === 'CENTER'">
-                                        <el-form-item label="分播类型" prop="sowingTypeList">
-                                          <el-select v-model="form.sowingTypeList" placeholder="请选择用途">
+                                        <el-form-item label="分播类型" prop="sowingTypeListOne">
+                                          <el-select v-model="form.sowingTypeListOne" placeholder="请选择用途">
                                             <el-option label="标准拆零" value="NORMAL"></el-option>
                                             <el-option label="冻品" value="COLD"></el-option>
                                             <el-option label="中件" value="MIDDLE"></el-option>
@@ -181,8 +181,8 @@
 
                                     <!-- 网格仓,多对多的关系 -->
                                     <el-col :span="6" class="info-box" v-if="getLoginUserMessage === 'FRONT'">
-                                        <el-form-item label="分播类型" prop="sowingTypeList">
-                                          <el-select v-model="form.sowingTypeList" multiple placeholder="请选择用途">
+                                        <el-form-item label="分播类型" prop="sowingTypeListTwo">
+                                          <el-select v-model="form.sowingTypeListTwo" multiple placeholder="请选择用途">
                                             <el-option label="标准拆零" value="NORMAL"></el-option>
                                             <el-option label="冻品" value="COLD"></el-option>
                                             <el-option label="中件" value="MIDDLE"></el-option>
@@ -531,6 +531,12 @@ export default {
           pickDevice: [
             { required: true, message: '请选择拣货设备', trigger: 'blur' }
           ],
+          sowingTypeListOne: [
+            { required: true, message: '请选择分播类型', trigger: 'blur' }
+          ],
+          sowingTypeListTwo: [
+            { required: true, message: '请选择分播类型', trigger: 'blur' }
+          ],
           pickBillSplit: [
             { required: true, message: '请输入拣货分单', trigger: 'blur' },
             { pattern: /^\d{1,6}$/, message: '请输入1-6位之间的数字', trigger: 'change' }
@@ -681,6 +687,13 @@ export default {
         .then((res) => {
           console.log(res);
           this.suppliersInfo = res;
+           if (this.getLoginUserMessage === 'CENTER') {
+            res.sowingTypeList.forEach((ele, idx) => {
+                this.form.sowingTypeListOne = ele;
+            })
+          } else if (this.getLoginUserMessage === 'FRONT') {
+            this.form.sowingTypeListTwo = res.sowingTypeList;
+          }
           this.storageList = this.suppliersInfo.storageList;
 
           this.stockTypeChange(res.stockType) // 修改补货算法值
@@ -712,7 +725,11 @@ export default {
                 this.$message.error("创建失败" + err)
               })
             } else {
-              // 因为提交的时候,需要传递状态值,所以先转换一下,这里是编辑
+              if (this.getLoginUserMessage === 'CENTER') {
+                this.form.sowingTypeList = [this.form.sowingTypeListOne];
+              } else if (this.getLoginUserMessage === 'FRONT') {
+                this.form.sowingTypeList = this.form.sowingTypeListTwo;
+              }
               this.form.storageList = this.storageList;
               console.log(this.form);
               SortdivisionService.updateSupplier(this.form)

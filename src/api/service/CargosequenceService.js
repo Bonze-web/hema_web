@@ -12,7 +12,7 @@ export default {
     return request.post('/wms/pickOrder/create', postData)
   },
   searchData(postData) {
-    return request.post('/wms/pickOrder/query', postData)
+    return request.post('/wms/pickOrder/getAllPickOrder', postData)
   },
   createSuppliers(postData) {
     return request.post('/wms/pickarea/create', postData)
@@ -102,6 +102,9 @@ export default {
     //   pageSize: 0
     // }
     return request.get('/wms/storagearea/query', {params: postData});
+  },
+  getFrontByDcId(postData) {
+    return request.get('/sys/dc/getFrontByDcId', { params: postData });
   }
 }
 

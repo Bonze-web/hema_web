@@ -9,7 +9,7 @@ export default {
   * @param {int} page
   */
   requestNewProjectsList(postData) {
-    return request.post('/wms/pickOrder/create', postData)
+    return request.post('/wms/frontPickOrder/create', postData)
   },
   searchData(postData) {
     return request.post('/wms/pickOrder/query', postData)
@@ -18,53 +18,53 @@ export default {
     return request.post('/wms/pickarea/create', postData)
   },
   getAllPickOrder(postData) {
-    return request.post('/wms/pickOrder/getAllPickOrder', postData)
+    return request.post('/wms/frontPickOrder/getAllPickOrder', postData)
   },
   getAllGrpByPickId(pickOrderId) {
-    return request.get('/wms/pickOrder/getAllGrpByPickId?pickOrderId=' + pickOrderId);
+    return request.get('/wms/frontPickOrder/getAllGrpByPickId?pickOrderId=' + pickOrderId);
   },
   getAllStoreByGrpId(id) {
-    return request.get('/wms/pickOrder/getAllStoreByGrpId?grpId=' + id);
+    return request.get('/wms/frontPickOrder/getAllFrontByGrpId?grpId=' + id);
   },
   getById(id) {
-    return request.get('/wms/pickOrder/getById?id=' + id);
+    return request.get('/wms/frontPickOrder/getById?id=' + id);
   },
   getGrpById(id) {
-    return request.get('/wms/pickOrder/getGrpById?id=' + id);
+    return request.get('/wms/frontPickOrder/getGrpById?id=' + id);
   },
   getItemById(id) {
-    return request.get('/wms/pickOrder/getItemById?id=' + id);
+    return request.get('/wms/frontPickOrder/getItemById?id=' + id);
   },
   deleteGroupItem(itemData) {
-    return request.delete('/wms/pickOrder/deleteGrp?id=' + itemData.id + "&version=" + itemData.version);
+    return request.delete('/wms/frontPickOrder/deleteGrp?id=' + itemData.id + "&version=" + itemData.version);
   },
   deleteSchemeItem(itemData) {
-    return request.delete('/wms/pickOrder/delete?id=' + itemData.id + "&version=" + itemData.version);
+    return request.delete('/wms/frontPickOrder/delete?id=' + itemData.id + "&version=" + itemData.version);
   },
   deleteItem(id, version) {
-    return request.delete('/wms/pickOrder/deleteItem?id=' + id + "&version=" + version);
+    return request.delete('/wms/frontPickOrder/deleteItem?id=' + id + "&version=" + version);
   },
   // 修改调序
-  postAdjustOrder(postData) {
-    return request.post('/wms/pickOrder/adjustOrder', postData)
-  },
+  // postAdjustOrder(postData) {
+  //   return request.post('/wms/pickOrder/adjustOrder', postData)
+  // },
   createGrp(postData) {
-    return request.post('/wms/pickOrder/createGrp', postData)
+    return request.post('/wms/frontPickOrder/createGrp', postData)
   },
   updateScheme(postData) {
-    return request.post('/wms/pickOrder/update', postData)
+    return request.post('/wms/frontPickOrder/update', postData)
   },
   updateGrpScheme(postData) {
-    return request.post('/wms/pickOrder/updateGrp', postData)
+    return request.post('/wms/frontPickOrder/updateGrp', postData)
   },
   queryItem(postData) {
     return request.get('/wms/store/query', {params: postData});
   },
   addGrpItems(postData) {
-    return request.post('/wms/pickOrder/addGrpItems', postData)
+    return request.post('/wms/frontPickOrder/addGrpItems', postData)
   },
   adjustOrder(postData) {
-    return request.post('/wms/pickOrder/adjustOrder', postData)
+    return request.post('/wms/frontPickOrder/adjustOrder', postData)
   },
   /**
    * 启用状态
