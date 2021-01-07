@@ -111,9 +111,8 @@
 
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <!-- <el-button size="mini" type="text">审核</el-button> -->
             <el-button size="mini" type="text" v-if="scope.row.status === 'AUDITED'" @click="complete(scope.row.id, scope.row.version)">完成</el-button>
-            <el-button v-else style="border: none; cursor: auto"></el-button>
+            <div v-else style="padding: 14px 0;"></div>
           </template>
         </el-table-column>
 
