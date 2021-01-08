@@ -493,16 +493,23 @@
                   </template>
                 </el-table-column>
 
-                <el-table-column prop="defaultReceive" label="默认供应商">
+                <el-table-column prop="defaultReceive" label="默认供应商"> 最初代码
                   <template slot-scope="scope">
-                    <!-- <div v-if="scope.row.id && !scope.row.isEdit"> -->
                       <span v-if="productInfo.defaultVendorCode === scope.row.vendorCode">是</span>
                       <span v-else>否</span>
-                    <!-- </div>
-                    <div v-else>修改</div> -->
-                    
                   </template>
                 </el-table-column>
+
+                <!-- <el-table-column prop="defaultReturn" label="默认供应商">
+                  <template slot-scope="scope">
+                    <div v-show="(scope.row.isEdit || scope.row.defaultReturn) || workingOrg.type !== 'GROUP'">
+                      <span>{{ productInfo.defaultVendorCode === scope.row.vendorCode ? '是' : '否' }}</span>
+                    </div>
+                    <div v-show="!((scope.row.isEdit || scope.row.defaultReturn) || workingOrg.type !== 'GROUP')">
+                      <el-button type="text" :disabled="!scope.row.id" @click="setReturnDefault(scope.row)">设为首选</el-button>
+                    </div>
+                  </template>
+                </el-table-column> -->
 
                 <el-table-column label="操作">
                   <template slot-scope="scope">
