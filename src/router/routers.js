@@ -1132,7 +1132,8 @@ const outhousingAdm = {
         icon: 'table',
         permission: PermIds.WMS_OPERATE_BILL_VIEW
       }
-      }, {
+      },
+      {
         path: "edit",
         name: "仓库作业单详情",
         component: () =>

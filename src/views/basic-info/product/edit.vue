@@ -493,23 +493,23 @@
                   </template>
                 </el-table-column>
 
-                <el-table-column prop="defaultReceive" label="默认供应商"> 最初代码
+                <!-- <el-table-column prop="defaultReceive" label="默认供应商"> 最初代码
                   <template slot-scope="scope">
                       <span v-if="productInfo.defaultVendorCode === scope.row.vendorCode">是</span>
                       <span v-else>否</span>
                   </template>
-                </el-table-column>
+                </el-table-column> -->
 
-                <!-- <el-table-column prop="defaultReturn" label="默认供应商">
+                <el-table-column prop="defaultReturn" label="默认供应商">
                   <template slot-scope="scope">
                     <div v-show="(scope.row.isEdit || scope.row.defaultReturn) || workingOrg.type !== 'GROUP'">
                       <span>{{ productInfo.defaultVendorCode === scope.row.vendorCode ? '是' : '否' }}</span>
                     </div>
                     <div v-show="!((scope.row.isEdit || scope.row.defaultReturn) || workingOrg.type !== 'GROUP')">
-                      <el-button type="text" :disabled="!scope.row.id" @click="setReturnDefault(scope.row)">设为首选</el-button>
+                      <el-button type="text" :disabled="!scope.row.id" @click="setSupplier(scope.row)">设为首选</el-button>
                     </div>
                   </template>
-                </el-table-column> -->
+                </el-table-column>
 
                 <el-table-column label="操作">
                   <template slot-scope="scope">
@@ -1613,6 +1613,17 @@ export default {
       ProductService.setReturnDefault(val.id)
         .then(res => {
           self.$message.success("设置首选退货成功");
+          self.getProductVendor();
+        })
+        .catch(err => {
+          this.$message.error("设置失败" + err.message);
+        });
+    },
+    setSupplier(val) {
+      const self = this;
+      ProductService.setSupplier(val.id)
+        .then(res => {
+          self.$message.success("设置首选供应商成功");
           self.getProductVendor();
         })
         .catch(err => {

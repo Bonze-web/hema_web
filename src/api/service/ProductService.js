@@ -177,6 +177,17 @@ export default {
     });
   },
   /**
+   * 设置为供应商默认
+   */
+  setSupplier(id) {
+    var params = {
+      id: id
+    }
+    return request.get('/product/vendor/setDefault', {
+      params: params
+    });
+  },
+  /**
    * 更新商品供应商明细
    */
   updateVendor(postData) {
@@ -281,6 +292,7 @@ export default {
   setDefaultProductQpc(id) {
     return request.get('/product/qpc/setDefault?id=' + id);
   },
+
   /**
    * 更新商品规格明细
    */
