@@ -201,6 +201,7 @@ export default {
         PersonnelbindService.getSuppliersList(this.form)
         .then((res) => {
           // 初始化自己定义的数据
+          this.addData = encodeURIComponent(JSON.stringify(res.records));
           _this.suppliersData = res.records;
           _this.totalCount = res.totalCount;
         })
@@ -223,13 +224,13 @@ export default {
     "system-log": systemLog
   },
   created() {
-    PersonnelbindService.getSuppliersListAll()
-    .then((res) => {
-      this.addData = encodeURIComponent(JSON.stringify(res.records));
-    })
-    .catch((err) => {
-      if (err) this.$message.error("获取信息失败" + err.message)
-    })
+    // PersonnelbindService.getSuppliersListAll()
+    // .then((res) => {
+      
+    // })
+    // .catch((err) => {
+    //   if (err) this.$message.error("获取信息失败" + err.message)
+    // })
     this.getSuppliersList();
   },
   filters: {

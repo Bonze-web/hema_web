@@ -130,12 +130,12 @@
                       </el-table-column>
                       <el-table-column label="网格仓">
                           <template slot-scope="scope">
-                              <span style="color:#409EFF">{{ "[" + scope.row.storeCode + "]" + scope.row.storeName}}</span>
+                              <span style="color:#409EFF">{{ "[" + scope.row.frontCode + "]" + scope.row.frontName}}</span>
                           </template>
                       </el-table-column>
                       <el-table-column label="顺序">
                           <template slot-scope="scope">
-                              {{ scope.row.storeOrder}}
+                              {{ scope.row.frontOrder}}
                           </template>
                       </el-table-column>
                       <!-- <el-table-column label="状态">
@@ -297,7 +297,7 @@
               {{storeMesAll.getGrpByIdMesName}}
             </el-form-item>
             <el-form-item label="网格仓:" >
-              {{'[' + storeMesAll.frontCode + ']' + storeMesAll.frontName}}
+              {{'[' + storeMesAll.storeCode + ']' + storeMesAll.storeName}}
             </el-form-item>
             <el-form-item label="网格仓数量:" >
               {{storeMesAll.mylength}}
@@ -310,7 +310,7 @@
             </el-form-item>
           </el-form>
           <div slot="footer" class="dialog-footer">
-            <el-button @click="dialogFormVisible = fasle;">取 消</el-button>
+            <el-button @click="dialogFormVisible = false;">取 消</el-button>
             <el-button type="primary" @click="Cancellation">确 定</el-button>
           </div>
         </el-dialog>
@@ -363,7 +363,7 @@
               </div>
             </div>
             <div slot="footer" class="dialog-footer">
-              <el-button @click="establish = fasle;">取 消</el-button>
+              <el-button @click="establish = false;">取 消</el-button>
               <el-button type="primary" @click="leftHandleComfirm">确 定</el-button>
             </div>
         </el-dialog>
@@ -546,6 +546,9 @@ export default {
           CircuitryService.getAllGrpByPickId(ele.id)
           .then((res) => {
             // 这里是所有的门店组的信息
+            res.sort(function(a, b) {
+              return a.grpOrder > b.grpOrder ? 1 : -1
+            });
             this.storeAllSchemeAll.push({schemeList: ele, store: res});
             if (idx === 0) {
                 this.editProjectsInfo = {schemeList: ele, store: res};
@@ -570,6 +573,7 @@ export default {
    getAllStoreByGrpId(id) {
       CircuitryService.getAllStoreByGrpId(id)
       .then((res) => {
+        console.log(res);
           const storeOptionArr = res;
           storeOptionArr.forEach((ele, idx) => {
               ele.idx = idx + 1;
@@ -708,6 +712,7 @@ export default {
      // 存储方案的字段
      this.editProjectsInfo = schemeOpt;
      this.storeArmy = obj;
+     console.log(this.editProjectsInfo);
      if (item === 'scheme') {
         this.getById(obj.id);
         this.headerScheme = "[" + obj.code + "]" + obj.name;
@@ -740,20 +745,20 @@ export default {
       // "version": "string"
       this.adjustOrderFlag = obj;
       this.storeMesAll = {
-        adjustOrder: obj.storeOrder,
+        adjustOrder: obj.frontOrder,
         grpId: obj.grpId,
         id: obj.id,
         pickorderId: obj.pickorderId,
         remark: obj.remark,
         status: obj.status,
-        storeCode: obj.storeCode,
-        storeName: obj.storeName,
-        storeOrder: obj.storeOrder,
+        storeCode: obj.frontCode,
+        storeName: obj.frontName,
+        storeOrder: obj.frontOrder,
         version: obj.version,
         getByIdMesName: '[' + this.editProjectsInfo.schemeList.code + ']' + this.editProjectsInfo.schemeList.name,
         getGrpByIdMesName: '[' + this.storeArmy.code + ']' + this.storeArmy.name,
         mylength: this.storeOption.length,
-        curIdx: obj.storeOrder
+        curIdx: obj.frontOrder
       }
    },
    Cancellation() {
@@ -804,7 +809,6 @@ export default {
     },
     storedContentChange() {
         this.storedContent = [];
-        console.log(this.editProjectsInfo);
         const mySelfData = {
           dcId: this.editProjectsInfo.schemeList.dcId,
           nameOrCodeLike: this.codeOrNameEquals || null,
@@ -842,7 +846,7 @@ export default {
         })
       })
       const postDataObj = {
-        createGrpItemDTOs: postData,
+        createFrontDTOs: postData,
         grpId: this.storeArmy.id
       }
       CircuitryService.addGrpItems(postDataObj)

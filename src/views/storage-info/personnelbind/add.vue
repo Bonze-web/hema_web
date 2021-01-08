@@ -10,12 +10,24 @@
         </div>
         <div style="height:20px" />
         <div class="info-content">
-              <el-form label-width="125px" :model="form" ref="formName" :rules="createRules">
+              <el-form label-width="135px" :model="form" ref="formName" :rules="createRules">
                 <el-form-item label="用户" prop="userId">
+                    <el-select
+                      v-model="form.userId"
+                      filterable
+                      remote
+                      reserve-keyword
+                      placeholder="请输入关键词"
+                      :remote-method="remoteMethod"
+                      :loading="loading">
+                     <el-option v-for="(ele, idx) in userAll" :key="idx" v-show="ele.disabled !== true" :label="ele.username" :value="ele.id"></el-option>
+                    </el-select>
+                </el-form-item>
+                <!-- <el-form-item label="用户" prop="userId">
                   <el-select v-model="form.userId" placeholder="请选择用户">
                     <el-option v-for="(ele, idx) in userAll" :key="idx" :disabled="ele.disabled" :label="ele.username" :value="ele.id"></el-option>
                   </el-select>
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item label="主要拣货分区" prop="firstPickareaId">
                     <el-select v-model="form.firstPickareaId" placeholder="请选择主要拣货分区">
                       <el-option v-for="(ele, idx) in firstPickareaIdArr" :key="idx" :label="'['+ ele.code + ']' + ele.name" :value="ele.id"></el-option>
@@ -32,19 +44,12 @@
                     <el-option label="拆零" value="SPLIT"></el-option>
                   </el-select>
                 </el-form-item>
-                <!-- <el-form-item label="辅助拣货任务类型">
-                  <el-select v-model="form.secondTaskType" placeholder="请选择辅助拣货任务类型">
-                    <el-option label="整箱" value="CASE"></el-option>
-                    <el-option label="拆零" value="SPLIT"></el-option>
-                  </el-select>
-                </el-form-item> -->
               </el-form>
         </div>
     </div>
 </template>
 
 <script>
-// import { mapGetters } from "vuex";
 import PersonnelbindService from "@/api/service/PersonnelbindService";
 import PermIds from "@/api/permissionIds";
 import { mapGetters } from "vuex";
@@ -53,6 +58,7 @@ export default {
   data() {
       return {
         PermIds: PermIds,
+        loading: false,
         status: '', // 页面状态
         id: '', 
         firstPickareaIdArr: [],
@@ -120,6 +126,36 @@ export default {
         .catch((err) => {
           if (err) this.$message.error("获取信息失败" + err.message)
         })
+      },
+      remoteMethod(query) {
+          console.log(query);
+          if (query !== '') {
+            this.loading = true;
+            PersonnelbindService.userQuery(query)
+            .then((res) => {
+              this.loading = false;
+              res.records.forEach((ele, idx) => {
+                  this.editData.forEach((item, index) => {
+                      if (ele.id === item.userId) {
+                          ele.disabled = true;
+                      }
+                  })
+              })
+              this.userAll = res.records;
+            })
+            .catch((err) => {
+              if (err) this.$message.error("获取所有用户失败" + err.message);
+            });
+            // setTimeout(() => {
+              
+            //   this.options = this.list.filter(item => {
+            //     return item.label.toLowerCase()
+            //       .indexOf(query.toLowerCase()) > -1;
+            //   });
+            // }, 200);
+          } else {
+            this.userAll = [];
+          }
       }
     },
     created() {
@@ -134,20 +170,20 @@ export default {
         if (err) this.$message.error("获取信息失败" + err.message);
       });
       PersonnelbindService.userQuery()
-        .then((res) => {
-          console.log(res);
-          res.records.forEach((ele, idx) => {
-              this.editData.forEach((item, index) => {
-                  if (ele.id === item.userId) {
-                      ele.disabled = true;
-                  }
-              })
-          })
-          this.userAll = res.records;
+      .then((res) => {
+        console.log(this.editData);
+        res.records.forEach((ele, idx) => {
+            this.editData.forEach((item, index) => {
+                if (ele.id === item.userId) {
+                    ele.disabled = true;
+                }
+            })
         })
-        .catch((err) => {
-          if (err) this.$message.error("获取所有用户失败" + err.message);
-        });
+        this.userAll = res.records;
+      })
+      .catch((err) => {
+        if (err) this.$message.error("获取所有用户失败" + err.message);
+      });
     },
     filters: {
         showFirstPickareaId(val) {

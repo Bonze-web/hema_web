@@ -26,7 +26,7 @@
                         <el-tab-pane label="仓区作业单" name="suppliers">
                             <div class="info-title">基本信息</div>
                             <el-col :span="6" class="info-box">
-                                <div>盘点单号:</div>
+                                <div>仓库作业单号:</div>
                                 <div>{{ suppliersInfo.billNumber }}</div>
                             </el-col>
                             <el-col :span="6" class="info-box">

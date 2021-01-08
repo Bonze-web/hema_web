@@ -228,7 +228,7 @@ const BasicInfoPackage = {
     icon: 'basic-info'
   },
   children: [
-     {
+    {
       path: "dc",
       name: "Dc",
       component: AModule,
@@ -269,6 +269,50 @@ const BasicInfoPackage = {
           title: '新建物流中心',
           icon: 'table',
           permission: PermIds.SYS_DC_CREATE
+        }
+      }]
+    },
+    {
+      path: "reseau",
+      name: "Reseau",
+      component: AModule,
+      meta: {
+        title: '网格仓信息',
+        icon: 'table'
+        // permission: PermIds.SYS_DC
+      },
+      children: [{
+        path: "",
+        name: "ReseauView",
+        component: () =>
+          import('@/views/basic-info/reseau/index'),
+        hidden: true,
+        meta: {
+          title: '网格仓信息',
+          icon: 'table'
+          // permission: PermIds.SYS_DC_VIEW
+        }
+      }, {
+        path: "edit",
+        name: "ReseauEdit",
+        component: () =>
+          import('@/views/basic-info/reseau/edit'),
+        hidden: true,
+        meta: {
+          title: '查看网格仓信息',
+          icon: 'table'
+          // permission: PermIds.SYS_DC_VIEW
+        }
+      }, {
+        path: "add",
+        name: "ReseauAdd",
+        component: () =>
+          import('@/views/basic-info/reseau/edit'),
+        hidden: true,
+        meta: {
+          title: '新建物流中心',
+          icon: 'table'
+          // permission: PermIds.SYS_DC_CREATE
         }
       }]
     },

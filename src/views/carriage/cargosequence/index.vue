@@ -310,7 +310,7 @@
             </el-form-item>
           </el-form>
           <div slot="footer" class="dialog-footer">
-            <el-button @click="dialogFormVisible = fasle;">取 消</el-button>
+            <el-button @click="dialogFormVisible = false;">取 消</el-button>
             <el-button type="primary" @click="Cancellation">确 定</el-button>
           </div>
         </el-dialog>
@@ -363,7 +363,7 @@
               </div>
             </div>
             <div slot="footer" class="dialog-footer">
-              <el-button @click="establish = fasle;">取 消</el-button>
+              <el-button @click="establish = false;">取 消</el-button>
               <el-button type="primary" @click="leftHandleComfirm">确 定</el-button>
             </div>
         </el-dialog>

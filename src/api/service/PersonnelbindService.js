@@ -71,8 +71,9 @@ export default {
     // return request.post('/wms/storagearea/update', param)
     return request.post('/wms/userpickarea/update', postData)
   },
-  userQuery() {
+  userQuery(nameLike) {
     const postData = {
+      nameLike: nameLike,
       page: 1,
       pageSize: 0
     }
