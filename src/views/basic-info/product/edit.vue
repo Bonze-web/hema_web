@@ -502,21 +502,33 @@
                   </template>
                 </el-table-column> -->
 
-                <el-table-column prop="defaultReceive" label="默认供应商"> 最初代码
+                <el-table-column prop="defaultReceive" label="默认供应商">
                   <template slot-scope="scope">
-                      <div v-show="!scope.row.isEdit || workingOrg.type === 'GROUP'">
+
+                      <div v-if="!scope.row.isEdit && workingOrg.type === 'GROUP'">
                         <span v-if="productInfo.defaultVendorCode === scope.row.vendorCode">是</span>
                         <span v-else>
                           <el-button type="text" :disabled="!scope.row.id" @click="setSupplier(scope.row)">设为首选</el-button>
                         </span>
                       </div>
-                      <div v-show="scope.row.isEdit">
+                      <div v-else>
                         <span v-if="productInfo.defaultVendorCode === scope.row.vendorCode">是</span>
                         <span v-else>否</span>
                       </div>
                       
                   </template>
                 </el-table-column>
+
+                <!-- <el-table-column prop="defaultReturn" label="默认供应商">
+                  <template slot-scope="scope">
+                    <div v-show="(scope.row.isEdit || scope.row.defaultReturn) || workingOrg.type !== 'GROUP'">
+                      <span>{{ scope.row.defaultReturn | filterBoolean}}</span>
+                    </div>
+                    <div v-show="!((scope.row.isEdit || scope.row.defaultReturn) || workingOrg.type !== 'GROUP')">
+                      <el-button type="text" :disabled="!scope.row.id" @click="setSupplier(scope.row)">设为首选</el-button>
+                    </div>
+                  </template>
+                </el-table-column> -->
 
                 <el-table-column label="操作">
                   <template slot-scope="scope">
