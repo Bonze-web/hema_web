@@ -36,13 +36,13 @@
     <div style="height: 20px" />
 
     <div style="background: #fff;">
-      <el-row>
+      <!-- <el-row>
         <router-link :to="{ path: '/basicinfo/container/add' }" >
           <el-button style="margin: 18px 10px" type="primary" size="mini" v-if="hasPermission(PermIds.WMS_CONTAINER_CREATE)">新建</el-button>
         </router-link>
 
         <el-button style="margin: 18px 10px" size="mini" @click="printingBtn" >打印</el-button>
-      </el-row>
+      </el-row> -->
 
 
       <el-table :data="listData" @selection-change="handleSelectionChange"  style="width: 100%; text-align: center" :row-style="{ height: '16px', padding: '-4px' }" >

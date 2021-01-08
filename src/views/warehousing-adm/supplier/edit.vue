@@ -89,7 +89,7 @@
             <div>
                 <template>
                     <el-tabs v-model="tabActiveName">
-                        <el-tab-pane label="容器详情" name="category">
+                        <el-tab-pane label="供应商退货单详情" name="category">
                             <div class="info-title">基本信息</div>
 
                             <el-col :span="6" class="info-box">
