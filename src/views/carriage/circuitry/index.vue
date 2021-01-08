@@ -268,7 +268,7 @@
             </el-form-item>
             <el-form-item label="当前序号" :label-width="formLabelWidth">
               <div>
-                {{ editStoreObj.index }}
+                {{ editStoreObj.grpOrder }}
               </div>
             </el-form-item>
             <el-form-item label="调整序号" :label-width="formLabelWidth">
