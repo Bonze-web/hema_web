@@ -98,11 +98,11 @@
           </template>
         </el-table-column>
 
-        <el-table-column prop="scope" label="上传时间">
+        <!-- <el-table-column prop="scope" label="上传时间">
           <template slot-scope="scope">
             {{ scope.row.uploadTime ? scope.row.uploadTime : "&lt;空&gt;" }}
           </template>
-        </el-table-column>
+        </el-table-column> -->
 
         <el-table-column prop="vendorName" label="供应商"></el-table-column>
 
