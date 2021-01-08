@@ -7,6 +7,10 @@
           <el-input type="text" placeholder="请输入单号" v-model="form.billNumberEquals" class="input-width" ></el-input>
         </el-form-item>
 
+        <el-form-item label="来源单号：">
+          <el-input type="text" placeholder="请输入来源单号：" v-model="form.srcBillNumberEquals" class="input-width" ></el-input>
+        </el-form-item>
+
         <el-form-item label="商品编码：">
           <el-input type="text" placeholder="请输入商品或编码" v-model="form.productCodeEqualsOrNameLike" class="input-width" ></el-input>
         </el-form-item>
@@ -14,6 +18,7 @@
         <el-form-item label="供应商：">
           <el-input type="text" placeholder="请输入供应商或编码" v-model="form.vendorCodeEqualsOrNameLike" class="input-width" ></el-input>
         </el-form-item>
+        
 
         <!-- //初始 INITIAL, 审核 AUDITED, 完成 FINISHED, 作废 ABORTED;  -->
         <el-form-item label="状态：">
@@ -151,6 +156,7 @@ export default {
       listData: [], // 列表数据
       form: {
         billNumberEquals: '', // 单号
+        srcBillNumberEquals: '', // 来源单号
         productCodeEqualsOrNameLike: '', // 商铺或编码
         positionCodeOrNameEquals: '', // 当前位置
         statusEquals: '', // 状态
@@ -181,6 +187,7 @@ export default {
     clearInput: function() {
       this.form = {
         billNumberEquals: '', // 单号
+        srcBillNumberEquals: '', // 来源单号
         productCodeEqualsOrNameLike: '', // 商铺或编码
         positionCodeOrNameEquals: '', // 当前位置
         statusEquals: '', // 状态
@@ -199,6 +206,7 @@ export default {
         page: this.page,
         pageSize: this.pageSize,
         billNumberEquals: this.form.billNumberEquals, // 单号
+        srcBillNumberEquals: this.form.srcBillNumberEquals, // 来源单号
         productCodeEqualsOrNameLike: this.form.productCodeEqualsOrNameLike, // 商铺或编码
         positionCodeOrNameEquals: this.form.positionCodeOrNameEquals, // 当前位置
         vendorCodeEqualsOrNameLike: this.form.vendorCodeEqualsOrNameLike, // 供应商或编码
