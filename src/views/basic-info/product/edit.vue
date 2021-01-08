@@ -496,18 +496,25 @@
                 <!-- <el-table-column prop="defaultReceive" label="默认供应商"> 最初代码
                   <template slot-scope="scope">
                       <span v-if="productInfo.defaultVendorCode === scope.row.vendorCode">是</span>
-                      <span v-else>否</span>
+                      <span v-else>
+                         <el-button type="text" :disabled="!scope.row.id" @click="setSupplier(scope.row)">设为首选</el-button>
+                      </span>
                   </template>
                 </el-table-column> -->
 
-                <el-table-column prop="defaultReturn" label="默认供应商">
+                <el-table-column prop="defaultReceive" label="默认供应商"> 最初代码
                   <template slot-scope="scope">
-                    <div v-show="(scope.row.isEdit || scope.row.defaultReturn) || workingOrg.type !== 'GROUP'">
-                      <span>{{ productInfo.defaultVendorCode === scope.row.vendorCode ? '是' : '否' }}</span>
-                    </div>
-                    <div v-show="!((scope.row.isEdit || scope.row.defaultReturn) || workingOrg.type !== 'GROUP')">
-                      <el-button type="text" :disabled="!scope.row.id" @click="setSupplier(scope.row)">设为首选</el-button>
-                    </div>
+                      <div v-show="!scope.row.isEdit">
+                        <span v-if="productInfo.defaultVendorCode === scope.row.vendorCode">是</span>
+                        <span v-else>
+                          <el-button type="text" :disabled="!scope.row.id" @click="setSupplier(scope.row)">设为首选</el-button>
+                        </span>
+                      </div>
+                      <div v-show="scope.row.isEdit">
+                        <span v-if="productInfo.defaultVendorCode === scope.row.vendorCode">是</span>
+                        <span v-else>否</span>
+                      </div>
+                      
                   </template>
                 </el-table-column>
 
@@ -515,7 +522,8 @@
                   <template slot-scope="scope">
                     <el-button type="text" v-if="scope.row.id && !scope.row.isEdit && hasPermission(PermIds.PRODUCT_VENDOR_UPDATE) && workingOrg.type === 'GROUP'" @click="handleEditVendor(scope.$index,scope.row)">编辑</el-button>
                     <el-button type="text" v-else-if="(hasPermission(PermIds.PRODUCT_VENDOR_CREATE) || hasPermission(PermIds.PRODUCT_VENDOR_UPDATE)) && workingOrg.type === 'GROUP'" @click="handleSaveVendor(scope.row)">保存</el-button>
-                    <el-button type="text" v-if="hasPermission(PermIds.PRODUCT_VENDOR_REMOVE) && workingOrg.type === 'GROUP'" @click="handleDeleteVendor(scope.$index,scope.row)">删除</el-button>
+                    <!-- 如果是默认供应商 则不允许删除 -->
+                    <el-button type="text" :disabled="productInfo.defaultVendorCode === scope.row.vendorCode" v-if="hasPermission(PermIds.PRODUCT_VENDOR_REMOVE) && workingOrg.type === 'GROUP'" @click="handleDeleteVendor(scope.$index,scope.row)">删除</el-button>
                   </template>
                 </el-table-column>
               </el-table>
@@ -1624,7 +1632,8 @@ export default {
       ProductService.setSupplier(val.id)
         .then(res => {
           self.$message.success("设置首选供应商成功");
-          self.getProductVendor();
+          // self.getProductVendor();
+          this.getQueryStatus();
         })
         .catch(err => {
           this.$message.error("设置失败" + err.message);
