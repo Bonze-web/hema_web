@@ -66,6 +66,9 @@ export default {
   adjustOrder(postData) {
     return request.post('/wms/pickOrder/adjustOrder', postData)
   },
+  updateGrp(postData) {
+    return request.post('/wms/pickOrder/updateGrp', postData)
+  },
   /**
    * 启用状态
    */
