@@ -1232,8 +1232,8 @@ const outhousingAdm = {
       component: AModule,
       meta: {
         title: '分播单',
-        icon: 'table',
-        permission: PermIds.WMS_SOWING_PICK_Bill
+        icon: 'table'
+        // permission: PermIds.WMS_SOWING_PICK_Bill
       },
       children: [
         {
@@ -1244,8 +1244,8 @@ const outhousingAdm = {
           hidden: true,
           meta: {
             title: '分播单',
-            icon: 'table',
-            permission: PermIds.WMS_SOWING_PICK_Bill_VIEW
+            icon: 'table'
+            // permission: PermIds.WMS_SOWING_PICK_Bill_VIEW
           }
         },
         {
@@ -1256,8 +1256,8 @@ const outhousingAdm = {
           hidden: true,
           meta: {
             title: '分播单详情',
-            icon: 'table',
-            permission: PermIds.WMS_SOWING_PICK_Bill_VIEW
+            icon: 'table'
+            // permission: PermIds.WMS_SOWING_PICK_Bill_VIEW
           }
         }
       ]

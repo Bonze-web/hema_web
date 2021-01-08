@@ -504,7 +504,7 @@
 
                 <el-table-column prop="defaultReceive" label="默认供应商"> 最初代码
                   <template slot-scope="scope">
-                      <div v-show="!scope.row.isEdit">
+                      <div v-show="!scope.row.isEdit || workingOrg.type === 'GROUP'">
                         <span v-if="productInfo.defaultVendorCode === scope.row.vendorCode">是</span>
                         <span v-else>
                           <el-button type="text" :disabled="!scope.row.id" @click="setSupplier(scope.row)">设为首选</el-button>

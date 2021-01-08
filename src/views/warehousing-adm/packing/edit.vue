@@ -125,7 +125,7 @@
 
 
                             <el-col>
-                                <div  class="info-title title">子容器</div>
+                                <div  class="info-title title">商品详情</div>
                             </el-col>
                             <el-input type="text" v-model="iptVal" placeholder="请输入商品编号" class="input-width" ></el-input>
                             <el-button type="primary" size="mini" @click="onSubmit" >立即搜索</el-button>
