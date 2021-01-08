@@ -1421,7 +1421,7 @@ export default {
           .then(res => {
             this.$message.success("编辑成功");
             this.getProductSpec();
-            this.getProductBarcode(); // 更新条码详情
+            // this.getProductBarcode(); // 更新条码详情
           })
           .catch(err => {
             this.$message.error("编辑失败" + err.message);
@@ -1432,7 +1432,7 @@ export default {
           .then(res => {
             this.$message.success("编辑成功");
             this.getProductSpec();
-            this.getProductBarcode(); // 更新条码详情
+            // this.getProductBarcode(); // 更新条码详情
           })
           .catch(err => {
             this.$message.error("编辑失败" + err.message);

@@ -7,7 +7,9 @@
                 
             </div>
             <div>
-                <el-button type="primary"  @click="toExamine">审核</el-button>
+                <el-button type="primary" v-if="dataList.status === 'INITIAL' && !isNew" @click="isNew = !isNew">审核</el-button>
+                <el-button type="primary" v-if="isNew"  @click="toExamine">保存</el-button>
+
                 <el-button @click="back">返回</el-button>
             </div>
         </div>
@@ -214,8 +216,8 @@
 
                             <el-table-column prop="scope" label="实际数量" style="height: 20px">
                               <template slot-scope="scope">
-                                <el-input type="number"  @change="calcProduct(scope.$index, 'realQty')" placeholder="请输入单号" v-model="scope.row.realQty" style="width: 80%" ></el-input>
-                                <!-- <span>{{ scope.row.realQty }}</span> -->
+                                <el-input v-if="isNew" type="number"  @change="calcProduct(scope.$index, 'realQty')" placeholder="请输入单号" v-model="scope.row.realQty" style="width: 80%" ></el-input>
+                                <span v-else>{{ scope.row.realQty }}</span>
                               </template>
                             </el-table-column>
 
@@ -241,6 +243,7 @@ import WarehousingAdmServers from "@/api/service/WarehousingAdmServers";
 export default {
   data() {
       return {
+        isNew: false, // 是否更新状态
         tabActiveName: 'category', // tab栏名称
         active: 'ccc',
         status: '', // 页面状态
@@ -303,7 +306,8 @@ export default {
           this.dataList.items.forEach(item => {
             const obj = {
               itemId: item.id,
-              qty: item.realQty
+              qty: item.realQty,
+              version: item.version
             }
             opt.auditItems.push(obj)
           })
@@ -311,7 +315,8 @@ export default {
           WarehousingAdmServers.vendorReturnBillAudit(opt)
           .then((res) => {
             this.$message.success("操作成功")
-            this.vendorReturnBillQuery();
+            this.$store.dispatch("tagsView/delView", this.$route);
+            this.$router.go(-1)
           })
           .catch((err) => {
             this.$message.error("操作失败功" + err.message)

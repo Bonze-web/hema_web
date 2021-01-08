@@ -7,8 +7,8 @@
           <el-input type="text" placeholder="请输入单号" v-model="form.billNumberEquals" class="input-width" ></el-input>
         </el-form-item>
 
-        <el-form-item label="商铺：">
-          <el-input type="text" placeholder="请输入商铺编码或编码" v-model="form.productCodeEqualsOrNameLike" class="input-width" ></el-input>
+        <el-form-item label="商品编码：">
+          <el-input type="text" placeholder="请输入商品编码或编码" v-model="form.productCodeEqualsOrNameLike" class="input-width" ></el-input>
         </el-form-item>
 
         <el-form-item label="供应商：">
@@ -51,6 +51,13 @@
             <router-link style="color: #409eff" :to="{ path: '/warehousing-adm/supplier/edit', query:{ id: scope.row.id} }" >
               <span>{{ scope.row.billNumber }}</span>
             </router-link>
+          </template>
+        </el-table-column>
+
+        
+        <el-table-column prop="scope" label="供应商">
+          <template slot-scope="scope">
+            {{ scope.row.vendorName !== ' ' ? scope.row.vendorName : "&lt;空&gt;" }}
           </template>
         </el-table-column>
 
