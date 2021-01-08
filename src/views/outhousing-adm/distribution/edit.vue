@@ -57,29 +57,21 @@
 
                             <br>
 
-                            <el-col>
-                                <div  class="info-title title">商品信息</div>
-                            </el-col>
-
+                            <el-col><div  class="info-title title">商品信息</div></el-col>
                             <div style="height:20px" />
 
                             <el-table :data="dataList.itemBins" style="width: 100%; text-align: center" :row-style="{ height: '16px', padding: '-4px' }" >
+                            <el-table-column prop="billNumber" label="单号"></el-table-column>
+                            <el-table-column prop="binCode" label="货位编码"></el-table-column>
+                            <el-table-column prop="productName" label="商品名称"></el-table-column>
+                            <el-table-column prop="isLack" label="是否缺货"></el-table-column>
+                            <el-table-column prop="planQty" label="计划数量"></el-table-column>
+                            <el-table-column prop="realQty" label="实拣数量"></el-table-column>
+                            <el-table-column prop="creatorName" label="创建人"></el-table-column>
 
-                            <el-table-column prop="a" label="条码" style="height: 20px">
+                            <el-table-column prop="scope" label="状态">
                               <template slot-scope="scope">
-                                <span>条码{{ scope.row.barcode }}</span>
-                              </template>
-                            </el-table-column>
-
-                            <el-table-column prop="b" label="容器类型" style="height: 20px">
-                              <template slot-scope="scope">
-                                <span>容器类型{{ scope.row.containerTypeName }}</span>
-                              </template>
-                            </el-table-column>
-
-                            <el-table-column prop="c" label="状态">
-                              <template slot-scope="scope">
-                                {{ scope.row.useStatus | dcStatus }}
+                                {{ scope.row.status | setStatus }}
                               </template>
                             </el-table-column>
 
@@ -106,7 +98,6 @@ export default {
   data() {
       return {
         tabActiveName: 'category', // tab栏名称
-        active: 'ccc',
         status: '', // 页面状态
         id: '', // 货位类别ID
         dataList: {} // 详情数据
