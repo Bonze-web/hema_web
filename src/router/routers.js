@@ -1182,6 +1182,42 @@ const outhousingAdm = {
         }
       }
     ]
+  },
+  {
+    path: "distribution",
+    name: "Distribution",
+    component: AModule,
+    meta: {
+      title: '分拨单',
+      icon: 'table'
+      // permission: PermIds.WMS_SOWING_PICK_Bill
+    },
+    children: [
+      {
+        path: "",
+        name: "DistributionView",
+        component: () =>
+          import('@/views/outhousing-adm/distribution/index'),
+        hidden: true,
+        meta: {
+          title: '分拨单',
+          icon: 'table'
+          // permission: PermIds.WMS_SOWING_PICK_Bill_VIEW
+        }
+      },
+      {
+        path: "edit",
+        name: "DistributionEdit",
+        component: () =>
+          import('@/views/outhousing-adm/distribution/edit'),
+        hidden: true,
+        meta: {
+          title: '分拨单详情',
+          icon: 'table'
+          // permission: PermIds.WMS_SOWING_PICK_Bill_VIEW
+        }
+      }
+    ]
   }
 ]}
   
