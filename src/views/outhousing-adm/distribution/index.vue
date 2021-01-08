@@ -3,24 +3,16 @@
     <div class="select-head">
       <el-form ref="form" style="display: flex;flex-wrap:wrap;" :model="form" label-width="90px" label-position="right" >
 
-        <el-form-item label="单号：">
-          <el-input type="text" placeholder="请输入单号" v-model="form.billNumber" class="input-width" ></el-input>
+        <el-form-item label="商品：">
+          <el-input type="text" placeholder="请输入商品或商品编码" v-model="form.productCodeEqualsOrNameLike" class="input-width" ></el-input>
         </el-form-item>
 
-        <el-form-item label="波次单号：">
-          <el-input type="text" placeholder="请输入波次单号" v-model="form.waveBillNumber" class="input-width" ></el-input>
-        </el-form-item>
-
-        <!-- 状态 INITIAL: 初始, LOCKED: 已占货, PICKING：拣货中，FINISHED: 已完成 -->
-        <el-form-item label="状态：">
+        <!-- <el-form-item label="状态：">
           <el-select v-model="form.status" placeholder="请选择状态">
             <el-option label="全部" value=""></el-option>
             <el-option value="INITIAL" label="初始"></el-option>
-            <el-option value="LOCKED" label="已占货"></el-option>
-            <el-option value="PICKING" label="拣货中"></el-option>
-            <el-option value="FINISHED" label="已完成"></el-option>
           </el-select>
-        </el-form-item>
+        </el-form-item> -->
 
         <el-form-item>
           <el-button type="primary" size="mini" @click="onSubmit" >立即搜索</el-button>
@@ -42,50 +34,37 @@
 
 
       <el-table :data="listData" @selection-change="handleSelectionChange"  style="width: 100%; text-align: center" :row-style="{ height: '16px', padding: '-4px' }" >
-        <el-table-column prop="scope" label="单号">
+        <el-table-column prop="scope" label="分播单">
           <template slot-scope="scope">
-            <router-link style="color: #409eff" :to="{ path: '/outhousing-adm/pickingProcess/edit', query:{ id: scope.row.id} }" >
+            <router-link style="color: #409eff" :to="{ path: '/outhousing-adm/distribution/edit', query:{ id: scope.row.id} }" >
               <span>{{ scope.row.billNumber }}</span>
             </router-link>
           </template>
         </el-table-column>
 
-        <el-table-column prop="scope" label="业务类型">
+        <el-table-column prop="scope" label="创建人">
           <template slot-scope="scope">
-            {{ scope.row.bizType | setBizType }}
+            {{ scope.row.creatorName }}
           </template>
         </el-table-column>
 
-
-        <el-table-column prop="finishTime" label="完成时间" style="height: 20px"></el-table-column>
-        <el-table-column prop="frontDcName" label="网络仓" style="height: 20px"></el-table-column>
-        <el-table-column prop="lockTime" label="暂用存库时间" style="height: 20px"></el-table-column>
-        
-        <el-table-column prop="scope" label="拣货方法">
+        <el-table-column prop="scope" label="收货方式">
           <template slot-scope="scope">
-            {{ scope.row.pickType | setPickType }}
+            {{ scope.row.method | setMethod }}
           </template>
         </el-table-column>
 
-        <el-table-column prop="pickUserName" label="拣货人" style="height: 20px"></el-table-column>
+        <el-table-column prop="beginPickTime" label="开始拣货时间" style="height: 20px"></el-table-column>
+        <el-table-column prop="endPickTime" label="结束拣货时间" style="height: 20px"></el-table-column>
 
-        <el-table-column prop="scope" label="拣货类型">
+
+        <el-table-column prop="pickUserName" label="拣货员" style="height: 20px"></el-table-column>
+
+        <el-table-column prop="scope" label="备注">
           <template slot-scope="scope">
-            {{ scope.row.type | setType }}
+            {{ scope.row.remark ? scope.row.remark : "&lt;空&gt;" }}
           </template>
         </el-table-column>
-
-        <el-table-column prop="scope" label="状态">
-          <template slot-scope="scope">
-            {{ scope.row.status | setStatus }}
-          </template>
-        </el-table-column>
-  
-        <!-- <el-table-column prop="scope" label="XX">
-          <template slot-scope="scope">
-            {{ scope.row.XX !== ' ' ? scope.row.XX : "&lt;空&gt;" }}
-          </template>
-        </el-table-column> -->
 
       </el-table>
 
@@ -115,9 +94,7 @@ export default {
       listData: [{}], // 列表数据
       containerType: [], // 容器类型
       form: {
-        billNumber: '', // 单号
-        waveBillNumber: '', // 波次单号
-        status: '' // 状态
+        productCodeEqualsOrNameLike: '' // 商品
       },
       page: 1,
       pageSize: 10,
@@ -143,9 +120,7 @@ export default {
     },
     clearInput: function() {
       this.form = {
-        billNumber: '', // 单号
-        waveBillNumber: '', // 波次单号
-        status: '' // 状态
+        productCodeEqualsOrNameLike: '' // 商品
       };
 
       this.sowingPickBillQuery();
@@ -159,9 +134,7 @@ export default {
       const data = {
         page: this.page,
         pageSize: this.pageSize,
-        // billNumber: this.form.billNumber, // 单号
-        // waveBillNumber: this.form.waveBillNumber, // 波次单号
-        // status: this.form.status ? this.form.status : null, // 状态
+        productCodeEqualsOrNameLike: this.form.productCodeEqualsOrNameLike, // 商品
         searchCount: true
       };
 
@@ -200,52 +173,13 @@ export default {
     })
   },
   filters: {
-    setBizType(type) {
-      // 业务类型。取值：DIST：配货；RETURN：退供应商
+    setMethod(type) {
+      // 拣货方式，MANUAL：手工单据，RF：手持终端
       switch (type) {
-        case 'DIST':
-          return "配货"
-        case 'RETURN':
-          return "退供应商"
-        default:
-          return '未知';
-      }
-    },
-    setPickType(type) {
-      // ‘拣货方法，RF：RF ，BILL：拣货单’
-      switch (type) {
+        case 'MANUAL':
+          return "手工单据"
         case 'RF':
-          return "RF"
-        case 'BILL':
-          return "拣货单"
-        default:
-          return '未知';
-      }
-    },
-    setStatus(type) {
-      // 状态 INITIAL: 初始, LOCKED: 已占货, PICKING：拣货中，FINISHED: 已完成
-      switch (type) {
-        case 'INITIAL':
-          return "初始"
-        case 'LOCKED':
-          return "已占货"
-        case 'PICKING':
-          return "拣货中"
-        case 'FINISHED':
-          return "已完成"
-        default:
-          return '未知';
-      }
-    },
-    setType(type) {
-      // 拣货类型，PALLET：整托 ，CASE：整件 ，SPLIT：拆零
-      switch (type) {
-        case 'PALLET':
-          return "整托"
-        case 'CASE':
-          return "整件"
-        case 'SPLIT':
-          return "拆零"
+          return "手持终端"
         default:
           return '未知';
       }

@@ -28,7 +28,7 @@ export default {
         return request.get('/wms/sowingPickBill/query', {params: data})
     },
     sowingPickBillDetails(id) {
-        // 分播单查看列表
+        // 分播单查看详情
         return request.get('/wms/sowingPickBill/getById?id=' + id)
     }
 
