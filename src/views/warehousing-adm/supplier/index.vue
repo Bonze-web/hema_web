@@ -8,7 +8,7 @@
         </el-form-item>
 
         <el-form-item label="商品编码：">
-          <el-input type="text" placeholder="请输入商品编码或编码" v-model="form.productCodeEqualsOrNameLike" class="input-width" ></el-input>
+          <el-input type="text" placeholder="请输入商品或编码" v-model="form.productCodeEqualsOrNameLike" class="input-width" ></el-input>
         </el-form-item>
 
         <el-form-item label="供应商：">
