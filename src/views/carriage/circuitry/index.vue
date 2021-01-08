@@ -268,7 +268,7 @@
             </el-form-item>
             <el-form-item label="当前序号" :label-width="formLabelWidth">
               <div>
-                {{ editStoreObj.index }}
+                {{ editStoreObj.grpOrder }}
               </div>
             </el-form-item>
             <el-form-item label="调整序号" :label-width="formLabelWidth">
@@ -547,8 +547,14 @@ export default {
           .then((res) => {
             // 这里是所有的门店组的信息
             this.storeAllSchemeAll.push({schemeList: ele, store: res});
-            // console.log(this.storeAllSchemeAll[0].schemeList);
-            // this.editProjectsInfo = this.storeAllSchemeAll[0].schemeList;
+            if (idx === 0) {
+                this.editProjectsInfo = {schemeList: ele, store: res};
+            }
+            if (idx === schemeArr.length - 1) {
+                this.storeAllSchemeAll.sort(function(a, b) {
+                  return a.schemeList.updateTime < b.schemeList.updateTime ? 1 : -1
+                });
+            }
           }).catch((err) => {
             this.$message.error("请求所有的方案失败" + err.message)
           })
@@ -640,7 +646,6 @@ export default {
    submitEditPro() {
       this.editProjects = false;
       this.editProjectsInfo = this.editProjectsObj;
-      console.log(this.editProjectsInfo);
       CircuitryService.updateScheme(this.editProjectsInfo)
       .then((res) => {
         this.$message.success("修改成功");
@@ -657,6 +662,7 @@ export default {
           if (valid) {
             this.newStoreInfo.pickorderId = this.getByIdDetail.id;
             this.newStoreInfo.status = this.getByIdDetail.status;
+            this.newStoreInfo.grpOrder = this.editProjectsInfo.store.length + 1;
             CircuitryService.createGrp(this.newStoreInfo)
             .then((res) => {
               this.$message.success("创建成功");
@@ -681,13 +687,13 @@ export default {
     // this.editStoreInfo = obj;
     this.editStoreObj.getByIdMes = '[' + schemeOpt.schemeList.code + ']' + schemeOpt.schemeList.name;
     this.editStoreObj.totalNum = schemeOpt.store.length;
-    this.editStoreObj.index = index + 1;
-    this.editStoreObj.afterNum = index + 1;
-    this.afterNum = index + 1;
+    this.editStoreObj.afterNum = this.editStoreObj.grpOrder;
+    this.afterNum = this.editStoreObj.grpOrder;
    },
    submitEditStoreChange() {
      this.editStore = false;
      this.editStoreInfo = this.editStoreObj;
+     this.editStoreInfo.adjustOrder = this.editStoreObj.afterNum;
      CircuitryService.updateGrpScheme(this.editStoreInfo)
       .then((res) => {
         this.$message.success("修改成功");

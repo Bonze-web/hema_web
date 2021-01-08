@@ -12,7 +12,7 @@ export default {
     // return request.post('/wms/storagearea/query', param)
     // return request.get('/wms/storagearea/query', param)
     console.log(postData);
-    return request.get('/operate-bill/listByPage', {
+    return request.get('/wms/operate-bill/listByPage', {
       params: postData
     })
   },
@@ -22,6 +22,6 @@ export default {
   getSuppliersDetail(id) {
     // return request.get('/wms/storagearea/getDetail?id=' + id)
     // return request.get('/wms/storagearea/getDetail?id=' + id)
-    return request.get('/operate-bill/getById?id=' + id)
+    return request.get('/wms/operate-bill/getById?id=' + id)
   }
 }
