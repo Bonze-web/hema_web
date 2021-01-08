@@ -140,7 +140,7 @@
                             <br>
 
                             <!-- <el-col>
-                                <div  class="info-title title">子容器</div>
+                                <div  class="info-title title">商品信息</div>
                             </el-col>
 
                             <div style="height:20px" />

@@ -1188,7 +1188,7 @@ const outhousingAdm = {
     name: "Distribution",
     component: AModule,
     meta: {
-      title: '分拨单',
+      title: '分播单',
       icon: 'table'
       // permission: PermIds.WMS_SOWING_PICK_Bill
     },
@@ -1200,7 +1200,7 @@ const outhousingAdm = {
           import('@/views/outhousing-adm/distribution/index'),
         hidden: true,
         meta: {
-          title: '分拨单',
+          title: '分播单',
           icon: 'table'
           // permission: PermIds.WMS_SOWING_PICK_Bill_VIEW
         }
@@ -1212,7 +1212,7 @@ const outhousingAdm = {
           import('@/views/outhousing-adm/distribution/edit'),
         hidden: true,
         meta: {
-          title: '分拨单详情',
+          title: '分播单详情',
           icon: 'table'
           // permission: PermIds.WMS_SOWING_PICK_Bill_VIEW
         }

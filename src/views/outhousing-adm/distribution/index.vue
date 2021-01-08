@@ -137,7 +137,7 @@ export default {
 
       this.$refs.form.validate((result) => {
         if (result) {
-          _this.pickBill();
+          _this.sowingPickBillQuery();
         }
       });
     },
@@ -148,9 +148,9 @@ export default {
         status: '' // 状态
       };
 
-      this.pickBill();
+      this.sowingPickBillQuery();
     },
-    pickBill: function() {
+    sowingPickBillQuery: function() {
       // 获取容器列表
       this.suppliersData = []
 
@@ -159,13 +159,13 @@ export default {
       const data = {
         page: this.page,
         pageSize: this.pageSize,
-        billNumber: this.form.billNumber, // 单号
-        waveBillNumber: this.form.waveBillNumber, // 波次单号
-        status: this.form.status ? this.form.status : null, // 状态
+        // billNumber: this.form.billNumber, // 单号
+        // waveBillNumber: this.form.waveBillNumber, // 波次单号
+        // status: this.form.status ? this.form.status : null, // 状态
         searchCount: true
       };
 
-      DeliveryService.pickBill(data).then((res) => {
+      DeliveryService.sowingPickBillQuery(data).then((res) => {
         const records = res.records;
 
         this.totalCount = res.totalCount;
@@ -179,24 +179,24 @@ export default {
     },
     handleCurrentChange: function(e) {
       this.page = Number(e);
-      this.pickBill(true);
+      this.sowingPickBillQuery(true);
     },
     handleSizeChange: function(e) {
       this.pageSize = Number(e);
       this.page = 1;
-      this.pickBill(true);
+      this.sowingPickBillQuery(true);
     },
     printingBtn() {
       this.$message.error("打印功能还未开通")
     }
   },
   created() {
-    this.pickBill();
+    this.sowingPickBillQuery();
   },
   beforeRouteEnter(to, from, next) {
     next(vm => {
       // 通过 `vm` 访问组件实例
-      vm.pickBill();
+      vm.sowingPickBillQuery();
     })
   },
   filters: {
