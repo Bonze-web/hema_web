@@ -98,11 +98,11 @@
           </template>
         </el-table-column>
 
-        <el-table-column prop="scope" label="上架完成时间">
+        <!-- <el-table-column prop="scope" label="上传时间">
           <template slot-scope="scope">
             {{ scope.row.uploadTime ? scope.row.uploadTime : "&lt;空&gt;" }}
           </template>
-        </el-table-column>
+        </el-table-column> -->
 
         <el-table-column prop="vendorName" label="供应商"></el-table-column>
 
@@ -227,8 +227,6 @@ export default {
         containerBarcodeEquals: this.form.containerBarcodeEquals ? this.form.containerBarcodeEquals : null,
         creatorNameOrCodeEquals: this.form.creatorNameOrCodeEquals ? this.form.creatorNameOrCodeEquals : null,
         statusIn: this.form.status ? this.form.status : null,
-        // orderBillBeginDate: this.warehousingTime[0] ? this.warehousingTime[0] : null,
-        // orderBillEndDate: this.warehousingTime[1] ? this.warehousingTime[1] : null,
         receiveBillBeginDate: this.shipmentTime[0] ? this.shipmentTime[0] : null, // 开始收货时间
         receiveBillEndDate: this.shipmentTime[1] ? this.shipmentTime[1] : null, // 开始收货时间
         searchCount: true

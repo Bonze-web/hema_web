@@ -202,7 +202,7 @@
                   <span v-show="!isEditShelfLife">编辑</span>
                 </div>
               </div>
-              <el-form :model="shelfLifeForm" :rules="shelfLifeRules" ref="shelfLifeForm" label-width="100px" class="demo-ruleForm" v-if="isEditShelfLife">
+              <el-form :model="shelfLifeForm" :rules="shelfLifeRules" ref="shelfLifeForm" label-width="130px" class="demo-ruleForm" v-if="isEditShelfLife">
                 <el-row :gutter="20">
                   <el-col :span="6" class="info-box">
                     <el-form-item label="保质期类型" prop="shelfLifeType">
@@ -233,6 +233,17 @@
                       <el-input v-model="shelfLifeForm.returnControlDays"></el-input>
                     </el-form-item>
                   </el-col>
+
+                  <!-- 包装类型，可选值：ORIGINAL（原箱）、STANDAD（标准箱） -->
+                  <el-col :span="6" class="info-box" v-show="shelfLifeForm.shelfLifeType !== 'NO_CARE'">
+                    <el-form-item label="包装类型" prop="packType">
+                      <el-select v-model="shelfLifeForm.packType" placeholder="请选择">
+                        <el-option label="原箱" value="ORIGINAL"></el-option>
+                        <el-option label="标准箱" value="STANDAD"></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+
                 </el-row>
               </el-form>
               <el-row :gutter="20" v-if="!isEditShelfLife">
@@ -256,6 +267,10 @@
                   <div>退货控制天数:</div>
                   <div>{{ shelfLifeInfo.returnControlDays }}</div>
                 </el-col>
+                <!-- <el-col :span="6" class="info-box">
+                  <div>包装类型:</div>
+                  <div>{{ shelfLifeInfo.packType | setPackTppe}}</div>
+                </el-col> -->
               </el-row>
               <div class="height20"></div>
               <div class="info-title" v-if="workingOrg.type === 'DC'">
@@ -306,11 +321,17 @@
                   <div>拆零拣货分区:</div>
                   <div>{{ businessInfo.splitPickAreaName }}</div>
                 </el-col>
+                <el-col :span="6" class="info-box">
+                  <div>包装类型:</div>
+                  <div>{{ businessInfo.packType | setPackTppe }}</div>
+                </el-col>
               </el-row>
             </el-tab-pane>
 
             <el-tab-pane label="包装数量" name="qpc">
+
               <el-button icon="el-icon-circle-plus-outline" type="text" @click="addSpec" v-if="workingOrg.type==='GROUP'">新增</el-button>
+
               <el-table :data="specList" style="width: 100%; text-align: center" :row-style="{ height: '16px', padding: '-4px' }">
                 <el-table-column prop="qpcStr" label="商品包装" style="height: 20px">
                   <template slot-scope="scope">
@@ -324,12 +345,22 @@
                     <span v-else>{{ scope.row.munit }}</span>
                   </template>
                 </el-table-column>
-                <el-table-column prop="paq" label="包装件数">
+
+                <el-table-column prop="qpc" label="包装件数">
                   <template slot-scope="scope">
-                    <el-input v-if="!scope.row.id || (scope.row.isEdit && workingOrg.type === 'GROUP')" v-model="scope.row.paq"></el-input>
-                    <span v-else>{{ scope.row.paq }}</span>
+                    <el-input v-if="!scope.row.id || (scope.row.isEdit && workingOrg.type === 'GROUP')" v-model="scope.row.qpc"></el-input>
+                    <span v-else>{{ scope.row.qpc }}</span>
                   </template>
                 </el-table-column>
+
+                <!-- <el-table-column prop="qpc" label="包装件数" v-if="workingOrg.type !== 'GROUP'">
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.id && !scope.row.isEdit">{{ scope.row.qpc }}</span>
+                    <el-input v-else v-model="scope.row.qpc" ></el-input>
+                  </template>
+                </el-table-column> -->
+
+
                 <el-table-column prop="length" label="长(cm)">
                   <template slot-scope="scope">
                     <el-input v-if="!scope.row.id || (scope.row.isEdit && workingOrg.type === 'GROUP')" v-model="scope.row.length"></el-input>
@@ -387,6 +418,7 @@
               <div class="height20"></div>
               <el-pagination style="float:right" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="1" :page-sizes="[10, 20, 30, 50]" :page-size="qpcPageData.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="qpcPageData.totalCount"></el-pagination>
             </el-tab-pane>
+
             <el-tab-pane label="条码详情" name="barcode">
               <el-button icon="el-icon-circle-plus-outline" type="text" @click="addBarcode" v-if="hasPermission(PermIds.PRODUCT_BARCODE_CREATE) && workingOrg.type === 'GROUP'">新增</el-button>
               <el-table :data="barcodeList" style="width: 100%; text-align: center" :row-style="{ height: '16px', padding: '-4px' }">
@@ -416,6 +448,7 @@
               <div class="height20"></div>
               <el-pagination style="float:right" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="1" :page-sizes="[10, 20, 30, 50]" :page-size="barcodePageData.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="barcodePageData.totalCount"></el-pagination>
             </el-tab-pane>
+
             <el-tab-pane label="供应商详情" name="vendor">
               <el-button icon="el-icon-circle-plus-outline" type="text" @click="addVendor" v-if="hasPermission(PermIds.PRODUCT_VENDOR_CREATE) && workingOrg.type === 'GROUP'">新增</el-button>
               <el-table :data="vendorList" style="width: 100%; text-align: center" :row-style="{ height: '16px', padding: '-4px' }">
@@ -460,14 +493,28 @@
                   </template>
                 </el-table-column>
 
-                <el-table-column prop="defaultReceive" label="默认供应商">
+                <!-- <el-table-column prop="defaultReceive" label="默认供应商"> 最初代码
                   <template slot-scope="scope">
-                    <!-- <div v-if="scope.row.id && !scope.row.isEdit"> -->
                       <span v-if="productInfo.defaultVendorCode === scope.row.vendorCode">是</span>
-                      <span v-else>否</span>
-                    <!-- </div>
-                    <div v-else>修改</div> -->
-                    
+                      <span v-else>
+                         <el-button type="text" :disabled="!scope.row.id" @click="setSupplier(scope.row)">设为首选</el-button>
+                      </span>
+                  </template>
+                </el-table-column> -->
+
+                <el-table-column prop="defaultReceive" label="默认供应商"> 最初代码
+                  <template slot-scope="scope">
+                      <div v-show="!scope.row.isEdit">
+                        <span v-if="productInfo.defaultVendorCode === scope.row.vendorCode">是</span>
+                        <span v-else>
+                          <el-button type="text" :disabled="!scope.row.id" @click="setSupplier(scope.row)">设为首选</el-button>
+                        </span>
+                      </div>
+                      <div v-show="scope.row.isEdit">
+                        <span v-if="productInfo.defaultVendorCode === scope.row.vendorCode">是</span>
+                        <span v-else>否</span>
+                      </div>
+                      
                   </template>
                 </el-table-column>
 
@@ -475,7 +522,8 @@
                   <template slot-scope="scope">
                     <el-button type="text" v-if="scope.row.id && !scope.row.isEdit && hasPermission(PermIds.PRODUCT_VENDOR_UPDATE) && workingOrg.type === 'GROUP'" @click="handleEditVendor(scope.$index,scope.row)">编辑</el-button>
                     <el-button type="text" v-else-if="(hasPermission(PermIds.PRODUCT_VENDOR_CREATE) || hasPermission(PermIds.PRODUCT_VENDOR_UPDATE)) && workingOrg.type === 'GROUP'" @click="handleSaveVendor(scope.row)">保存</el-button>
-                    <el-button type="text" v-if="hasPermission(PermIds.PRODUCT_VENDOR_REMOVE) && workingOrg.type === 'GROUP'" @click="handleDeleteVendor(scope.$index,scope.row)">删除</el-button>
+                    <!-- 如果是默认供应商 则不允许删除 -->
+                    <el-button type="text" :disabled="productInfo.defaultVendorCode === scope.row.vendorCode" v-if="hasPermission(PermIds.PRODUCT_VENDOR_REMOVE) && workingOrg.type === 'GROUP'" @click="handleDeleteVendor(scope.$index,scope.row)">删除</el-button>
                   </template>
                 </el-table-column>
               </el-table>
@@ -483,7 +531,7 @@
               <el-pagination style="float:right" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="1" :page-sizes="[10, 20, 30, 50]" :page-size="vendorPageData.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="vendorPageData.totalCount"></el-pagination>
             </el-tab-pane>
             <el-tab-pane label="操作日志" name="log">
-              <system-log modular="PRODUCT"></system-log>
+              <system-log modular="PRODUCT" :id="id"></system-log>
             </el-tab-pane>
           </el-tabs>
         </template>
@@ -726,14 +774,16 @@ export default {
         shelfLifeDays: 0,
         receiveControlDays: 0,
         deliveryControlDays: 0,
-        returnControlDays: 0
+        returnControlDays: 0,
+        packType: '' // 包装类型
       },
       shelfLifeInfo: {
         shelfLifeType: "NO_CARE",
         shelfLifeDays: 0,
         receiveControlDays: 0,
         deliveryControlDays: 0,
-        returnControlDays: 0
+        returnControlDays: 0,
+        packType: '' // 包装类型
       },
       shelfLifeRules: {
         shelfLifeDays: [
@@ -763,6 +813,9 @@ export default {
             message: "请输入非零整数",
             trigger: "blur"
           }
+        ],
+        packType: [
+          { required: true, message: "请选择包装类型", trigger: "change" }
         ]
       },
       isEditShelfLife: false,
@@ -944,6 +997,7 @@ export default {
             this.shelfLifeInfo.receiveControlDays = this.businessInfo.receiveControlDays;
             this.shelfLifeInfo.deliveryControlDays = this.businessInfo.deliveryControlDays;
             this.shelfLifeInfo.returnControlDays = this.businessInfo.returnControlDays;
+            this.shelfLifeInfo.packType = this.businessInfo.packType; // 包装类型
           }
         })
         .catch(err => {
@@ -1049,6 +1103,7 @@ export default {
     },
 
     getProductBarcode() {
+      console.log('获取条码详情')
       const self = this;
       const opts = {
         productIdEquals: this.id
@@ -1185,7 +1240,8 @@ export default {
           receiveControlDays: this.shelfLifeForm.receiveControlDays,
           returnControlDays: this.shelfLifeForm.returnControlDays,
           shelfLifeDays: this.shelfLifeForm.shelfLifeDays,
-          shelfLifeType: this.shelfLifeForm.shelfLifeType
+          shelfLifeType: this.shelfLifeForm.shelfLifeType,
+          packType: this.shelfLifeForm.packType
         };
       } else {
         postData = {
@@ -1202,7 +1258,8 @@ export default {
           splitPickAreaCode: this.businessForm.splitPickAreaCode,
           splitPickAreaId: this.businessForm.splitPickAreaId,
           splitPickAreaName: this.businessForm.splitPickAreaName,
-          splitPickBin: this.businessForm.splitPickBin
+          splitPickBin: this.businessForm.splitPickBin,
+          packType: this.businessForm.packType
         };
 
         // 业务信息
@@ -1211,8 +1268,7 @@ export default {
             ...postData,
             settleQpcStr: this.businessForm.settleQpcStr,
             overDeliveryRate: this.businessForm.overDeliveryRate,
-            overReceiveRate: this.businessForm.overReceiveRate,
-            packType: this.businessForm.packType
+            overReceiveRate: this.businessForm.overReceiveRate
           };
         } else {
           postData = {
@@ -1263,7 +1319,7 @@ export default {
         height: 0,
         length: 0,
         munit: "",
-        paq: 0,
+        qpc: 0,
         productId: "",
         qpcStr: "",
         weight: 0,
@@ -1313,14 +1369,14 @@ export default {
       } else if (val.munit.length > 32) {
         this.$message.error("计量单位的长度不能超过32位");
         return false;
-      } else if (!val.paq) {
+      } else if (!val.qpc) {
         this.$message.error("请填写商品包装件数！");
         return false;
-      } else if (!(Number(val.paq) >= 0)) {
+      } else if (!(Number(val.qpc) >= 0)) {
         this.$message.error("商品包装件数为数字且不能小于0！");
         return false;
-      } else if (this.qpcStrToNumber(val.qpcStr) !== Number(val.paq)) {
-        console.log(this.qpcStrToNumber(val.qpcStr), Number(val.paq));
+      } else if (this.qpcStrToNumber(val.qpcStr) !== Number(val.qpc)) {
+        console.log(this.qpcStrToNumber(val.qpcStr), Number(val.qpc));
         this.$message.error("商品包装规格和包装件数不一致！");
         return false;
       } else if (!val.length) {
@@ -1367,7 +1423,7 @@ export default {
         height: val.height,
         length: val.length,
         munit: val.munit,
-        paq: val.paq,
+        qpc: val.qpc,
         productId: this.id,
         qpcStr: val.qpcStr,
         weight: val.weight,
@@ -1380,6 +1436,7 @@ export default {
           .then(res => {
             this.$message.success("编辑成功");
             this.getProductSpec();
+            // this.getProductBarcode(); // 更新条码详情
           })
           .catch(err => {
             this.$message.error("编辑失败" + err.message);
@@ -1390,6 +1447,7 @@ export default {
           .then(res => {
             this.$message.success("编辑成功");
             this.getProductSpec();
+            // this.getProductBarcode(); // 更新条码详情
           })
           .catch(err => {
             this.$message.error("编辑失败" + err.message);
@@ -1403,7 +1461,7 @@ export default {
         height: val.height,
         length: val.length,
         munit: val.munit,
-        paq: val.paq,
+        qpc: val.qpc,
         productId: this.id,
         qpcStr: val.qpcStr,
         weight: val.weight,
@@ -1569,6 +1627,18 @@ export default {
           this.$message.error("设置失败" + err.message);
         });
     },
+    setSupplier(val) {
+      const self = this;
+      ProductService.setSupplier(val.id)
+        .then(res => {
+          self.$message.success("设置首选供应商成功");
+          // self.getProductVendor();
+          this.getQueryStatus();
+        })
+        .catch(err => {
+          this.$message.error("设置失败" + err.message);
+        });
+    },
     // 供应商相关处理
     addVendor() {
       const vendor = {
@@ -1645,7 +1715,7 @@ export default {
       }
     },
     handleDeleteVendor(index, val) {
-      this.$confirm("此操作将改变删除该供应商, 是否继续?", "提示", {
+      this.$confirm("此操作将删除该供应商, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
@@ -1745,6 +1815,16 @@ export default {
         return "数量";
       } else if (val === "WEIGHT") {
         return "重量";
+      } else {
+        return "";
+      }
+    },
+    setPackTppe(val) {
+      // 可选值：ORIGINAL（原箱）、STANDAD（标准箱）
+      if (val === "ORIGINAL") {
+        return "原箱";
+      } else if (val === "STANDAD") {
+        return "标准箱";
       } else {
         return "";
       }

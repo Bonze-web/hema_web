@@ -7,8 +7,8 @@
           <el-input type="text" placeholder="请输入单号" v-model="form.billNumberEquals" class="input-width" ></el-input>
         </el-form-item>
 
-        <el-form-item label="商铺：">
-          <el-input type="text" placeholder="请输入商铺编码或编码" v-model="form.productCodeEqualsOrNameLike" class="input-width" ></el-input>
+        <el-form-item label="商品编码：">
+          <el-input type="text" placeholder="请输入商品或编码" v-model="form.productCodeEqualsOrNameLike" class="input-width" ></el-input>
         </el-form-item>
 
         <el-form-item label="供应商：">
@@ -36,13 +36,13 @@
     <div style="height: 20px" />
 
     <div style="background: #fff;">
-      <el-row>
+      <!-- <el-row>
         <router-link :to="{ path: '/basicinfo/container/add' }" >
           <el-button style="margin: 18px 10px" type="primary" size="mini" v-if="hasPermission(PermIds.WMS_CONTAINER_CREATE)">新建</el-button>
         </router-link>
 
         <el-button style="margin: 18px 10px" size="mini" @click="printingBtn" >打印</el-button>
-      </el-row>
+      </el-row> -->
 
 
       <el-table :data="listData" @selection-change="handleSelectionChange"  style="width: 100%; text-align: center" :row-style="{ height: '16px', padding: '-4px' }" >
@@ -51,6 +51,13 @@
             <router-link style="color: #409eff" :to="{ path: '/warehousing-adm/supplier/edit', query:{ id: scope.row.id} }" >
               <span>{{ scope.row.billNumber }}</span>
             </router-link>
+          </template>
+        </el-table-column>
+
+        
+        <el-table-column prop="scope" label="供应商">
+          <template slot-scope="scope">
+            {{ scope.row.vendorName !== ' ' ? scope.row.vendorName : "&lt;空&gt;" }}
           </template>
         </el-table-column>
 
