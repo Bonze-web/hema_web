@@ -7,12 +7,12 @@
           <el-input type="text" placeholder="请输入商品或商品编码" v-model="form.productCodeEqualsOrNameLike" class="input-width" ></el-input>
         </el-form-item>
 
-        <!-- <el-form-item label="拣货分区：">
+        <el-form-item label="拣货分区：">
           <el-select v-model="form.pickarea" placeholder="请选择拣货分区">
             <el-option label="全部" value=""></el-option>
             <el-option v-for="item in pickareaList" :key="item.id" :label="item.name" :value="item.id"></el-option>
           </el-select>
-        </el-form-item> -->
+        </el-form-item>
 
         <el-form-item>
           <el-button type="primary" size="mini" @click="onSubmit" >立即搜索</el-button>
@@ -29,7 +29,7 @@
           <el-button style="margin: 18px 10px" type="primary" size="mini" v-if="hasPermission(PermIds.WMS_CONTAINER_CREATE)">新建</el-button>
         </router-link> -->
 
-        <!-- <el-button style="margin: 18px 10px" size="mini" @click="printingBtn" >打印</el-button> -->
+        <div style="margin: 18px 10px; float: right; font-size: 14px; color: #909399;">共{{ totalCount }}条数据</div>
       </el-row>
 
 
@@ -94,12 +94,12 @@ export default {
   data() {
     return {    
       PermIds: PermIds,
-      // pickareaList: [], // 拣货分区列表
+      pickareaList: [], // 拣货分区列表
       listData: [], // 列表数据
       containerType: [], // 容器类型
       form: {
-        productCodeEqualsOrNameLike: '' // 商品
-        // pickarea: '' // 拣货分区
+        productCodeEqualsOrNameLike: '', // 商品
+        pickarea: '' // 拣货分区
       },
       page: 1,
       pageSize: 10,
@@ -125,8 +125,8 @@ export default {
     },
     clearInput: function() {
       this.form = {
-        productCodeEqualsOrNameLike: '' // 商品
-        // pickarea: '' // 拣货分区
+        productCodeEqualsOrNameLike: '', // 商品
+        pickarea: '' // 拣货分区
       };
 
       this.sowingPickBillQuery();
@@ -141,7 +141,7 @@ export default {
         page: this.page,
         pageSize: this.pageSize,
         productCodeEqualsOrNameLike: this.form.productCodeEqualsOrNameLike, // 商品
-        // pickarea: this.form.pickarea ? this.form.pickarea : null, // 拣货分区
+        pickarea: this.form.pickarea ? this.form.pickarea : null, // 商品
         searchCount: true
       };
 
@@ -186,8 +186,8 @@ export default {
     }
   },
   created() {
-    this.sowingPickBillQuery();
-    // this.pickareaQuery() // 获取拣货分区列表
+    // this.sowingPickBillQuery();
+    this.pickareaQuery() // 获取拣货分区列表
   },
   beforeRouteEnter(to, from, next) {
     next(vm => {

@@ -30,6 +30,10 @@ export default {
     sowingPickBillDetails(id) {
         // 分播单查看详情
         return request.get('/wms/sowingPickBill/getById?id=' + id)
+    },
+    pickareaQuery(data) {
+        // 获取拣货分区
+        return request.get('/wms/pickarea/query', {params: data})
     }
 
      /**

@@ -1218,6 +1218,28 @@ const outhousingAdm = {
         }
       }
     ]
+  },
+  {
+    path: "toPicked",
+    name: "ToPicked",
+    component: AModule,
+    meta: {
+      title: '待拣货容器',
+      icon: 'table'
+    },
+    children: [
+      {
+        path: "",
+        name: "ToPickedView",
+        component: () =>
+          import('@/views/outhousing-adm/to-picked/index'),
+        hidden: true,
+        meta: {
+          title: '待拣货容器',
+          icon: 'table'
+        }
+      }
+    ]
   }
 ]}
   

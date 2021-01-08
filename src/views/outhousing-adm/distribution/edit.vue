@@ -45,15 +45,35 @@
                                 {{ dataList.method | setMethod }}
                             </el-col>
 
-                            <!-- <el-col :span="6" class="info-box">
+                            <el-col :span="6" class="info-box">
                                 <div>分播类型:</div>
                                 {{ dataList.sowingType | setSowingType }}
-                            </el-col> -->
+                            </el-col>
 
                             <el-col :span="6" class="info-box">
                                 <div>备注:</div>
                                 <div>{{ dataList.remark }}</div>
                             </el-col>
+
+                            <!-- <el-col :span="6" class="info-box">
+                                <div>所属波次号:</div>
+                                {{ dataList.method | setMethod }}
+                            </el-col>
+
+                            <el-col :span="6" class="info-box">
+                                <div>拣货分区:</div>
+                                {{ dataList.method | setMethod }}
+                            </el-col>
+
+                            <el-col :span="6" class="info-box">
+                                <div>容器数:</div>
+                                {{ dataList.method | setMethod }}
+                            </el-col>
+
+                            <el-col :span="6" class="info-box">
+                                <div>商品数量:</div>
+                                {{ dataList.method | setMethod }}
+                            </el-col> -->
 
                             <br>
 

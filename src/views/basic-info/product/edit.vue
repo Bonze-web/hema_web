@@ -1715,7 +1715,7 @@ export default {
       }
     },
     handleDeleteVendor(index, val) {
-      this.$confirm("此操作将改变删除该供应商, 是否继续?", "提示", {
+      this.$confirm("此操作将删除该供应商, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
