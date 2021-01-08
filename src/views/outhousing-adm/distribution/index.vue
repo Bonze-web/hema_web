@@ -135,7 +135,7 @@ export default {
       // 获取容器列表
       this.suppliersData = []
 
-      // const _this = this;
+      const _this = this;
 
       const data = {
         page: this.page,
@@ -145,16 +145,12 @@ export default {
         searchCount: true
       };
 
-      console.log(data)
-
       DeliveryService.sowingPickBillQuery(data).then((res) => {
-        // const records = res.records;
+        const records = res.records;
 
-        // this.totalCount = res.totalCount;
+        this.totalCount = res.totalCount;
 
-        console.log(res)
-
-        // _this.listData = records;
+        _this.listData = records;
       }).catch(err => {
         this.$message.error("数据请求失败" + err.message)
       });

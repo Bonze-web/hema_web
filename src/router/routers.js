@@ -1189,43 +1189,101 @@ const outhousingAdm = {
         }
       }
     ]
-  },
-  {
-    path: "pickingProcess",
-    name: "PickingProcess",
-    component: AModule,
-    meta: {
-      title: '拣货单',
-      icon: 'table',
-      permission: PermIds.WMS_PICK_BILL
     },
-    children: [
-      {
-        path: "",
-        name: "PickingProcessView",
-        component: () =>
-          import('@/views/outhousing-adm/pickingProcess/index'),
-        hidden: true,
-        meta: {
-          title: '拣货单',
-          icon: 'table',
-          permission: PermIds.WMS_PICK_BILL_VIEW
-        }
+    {
+      path: "pickingProcess",
+      name: "PickingProcess",
+      component: AModule,
+      meta: {
+        title: '拣货单',
+        icon: 'table',
+        permission: PermIds.WMS_PICK_BILL_ITEM
       },
-      {
-        path: "edit",
-        name: "PickingProcessEdit",
-        component: () =>
-          import('@/views/outhousing-adm/pickingProcess/edit'),
-        hidden: true,
-        meta: {
-          title: '拣货单详情',
-          icon: 'table',
-          permission: PermIds.WMS_PICK_BILL_VIEW
+      children: [
+        {
+          path: "",
+          name: "PickingProcessView",
+          component: () =>
+            import('@/views/outhousing-adm/pickingProcess/index'),
+          hidden: true,
+          meta: {
+            title: '拣货单',
+            icon: 'table',
+            permission: PermIds.WMS_PICK_BILL_ITEM_VIEW
+          }
+        },
+        {
+          path: "edit",
+          name: "PickingProcessEdit",
+          component: () =>
+            import('@/views/outhousing-adm/pickingProcess/edit'),
+          hidden: true,
+          meta: {
+            title: '拣货单详情',
+            icon: 'table',
+            permission: PermIds.WMS_PICK_BILL_ITEM_VIEW
+          }
         }
-      }
-    ]
-  }
+      ]
+    },
+    {
+      path: "distribution",
+      name: "Distribution",
+      component: AModule,
+      meta: {
+        title: '分播单',
+        icon: 'table',
+        permission: PermIds.WMS_SOWING_PICK_Bill
+      },
+      children: [
+        {
+          path: "",
+          name: "DistributionView",
+          component: () =>
+            import('@/views/outhousing-adm/distribution/index'),
+          hidden: true,
+          meta: {
+            title: '分播单',
+            icon: 'table',
+            permission: PermIds.WMS_SOWING_PICK_Bill_VIEW
+          }
+        },
+        {
+          path: "edit",
+          name: "DistributionEdit",
+          component: () =>
+            import('@/views/outhousing-adm/distribution/edit'),
+          hidden: true,
+          meta: {
+            title: '分播单详情',
+            icon: 'table',
+            permission: PermIds.WMS_SOWING_PICK_Bill_VIEW
+          }
+        }
+      ]
+    },
+    {
+      path: "toPicked",
+      name: "ToPicked",
+      component: AModule,
+      meta: {
+        title: '待拣货容器',
+        icon: 'table'
+      },
+      children: [
+        {
+          path: "",
+          name: "ToPickedView",
+          component: () =>
+            import('@/views/outhousing-adm/to-picked/index'),
+          hidden: true,
+          meta: {
+            title: '待拣货容器',
+            icon: 'table'
+          }
+        }
+      ]
+    }
 ]}
   
   /*

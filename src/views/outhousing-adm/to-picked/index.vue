@@ -135,7 +135,7 @@ export default {
       // 获取容器列表
       this.suppliersData = []
 
-      // const _this = this;
+      const _this = this;
 
       const data = {
         page: this.page,
@@ -148,13 +148,13 @@ export default {
       console.log(data)
 
       DeliveryService.sowingPickBillQuery(data).then((res) => {
-        // const records = res.records;
+        const records = res.records;
 
-        // this.totalCount = res.totalCount;
+        this.totalCount = res.totalCount;
 
-        console.log(res)
+        _this.listData = records;
 
-        // _this.listData = records;
+        console.log(_this.listData)
       }).catch(err => {
         this.$message.error("数据请求失败" + err.message)
       });
@@ -186,13 +186,13 @@ export default {
     }
   },
   created() {
-    // this.sowingPickBillQuery();
-    this.pickareaQuery() // 获取拣货分区列表
+    this.sowingPickBillQuery();
+    // this.pickareaQuery() // 获取拣货分区列表
   },
   beforeRouteEnter(to, from, next) {
     next(vm => {
       // 通过 `vm` 访问组件实例
-      // vm.sowingPickBillQuery();
+      vm.sowingPickBillQuery();
     })
   },
   filters: {
