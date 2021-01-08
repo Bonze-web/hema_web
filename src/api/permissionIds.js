@@ -309,6 +309,13 @@ export default {
   WMS_RECEIVE_BILL_RECEIVE: "wms:receive_bill:receive",
   WMS_RECEIVE_BILL_FAST_RECEIVE: "wms:receive_bill:fast_receive",
 
+   /**
+   * 网格仓分播单模块
+   */
+  WMS_SOWING_PICK_Bill: "wms:sowing_pick_bill",
+  WMS_SOWING_PICK_Bill_VIEW: "wms:sowing_pick_bill:view",
+  WMS_SOWING_PICK_Bill_CREATE: "wms:sowing_pick_bill:pick",
+
   /**
    * 质检类型
    */
@@ -399,13 +406,22 @@ export default {
   STOCK_TAKE_BILL_VIEW: "stock:take_bill:view",
   STOCK_TAKE_BILL_CREATE: "stock:take_bill:create",
   STOCK_TAKE_BILL_UPDATE: "stock:take_bill:update",
-    /**
+
+  /**
    * 拣货单模块
    */
-  WMS_PICK_BILL: "wms:receive_bill",
-  WMS_PICK_BILL_VIEW: "wms:receive_bill:view",
-  WMS_PICK_BILL_CREATE: "wms:receive_bill:create",
-  WMS_PICK_BILL_UPDATE: "wms:receive_bill:receive",
+  WMS_PICK_BILL: "wms:pick_bill",
+  WMS_PICK_BILL_VIEW: "wms:pick_bill:view",
+  WMS_PICK_BILL_CREATE: "wms:pick_bill:create",
+  WMS_PICK_BILL_UPDATE: "wms:pick_bill:receive",
+
+  /**
+   * 拣货单模块
+   */
+  WMS_PICK_BILL_ITEM: "wms:pick_bill_item",
+  WMS_PICK_BILL_ITEM_VIEW: "wms:pick_bill_item:view",
+  WMS_PICK_BILL_ITEM_CREATE: "wms:pick_bill_item:create",
+  WMS_PICK_BILL_ITEM_UPDATE: "wms:pick_bill_item:receive",
 
     /**
    * 查看区块

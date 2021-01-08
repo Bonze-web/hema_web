@@ -1154,7 +1154,7 @@ const outhousingAdm = {
     meta: {
       title: '拣货单',
       icon: 'table',
-      permission: PermIds.WMS_PICK_BILL
+      permission: PermIds.WMS_PICK_BILL_ITEM
     },
     children: [
       {
@@ -1166,7 +1166,7 @@ const outhousingAdm = {
         meta: {
           title: '拣货单',
           icon: 'table',
-          permission: PermIds.WMS_PICK_BILL_VIEW
+          permission: PermIds.WMS_PICK_BILL_ITEM_VIEW
         }
       },
       {
@@ -1178,7 +1178,7 @@ const outhousingAdm = {
         meta: {
           title: '拣货单详情',
           icon: 'table',
-          permission: PermIds.WMS_PICK_BILL_VIEW
+          permission: PermIds.WMS_PICK_BILL_ITEM_VIEW
         }
       }
     ]
