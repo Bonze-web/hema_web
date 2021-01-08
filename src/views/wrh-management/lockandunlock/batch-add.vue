@@ -117,7 +117,7 @@ export default {
       }
       // LOCK:锁定 UNLOCK:解锁            商品查询状态 NORMAL（正常）、LOCKED（锁定）
       const billType = this.statusIn === 'LOCKED' ? 'UNLOCK' : 'LOCK';
-      console.log(this.multipleSelection)
+
       this.addSelection(this.multipleSelection)
       this.setBillType(billType)
       this.$router.push('/wrhmanagement/lockandunlock/add')
@@ -126,6 +126,8 @@ export default {
         list.forEach((item, index) => {
           list[index].stockBatch = item.batch
           list[index].stockId = item.id
+          list[index].qty = item.qpc
+          list[index].qtyStr = item.qpcStr
         })
 
         console.log(list)
