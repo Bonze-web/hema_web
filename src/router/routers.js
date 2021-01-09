@@ -1283,6 +1283,42 @@ const outhousingAdm = {
           }
         }
       ]
+    },
+    {
+      path: "thecage",
+      name: "TheCage",
+      component: AModule,
+      meta: {
+        title: '装笼单',
+        icon: 'table'
+        // permission: PermIds.WMS_LOAD_PALLET
+      },
+      children: [
+        {
+          path: "",
+          name: "TheCageView",
+          component: () =>
+            import('@/views/outhousing-adm/the-cage/index'),
+          hidden: true,
+          meta: {
+            title: '装笼单',
+            icon: 'table'
+            // permission: PermIds.WMS_LOAD_PALLET_VIEW
+          }
+        },
+        {
+          path: "edit",
+          name: "TheCageEdit",
+          component: () =>
+            import('@/views/outhousing-adm/the-cage/edit'),
+          hidden: true,
+          meta: {
+            title: '装笼单',
+            icon: 'table'
+            // permission: PermIds.WMS_LOAD_PALLET_VIEW
+          }
+        }
+      ]
     }
 ]}
   

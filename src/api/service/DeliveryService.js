@@ -34,9 +34,25 @@ export default {
     pickareaQuery(data) {
         // 获取拣货分区
         return request.get('/wms/pickarea/query', {params: data})
-    }
+    },
 
      /**
      * 分播单结束
+     */
+
+    /**
+     * 装笼开始 ======
+     */
+
+    sowingPickBillQueraaaaay(data) {
+        // 装笼查看列表
+        return request.get('/wms/sowingPickBill/query', {params: data})
+    },
+    sowingPickBillDetaaaaails(id) {
+        // 装笼查看详情
+        return request.get('/wms/sowingPickBill/getById?id=' + id)
+    }
+     /**
+     * 装笼结束
      */
 }

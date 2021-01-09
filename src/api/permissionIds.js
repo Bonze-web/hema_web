@@ -57,7 +57,7 @@ export default {
   /**
    * 系统组件-监控管理-缓存管理
    */
-  SYS_MONITOR_CACHE: "sys:monitor:cache",
+  SYS_MONITOR_CAE: "sys:monitor:cache",
 
   /**
    * 系统组件-监控管理-SQL管理
@@ -315,6 +315,12 @@ export default {
   WMS_SOWING_PICK_Bill: "wms:sowing_pick_bill",
   WMS_SOWING_PICK_Bill_VIEW: "wms:sowing_pick_bill:view",
   WMS_SOWING_PICK_Bill_CREATE: "wms:sowing_pick_bill:pick",
+
+  /**
+   * 装笼单模块
+   */
+  WMS_LOAD_PALLET: "wms:load_pallet",
+  WMS_LOAD_PALLET_VIEW: "wms:load_pallet:view",
 
   /**
    * 质检类型
