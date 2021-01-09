@@ -43,11 +43,11 @@
                   </el-col>
                   <el-col :span="10">
                     <el-form-item label="主要任务类型" prop="firstTaskTypeList">
-                        <el-checkbox-group v-model="form.firstTaskTypeList">
-                          <el-checkbox label="整托" value="PALLET"></el-checkbox>
-                          <el-checkbox label="整箱" value="CASE"></el-checkbox>
-                          <el-checkbox label="拆零" value="SPLIT"></el-checkbox>
-                        </el-checkbox-group>
+                         <el-checkbox-group v-model="form.firstTaskTypeList">
+                            <el-checkbox label="PALLET">整托</el-checkbox>
+                            <el-checkbox label="CASE">整箱</el-checkbox>
+                            <el-checkbox label="SPLIT">拆零</el-checkbox>
+                          </el-checkbox-group>
                     </el-form-item>
                   </el-col>
                 </el-row>
@@ -62,9 +62,9 @@
                   <el-col :span="10">
                     <el-form-item label="辅助任务类型" prop="secondTaskTypeList">
                         <el-checkbox-group v-model="form.secondTaskTypeList">
-                          <el-checkbox label="整托" value="PALLET"></el-checkbox>
-                          <el-checkbox label="整箱" value="CASE"></el-checkbox>
-                          <el-checkbox label="拆零" value="SPLIT"></el-checkbox>
+                            <el-checkbox label="PALLET">整托</el-checkbox>
+                            <el-checkbox label="CASE">整箱</el-checkbox>
+                            <el-checkbox label="SPLIT">拆零</el-checkbox>
                         </el-checkbox-group>
                     </el-form-item>
                   </el-col>
@@ -158,34 +158,22 @@ export default {
         })
       },
       remoteMethod(query) {
-          console.log(query);
-          if (query !== '') {
-            this.loading = true;
-            PersonnelbindService.userQuery(query)
-            .then((res) => {
-              this.loading = false;
-              res.records.forEach((ele, idx) => {
-                  this.editData.forEach((item, index) => {
-                      if (ele.id === item.userId) {
-                          ele.disabled = true;
-                      }
-                  })
-              })
-              this.userAll = res.records;
+          this.loading = true;
+          PersonnelbindService.userQuery(query)
+          .then((res) => {
+            this.loading = false;
+            res.records.forEach((ele, idx) => {
+                this.editData.forEach((item, index) => {
+                    if (ele.id === item.userId) {
+                        ele.disabled = true;
+                    }
+                })
             })
-            .catch((err) => {
-              if (err) this.$message.error("获取所有用户失败" + err.message);
-            });
-            // setTimeout(() => {
-              
-            //   this.options = this.list.filter(item => {
-            //     return item.label.toLowerCase()
-            //       .indexOf(query.toLowerCase()) > -1;
-            //   });
-            // }, 200);
-          } else {
-            this.userAll = [];
-          }
+            this.userAll = res.records;
+          })
+          .catch((err) => {
+            if (err) this.$message.error("获取所有用户失败" + err.message);
+          });
       }
     },
     created() {

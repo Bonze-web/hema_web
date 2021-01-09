@@ -240,7 +240,6 @@ export default {
   },
   filters: {
     stockTypeChange(type) {
-      console.log(type);
       var str = '';
       if (type.length > 0) {
         type.forEach((ele, idx) => {

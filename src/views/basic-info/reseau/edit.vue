@@ -334,7 +334,7 @@ export default {
         ReseauService.getById(id)
         .then((res) => {
           this.dcInfo = res;
-          console.log(res);
+          this.collectBinId = res.collectBinId;
         })
         .catch((err) => {
           this.$message.error("获取详情失败" + err.message)

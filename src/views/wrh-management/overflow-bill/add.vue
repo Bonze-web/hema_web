@@ -392,8 +392,8 @@ export default {
         .then((result) => {
           
         }).catch((err) => {
-         
-        });
+          this.$message.error(err.message)
+        })
         this.allProducet.forEach(item => {
           if (item.id === e) {
             obj = item

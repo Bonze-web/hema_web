@@ -10,7 +10,7 @@
         </div>
         <div style="height:20px" />
         <div class="info-content">
-              <el-form label-width="125px" :model="form">
+              <el-form label-width="125px" :model="form" ref="formName">
                   <el-row>
                     <el-col :span="8">
                         <el-form-item label="用户" prop="userId">
@@ -39,9 +39,9 @@
                     <el-col :span="10">
                       <el-form-item label="主要任务类型" prop="firstTaskTypeList">
                           <el-checkbox-group v-model="form.firstTaskTypeList">
-                            <el-checkbox label="整托" value="PALLET"></el-checkbox>
-                            <el-checkbox label="整箱" value="CASE"></el-checkbox>
-                            <el-checkbox label="拆零" value="SPLIT"></el-checkbox>
+                            <el-checkbox label="PALLET">整托</el-checkbox>
+                            <el-checkbox label="CASE">整箱</el-checkbox>
+                            <el-checkbox label="SPLIT">拆零</el-checkbox>
                           </el-checkbox-group>
                       </el-form-item>
                     </el-col>
@@ -57,9 +57,9 @@
                     <el-col :span="10">
                       <el-form-item label="辅助任务类型" prop="secondTaskTypeList">
                           <el-checkbox-group v-model="form.secondTaskTypeList">
-                            <el-checkbox label="整托" value="PALLET"></el-checkbox>
-                            <el-checkbox label="整箱" value="CASE"></el-checkbox>
-                            <el-checkbox label="拆零" value="SPLIT"></el-checkbox>
+                            <el-checkbox label="PALLET">整托</el-checkbox>
+                            <el-checkbox label="CASE">整箱</el-checkbox>
+                            <el-checkbox label="SPLIT">拆零</el-checkbox>
                           </el-checkbox-group>
                       </el-form-item>
                     </el-col>
@@ -131,19 +131,23 @@ export default {
           }
       },
       createSuppliers() {
-        this.form.id = this.$route.query.id;
-        if (this.form.firstPickareaId === this.form.secondPickareaId) {
-          this.$message.error("助拣货分区 不能等于 主拣货分区");
-          return false;
-        }
-        PersonnelbindService.updateSupplier(this.form)
-        .then((res) => {
-          this.$message.success("更新成功");
-          this.$store.dispatch("tagsView/delView", this.$route);
-          this.$router.go(-1)
-        })
-        .catch((err) => {
-          if (err) this.$message.error("更新失败" + err.message)
+         this.$refs['formName'].validate((valid) => {
+          if (valid) {
+              this.form.id = this.$route.query.id;
+              if (this.form.firstPickareaId === this.form.secondPickareaId) {
+                this.$message.error("助拣货分区 不能等于 主拣货分区");
+                return false;
+              }
+              PersonnelbindService.updateSupplier(this.form)
+              .then((res) => {
+                this.$message.success("更新成功");
+                this.$store.dispatch("tagsView/delView", this.$route);
+                this.$router.go(-1)
+              })
+              .catch((err) => {
+                if (err) this.$message.error("更新失败" + err.message)
+              })
+          }
         })
       },
       back: function() {
@@ -156,6 +160,8 @@ export default {
         .then((res) => {
             this.form.firstPickareaId = res.firstPickarea.id;
             this.form.secondPickareaId = res.secondPickarea.id;
+            this.form.secondTaskTypeList = res.secondTaskTypeList;
+            this.form.firstTaskTypeList = res.firstTaskTypeList;
             this.form.firstTaskType = res.firstTaskType;
             this.form.userId = res.userId;
         })
@@ -166,7 +172,6 @@ export default {
     },
     created() {
       this.editData = JSON.parse(decodeURIComponent(this.$route.query.addData));
-      console.log(this.editData);
       this.getDetail();
       PersonnelbindService.getPickareaQuery()
       .then((res) => {
