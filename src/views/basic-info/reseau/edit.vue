@@ -225,7 +225,7 @@
 <script>
 import PermIds from "@/api/permissionIds";
 import { mapGetters } from "vuex";
-import ReseauService from "@/api/service/ReseauService.js";
+import ReseauService from "@/api/service/CollectService.js";
 import systemLog from "@/components/systemLog.vue";
 
 export default {
