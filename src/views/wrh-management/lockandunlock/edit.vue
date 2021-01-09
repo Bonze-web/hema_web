@@ -8,10 +8,10 @@
                 <div style="margin:8px">{{ '锁定解锁单：' + dataList.billNumber }}</div>
             </div>
             <div>
-              <!-- SAVED:已保存，AUDITED:已审核 -->
+              <!-- INITIAL 初始 SAVED:已保存，AUDITED:已审核 -->
                 <el-button @click="back">返回</el-button>
-                <el-button type="primary" v-show="dataList.status === 'SAVED'" v-if="hasPermission(PermIds.STOCK_LOCK_BILL_UPDATE)" @click="esaminareBtn">审核通过</el-button>
-                <el-button type="primary" v-show="dataList.status === 'AUDITED'" v-if="hasPermission(PermIds.STOCK_LOCK_BILL_DELETE)" @click="deleteBtn">作废</el-button>
+                <el-button type="primary" v-show="dataList.status === 'INITIAL'" v-if="hasPermission(PermIds.STOCK_LOCK_BILL_UPDATE)" @click="esaminareBtn">审核通过</el-button>
+                <el-button type="primary" v-show="dataList.status === 'INITIAL'" v-if="hasPermission(PermIds.STOCK_LOCK_BILL_DELETE)" @click="deleteBtn">作废</el-button>
             </div>
         </div>
         <div style="height:20px" />
@@ -150,7 +150,7 @@
 
                         <!-- USER, DOCK, Inbound_Outbound, PRETYPE, PICK_ORDER, USER_PICKAREA, OTHER, SUPPLIER, CONTAINER, CONTAINERTYPE, DECINVBILL, INCINVBILL, PICKAREA, STORAGEAREA, PRODUCT, PRODUCTCATEGORY, BINTYPE, ZONE, PATH, SHELF, BIN, QUALITY, MOVESTOCK, LOCKSTOCK, VENDORRETURNBILL, ORDERBILL -->
                         <el-tab-pane label="操作日志" name="log">
-                          <system-log modular="LOCKBILL" :id=id></system-log>
+                          <system-log modular="LOCKSTOCK" :id=id></system-log>
                         </el-tab-pane>
                     </el-tabs>
                 </template>
@@ -273,16 +273,18 @@ export default {
     },
     filters: {
       setStatus(type) {
-      // INITIAL: 初始；AUDITED：已审核，ABORTED: 已作废
-      switch (type) {
-        case 'INITIAL':
-          return "已作废"
-        case 'AUDITED':
-          return "已审核"
-        default:
-          return '未知';
-      }
-    },
+        // INITIAL: 初始；AUDITED：已审核，ABORTED: 已作废
+        switch (type) {
+          case 'INITIAL':
+            return "初始"
+          case 'AUDITED':
+            return "已审核"
+          case 'ABORTED':
+            return "已作废"
+          default:
+            return '未知';
+        }
+      },
       setBillType(type) {
         // LOCK:锁定 UNLOCK:解锁
         switch (type) {

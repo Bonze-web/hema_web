@@ -8,7 +8,6 @@
             </div>
             <div>
                 <el-button @click="back">返回</el-button>
-                <!-- <el-button type="primary"  @click="printingBtn">打印</el-button> -->
             </div>
         </div>
         <div style="height:20px" />
@@ -18,83 +17,84 @@
             <div>
                 <template>
                     <el-tabs v-model="tabActiveName">
-                        <el-tab-pane label="容器详情" name="category">
+                        <el-tab-pane label="装笼单详情" name="category">
                             <div class="info-title">基本信息</div>
                             <el-col :span="6" class="info-box">
-                                <div>创建人:</div>
-                                <div>{{ dataList.creatorName }}</div>
+                                <div>区块码:</div>
+                                <div>{{ dataList.blockCode }}</div>
                             </el-col>
 
                             <el-col :span="6" class="info-box">
-                                <div>拣货员:</div>
-                                {{ dataList.pickUserName }}
+                                <div>集货位码:</div>
+                                {{ dataList.collectBinCode }}
                             </el-col>
 
                             <el-col :span="6" class="info-box">
-                                <div>开始拣货时间:</div>
-                                <div>{{ dataList.beginPickTime }}</div>
+                                <div>集货人时间:</div>
+                                <div>{{ dataList.collectTime }}</div>
                             </el-col>
 
                             <el-col :span="6" class="info-box">
-                                <div>结束拣货时间:</div>
-                                {{ dataList.endPickTime }}
+                                <div>容器码:</div>
+                                {{ dataList.containerCode }}
                             </el-col>
 
                             <el-col :span="6" class="info-box">
-                                <div>拣货方式:</div>
-                                {{ dataList.method | setMethod }}
+                                <div>装车人时间:</div>
+                                {{ dataList.entrunckTime }}
                             </el-col>
 
                             <el-col :span="6" class="info-box">
-                                <div>分播类型:</div>
-                                {{ dataList.sowingType | setSowingType }}
+                                <div>网格仓:</div>
+                                {{ dataList.frontDcName }}
                             </el-col>
 
                             <el-col :span="6" class="info-box">
-                                <div>备注:</div>
-                                <div>{{ dataList.remark }}</div>
-                            </el-col>
-
-                            <!-- <el-col :span="6" class="info-box">
-                                <div>所属波次号:</div>
-                                {{ dataList.method | setMethod }}
+                                <div>装笼人:</div>
+                                {{ dataList.palletUserName }}
                             </el-col>
 
                             <el-col :span="6" class="info-box">
-                                <div>拣货分区:</div>
-                                {{ dataList.method | setMethod }}
+                                <div>装笼人时间:</div>
+                                {{ dataList.palletTime }}
                             </el-col>
 
                             <el-col :span="6" class="info-box">
-                                <div>容器数:</div>
-                                {{ dataList.method | setMethod }}
+                                <div>收货时间:</div>
+                                {{ dataList.receiveTime }}
                             </el-col>
 
                             <el-col :span="6" class="info-box">
-                                <div>商品数量:</div>
-                                {{ dataList.method | setMethod }}
-                            </el-col> -->
+                                <div>发运人:</div>
+                                {{ dataList.shipUserName }}
+                            </el-col>
+
+                            <el-col :span="6" class="info-box">
+                                <div>发运人时间:</div>
+                                {{ dataList.shipTime }}
+                            </el-col>
+
+                            <el-col :span="6" class="info-box">
+                                <div>仓库:</div>
+                                {{ dataList.wrhName }}
+                            </el-col>
 
                             <br>
 
                             <el-col><div  class="info-title title">商品信息</div></el-col>
                             <div style="height:20px" />
 
-                            <el-table :data="dataList.itemBins" style="width: 100%; text-align: center" :row-style="{ height: '16px', padding: '-4px' }" >
-                            <el-table-column prop="billNumber" label="单号"></el-table-column>
-                            <el-table-column prop="binCode" label="货位编码"></el-table-column>
-                            <el-table-column prop="productName" label="商品名称"></el-table-column>
-                            <el-table-column prop="isLack" label="是否缺货"></el-table-column>
-                            <el-table-column prop="planQty" label="计划数量"></el-table-column>
-                            <el-table-column prop="realQty" label="实拣数量"></el-table-column>
-                            <el-table-column prop="creatorName" label="创建人"></el-table-column>
-
-                            <el-table-column prop="scope" label="状态">
-                              <template slot-scope="scope">
-                                {{ scope.row.status | setStatus }}
-                              </template>
-                            </el-table-column>
-
+                            <el-table :data="dataList.loadPalletItemDTOList" style="width: 100%; text-align: center" :row-style="{ height: '16px', padding: '-4px' }" >
+                            <el-table-column prop="productCode" label="商品编码"></el-table-column>
+                            <el-table-column prop="productName" label="商品名"></el-table-column>
+                            <el-table-column prop="batch" label="批次"></el-table-column>
+                            <el-table-column prop="containerCode" label="二级容器"></el-table-column>
+                            <el-table-column prop="loadPalletNumber" label="装笼单号"></el-table-column>
+                            <el-table-column prop="qpc" label="规格数"></el-table-column>
+                            <el-table-column prop="unit" label="单位"></el-table-column>
+                            <el-table-column prop="qpcStr" label="规格"></el-table-column>
+                            <el-table-column prop="qty" label="数量"></el-table-column>
+                            <el-table-column prop="qtyStr" label="件数"></el-table-column>
                           </el-table>
 
 
@@ -133,10 +133,10 @@ export default {
         this.$store.dispatch("tagsView/delView", this.$route);
         this.$router.go(-1)
       },
-      sowingPickBillDetails: function() {
+      loadPalletDetils: function() {
         this.id = this.$route.query.id;
         console.log(this.id)
-        DeliveryService.sowingPickBillDetails(this.id)
+        DeliveryService.loadPalletDetils(this.id)
         .then((res) => {
           this.dataList = res;
         })
@@ -149,29 +149,26 @@ export default {
       }
     },
     created() {
-      this.sowingPickBillDetails()
+      this.loadPalletDetils()
     },
     filters: {
-      setMethod(type) {
-        // 拣货方式，MANUAL：手工单据，RF：手持终端
-        switch (type) {
-          case 'MANUAL':
-            return "手工单据"
-          case 'RF':
-            return "手持终端"
-          default:
-            return '未知';
-        }
-      },
       setStatus(type) {
-        // 状态， INITIAL 初始 PROCESSING 进行中 FINISH 已完成
+        // 状态 CREATED:创建, PALLETED : 装笼完成；COLLECTED: 集货完成, ENTRUNCKED：已装车，SHIPED: 已发运，RECEIVED：已收货，MERGE_PALLETED 已拼笼
         switch (type) {
-          case 'INITIAL':
-            return "初始"
-          case 'PROCESSING':
-            return "进行中"
-          case 'FINISH':
-            return "已完成"
+          case 'CREATED':
+            return "创建"
+          case 'PALLETED':
+            return "装笼完成"
+          case 'COLLECTED':
+            return "集货完成"
+          case 'ENTRUNCKED':
+            return "已装车"
+          case 'SHIPED':
+            return "已发运"
+          case 'RECEIVED':
+            return "已收货"
+          case 'MERGE_PALLETED':
+            return "已拼笼"
           default:
             return '未知';
         }

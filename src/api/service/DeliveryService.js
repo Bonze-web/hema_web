@@ -44,13 +44,13 @@ export default {
      * 装笼开始 ======
      */
 
-    sowingPickBillQueraaaaay(data) {
+    loadPalletList(data) {
         // 装笼查看列表
-        return request.get('/wms/sowingPickBill/query', {params: data})
+        return request.get('/wms/load-pallet/listByPage', {params: data})
     },
-    sowingPickBillDetaaaaails(id) {
+    loadPalletDetils(id) {
         // 装笼查看详情
-        return request.get('/wms/sowingPickBill/getById?id=' + id)
+        return request.get('/wms/load-pallet/getById?id=' + id)
     }
      /**
      * 装笼结束

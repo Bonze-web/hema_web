@@ -179,8 +179,8 @@ export default {
       this.stockLocjBill(true);
     },
     checkboxSelect(opt) {
-      // SAVED:已保存，AUDITED:已审核  已保存状态禁止选中
-      if (opt.status === 'SAVED') {
+      // INITIAL 初始
+      if (opt.status === 'INITIAL') {
         return true
       }
     },
@@ -266,9 +266,11 @@ export default {
       // INITIAL: 初始；AUDITED：已审核，ABORTED: 已作废
       switch (type) {
         case 'INITIAL':
-          return "已作废"
+          return "初始"
         case 'AUDITED':
           return "已审核"
+        case 'ABORTED':
+          return "已作废"
         default:
           return '未知';
       }
