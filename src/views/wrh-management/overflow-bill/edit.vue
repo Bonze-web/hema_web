@@ -200,7 +200,7 @@
                                     <div class="list-count">
                                         <div>总数:{{ form.totalQtystr ? form.totalQtystr : 0 }},</div>
                                         <div>总品相数:{{ form.totalProductCount ? form.totalProductCount : 0 }},</div>
-                                        <div>总金额:{{ form.realtotalAmount ? form.realtotalAmount : 0 }}</div>
+                                        <div>总金额:{{ form.totalAmount ? form.totalAmount : 0 }}</div>
                                     </div>
                                 </div>
                                     <el-table
@@ -243,12 +243,12 @@
                                         </el-table-column>
                                         <el-table-column prop="consumeQtystr" label="溢余件数">
                                           <template slot-scope="scope">
-                                            <el-input type="number" max="100" @change="calcProduct" size="mini" v-model="scope.row.consumeQtystr"></el-input>
+                                            <el-input type="number" max="100" @change="calcProductEdit" size="mini" v-model="scope.row.consumeQtystr"></el-input>
                                           </template>
                                         </el-table-column>
                                         <el-table-column prop="consumeQty" label="溢余数量">
                                           <template slot-scope="scope">
-                                            <el-input type="number" max="100" @change="calcProduct" size="mini" v-model="scope.row.consumeQty"></el-input>
+                                            <el-input type="number" max="100" @change="calcProductEdit" size="mini" v-model="scope.row.consumeQty"></el-input>
                                           </template>
                                         </el-table-column>
                                         <el-table-column prop="consumeAmount" label="溢余金额">
@@ -376,7 +376,7 @@ export default {
             this.form.wrhId = ''
             this.form.totalAmount = 0
             this.form.totalProductCount = 0
-            this.form.totalQtystr = 0 + '+' + 0
+            this.form.totalQtystr = 0
           })
         }
       },
@@ -385,8 +385,8 @@ export default {
         for (const item in this.productList) {
             this.productList[item].realAmount = this.productList[item].consumeAmount
             this.productList[item].lineNum = 0
-            this.productList[item].realQty = this.productList[item].qty
-            this.productList[item].realQtystr = this.productList[item].qtystr
+            this.productList[item].realQty = this.productList[item].consumeQty
+            this.productList[item].realQtystr = this.productList[item].consumeQtystr
             this.productList[item].stockId = this.productList[item].id
           }
       },
@@ -576,7 +576,7 @@ export default {
           }
           console.log(consumeQty)
           this.form.totalQtystr = consumeQtystr * item.qpc + consumeQty
-          this.form.totalAmount = Number(this.form.totalAmount) + Number(item.consumeAmount)
+          this.form.totalAmount = (Number(this.form.totalAmount) + Number(item.consumeAmount)).toFixed(2)
           console.log(item)
         });
       },

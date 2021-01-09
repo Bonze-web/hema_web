@@ -108,7 +108,7 @@
                                         </el-table-column>
                                         <!-- <el-table-column prop="price" label="单价"></el-table-column> -->
                                         <!-- <el-table-column prop="batch" label="批次"></el-table-column> -->
-                                        <el-table-column prop="qty" label="数量"></el-table-column>
+                                        <el-table-column prop="availableQty" label="数量"></el-table-column>
                                         <el-table-column prop="consumeQtystr" label="损耗件数">
                                           <template slot-scope="scope">
                                             <el-input type="number" max="100" @change="calcProduct" size="mini" v-model="scope.row.consumeQtystr"></el-input>
@@ -278,10 +278,7 @@ export default {
         }
         _this.$refs.form.validate(valid => {
           if (valid) {
-            if (reset) {
-              _this.form.realTotalAmount = _this.form.totalAmount
-              // _this.form.realTotalProductCount = _this.form.totalProductCount
-            }
+            _this.form.realTotalAmount = _this.form.totalAmount
             BillService.createLossBill(this.form)
             .then((res) => {
               _this.$message.success('创建成功')
@@ -370,7 +367,7 @@ export default {
           // this.form.realTotalAmount += item.consumeAmount
           consumeQtystr = Number(consumeQtystr) + (Number(item.consumeQtystr) ? Number(item.consumeQtystr) : 0)
           consumeQty = Number(consumeQty) + (Number(item.consumeQty) ? Number(item.consumeQty) : 0)
-          if (Number(item.consumeQtystr) * item.qpc > Number(item.qty) || Number(item.consumeQty) + Number(item.consumeQtystr) * item.qpc > Number(item.qty) || Number(item.consumeQty) < 0 || Number(item.consumeQtystr) < 0) {
+          if (Number(item.consumeQtystr) * item.qpc > Number(item.availableQty) || Number(item.consumeQty) + Number(item.consumeQtystr) * item.qpc > Number(item.availableQty) || Number(item.consumeQty) < 0 || Number(item.consumeQtystr) < 0) {
             this.$message.error('请输入正确数据')
             consumeQtystr = Number(consumeQtystr) - Number(item.consumeQtystr)
             consumeQty = Number(consumeQty) - Number(item.consumeQty)

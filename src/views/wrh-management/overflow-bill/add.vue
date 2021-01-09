@@ -108,7 +108,7 @@
                                         </el-table-column>
                                         <!-- <el-table-column prop="price" label="单价"></el-table-column> -->
                                         <!-- <el-table-column prop="batch" label="批次"></el-table-column> -->
-                                        <el-table-column prop="qty" label="数量"></el-table-column>
+                                        <el-table-column prop="availableQty" label="数量"></el-table-column>
                                         <el-table-column prop="consumeQtystr" label="溢余件数">
                                           <template slot-scope="scope">
                                             <el-input type="number" max="100" @change="calcProduct" size="mini" v-model="scope.row.consumeQtystr"></el-input>
@@ -121,7 +121,7 @@
                                         </el-table-column>
                                         <el-table-column prop="amount" label="溢余金额">
                                           <template slot-scope="scope">
-                                            {{ (Number(scope.row.consumeQtystr) + Number(scope.row.consumeQty)) * scope.row.price ? ((Number(scope.row.consumeQtystr) + Number(scope.row.consumeQty)) * scope.row.price).toFixed(2) : 0 }}
+                                            {{ (Number(scope.row.consumeQtystr) * scope.row.qpc + Number(scope.row.consumeQty)) * scope.row.price ? ((Number(scope.row.consumeQtystr) * scope.row.qpc + Number(scope.row.consumeQty)) * scope.row.price).toFixed(2) : 0 }}
                                           </template>
                                         </el-table-column>
                                         <el-table-column prop="remark" label="备注">
@@ -629,7 +629,6 @@ export default {
         let consumeQty = 0
         this.productList.forEach(item => {
           item.lineNum = this.productList.indexOf(item) + 1
-          item.consumeAmount = ((Number(item.consumeQtystr) * (item.price) * item.qpc ? Number(item.consumeQtystr) * (item.price) * item.qpc : 0) + (Number(item.consumeQty) * item.price ? Number(item.consumeQty) * item.price : 0)).toFixed(2) 
           // this.form.realTotalAmount += item.consumeAmount
           consumeQtystr = Number(consumeQtystr) + (Number(item.consumeQtystr) ? Number(item.consumeQtystr) : 0)
           consumeQty = Number(consumeQty) + (Number(item.consumeQty) ? Number(item.consumeQty) : 0)
@@ -645,6 +644,7 @@ export default {
             }
           }
           console.log(consumeQty)
+          item.consumeAmount = ((Number(item.consumeQtystr) * (item.price) * item.qpc ? Number(item.consumeQtystr) * (item.price) * item.qpc : 0) + (Number(item.consumeQty) * item.price ? Number(item.consumeQty) * item.price : 0)).toFixed(2) 
           this.form.totalQtystr = consumeQtystr * item.qpc + consumeQty
           this.form.totalAmount = (Number(this.form.totalAmount) + Number(item.consumeAmount)).toFixed(2)
           console.log(item)
