@@ -1196,8 +1196,8 @@ const outhousingAdm = {
       component: AModule,
       meta: {
         title: '拣货单',
-        icon: 'table',
-        permission: PermIds.WMS_PICK_BILL_ITEM
+        icon: 'table'
+        // permission: PermIds.WMS_PICK_BILL_ITEM
       },
       children: [
         {
@@ -1208,8 +1208,8 @@ const outhousingAdm = {
           hidden: true,
           meta: {
             title: '拣货单',
-            icon: 'table',
-            permission: PermIds.WMS_PICK_BILL_ITEM_VIEW
+            icon: 'table'
+            // permission: PermIds.WMS_PICK_BILL_ITEM_VIEW
           }
         },
         {
@@ -1220,8 +1220,8 @@ const outhousingAdm = {
           hidden: true,
           meta: {
             title: '拣货单详情',
-            icon: 'table',
-            permission: PermIds.WMS_PICK_BILL_ITEM_VIEW
+            icon: 'table'
+            // permission: PermIds.WMS_PICK_BILL_ITEM_VIEW
           }
         }
       ]
@@ -1313,9 +1313,45 @@ const outhousingAdm = {
             import('@/views/outhousing-adm/the-cage/edit'),
           hidden: true,
           meta: {
-            title: '装笼单',
+            title: '装笼单详情',
             icon: 'table'
             // permission: PermIds.WMS_LOAD_PALLET_VIEW
+          }
+        }
+      ]
+    },
+    {
+      path: "loading",
+      name: "Loading",
+      component: AModule,
+      meta: {
+        title: '装车单',
+        icon: 'table'
+        // permission: PermIds.WMS_ENTRUCK_BILL_ITEM
+      },
+      children: [
+        {
+          path: "",
+          name: "LoadingView",
+          component: () =>
+            import('@/views/outhousing-adm/loading/index'),
+          hidden: true,
+          meta: {
+            title: '装车单',
+            icon: 'table'
+            // permission: PermIds.WMS_ENTRUCK_BILL_ITEM_VIEW
+          }
+        },
+        {
+          path: "edit",
+          name: "LoadingEdit",
+          component: () =>
+            import('@/views/outhousing-adm/loading/edit'),
+          hidden: true,
+          meta: {
+            title: '装车单详情',
+            icon: 'table'
+            // permission: PermIds.WMS_ENTRUCK_BILL_ITEM_VIEW
           }
         }
       ]

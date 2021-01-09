@@ -51,8 +51,24 @@ export default {
     loadPalletDetils(id) {
         // 装笼查看详情
         return request.get('/wms/load-pallet/getById?id=' + id)
-    }
+    },
      /**
      * 装笼结束
+     */
+
+     /**
+     * 装车单开始 ======
+     */
+
+    entruckBill(data) {
+        // 装车单查看列表
+        return request.get('/wms/entruck-bill', {params: data})
+    },
+    entruckBillDetils(id) {
+        // 装车单查看详情
+        return request.get('/wms/entruck-bill/getById?id=' + id)
+    }
+     /**
+     * 装车单结束
      */
 }

@@ -322,6 +322,15 @@ export default {
   WMS_LOAD_PALLET: "wms:load_pallet",
   WMS_LOAD_PALLET_VIEW: "wms:load_pallet:view",
 
+    /**
+   * 装车单模块
+   */
+  WMS_ENTRUCK_BILL_ITEM: "wms:pick_entruck_item",
+  WMS_ENTRUCK_BILL_ITEM_VIEW: "wms:pick_entruck_item:view",
+  WMS_ENTRUCK_BILL_ITEM_CREATE: "wms:pick_entruck_item:create",
+  WMS_ENTRUCK_BILL_ITEM_UPDATE: "wms:pick_entruck_item:update",
+  WMS_ENTRUCK_BILL_ITEM_DELETE: "wms:pick_entruck_item:delete",
+
   /**
    * 质检类型
    */
