@@ -221,7 +221,7 @@
 <script>
 import PermIds from "@/api/permissionIds";
 import { mapGetters } from "vuex";
-import ReseauService from "@/api/service/ReseauService.js";
+// import ReseauService from "@/api/service/ReseauService.js";
 import systemLog from "@/components/systemLog.vue";
 
 export default {
@@ -289,21 +289,21 @@ export default {
     methods: {
       submitEditStoreChange() {
         this.editStore = false;
-        const filterEle = this.userAll.find((ele) => {
-          return ele.id === this.collectBinId
-        });
-        const postData = {
-          collectBinCode: filterEle.code,
-          collectBinId: filterEle.id,
-          id: this.id
-        }
-        ReseauService.setCollectBin(postData)      
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((err) => {
-          this.$message.error("设置集货位失败" + err.message)
-        })
+        // const filterEle = this.userAll.find((ele) => {
+        //   return ele.id === this.collectBinId
+        // });
+        // const postData = {
+        //   collectBinCode: filterEle.code,
+        //   collectBinId: filterEle.id,
+        //   id: this.id
+        // }
+        // ReseauService.setCollectBin(postData)      
+        // .then((res) => {
+        //   console.log(res);
+        // })
+        // .catch((err) => {
+        //   this.$message.error("设置集货位失败" + err.message)
+        // })
       },
       back: function() {
         this.$store.dispatch("tagsView/delView", this.$route);
@@ -324,13 +324,13 @@ export default {
       },
       getById: function(id) {
         // 获取配送中心详情
-        ReseauService.getById(id)
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((err) => {
-          this.$message.error("获取详情失败" + err.message)
-        })
+        // ReseauService.getById(id)
+        // .then((res) => {
+        //   console.log(res);
+        // })
+        // .catch((err) => {
+        //   this.$message.error("获取详情失败" + err.message)
+        // })
       },
       // getDcCenter: function() {
       //   // 获取所有中心仓
@@ -370,22 +370,22 @@ export default {
           console.log(query);
           if (query !== '') {
             this.loading = true;
-            ReseauService.binQueryBin(query)
-            .then((res) => {
-              this.loading = false;
-              // res.records.forEach((ele, idx) => {
-              //     this.editData.forEach((item, index) => {
-              //         if (ele.id === item.userId) {
-              //             ele.disabled = true;
-              //         }
-              //     })
-              // })
-              console.log(res.records);
-              this.userAll = res.records;
-            })
-            .catch((err) => {
-              if (err) this.$message.error("获取所有用户失败" + err.message);
-            });
+            // ReseauService.binQueryBin(query)
+            // .then((res) => {
+            //   this.loading = false;
+            //   // res.records.forEach((ele, idx) => {
+            //   //     this.editData.forEach((item, index) => {
+            //   //         if (ele.id === item.userId) {
+            //   //             ele.disabled = true;
+            //   //         }
+            //   //     })
+            //   // })
+            //   console.log(res.records);
+            //   this.userAll = res.records;
+            // })
+            // .catch((err) => {
+            //   if (err) this.$message.error("获取所有用户失败" + err.message);
+            // });
           } else {
             this.userAll = [];
           }

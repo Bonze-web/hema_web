@@ -75,7 +75,7 @@
 </template>
 
 <script>
-import ReseauService from "@/api/service/ReseauService.js";
+// import ReseauService from "@/api/service/ReseauService.js";
 import PermIds from "@/api/permissionIds";
 import { mapGetters } from "vuex";
 
@@ -124,15 +124,15 @@ export default {
         this.form.page = this.page;
         this.form.pageSize = this.pageSize;
         // 获取物流中心列表
-        ReseauService.frontQuery(this.form)      
-        .then((res) => {
-          this.reseauData = res.records;
-          this.totalCount = res.totalCount;
-          console.log(res);
-        })
-        .catch((err) => {
-          this.$message.error("获取网格仓列表失败" + err.message)
-        })
+        // ReseauService.frontQuery(this.form)      
+        // .then((res) => {
+        //   this.reseauData = res.records;
+        //   this.totalCount = res.totalCount;
+        //   console.log(res);
+        // })
+        // .catch((err) => {
+        //   this.$message.error("获取网格仓列表失败" + err.message)
+        // })
       },
       handleCurrentChange: function(e) {
         this.page = Number(e)
@@ -149,43 +149,43 @@ export default {
       },
       submitEditStoreChange() {
         this.editStore = false;
-        const filterEle = this.userAll.find((ele) => {
-          return ele.id === this.collectBinId
-        });
-        const postData = {
-          collectBinCode: filterEle.code,
-          collectBinId: filterEle.id,
-          id: this.idRecode.id
-        }
-        ReseauService.setCollectBin(postData)      
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((err) => {
-          this.$message.error("设置集货位失败" + err.message)
-        })
-        console.log(filterEle);
+        // const filterEle = this.userAll.find((ele) => {
+        //   return ele.id === this.collectBinId
+        // });
+        // const postData = {
+        //   collectBinCode: filterEle.code,
+        //   collectBinId: filterEle.id,
+        //   id: this.idRecode.id
+        // }
+        // ReseauService.setCollectBin(postData)      
+        // .then((res) => {
+        //   console.log(res);
+        // })
+        // .catch((err) => {
+        //   this.$message.error("设置集货位失败" + err.message)
+        // })
+        // console.log(filterEle);
       },
       remoteMethod(query) {
           console.log(query);
           if (query !== '') {
             this.loading = true;
-            ReseauService.binQueryBin(query)
-            .then((res) => {
-              this.loading = false;
-              // res.records.forEach((ele, idx) => {
-              //     this.editData.forEach((item, index) => {
-              //         if (ele.id === item.userId) {
-              //             ele.disabled = true;
-              //         }
-              //     })
-              // })
-              console.log(res.records);
-              this.userAll = res.records;
-            })
-            .catch((err) => {
-              if (err) this.$message.error("获取所有用户失败" + err.message);
-            });
+            // ReseauService.binQueryBin(query)
+            // .then((res) => {
+            //   this.loading = false;
+            //   // res.records.forEach((ele, idx) => {
+            //   //     this.editData.forEach((item, index) => {
+            //   //         if (ele.id === item.userId) {
+            //   //             ele.disabled = true;
+            //   //         }
+            //   //     })
+            //   // })
+            //   console.log(res.records);
+            //   this.userAll = res.records;
+            // })
+            // .catch((err) => {
+            //   if (err) this.$message.error("获取所有用户失败" + err.message);
+            // });
             // setTimeout(() => {
               
             //   this.options = this.list.filter(item => {
