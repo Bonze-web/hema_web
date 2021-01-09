@@ -67,8 +67,24 @@ export default {
     entruckBillDetils(id) {
         // 装车单查看详情
         return request.get('/wms/entruck-bill/getById?id=' + id)
-    }
+    },
      /**
      * 装车单结束
+     */
+
+    /**
+     * 拣货装箱单开始 ======
+     */
+
+    pickContainerBill(data) {
+        // 拣货装箱单查看列表
+        return request.get('/wms/pick-container-bill', {params: data})
+    },
+    pickContainerBillDetils(id) {
+        // 拣货装箱单查看详情
+        return request.get('/wms/pick-container-bill/getById?id=' + id)
+    }
+     /**
+     * 拣货装箱单结束
      */
 }

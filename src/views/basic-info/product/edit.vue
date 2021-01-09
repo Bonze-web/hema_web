@@ -1196,6 +1196,7 @@ export default {
       this.businessForm.splitPickAreaName = val.name ? val.name : "";
     },
     onCasePickBinSelected(val) {
+      console.log(val)
       this.businessForm.casePickBin = val.code ? val.code : "";
     },
     onSplitPickBinSelected(val) {

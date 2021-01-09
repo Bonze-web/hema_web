@@ -1191,7 +1191,7 @@ const outhousingAdm = {
     ]
     },
     {
-      path: "pickingProcess",
+      path: "pickingprocess",
       name: "PickingProcess",
       component: AModule,
       meta: {
@@ -1204,7 +1204,7 @@ const outhousingAdm = {
           path: "",
           name: "PickingProcessView",
           component: () =>
-            import('@/views/outhousing-adm/pickingProcess/index'),
+            import('@/views/outhousing-adm/picking-process/index'),
           hidden: true,
           meta: {
             title: '拣货单',
@@ -1216,7 +1216,7 @@ const outhousingAdm = {
           path: "edit",
           name: "PickingProcessEdit",
           component: () =>
-            import('@/views/outhousing-adm/pickingProcess/edit'),
+            import('@/views/outhousing-adm/picking-process/edit'),
           hidden: true,
           meta: {
             title: '拣货单详情',
@@ -1352,6 +1352,42 @@ const outhousingAdm = {
             title: '装车单详情',
             icon: 'table'
             // permission: PermIds.WMS_ENTRUCK_BILL_ITEM_VIEW
+          }
+        }
+      ]
+    },
+    {
+      path: "pickingandpacking",
+      name: "PickingAndPacking",
+      component: AModule,
+      meta: {
+        title: '拣货装箱单',
+        icon: 'table'
+        // permission: PermIds.WMS_ENTRUCK_BILL_ITEM====
+      },
+      children: [
+        {
+          path: "",
+          name: "PickingAndPackingView",
+          component: () =>
+            import('@/views/outhousing-adm/picking-and-packing/index'),
+          hidden: true,
+          meta: {
+            title: '拣货装箱单',
+            icon: 'table'
+            // permission: PermIds.WMS_ENTRUCK_BILL_ITEM_VIEW====
+          }
+        },
+        {
+          path: "edit",
+          name: "PickingAndPackingEdit",
+          component: () =>
+            import('@/views/outhousing-adm/picking-and-packing/edit'),
+          hidden: true,
+          meta: {
+            title: '拣货装箱单详情',
+            icon: 'table'
+            // permission: PermIds.WMS_ENTRUCK_BILL_ITEM_VIEW====
           }
         }
       ]

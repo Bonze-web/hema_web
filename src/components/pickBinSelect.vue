@@ -45,12 +45,11 @@ export default {
       this.hasQuery = true;
       StorageService.queryBin(this.page, 5, opts)
         .then(res => {
-          if (
-            res.records &&
-            res.records.length <= 5 &&
-            res.records.length > 0
-          ) {
+          this.resultList = [];
+          console.log(this.status)
+          if (res.records && res.records.length <= 5 && res.records.length > 0) {
             this.resultList = res.records;
+
             if (this.status === "prev") {
               if (this.page === 1) {
                 this.disabledPrev = true;

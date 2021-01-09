@@ -243,15 +243,19 @@ export default {
       this.packingReceiveBill()
     },
     filters: {
-      setStatus(status) {
-        // 状态。INITIAL:初始，RECEIVED:暂存，PUTAWAY:上架完成
-        switch (status) {
+      setStatus(type) {
+        // 状态。INITIAL:初始，RECEIVED:暂存，PUTAWAY:上架完成，SOWING 分播中，SOWED 分播完成
+        switch (type) {
           case 'INITIAL':
             return "初始"
           case 'RECEIVED':
             return "暂存"
           case 'PUTAWAY':
             return "上架完成"
+          case 'SOWING':
+            return "分播中"
+          case 'SOWED':
+            return "分播完成"
           default:
             return '未知';
         }
