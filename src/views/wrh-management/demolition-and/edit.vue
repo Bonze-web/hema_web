@@ -125,6 +125,16 @@
                                 <div>{{ dataList.toPalletContainer ? dataList.toPalletContainer : "&lt;空&gt;" }}</div>
                             </el-col>
 
+                            <!-- <el-col v-if="dataList.type==='PALLET'" :span="6" class="info-box">
+                                <div>来源容器码:</div>
+                                <div>{{ dataList.fromPalletNumber ? dataList.fromPalletNumber : "&lt;空&gt;" }}</div>
+                            </el-col>
+
+                            <el-col v-if="dataList.type==='PALLET'" :span="6" class="info-box">
+                                <div>目标容器码:</div>
+                                <div>{{ dataList.toPalletNumber ? dataList.toPalletNumber : "&lt;空&gt;" }}</div>
+                            </el-col> -->
+
                             <el-col :span="6" class="info-box">
                                 <div>收货方式:</div>
                                 <div>{{ dataList.method | setMethod }}</div>
@@ -149,17 +159,18 @@
 
                               <el-table-column prop="productCode" label="商品编码" style="height: 20px"></el-table-column>
 
-                              <!-- <el-table-column prop="createTime" label="创建时间" style="height: 20px"></el-table-column>
-                              <el-table-column prop="creatorName" label="创建人" style="height: 20px"></el-table-column> -->
+                              <el-table-column prop="fromContainerBarcode" label="来源容器条码" style="height: 20px"></el-table-column>
+                              <el-table-column prop="toContainerBarcode" label="目标容器条码" style="height: 20px"></el-table-column>
+
+
                               <el-table-column prop="productName" label="商品名称" style="height: 20px"></el-table-column>
-                              <el-table-column prop="productDate" label="商品生产日期" style="height: 20px"></el-table-column>
+                              <!-- <el-table-column prop="productDate" label="商品生产日期" style="height: 20px"></el-table-column> -->
                               <el-table-column prop="qpc" label="商品规格" style="height: 20px"></el-table-column>
                               <el-table-column prop="volume" label="体积" style="height: 20px"></el-table-column>
                               <el-table-column prop="weight" label="质量" style="height: 20px"></el-table-column>
                               <el-table-column prop="price" label="库存单价" style="height: 20px"></el-table-column>
                               <el-table-column prop="qtystr" label="拆并件数" style="height: 20px"></el-table-column>
                               <el-table-column prop="qty" label="拆并数量" style="height: 20px"></el-table-column>
-                              <el-table-column prop="updatorName" label="最后更新人" style="height: 20px"></el-table-column>
                               <el-table-column prop="vendorName" label="供应商" style="height: 20px"></el-table-column>
 
                             </el-table>
@@ -247,47 +258,6 @@ export default {
             return "初始"
           case 'FINISHED':
             return "已完成"
-          default:
-            return '未知';
-        }
-      },
-      setSonStatus(status) {
-      // 质检列表 PENDING_QUALITY_INSPECTION：待质检，QUALIFIED：合格，UNQUALIFIED：不合格
-        switch (status) {
-          case '质检单状态，PENDING_QUALITY_INSPECTION':
-            return "待质检"
-          case 'QUALIFIED':
-            return "合格"
-          case 'UNQUALIFIED':
-            return "不合格"
-          default:
-            return '未知';
-        }
-      },
-      setQualityInspectionType(type) {
-      // --质检项类型：1运输条件，2农残药残，3破坏检测，4外观检测，5食安检测
-        switch (type) {
-          case '1':
-            return "运输条件"
-          case '2':
-            return "农残药残"
-          case '3':
-            return "破坏检测"
-          case '4':
-            return "外观检测"
-          case '5':
-            return "食安检测"
-          default:
-            return '未知';
-        }
-      },
-      setOrderbillType(type) {
-      // 收货方式，NOTTRUST：清点收货；TRUST：信任收货
-        switch (type) {
-          case 'NOTTRUST':
-            return "清点收货"
-          case 'TRUST':
-            return "信任收货"
           default:
             return '未知';
         }

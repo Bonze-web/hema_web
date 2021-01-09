@@ -28,6 +28,15 @@
           <el-input type="text" placeholder="请输入容器代码" v-model="form.targetCodeLike" class="input-width" ></el-input>
         </el-form-item>
 
+        <el-form-item label="拆并类型：">
+          <el-select v-model="form.typeEquals" placeholder="请选择拆并类型" class="input-width" >
+            <!-- 拆并类型，CASE：整箱拆并，SPLIT：单品拆并，PALLET  拼笼 -->
+            <el-option value="CASE" label="整箱拆并"></el-option>
+            <el-option value="SPLIT" label="单品拆并"></el-option>
+            <el-option value="PALLET" label="拼笼"></el-option>
+          </el-select>
+        </el-form-item>
+
         <el-form-item>
           <el-button type="primary" size="mini" @click="onSubmit" >立即搜索</el-button>
           <el-button size="mini" @click="clearInput">重置</el-button>
@@ -77,17 +86,19 @@
           </template>
         </el-table-column>
 
-        <el-table-column v-if="type==='PALLET'" prop="scope" label="来源笼车">
-          <template slot-scope="scope">
+        <el-table-column prop="scope" label="来源笼车">
+          <template v-if="scope.type==='PALLET'"  slot-scope="scope">
             {{ scope.row.fromPalletContainer ? scope.row.fromPalletContainer : "&lt;空&gt;" }}
           </template>
         </el-table-column>
 
-        <el-table-column v-if="type==='PALLET'" prop="scope" label="目标笼车">
-          <template slot-scope="scope">
+        <el-table-column prop="scope" label="目标笼车">
+          <template v-if="scope.type==='PALLET'"  slot-scope="scope">
             {{ scope.row.toPalletContainer ? scope.row.toPalletContainer : "&lt;空&gt;" }}
           </template>
         </el-table-column>
+
+        <el-table-column prop="totalAmount" label="总金额"></el-table-column>
 
 
         <el-table-column prop="totalAmount" label="总金额"></el-table-column>
@@ -141,6 +152,7 @@ export default {
         productNameOrCodeLike: '', // 商品名称或代码
         sourceCodeLike: '', // 来源容器代码
         statusIn: '', // 状态在。。之内
+        typeEquals: '', // 拆并类型
         targetCodeLike: '' // 目标容器代码
       },
       page: 1,
@@ -166,6 +178,7 @@ export default {
         productNameOrCodeLike: '', // 商品名称或代码
         sourceCodeLike: '', // 来源容器代码
         statusIn: '', // 状态在。。之内
+        typeEquals: '', // 拆并类型
         targetCodeLike: '' // 目标容器代码
       };
     },
@@ -206,6 +219,7 @@ export default {
         productNameOrCodeLike: this.form.productNameOrCodeLike, // 商品名称或代码
         sourceCodeLike: this.form.sourceCodeLike, // 来源容器代码
         statusIn: this.form.statusIn ? this.form.statusIn : null, // 状态在。。之内
+        typeEquals: this.form.typeEquals ? this.form.typeEquals : null, // 拆并类型
         targetCodeLike: this.form.targetCodeLike, // 目标容器代码
         searchCount: true
       };
@@ -253,12 +267,14 @@ export default {
       }
     },
     setType(type) {
-      // 拆并类型，CASE：整箱拆并，SPLIT：单品拆并
+      // 拆并类型，CASE：整箱拆并，SPLIT：单品拆并，PALLET  拼笼
       switch (type) {
         case 'CASE':
           return "整箱拆并"
         case 'SPLIT':
           return "单品拆并"
+        case 'PALLET':
+          return "拼笼"
         default:
           return '未知';
       }
