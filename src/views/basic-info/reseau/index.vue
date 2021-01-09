@@ -75,7 +75,7 @@
 </template>
 
 <script>
-import ReseauService from "@/api/service/ReseauService"
+import ReseauService from "@/api/service/reseauService"
 import PermIds from "@/api/permissionIds";
 import { mapGetters } from "vuex";
 
