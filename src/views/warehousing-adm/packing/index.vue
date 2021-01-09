@@ -21,13 +21,15 @@
         <el-form-item label="操作人：">
           <el-input type="text" placeholder="请输入操作人" v-model="form.creatorNameOrCodeEquals" class="input-width" ></el-input>
         </el-form-item>
-        <!-- ==== -->
+        <!-- // 状态。INITIAL:初始，RECEIVED:暂存，PUTAWAY:上架完成，SOWING 分播中，SOWED 分播完成 -->
         <el-form-item label="状态：">
           <el-select v-model="form.status" placeholder="请选择状态" class="input-width" >
             <el-option value="" label="全部"></el-option>
             <el-option value="INITIAL" label="初始"></el-option>
             <el-option value="RECEIVED" label="暂存"></el-option>
             <el-option value="PUTAWAY" label="上架完成"></el-option>
+            <el-option value="SOWING" label="分播中"></el-option>
+            <el-option value="SOWED" label="分播完成"></el-option>
           </el-select>
         </el-form-item>
 
@@ -277,15 +279,19 @@ export default {
           return '未知';
       }
     },
-    setStatus(status) {
-      // 状态。INITIAL:初始，RECEIVED:暂存，PUTAWAY:上架完成
-      switch (status) {
+    setStatus(type) {
+      // 状态。INITIAL:初始，RECEIVED:暂存，PUTAWAY:上架完成，SOWING 分播中，SOWED 分播完成
+      switch (type) {
         case 'INITIAL':
           return "初始"
         case 'RECEIVED':
           return "暂存"
         case 'PUTAWAY':
           return "上架完成"
+        case 'SOWING':
+          return "分播中"
+        case 'SOWED':
+          return "分播完成"
         default:
           return '未知';
       }
