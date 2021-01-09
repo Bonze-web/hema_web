@@ -44,7 +44,7 @@
       </el-row> -->
 
 
-      <el-table :data="listData" @selection-change="handleSelectionChange"  style="width: 100%; text-align: center" :row-style="{ height: '16px', padding: '-4px' }" >
+      <el-table :data="listData" @sort-change="sortChange" @selection-change="handleSelectionChange"  style="width: 100%; text-align: center" :row-style="{ height: '16px', padding: '-4px' }" >
         <!-- <el-table-column prop="barcode" label="区块代码" style="height: 20px">
           <template slot-scope="scope">
             <router-link style="color: #409eff" :to="{ path: '/basicinfo/container/edit', query:{ id: scope.row.id} }" >
@@ -71,7 +71,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column prop="scope" label="所属网格仓">
+        <el-table-column sortable prop="scope" label="所属网格仓">
           <template slot-scope="scope">
             {{ scope.row.frontDcName !== ' ' ? scope.row.frontDcName : "&lt;空&gt;" }}
           </template>
@@ -143,6 +143,9 @@ export default {
           _this.quertOcntainer();
         }
       });
+    },
+    sortChange(val) {
+      console.log(val)
     },
     clearInput: function() {
       this.form = {
