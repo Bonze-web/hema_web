@@ -77,6 +77,34 @@
           </template>
         </el-table-column>
 
+        <el-table-column v-if="type==='PALLET'" prop="scope" label="来源笼车">
+          <template slot-scope="scope">
+            {{ scope.row.fromPalletContainer ? scope.row.fromPalletContainer : "&lt;空&gt;" }}
+          </template>
+        </el-table-column>
+
+        <el-table-column v-if="type==='PALLET'" prop="scope" label="目标笼车">
+          <template slot-scope="scope">
+            {{ scope.row.toPalletContainer ? scope.row.toPalletContainer : "&lt;空&gt;" }}
+          </template>
+        </el-table-column>
+
+
+        <el-table-column prop="totalAmount" label="总金额"></el-table-column>
+        <el-table-column prop="totalQtystr" label="总件数"></el-table-column>
+        <el-table-column prop="totalVolume" label="总体积"></el-table-column>
+        <el-table-column prop="totalWeight" label="总质量"></el-table-column>
+
+
+        <el-table-column prop="wrhName" label="仓库名"></el-table-column>
+        <el-table-column prop="totalAmount" label="总金额"></el-table-column>
+
+        <el-table-column prop="scope" label="拆并类型">
+          <template slot-scope="scope">
+            {{ scope.row.type | setType }}
+          </template>
+        </el-table-column>
+
         <el-table-column prop="scope" label="状态">
           <template slot-scope="scope">
             {{ scope.row.status | setStatus }}
@@ -220,6 +248,17 @@ export default {
           return "初始"
         case 'FINISHED':
           return "已完成"
+        default:
+          return '未知';
+      }
+    },
+    setType(type) {
+      // 拆并类型，CASE：整箱拆并，SPLIT：单品拆并
+      switch (type) {
+        case 'CASE':
+          return "整箱拆并"
+        case 'SPLIT':
+          return "单品拆并"
         default:
           return '未知';
       }

@@ -96,19 +96,38 @@
                             </el-col>
 
                             <el-col :span="6" class="info-box">
+                                <div>创建人:</div>
+                                <div>{{ dataList.creatorName ? dataList.creatorName : "&lt;空&gt;" }}</div>
+                            </el-col>
+
+                            <el-col :span="6" class="info-box">
                                 <div>创建日期:</div>
                                 <div>{{ dataList.createTime ? dataList.createTime : "&lt;空&gt;" }}</div>
                             </el-col>
 
                             <el-col :span="6" class="info-box">
-                                <div>创建人名称:</div>
-                                <div>{{ dataList.creatorName ? dataList.creatorName : "&lt;空&gt;" }}</div>
+                                <div>开始拆并时间:</div>
+                                <div>{{ dataList.beginReceiveTime ? dataList.beginReceiveTime : "&lt;空&gt;" }}</div>
                             </el-col>
 
-      
                             <el-col :span="6" class="info-box">
                                 <div>结束拆并时间:</div>
                                 <div>{{ dataList.endReceiveTime ? dataList.endReceiveTime : "&lt;空&gt;" }}</div>
+                            </el-col>
+
+                            <el-col v-if="dataList.type==='PALLET'" :span="6" class="info-box">
+                                <div>来源笼车:</div>
+                                <div>{{ dataList.fromPalletContainer ? dataList.fromPalletContainer : "&lt;空&gt;" }}</div>
+                            </el-col>
+
+                            <el-col v-if="dataList.type==='PALLET'" :span="6" class="info-box">
+                                <div>目标笼车:</div>
+                                <div>{{ dataList.toPalletContainer ? dataList.toPalletContainer : "&lt;空&gt;" }}</div>
+                            </el-col>
+
+                            <el-col :span="6" class="info-box">
+                                <div>收货方式:</div>
+                                <div>{{ dataList.method | setMethod }}</div>
                             </el-col>
 
                             <el-col :span="6" class="info-box">
@@ -131,16 +150,17 @@
                               <el-table-column prop="productCode" label="商品编码" style="height: 20px"></el-table-column>
 
                               <!-- <el-table-column prop="createTime" label="创建时间" style="height: 20px"></el-table-column>
-                              <el-table-column prop="creatorName" label="创建人名称" style="height: 20px"></el-table-column> -->
-
-                              <el-table-column prop="munit" label="计量单位" style="height: 20px"></el-table-column>
-                              <el-table-column prop="price" label="库存单价" style="height: 20px"></el-table-column>
+                              <el-table-column prop="creatorName" label="创建人" style="height: 20px"></el-table-column> -->
+                              <el-table-column prop="productName" label="商品名称" style="height: 20px"></el-table-column>
                               <el-table-column prop="productDate" label="商品生产日期" style="height: 20px"></el-table-column>
-                              <el-table-column prop="productName" label="商品名" style="height: 20px"></el-table-column>
-
-                              <el-table-column prop="qty" label="数量" style="height: 20px"></el-table-column>
+                              <el-table-column prop="qpc" label="商品规格" style="height: 20px"></el-table-column>
+                              <el-table-column prop="volume" label="体积" style="height: 20px"></el-table-column>
+                              <el-table-column prop="weight" label="质量" style="height: 20px"></el-table-column>
+                              <el-table-column prop="price" label="库存单价" style="height: 20px"></el-table-column>
                               <el-table-column prop="qtystr" label="拆并件数" style="height: 20px"></el-table-column>
-
+                              <el-table-column prop="qty" label="拆并数量" style="height: 20px"></el-table-column>
+                              <el-table-column prop="updatorName" label="最后更新人" style="height: 20px"></el-table-column>
+                              <el-table-column prop="vendorName" label="供应商" style="height: 20px"></el-table-column>
 
                             </el-table>
                         </el-tab-pane>
@@ -209,6 +229,17 @@ export default {
       this.getByIdContainerMergerBill()
     },
     filters: {
+      setMethod(type) {
+      // 收货方式，MANUAL：手工单据，RF：手持终端
+        switch (type) {
+          case 'MANUAL':
+            return "手工单据"
+          case 'RF':
+            return "手持终端"
+          default:
+            return '未知';
+        }
+      },
       setStatus(status) {
       // 状态。INITIAL：初始；FINISHED：已完成。
         switch (status) {
