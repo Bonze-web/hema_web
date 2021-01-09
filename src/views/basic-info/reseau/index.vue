@@ -3,7 +3,7 @@
         <div class="select-head">
             <el-form ref="form" style="display:flex" :model="form" label-width="80px" label-position="right">
                 <el-form-item label="网格仓">
-                    <el-input type='text' clearable placeholder="请输入网格仓代码/名称" v-model="form.nameOrCodeLike" class="input-width"></el-input>
+                    <el-input type='text' @change="onSubmit" clearable placeholder="请输入网格仓代码/名称" v-model="form.nameOrCodeLike" class="input-width"></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="onSubmit" size="mini">立即搜索</el-button>
@@ -27,9 +27,9 @@
                 </el-table-column>
                 <el-table-column prop="name" label="名称"></el-table-column>
                 <el-table-column prop="shortName" label="简称"></el-table-column>
-                <el-table-column prop="type" label="推荐集货位" >
+                <el-table-column prop="collectBinCode" label="推荐集货位" >
                   <template slot-scope="scope">
-                    {{ scope.row.type}}
+                    {{ scope.row.collectBinCode}}
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -75,7 +75,7 @@
 </template>
 
 <script>
-// import ReseauService from "@/api/service/ReseauService.js";
+import ReseauService from "@/api/service/ReseauService"
 import PermIds from "@/api/permissionIds";
 import { mapGetters } from "vuex";
 
@@ -124,15 +124,14 @@ export default {
         this.form.page = this.page;
         this.form.pageSize = this.pageSize;
         // 获取物流中心列表
-        // ReseauService.frontQuery(this.form)      
-        // .then((res) => {
-        //   this.reseauData = res.records;
-        //   this.totalCount = res.totalCount;
-        //   console.log(res);
-        // })
-        // .catch((err) => {
-        //   this.$message.error("获取网格仓列表失败" + err.message)
-        // })
+        ReseauService.frontQuery(this.form)      
+        .then((res) => {
+          this.reseauData = res.records;
+          this.totalCount = res.totalCount;
+        })
+        .catch((err) => {
+          this.$message.error("获取网格仓列表失败" + err.message)
+        })
       },
       handleCurrentChange: function(e) {
         this.page = Number(e)
@@ -146,59 +145,45 @@ export default {
       setCollectors(item) {
         this.editStore = true;
         this.idRecode = item;
+        this.collectBinId = item.collectBinId;
       },
       submitEditStoreChange() {
+        const filterEle = this.userAll.find((ele) => {
+          return ele.id === this.collectBinId
+        });
+        if (filterEle.id === this.idRecode.collectBinId) {
+          this.editStore = false;
+          return false;
+        }
+        const postData = {
+          collectBinCode: filterEle.code,
+          collectBinId: filterEle.id,
+          id: this.idRecode.id
+        }
+        ReseauService.setCollectBin(postData)      
+        .then((res) => {
+           this.getDcList();
+          this.$message.success("设置集货位成功")
+        })
+        .catch((err) => {
+          this.$message.error("设置集货位失败" + err.message)
+        })
         this.editStore = false;
-        // const filterEle = this.userAll.find((ele) => {
-        //   return ele.id === this.collectBinId
-        // });
-        // const postData = {
-        //   collectBinCode: filterEle.code,
-        //   collectBinId: filterEle.id,
-        //   id: this.idRecode.id
-        // }
-        // ReseauService.setCollectBin(postData)      
-        // .then((res) => {
-        //   console.log(res);
-        // })
-        // .catch((err) => {
-        //   this.$message.error("设置集货位失败" + err.message)
-        // })
-        // console.log(filterEle);
       },
       remoteMethod(query) {
-          console.log(query);
-          if (query !== '') {
-            this.loading = true;
-            // ReseauService.binQueryBin(query)
-            // .then((res) => {
-            //   this.loading = false;
-            //   // res.records.forEach((ele, idx) => {
-            //   //     this.editData.forEach((item, index) => {
-            //   //         if (ele.id === item.userId) {
-            //   //             ele.disabled = true;
-            //   //         }
-            //   //     })
-            //   // })
-            //   console.log(res.records);
-            //   this.userAll = res.records;
-            // })
-            // .catch((err) => {
-            //   if (err) this.$message.error("获取所有用户失败" + err.message);
-            // });
-            // setTimeout(() => {
-              
-            //   this.options = this.list.filter(item => {
-            //     return item.label.toLowerCase()
-            //       .indexOf(query.toLowerCase()) > -1;
-            //   });
-            // }, 200);
-          } else {
-            this.userAll = [];
-          }
+        this.loading = true;
+        ReseauService.binQueryBin(query)
+        .then((res) => {
+          this.loading = false;
+          this.userAll = res.records;
+        })
+        .catch((err) => {
+          if (err) this.$message.error("获取货位失败" + err.message);
+        });
       }
   },
   created() {
+    this.remoteMethod("");
     this.getDcList();
   },
   beforeRouteEnter(to, from, next) {

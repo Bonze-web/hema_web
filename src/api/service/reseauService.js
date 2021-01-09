@@ -7,10 +7,11 @@ export default {
   /**
   * @param {int} pageSize
   * @param {int} page
+  * @param {*} opts
   */
-    /**
-   * 取得当前登录用户
-   */
+  /**
+ * 取得当前登录用户
+ */
   getLoginUser() {
     return request.get('/sys/user/getLoginUser');
   },

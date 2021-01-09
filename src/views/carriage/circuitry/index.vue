@@ -11,7 +11,7 @@
               <el-collapse-item v-for="(ele, idx) in storeAllSchemeAll" :key="idx">
                 <template slot="title">
                     <div class="sequential-programme" style="font-size:14px;display:flex;justify-content: space-between;">
-                      <span class="el-icon-folder" :class="{colorStyle: colorChange&&idx === 0}" style="display:flex;align-items: center;max-width: 188px;overflow:hidden;color:#409EFF;cursor: pointer;"><span style="padding-left:10px;color:#409EFF !important;" @click.stop="schemeOrStore('scheme', ele.schemeList, ele)">{{'[' + ele.schemeList.code + ']' + ele.schemeList.name}}</span></span> 
+                      <span class="el-icon-folder" :class="{colorStyle: colorChange&&idx === 0}" style="display:flex;align-items: center;max-width: 188px;overflow:hidden;color:#409EFF;cursor: pointer;"><span style="padding-left:10px;color:#409EFF !important;" @click="schemeOrStore('scheme', ele.schemeList, ele)">{{'[' + ele.schemeList.code + ']' + ele.schemeList.name}}</span></span> 
                       <div class="operation-button">
                          <el-button
                             size="mini"

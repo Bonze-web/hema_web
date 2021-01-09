@@ -55,7 +55,7 @@
               </el-table-column>
               <el-table-column label="主要拣货任务类型">
                   <template slot-scope="scope">
-                      {{ scope.row.firstTaskType | stockTypeChange }}
+                      {{ scope.row.firstTaskTypeList | stockTypeChange }}
                   </template>
               </el-table-column>
               <el-table-column label="辅助拣货分区">
@@ -70,7 +70,7 @@
               </el-table-column>
               <el-table-column label="辅助拣货任务类型">
                   <template slot-scope="scope">
-                      {{ scope.row.secondTaskType | stockTypeChange }}
+                      {{ scope.row.secondTaskTypeList | stockTypeChange }}
                   </template>
               </el-table-column>
               <el-table-column
@@ -240,12 +240,27 @@ export default {
   },
   filters: {
     stockTypeChange(type) {
-      switch (type) {
-        case "CASE":
-          return "整箱"
-        case "SPLIT":
-          return "拆零"
+      console.log(type);
+      var str = '';
+      if (type.length > 0) {
+        type.forEach((ele, idx) => {
+          switch (ele) {
+            case "PALLET":
+              str += "整托"
+              break;
+            case "CASE":
+              str += "整箱"
+              break;
+            case "SPLIT":
+              str += "拆零"
+              break;
+          }
+          if (idx < type.length - 1) {
+            str += ','
+          }
+        })
       }
+      return str;
     },
     sourceType(type) {
       switch (type) {

@@ -27,7 +27,7 @@
             </div>
             <div>
                 <el-button @click="back">返回</el-button>
-                <el-button type="primary" @click="editDc">设置集货位</el-button>
+                <el-button type="primary" @click="editStore = true">设置集货位</el-button>
             </div>
         </div>
         <div style="height:20px" />
@@ -180,11 +180,15 @@
                             </el-col>
                             <el-col :span="6" class="info-box">
                                 <div>经度:</div>
-                                <div>{{ dcInfo.lng ? dcInfo.lng : "&lt;空&gt;"}}</div>
+                                <div>{{ dcInfo.lng }}</div>
                             </el-col>
                             <el-col :span="6" class="info-box">
                                 <div>纬度:</div>
-                                <div>{{ dcInfo.lat ? dcInfo.lat : "&lt;空&gt;" }}</div>
+                                <div>{{ dcInfo.lat }}</div>
+                            </el-col>
+                            <el-col :span="6" class="info-box">
+                                <div>推荐货位:</div>
+                                <div>{{ dcInfo.collectBinCode }}</div>
                             </el-col>
                             <el-col class="info-box">
                                 <div style="width:32px">备注:</div>
@@ -221,12 +225,15 @@
 <script>
 import PermIds from "@/api/permissionIds";
 import { mapGetters } from "vuex";
-// import ReseauService from "@/api/service/ReseauService.js";
+import ReseauService from "@/api/service/ReseauService.js";
 import systemLog from "@/components/systemLog.vue";
 
 export default {
   data() {
       return {
+        userAll: '',
+        loading: '',
+        formLabelWidth: '120px',
         collectBinId: '',
         editStore: false,
         editStoreObj: {},
@@ -289,21 +296,21 @@ export default {
     methods: {
       submitEditStoreChange() {
         this.editStore = false;
-        // const filterEle = this.userAll.find((ele) => {
-        //   return ele.id === this.collectBinId
-        // });
-        // const postData = {
-        //   collectBinCode: filterEle.code,
-        //   collectBinId: filterEle.id,
-        //   id: this.id
-        // }
-        // ReseauService.setCollectBin(postData)      
-        // .then((res) => {
-        //   console.log(res);
-        // })
-        // .catch((err) => {
-        //   this.$message.error("设置集货位失败" + err.message)
-        // })
+        const filterEle = this.userAll.find((ele) => {
+          return ele.id === this.collectBinId
+        });
+        const postData = {
+          collectBinCode: filterEle.code,
+          collectBinId: filterEle.id,
+          id: this.id
+        }
+        ReseauService.setCollectBin(postData)      
+        .then((res) => {
+          this.$message.success("设置集货位成功")
+        })
+        .catch((err) => {
+          this.$message.error("设置集货位失败" + err.message)
+        })
       },
       back: function() {
         this.$store.dispatch("tagsView/delView", this.$route);
@@ -324,13 +331,14 @@ export default {
       },
       getById: function(id) {
         // 获取配送中心详情
-        // ReseauService.getById(id)
-        // .then((res) => {
-        //   console.log(res);
-        // })
-        // .catch((err) => {
-        //   this.$message.error("获取详情失败" + err.message)
-        // })
+        ReseauService.getById(id)
+        .then((res) => {
+          this.dcInfo = res;
+          console.log(res);
+        })
+        .catch((err) => {
+          this.$message.error("获取详情失败" + err.message)
+        })
       },
       // getDcCenter: function() {
       //   // 获取所有中心仓
@@ -367,31 +375,19 @@ export default {
         // this.getDcCenter()
       },
       remoteMethod(query) {
-          console.log(query);
-          if (query !== '') {
-            this.loading = true;
-            // ReseauService.binQueryBin(query)
-            // .then((res) => {
-            //   this.loading = false;
-            //   // res.records.forEach((ele, idx) => {
-            //   //     this.editData.forEach((item, index) => {
-            //   //         if (ele.id === item.userId) {
-            //   //             ele.disabled = true;
-            //   //         }
-            //   //     })
-            //   // })
-            //   console.log(res.records);
-            //   this.userAll = res.records;
-            // })
-            // .catch((err) => {
-            //   if (err) this.$message.error("获取所有用户失败" + err.message);
-            // });
-          } else {
-            this.userAll = [];
-          }
+        this.loading = true;
+        ReseauService.binQueryBin(query)
+        .then((res) => {
+          this.loading = false;
+          this.userAll = res.records;
+        })
+        .catch((err) => {
+          if (err) this.$message.error("获取货位信息失败" + err.message);
+        });
       }
     },
     created() {
+      this.remoteMethod("");
       this.getQueryStatus()
     },
     // beforeRouteEnter(to, from, next) {
