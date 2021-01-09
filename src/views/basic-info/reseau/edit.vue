@@ -227,6 +227,7 @@ import systemLog from "@/components/systemLog.vue";
 export default {
   data() {
       return {
+        collectBinId: '',
         editStore: false,
         editStoreObj: {},
         PermIds: PermIds,
@@ -286,6 +287,24 @@ export default {
       ...mapGetters(["hasPermission"])
     },
     methods: {
+      submitEditStoreChange() {
+        this.editStore = false;
+        const filterEle = this.userAll.find((ele) => {
+          return ele.id === this.collectBinId
+        });
+        const postData = {
+          collectBinCode: filterEle.code,
+          collectBinId: filterEle.id,
+          id: this.id
+        }
+        ReseauService.setCollectBin(postData)      
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          this.$message.error("设置集货位失败" + err.message)
+        })
+      },
       back: function() {
         this.$store.dispatch("tagsView/delView", this.$route);
         this.$router.go(-1)
