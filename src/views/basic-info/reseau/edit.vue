@@ -41,7 +41,7 @@
                                 <el-row :gutter="20">
                                     <el-col :span="6" class="info-box">
                                         <el-form-item label="类型" prop="type">
-                                          <el-select v-model="form.type" placeholder="请选择类型" @change="getDcCenter">
+                                          <el-select v-model="form.type" placeholder="请选择类型">
                                             <el-option label="中心仓" value="CENTER"></el-option>
                                             <el-option label="网格仓" value="FRONT"></el-option>
                                           </el-select>
@@ -221,7 +221,7 @@
 <script>
 import PermIds from "@/api/permissionIds";
 import { mapGetters } from "vuex";
-import ReseauService from "@/api/service/ReseauService";
+import ReseauService from "@/api/service/ReseauService.js";
 import systemLog from "@/components/systemLog.vue";
 
 export default {
@@ -315,37 +315,6 @@ export default {
         }
         this.form.operatingArea = Number(this.form.operatingArea).toFixed(3)
       },
-      statusChange: function() {
-        // 修改仓区状态
-        const self = this
-        this.$confirm('此操作将改变物流中心状态, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          if (self.dcInfo.status) {
-          ReseauService.closeDc(self.id)
-          .then((res) => {
-            self.$message.success("禁用成功")
-            self.getDc(self.id)
-          })
-          .catch((err) => {
-            self.$message.error("禁用失败" + err.message)
-            self.getDc(self.id)
-          })
-        } else {
-          ReseauService.openDc(self.id)
-          .then((res) => {
-            self.$message.success("启用成功")
-            self.getDc(self.id)
-          })
-          .catch((err) => {
-            self.$message.error("启用失败" + err.message)
-            self.getDc(self.id)
-          })
-        }
-        })
-      },
       getQueryStatus: function() {
         this.status = this.$route.query.status
         if (this.status === 'read') {
@@ -363,58 +332,31 @@ export default {
           this.$message.error("获取详情失败" + err.message)
         })
       },
-      getDcCenter: function() {
-        // 获取所有中心仓
-        // const _this = this
-        const data = {
-          page: this.page,
-          pageSize: 0,
-          searchCount: true,
-          typeEquals: "CENTER"
-        }
-        ReseauService.getWrhQuery(data)
-        .then((res) => {
-          this.dcList = res.records
-        })
-      },
+      // getDcCenter: function() {
+      //   // 获取所有中心仓
+      //   // const _this = this
+      //   const data = {
+      //     page: this.page,
+      //     pageSize: 0,
+      //     searchCount: true,
+      //     typeEquals: "CENTER"
+      //   }
+      // },
       tabClick: function() {  
       },
       createDc: function() {
         // 创建新的供应商
         this.$refs.form.validate(valid => {
-          if (valid) {
-            // 判断创建和更新
-            if (this.status === 'create') {
-              ReseauService.creatDc(this.form)
-              .then(res => {
-                console.log(res)
-                this.$message.success("创建成功")
-                this.$store.dispatch("tagsView/delView", this.$route);
-                this.$router.go(-1)
-              })
-              .catch(err => {
-                this.$message.error("创建失败" + err.message)
-              })
-            } else {
-              if (this.form.status) {
-                this.form.status = "ON"
-              } else {
-                this.form.status = "OFF"
-              }
-              ReseauService.updateDc(this.form)
-              .then(res => {
-                console.log(res)
-                this.$message.success("更新成功")
-                this.$store.dispatch("tagsView/delView", this.$route);
-                this.$router.go(-1)
-              })
-              .catch(err => {
-                this.$message.error("更新失败" + err.message)
-              })
-            }
-          } else {
-            console.log(2)
-          }
+          // ReseauService.updateDc(this.form)
+          // .then(res => {
+          //   console.log(res)
+          //   this.$message.success("更新成功")
+          //   this.$store.dispatch("tagsView/delView", this.$route);
+          //   this.$router.go(-1)
+          // })
+          // .catch(err => {
+          //   this.$message.error("更新失败" + err.message)
+          // })
         })
       },
       editDc() {

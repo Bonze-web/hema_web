@@ -75,7 +75,7 @@
 </template>
 
 <script>
-import ReseauService from "@/api/service/ReseauService";
+import ReseauService from "@/api/service/ReseauService.js";
 import PermIds from "@/api/permissionIds";
 import { mapGetters } from "vuex";
 
@@ -200,22 +200,6 @@ export default {
   },
   created() {
     this.getDcList();
-    // this.reseauData = [
-    //   {
-    //     code: 1,
-    //     name: 'zouzou',
-    //     shortName: 'lili',
-    //     type: 'c位'
-    //   }
-    // ]
-    // ReseauService.getLoginUser()      
-    // .then((res) => {
-    //   this.getLoginUserMessage = res.workingOrg.dcType;
-    // })
-    // .catch((err) => {
-    //   this.$message.error("获取用户信息失败" + err.message)
-    // })
-    // this.getDcList()
   },
   beforeRouteEnter(to, from, next) {
       next(vm => {
