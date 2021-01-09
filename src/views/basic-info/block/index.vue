@@ -59,7 +59,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column prop="scope" label="中心仓代码">
+        <el-table-column sortable prop="scope" label="中心仓代码">
           <template slot-scope="scope">
             {{ scope.row.centerDcCode !== ' ' ? scope.row.centerDcCode : "&lt;空&gt;" }}
           </template>
