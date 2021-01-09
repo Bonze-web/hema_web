@@ -1263,7 +1263,7 @@ const outhousingAdm = {
       ]
     },
     {
-      path: "toPicked",
+      path: "topicked",
       name: "ToPicked",
       component: AModule,
       meta: {

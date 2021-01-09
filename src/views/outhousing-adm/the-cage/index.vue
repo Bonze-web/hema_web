@@ -157,8 +157,6 @@ export default {
       // 获取容器列表
       this.suppliersData = []
 
-      // const _this = this;
-
       const data = {
         page: this.page,
         pageSize: this.pageSize,
@@ -172,11 +170,11 @@ export default {
 
       DeliveryService.loadPalletList(data).then((res) => {
         console.log(res)
+        console.log('======')
         // const records = res.records;
-
         // this.totalCount = res.totalCount;
 
-        // _this.listData = records;
+        // this.listData = records;
       }).catch(err => {
         this.$message.error("数据请求失败" + err.message)
       });

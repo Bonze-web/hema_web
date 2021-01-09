@@ -56,7 +56,7 @@
 
         <el-table-column prop="scope" label="单号">
           <template slot-scope="scope">
-            <router-link style="color: #409eff" :to="{ path: '/outhousing-adm/picking-and-packing/edit', query:{ id: scope.row.id} }" >
+            <router-link style="color: #409eff" :to="{ path: '/outhousing-adm/pickingandpacking/edit', query:{ id: scope.row.id} }" >
               <span>{{ scope.row.billNumber }}</span>
             </router-link>
           </template>
@@ -68,32 +68,6 @@
 
         <el-table-column prop="waveBillNumber" label="波次单号" style="height: 20px"></el-table-column>
         <el-table-column prop="wrhName" label="仓区" style="height: 20px"></el-table-column>
-
-
-        
-
-        <el-table-column prop="scope" label="业务类型" style="height: 20px">
-         <template slot-scope="scope">
-           {{ scope.row.bizType | setBizType }}
-          </template>
-        </el-table-column>
-
-        <el-table-column prop="scope" label="拣货类型" style="height: 20px">
-         <template slot-scope="scope">
-           {{ scope.row.type | setType }}
-          </template>
-        </el-table-column>
-
-        <el-table-column prop="scope" label="是否整托" style="height: 20px">
-         <template slot-scope="scope">
-           <span>{{scope.row.type==='CASE' ? '是' : '否'}}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column prop="frontDcName" label="网络仓" style="height: 20px"></el-table-column>
-        <el-table-column prop="pickUserName" label="拣货员" style="height: 20px"></el-table-column>
-        <el-table-column prop="startPickTime" label="开始拣货时间" style="height: 20px"></el-table-column>
-        <el-table-column prop="finishTime" label="完成拣货时间" style="height: 20px"></el-table-column>
 
         <el-table-column prop="scope" label="状态">
           <template slot-scope="scope">
@@ -217,49 +191,10 @@ export default {
     })
   },
   filters: {
-    setBizType(type) {
-      // 业务类型。取值：DIST：配货；RETURN：退供应商
-      switch (type) {
-        case 'DIST':
-          return "配货"
-        case 'RETURN':
-          return "退供应商"
-        default:
-          return '未知';
-      }
-    },
-    setType(type) {
-      // 拣货类型，PALLET：整托 ，CASE：整件 ，SPLIT：拆零
-      switch (type) {
-        case 'PALLET':
-          return "整托"
-        case 'CASE':
-          return "整件"
-        case 'SPLIT':
-          return "拆零"
-        default:
-          return '未知';
-      }
-    },
-    setPickMode(type) {
-      // 拣货方法，RF：RF拣货 ，BILL：单据拣货，DPS：电子标签拣货，LABEL：标签拣货
-      switch (type) {
-        case 'RF':
-          return "RF拣货"
-        case 'BILL':
-          return "单据拣货"
-        case 'DPS':
-          return "电子标签拣货"
-        case 'LABEL':
-          return "标签拣货"
-        default:
-          return '未知';
-      }
-    },
     setStatus(type) {
-      // 状态 INITIAL: 初始，FINISHED: 已完成
+      // 初始 INITIAL 已完成 FINISHED;
       switch (type) {
-        case 'INITIAL':
+        case 'INITIAL ':
           return "初始"
         case 'FINISHED':
           return "已完成"

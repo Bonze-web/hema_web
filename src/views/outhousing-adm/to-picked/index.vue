@@ -37,13 +37,13 @@
 
         <el-table-column label="序号" type="index" width="50"> </el-table-column>
         
-        <el-table-column prop="scope" label="分播单">
+        <!-- <el-table-column prop="scope" label="">
           <template slot-scope="scope">
-            <router-link style="color: #409eff" :to="{ path: '/outhousing-adm/distribution/edit', query:{ id: scope.row.id} }" >
+            <router-link style="color: #409eff" :to="{ path: '/outhousing-adm/to-picked/edit', query:{ id: scope.row.id} }" >
               <span>{{ scope.row.billNumber }}</span>
             </router-link>
           </template>
-        </el-table-column>
+        </el-table-column> -->
 
         <el-table-column prop="scope" label="创建人">
           <template slot-scope="scope">
@@ -186,13 +186,13 @@ export default {
     }
   },
   created() {
-    this.sowingPickBillQuery();
+    // this.sowingPickBillQuery();
     // this.pickareaQuery() // 获取拣货分区列表
   },
   beforeRouteEnter(to, from, next) {
     next(vm => {
       // 通过 `vm` 访问组件实例
-      vm.sowingPickBillQuery();
+      // vm.sowingPickBillQuery();
     })
   },
   filters: {
