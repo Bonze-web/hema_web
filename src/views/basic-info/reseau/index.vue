@@ -3,7 +3,7 @@
         <div class="select-head">
             <el-form ref="form" style="display:flex" :model="form" label-width="80px" label-position="right">
                 <el-form-item label="网格仓">
-                    <el-input type='text' clearable placeholder="请输入网格仓代码/名称" v-model="form.nameOrCode" class="input-width"></el-input>
+                    <el-input type='text' clearable placeholder="请输入网格仓代码/名称" v-model="form.nameOrCodeLike" class="input-width"></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="onSubmit" size="mini">立即搜索</el-button>
@@ -52,14 +52,14 @@
           <el-form :model="editStoreObj" >
             <el-form-item label="推荐集货位" :label-width="formLabelWidth">
                 <el-select
-                    v-model="xxx"
+                    v-model="collectBin"
                     filterable
                     remote
                     reserve-keyword
                     placeholder="请输入关键词"
                     :remote-method="remoteMethod"
                     :loading="loading">
-                     <!-- <el-option v-for="(ele, idx) in userAll" :key="idx" v-show="ele.disabled !== true" :label="ele.username" :value="ele.id"></el-option> -->
+                     <el-option v-for="(ele, idx) in userAll" :key="idx" v-show="ele.disabled !== true" :label="ele.username" :value="ele.id"></el-option>
                     </el-select>
             </el-form-item>
           </el-form>
@@ -79,12 +79,13 @@ import { mapGetters } from "vuex";
 export default {
   data() {
       return {
+        collectBin: '',
         suppliersId: '',
         page: 1,
         pageSize: 10,
         totalCount: 0,
         form: {
-          nameOrCode: ''
+          nameOrCodeLike: ''
         },
         PermIds: PermIds,
         reseauData: [],
@@ -115,16 +116,18 @@ export default {
         this.getDcList()
       },
       getDcList: function(reset) {
+        this.form.page = this.page;
+        this.form.pageSize = this.pageSize;
         // 获取物流中心列表
-        // const _this = this
-        // const data = {
-        //   page: this.page,
-        //   pageSize: this.pageSize,
-        //   searchCount: true,
-        //   nameOrCodeLike: this.form.nameOrCode,
-        //   statusEquals: this.form.status,
-        //   typeEquals: this.form.type
-        // }
+        ReseauService.frontQuery(this.form)      
+        .then((res) => {
+          this.reseauData = res.records;
+          this.totalCount = res.totalCount;
+          console.log(res);
+        })
+        .catch((err) => {
+          this.$message.error("获取网格仓列表失败" + err.message)
+        })
       },
       handleCurrentChange: function(e) {
         this.page = Number(e)
@@ -173,21 +176,22 @@ export default {
       }
   },
   created() {
-    this.reseauData = [
-      {
-        code: 1,
-        name: 'zouzou',
-        shortName: 'lili',
-        type: 'c位'
-      }
-    ]
-    ReseauService.getLoginUser()      
-    .then((res) => {
-      this.getLoginUserMessage = res.workingOrg.dcType;
-    })
-    .catch((err) => {
-      this.$message.error("获取用户信息失败" + err.message)
-    })
+    this.getDcList();
+    // this.reseauData = [
+    //   {
+    //     code: 1,
+    //     name: 'zouzou',
+    //     shortName: 'lili',
+    //     type: 'c位'
+    //   }
+    // ]
+    // ReseauService.getLoginUser()      
+    // .then((res) => {
+    //   this.getLoginUserMessage = res.workingOrg.dcType;
+    // })
+    // .catch((err) => {
+    //   this.$message.error("获取用户信息失败" + err.message)
+    // })
     // this.getDcList()
   },
   beforeRouteEnter(to, from, next) {

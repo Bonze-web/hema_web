@@ -13,7 +13,9 @@ export default {
    */
   getLoginUser() {
     return request.get('/sys/user/getLoginUser');
+  },
+  frontQuery(postData) {
+    return request.get('/sys/front/query', {params: postData});
   }
-
 }
 

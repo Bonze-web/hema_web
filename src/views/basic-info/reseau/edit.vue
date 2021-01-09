@@ -163,7 +163,7 @@
                                 <div>{{ dcInfo.address }}</div>
                             </el-col>
                             <el-col :span="6" class="info-box">
-                                <div>经营面积:</div>
+                                <div>经营面:</div>
                                 <div>{{ dcInfo.operatingArea ? dcInfo.operatingArea : "&lt;空&gt;" }}</div>
                             </el-col>
                             <el-col :span="6" class="info-box">
@@ -171,8 +171,20 @@
                                 <div>{{ dcInfo.zipCode ? dcInfo.zipCode : "&lt;空&gt;" }}</div>
                             </el-col>
                             <el-col :span="6" class="info-box">
+                                <div>来源:</div>
+                                <div>{{ dcInfo.sourceWay | sourceWayType}}</div>
+                            </el-col>
+                            <el-col :span="6" class="info-box">
                                 <div>主体码:</div>
                                 <div>{{ dcInfo.subjectCode ? dcInfo.subjectCode : "&lt;空&gt;" }}</div>
+                            </el-col>
+                            <el-col :span="6" class="info-box">
+                                <div>经度:</div>
+                                <div>{{ dcInfo.lng ? dcInfo.lng : "&lt;空&gt;"}}</div>
+                            </el-col>
+                            <el-col :span="6" class="info-box">
+                                <div>纬度:</div>
+                                <div>{{ dcInfo.lat ? dcInfo.lat : "&lt;空&gt;" }}</div>
                             </el-col>
                             <el-col class="info-box">
                                 <div style="width:32px">备注:</div>
@@ -394,8 +406,17 @@ export default {
             return "中心仓"
           case 'FRONT':
             return "网格仓"
-          default:
-            return "未知"
+        }
+      },
+      sourceWayType(type) {
+        switch (type) {
+          // :手工新建manual、接口导入api、文件导入excel
+          case 'MANUAL':
+            return "手工新建"
+          case 'API':
+            return "接口导入"
+          case 'EXCEL':
+            return "文件导入"
         }
       }
     }

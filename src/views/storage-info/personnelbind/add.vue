@@ -11,39 +11,64 @@
         <div style="height:20px" />
         <div class="info-content">
               <el-form label-width="135px" :model="form" ref="formName" :rules="createRules">
-                <el-form-item label="用户" prop="userId">
-                    <el-select
-                      v-model="form.userId"
-                      filterable
-                      remote
-                      reserve-keyword
-                      placeholder="请输入关键词"
-                      :remote-method="remoteMethod"
-                      :loading="loading">
-                     <el-option v-for="(ele, idx) in userAll" :key="idx" v-show="ele.disabled !== true" :label="ele.username" :value="ele.id"></el-option>
-                    </el-select>
-                </el-form-item>
+                 <el-row>
+                    <el-col :span="6">
+                        <el-form-item label="用户" prop="userId">
+                          <el-select
+                            v-model="form.userId"
+                            filterable
+                            remote
+                            reserve-keyword
+                            placeholder="请输入关键词"
+                            :remote-method="remoteMethod"
+                            :loading="loading">
+                          <el-option v-for="(ele, idx) in userAll" :key="idx" v-show="ele.disabled !== true" :label="ele.username" :value="ele.id"></el-option>
+                          </el-select>
+                        </el-form-item>
+                    </el-col>
+                 </el-row>
                 <!-- <el-form-item label="用户" prop="userId">
                   <el-select v-model="form.userId" placeholder="请选择用户">
                     <el-option v-for="(ele, idx) in userAll" :key="idx" :disabled="ele.disabled" :label="ele.username" :value="ele.id"></el-option>
                   </el-select>
                 </el-form-item> -->
-                <el-form-item label="主要拣货分区" prop="firstPickareaId">
-                    <el-select v-model="form.firstPickareaId" placeholder="请选择主要拣货分区">
-                      <el-option v-for="(ele, idx) in firstPickareaIdArr" :key="idx" :label="'['+ ele.code + ']' + ele.name" :value="ele.id"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="辅助拣货分区" prop="secondPickareaId">
-                  <el-select v-model="form.secondPickareaId" placeholder="请选择主要拣货分区">
-                    <el-option v-for="(ele, idx) in secondPickareaIdArr" :key="idx" :label="'['+ ele.code + ']' + ele.name" :value="ele.id"></el-option>
-                  </el-select>
-                </el-form-item>
-                <el-form-item label="首先拣货任务类型" prop="firstTaskType">
-                  <el-select v-model="form.firstTaskType" placeholder="请选择首先拣货任务类型">
-                    <el-option label="整箱" value="CASE"></el-option>
-                    <el-option label="拆零" value="SPLIT"></el-option>
-                  </el-select>
-                </el-form-item>
+                
+                <el-row>
+                  <el-col :span="6">
+                    <el-form-item label="主要拣货分区" prop="firstPickareaId">
+                      <el-select v-model="form.firstPickareaId" placeholder="请选择主要拣货分区">
+                        <el-option v-for="(ele, idx) in firstPickareaIdArr" :key="idx" :label="'['+ ele.code + ']' + ele.name" :value="ele.id"></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="10">
+                    <el-form-item label="主要任务类型" prop="firstTaskTypeList">
+                        <el-checkbox-group v-model="form.firstTaskTypeList">
+                          <el-checkbox label="整托" value="PALLET"></el-checkbox>
+                          <el-checkbox label="整箱" value="CASE"></el-checkbox>
+                          <el-checkbox label="拆零" value="SPLIT"></el-checkbox>
+                        </el-checkbox-group>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span="6">
+                    <el-form-item label="辅助拣货分区" prop="secondPickareaId">
+                      <el-select v-model="form.secondPickareaId" placeholder="请选择主要拣货分区">
+                        <el-option v-for="(ele, idx) in secondPickareaIdArr" :key="idx" :label="'['+ ele.code + ']' + ele.name" :value="ele.id"></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="10">
+                    <el-form-item label="辅助任务类型" prop="secondTaskTypeList">
+                        <el-checkbox-group v-model="form.secondTaskTypeList">
+                          <el-checkbox label="整托" value="PALLET"></el-checkbox>
+                          <el-checkbox label="整箱" value="CASE"></el-checkbox>
+                          <el-checkbox label="拆零" value="SPLIT"></el-checkbox>
+                        </el-checkbox-group>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
               </el-form>
         </div>
     </div>
@@ -68,8 +93,8 @@ export default {
           firstPickareaId: "",
           secondPickareaId: "",
           userId: '',
-          firstTaskType: "",
-          secondTaskType: ""
+          firstTaskTypeList: [],
+          secondTaskTypeList: []
         },
         editData: [],
         createRules: {
@@ -84,6 +109,12 @@ export default {
           ],
           firstTaskType: [
             { required: true, message: '请选择首要任务类型', trigger: 'blur' }
+          ],
+          firstTaskTypeList: [
+            { required: true, message: '请选择首要任务类型', trigger: 'blur' }
+          ],
+          secondTaskTypeList: [
+            { required: true, message: '请选择辅助任务类型', trigger: 'blur' }
           ]
         }
       }
@@ -95,10 +126,9 @@ export default {
       createSuppliers() {
         this.$refs['formName'].validate((valid) => {
           if (valid) {
-              if (this.form.firstTaskType === 'CASE') {
-                this.form.secondTaskType = 'SPLIT';
-              } else if (this.form.firstTaskType === 'SPLIT') {
-                this.form.secondTaskType = 'CASE'
+              if (this.form.firstPickareaId === this.form.secondPickareaId) {
+                this.$message.error("助拣货分区 不能等于 主拣货分区");
+                return false;
               }
               PersonnelbindService.createSuppliers(this.form)
               .then((res) => {

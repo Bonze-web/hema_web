@@ -11,7 +11,7 @@
               <el-collapse-item v-for="(ele, idx) in storeAllSchemeAll" :key="idx">
                 <template slot="title">
                     <div class="sequential-programme" style="font-size:14px;display:flex;justify-content: space-between;">
-                      <span class="el-icon-folder" style="display:flex;align-items: center;max-width: 188px;overflow:hidden;color:#409EFF;cursor: pointer;"><span style="padding-left:10px;" @click.stop="schemeOrStore('scheme', ele.schemeList, ele)">{{'[' + ele.schemeList.code + ']' + ele.schemeList.name}}</span></span> 
+                      <span class="el-icon-folder" :class="{colorStyle: colorChange&&idx === 0}" style="display:flex;align-items: center;max-width: 188px;overflow:hidden;color:#409EFF;cursor: pointer;"><span style="padding-left:10px;color:#409EFF !important;" @click="schemeOrStore('scheme', ele.schemeList, ele)">{{'[' + ele.schemeList.code + ']' + ele.schemeList.name}}</span></span> 
                       <div class="operation-button">
                          <el-button
                             size="mini"
@@ -32,7 +32,7 @@
                 </template>
                 <div>
                   <div class="content-operation" v-for="(item, index) in ele.store" :key="index">
-                      <span class="el-icon-sort" style="display:flex;align-items: center;max-width: 170px;overflow:hidden;color:#409EFF;cursor: pointer;"><span style="padding-left:10px;" @click.stop="schemeOrStore('store', item, ele)">{{'[' + item.code + ']' + item.name}}</span></span> 
+                      <span class="el-icon-sort" style="display:flex;align-items: center;max-width: 170px;overflow:hidden;color:#409EFF;cursor: pointer;"><span style="padding-left:10px;" @click="schemeOrStore('store', item, ele)">{{'[' + item.code + ']' + item.name}}</span></span> 
                       <div class="operation-button">
                          <el-button
                             size="mini"
@@ -377,6 +377,7 @@ import systemLog from "@/components/systemLog.vue"
 export default {
   data() {
       return {
+        colorChange: false,
         adjustOrderFlag: {},
         afterNum: 1,
         editProjectsObj: {
@@ -525,9 +526,6 @@ export default {
      CargosequenceService.getAllPickOrder(postData)
       .then((res) => {
         // 排序
-        res.sort(function(a, b) {
-          return a.updateTime < b.updateTime ? 1 : -1
-        });
         this.getAllGrpByPickId(res);
       }).catch((err) => {
         this.$message.error("请求失败" + err.message)
@@ -544,7 +542,7 @@ export default {
           this.storeAllSchemeAll = [];
           CargosequenceService.getAllGrpByPickId(ele.id)
           .then((res) => {
-            // 根据grpOrder顺序进行排序
+            // 根据code顺序进行排序
             res.sort(function(a, b) {
               return a.grpOrder > b.grpOrder ? 1 : -1
             });
@@ -555,8 +553,17 @@ export default {
             }
             if (idx === schemeArr.length - 1) {
                 this.storeAllSchemeAll.sort(function(a, b) {
-                  return a.schemeList.updateTime < b.schemeList.updateTime ? 1 : -1
+                  return a.schemeList.code > b.schemeList.code ? 1 : -1
                 });
+                this.storeAllSchemeAll = this.storeAllSchemeAll.reduce((prev, cur) => {
+                  if (cur.schemeList.def === true) {
+                    prev.unshift(cur);
+                    this.colorChange = true;
+                  } else {
+                    prev.push(cur)
+                  }
+                  return prev
+                }, [])
             }
           }).catch((err) => {
             this.$message.error("请求所有的方案失败" + err.message)
@@ -763,6 +770,9 @@ export default {
     this.adjustOrderFlag.adjustOrder = this.storeMesAll.adjustOrder;
     CargosequenceService.adjustOrder(this.adjustOrderFlag)
     .then((res) => {
+      if (this.storeMesAll.adjustOrder === this.storeMesAll.storeOrder) {
+          return false;
+      }
      this.schemeOrStore(this.changeActive, this.storeArmy, this.editProjectsInfo)
       this.$message.success("调序成功");
     }).catch((err) => {
@@ -943,6 +953,9 @@ export default {
   // /deep/ .el-collapse-item__header {
   //   padding-left: 30px;
   // }
+  /deep/ .colorStyle {
+    color: red !important;
+  }
   /deep/ .el-collapse-item__header:hover {
     color: #409EFF;
     background-color: #ecf5ff !important;

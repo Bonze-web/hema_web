@@ -53,6 +53,11 @@
                       {{ scope.row.firstBinscope }}
                   </template>
               </el-table-column>
+              <el-table-column label="主要拣货任务类型">
+                  <template slot-scope="scope">
+                      {{ scope.row.firstTaskType | stockTypeChange }}
+                  </template>
+              </el-table-column>
               <el-table-column label="辅助拣货分区">
                   <template slot-scope="scope">
                       {{ '[' + scope.row.secondPickareaCode + ']' + scope.row.secondPickareaName }}
@@ -63,9 +68,9 @@
                       {{ scope.row.secondBinscope }}
                   </template>
               </el-table-column>
-              <el-table-column label="首选拣货任务类型">
+              <el-table-column label="辅助拣货任务类型">
                   <template slot-scope="scope">
-                      {{ scope.row.firstTaskType | stockTypeChange }}
+                      {{ scope.row.secondTaskType | stockTypeChange }}
                   </template>
               </el-table-column>
               <el-table-column
