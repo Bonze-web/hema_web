@@ -392,7 +392,7 @@ export default {
         .then((result) => {
           
         }).catch((err) => {
-          
+         
         });
         this.allProducet.forEach(item => {
           if (item.id === e) {
