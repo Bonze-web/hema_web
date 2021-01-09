@@ -120,7 +120,7 @@
                         </el-tab-pane>
                         <!-- <el-tab-pane label="配送中心范围" name="range">配置管理</el-tab-pane> -->
                         <el-tab-pane label="操作日志" name="log">
-                          <system-log modular="DECINVBILL" :id="id"></system-log>
+                          <system-log modular="INCINVBILL" :id="id"></system-log>
                         </el-tab-pane>
                     </el-tabs>
                 </template>
@@ -176,14 +176,14 @@
                                                 :value="item.username">
                                               </el-option>
                                             </el-select>
-                                            <el-autocomplete
+                                            <!-- <el-autocomplete
                                                 class="inline-input"
                                                 v-model="form.incerName"
                                                 :fetch-suggestions="querySearch"
                                                 placeholder="请输入报溢员"
                                                 :trigger-on-focus="false"
                                                 @select="handleSelect"
-                                            ></el-autocomplete>
+                                            ></el-autocomplete> -->
                                         </el-form-item>
                                     </el-col>
                                 </el-row>
@@ -200,7 +200,7 @@
                                     <div class="list-count">
                                         <div>总数:{{ form.totalQtystr ? form.totalQtystr : 0 }},</div>
                                         <div>总品相数:{{ form.totalProductCount ? form.totalProductCount : 0 }},</div>
-                                        <div>总金额:{{ form.totalAmount ? form.totalAmount : 0 }}</div>
+                                        <div>总金额:{{ form.realTotalAmount ? form.realTotalAmount : 0 }}</div>
                                     </div>
                                 </div>
                                     <el-table
@@ -551,13 +551,12 @@ export default {
         });
       },
       calcProductEdit: function(productList) {
-        this.form.totalAmount = ''
+        this.form.realTotalAmount = ''
         this.form.totalQtystr = ''
         let consumeQtystr = ''
         let consumeQty = ''
         this.productList.forEach(item => {
           item.lineNum = this.productList.indexOf(item) + 1
-          item.consumeAmount = ((Number(item.consumeQtystr) * item.price * Number(item.qpc) ? Number(item.consumeQtystr) * item.price * Number(item.qpc) : 0) + (Number(item.consumeQty) * item.price ? Number(item.consumeQty) * item.price : 0)).toFixed(2) 
           // this.form.realTotalAmount += item.consumeAmount
           consumeQtystr = Number(consumeQtystr) + (Number(item.consumeQtystr) ? Number(item.consumeQtystr) : 0)
           consumeQty = Number(consumeQty) + (Number(item.consumeQty) ? Number(item.consumeQty) : 0)
@@ -574,9 +573,10 @@ export default {
             // item.consumeQtystr = 0
             // item.consumeQty = 0
           }
-          console.log(consumeQty)
+          item.consumeAmount = ((Number(item.consumeQtystr) * item.price * Number(item.qpc) ? Number(item.consumeQtystr) * item.price * Number(item.qpc) : 0) + (Number(item.consumeQty) * item.price ? Number(item.consumeQty) * item.price : 0)).toFixed(2) 
+          console.log(item.consumeAmount)
           this.form.totalQtystr = consumeQtystr * item.qpc + consumeQty
-          this.form.totalAmount = (Number(this.form.totalAmount) + Number(item.consumeAmount)).toFixed(2)
+          this.form.realTotalAmount = (Number(this.form.realTotalAmount) + Number(item.consumeAmount)).toFixed(2)
           console.log(item)
         });
       },
@@ -603,7 +603,7 @@ export default {
             this.productList[item].realQtystr = this.productList[item].realQtystr ? this.productList[item].realQtystr : this.productList[item].consumeQtystr
             this.productList[item].stockId = this.productList[item].stockId ? this.productList[item].stockId : this.productList[item].id
           }
-          this.form.totalAmount = result.totalAmount
+          this.form.realTotalAmount = result.realTotalAmount
           this.form.realtotalQtystr = result.realTotalQtystr
           // const arr = Array.from(new Set(this.productList))
           // this.form.realtotalProductCount = arr.length

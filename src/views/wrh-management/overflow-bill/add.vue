@@ -344,6 +344,7 @@ export default {
             { required: true, message: '请选择报告人', trigger: 'blur'}
           ]
         },
+        orgId: '',
         productList: [], // 报告商品列表
         billTypeList: [] // 溢余类型
       }
@@ -387,19 +388,26 @@ export default {
       },
       handleSelect1: function(e) {
         let obj = {}
+        ProductService.queryDcProductQpc(1, 10, {dcIdEquals: this.orgId, productIdEquals: e})
+        .then((result) => {
+          
+        }).catch((err) => {
+          
+        });
         this.allProducet.forEach(item => {
-          if (item.id === e.id) {
+          if (item.id === e) {
             obj = item
           }
         })
         this.product = Object.assign(this.product, obj)
+        this.product.productName = this.product.name
         console.log(this.product)
       },
       subAdd: function() {
         this.$refs.product.validate(value => {
           if (value) {
             this.productList.push(this.product)
-            this.addSelection(this.product)
+            this.addSelection(this.productList)
             // const arr = Array.from(new Set(this.productList))
             // this.productList = arr
             // this.form.totalProductCount = arr.length
@@ -555,10 +563,7 @@ export default {
         }
         _this.$refs.form.validate(valid => {
           if (valid) {
-            if (reset) {
-              _this.form.realTotalAmount = _this.form.totalAmount
-              _this.form.realTotalProductCount = _this.form.totalProductCount
-            }
+            _this.form.realTotalAmount = _this.form.totalAmount
             BillService.createOverflowBill(this.form)
             .then((res) => {
               _this.$message.success('创建成功')
@@ -645,7 +650,7 @@ export default {
           }
           console.log(consumeQty)
           item.consumeAmount = ((Number(item.consumeQtystr) * (item.price) * item.qpc ? Number(item.consumeQtystr) * (item.price) * item.qpc : 0) + (Number(item.consumeQty) * item.price ? Number(item.consumeQty) * item.price : 0)).toFixed(2) 
-          this.form.totalQtystr = consumeQtystr * item.qpc + consumeQty
+          this.form.totalQtystr = consumeQtystr + consumeQty
           this.form.totalAmount = (Number(this.form.totalAmount) + Number(item.consumeAmount)).toFixed(2)
           console.log(item)
         });
@@ -665,6 +670,7 @@ export default {
           console.log(result)
           this.form.decerName = '[' + result.username + ']' + result.realName
           this.form.incerId = result.id
+          this.orgId = result.workingOrg.id
         }).catch((err) => {
           this.$message.error('获取当前用户失败' + err.message)
         });
