@@ -1743,6 +1743,7 @@ const BillManagement = {
       },
       {
         path: "add",
+        // replace: true,
         name: "LockAndUnlockAdd",
         component: () =>
           import('@/views/wrh-management/lockandunlock/add'),

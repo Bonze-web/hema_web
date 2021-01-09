@@ -120,6 +120,8 @@ export default {
 
       this.addSelection(this.multipleSelection)
       this.setBillType(billType)
+
+      this.$store.dispatch("tagsView/delView", this.$route);
       this.$router.push('/wrhmanagement/lockandunlock/add')
     },
     handleSelectionChange(list) {

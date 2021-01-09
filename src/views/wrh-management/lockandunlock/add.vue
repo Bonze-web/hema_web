@@ -111,7 +111,7 @@ export default {
       ...mapActions(["deleteSelection"]),
       back: function() {
         this.$store.dispatch("tagsView/delView", this.$route);
-        this.$router.go(-1)
+        this.$router.push('/wrhmanagement/lockandunlock')
       },
       getUsers: function() {
         MemberService.query(1, 0, {nameLike: this.form.decerName})
@@ -127,7 +127,6 @@ export default {
           return
         }
 
-        // const _this = this;
         const index = this.form.lockerIndex;
 
         this.$refs.form.validate(valid => {
@@ -161,6 +160,7 @@ export default {
                 .then(res => {
                   console.log(res)
                   this.$message.success("审核成功")
+                  this.$store.dispatch("tagsView/delView", this.$route);
                   this.$router.push('/wrhmanagement/lockandunlock')
                   this.$store.state.lockandunlock.multipleSelection = [];
                 })
@@ -168,6 +168,7 @@ export default {
                   this.$message.error("审核失败" + err.message)
                 });
               } else {
+                this.$store.dispatch("tagsView/delView", this.$route);
                 this.$router.push('/wrhmanagement/lockandunlock')
                 this.$store.state.lockandunlock.multipleSelection = [];
               }
