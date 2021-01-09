@@ -16,6 +16,20 @@ export default {
   },
   frontQuery(postData) {
     return request.get('/sys/front/query', {params: postData});
+  },
+  binQueryBin(query) {
+    const postData = {
+      page: 1,
+      pageSize: 10,
+      codeLike: query
+    }
+    return request.get('/wms/bin/queryBin', {params: postData});
+  },
+  setCollectBin(postData) {
+    return request.post('/sys/front/setCollectBin', postData);
+  },
+  getById(id) {
+    return request.get('/sys/front/getById?id=' + id);
   }
 }
 

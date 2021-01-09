@@ -34,7 +34,10 @@
                 </el-table-column>
                 <el-table-column
                 label="操作">
-                    <el-button size="mini" type="text" @click="setCollectors">设置集货位</el-button>
+                 <template slot-scope="scope">
+                    <el-button size="mini" type="text" @click="setCollectors(scope.row)">设置集货位</el-button>
+                  </template>
+                    
                 </el-table-column>
             </el-table>
             <el-pagination
@@ -52,15 +55,15 @@
           <el-form :model="editStoreObj" >
             <el-form-item label="推荐集货位" :label-width="formLabelWidth">
                 <el-select
-                    v-model="collectBin"
+                    v-model="collectBinId"
                     filterable
                     remote
                     reserve-keyword
                     placeholder="请输入关键词"
                     :remote-method="remoteMethod"
                     :loading="loading">
-                     <el-option v-for="(ele, idx) in userAll" :key="idx" v-show="ele.disabled !== true" :label="ele.username" :value="ele.id"></el-option>
-                    </el-select>
+                     <el-option v-for="(ele, idx) in userAll" :key="idx" :label="ele.code" :value="ele.id"></el-option>
+                </el-select>
             </el-form-item>
           </el-form>
           <div slot="footer" class="dialog-footer">
@@ -79,7 +82,7 @@ import { mapGetters } from "vuex";
 export default {
   data() {
       return {
-        collectBin: '',
+        collectBinId: '',
         suppliersId: '',
         page: 1,
         pageSize: 10,
@@ -94,7 +97,9 @@ export default {
         editStoreObj: {},
         formLabelWidth: '120px',
         xxx: '',
-        loading: false
+        loading: false,
+        userAll: [],
+        idRecode: {}
       }
     },
   computed: {
@@ -138,31 +143,49 @@ export default {
         this.page = 1
         this.getDcList(true)
       },
-      setCollectors() {
+      setCollectors(item) {
         this.editStore = true;
+        this.idRecode = item;
       },
       submitEditStoreChange() {
         this.editStore = false;
+        const filterEle = this.userAll.find((ele) => {
+          return ele.id === this.collectBinId
+        });
+        const postData = {
+          collectBinCode: filterEle.code,
+          collectBinId: filterEle.id,
+          id: this.idRecode.id
+        }
+        ReseauService.setCollectBin(postData)      
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          this.$message.error("设置集货位失败" + err.message)
+        })
+        console.log(filterEle);
       },
       remoteMethod(query) {
           console.log(query);
           if (query !== '') {
             this.loading = true;
-            // PersonnelbindService.userQuery(query)
-            // .then((res) => {
-            //   this.loading = false;
-            //   res.records.forEach((ele, idx) => {
-            //       this.editData.forEach((item, index) => {
-            //           if (ele.id === item.userId) {
-            //               ele.disabled = true;
-            //           }
-            //       })
-            //   })
-            //   this.userAll = res.records;
-            // })
-            // .catch((err) => {
-            //   if (err) this.$message.error("获取所有用户失败" + err.message);
-            // });
+            ReseauService.binQueryBin(query)
+            .then((res) => {
+              this.loading = false;
+              // res.records.forEach((ele, idx) => {
+              //     this.editData.forEach((item, index) => {
+              //         if (ele.id === item.userId) {
+              //             ele.disabled = true;
+              //         }
+              //     })
+              // })
+              console.log(res.records);
+              this.userAll = res.records;
+            })
+            .catch((err) => {
+              if (err) this.$message.error("获取所有用户失败" + err.message);
+            });
             // setTimeout(() => {
               
             //   this.options = this.list.filter(item => {

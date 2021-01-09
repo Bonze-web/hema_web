@@ -195,18 +195,40 @@
                 </template>
             </div>
         </div>
+        <el-dialog title="推荐集货位" :visible.sync="editStore">
+          <el-form :model="editStoreObj" >
+            <el-form-item label="推荐集货位" :label-width="formLabelWidth">
+                <el-select
+                    v-model="collectBinId"
+                    filterable
+                    remote
+                    reserve-keyword
+                    placeholder="请输入关键词"
+                    :remote-method="remoteMethod"
+                    :loading="loading">
+                     <el-option v-for="(ele, idx) in userAll" :key="idx" :label="ele.code" :value="ele.id"></el-option>
+                </el-select>
+            </el-form-item>
+          </el-form>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click.stop="editStore = false">取 消</el-button>
+            <el-button type="primary" @click.stop="submitEditStoreChange">确 定</el-button>
+          </div>
+        </el-dialog>
     </div>
 </template>
 
 <script>
 import PermIds from "@/api/permissionIds";
 import { mapGetters } from "vuex";
-import BasicService from "@/api/service/BasicService";
+import ReseauService from "@/api/service/ReseauService";
 import systemLog from "@/components/systemLog.vue";
 
 export default {
   data() {
       return {
+        editStore: false,
+        editStoreObj: {},
         PermIds: PermIds,
         dcList: [], // 中心仓列表
         status: '', // 页面状态
@@ -283,7 +305,7 @@ export default {
           type: 'warning'
         }).then(() => {
           if (self.dcInfo.status) {
-          BasicService.closeDc(self.id)
+          ReseauService.closeDc(self.id)
           .then((res) => {
             self.$message.success("禁用成功")
             self.getDc(self.id)
@@ -293,7 +315,7 @@ export default {
             self.getDc(self.id)
           })
         } else {
-          BasicService.openDc(self.id)
+          ReseauService.openDc(self.id)
           .then((res) => {
             self.$message.success("启用成功")
             self.getDc(self.id)
@@ -309,20 +331,14 @@ export default {
         this.status = this.$route.query.status
         if (this.status === 'read') {
           this.id = this.$route.query.id
-          this.getDc(this.id)
+          this.getById(this.id)
         }
       },
-      getDc: function(id) {
+      getById: function(id) {
         // 获取配送中心详情
-        BasicService.getDcDetail(id)
+        ReseauService.getById(id)
         .then((res) => {
-          this.dcInfo = res
-          // 根据状态修改
-          if (this.dcInfo.status === "ON") {
-            this.dcInfo.status = true
-          } else {
-            this.dcInfo.status = false
-          }
+          console.log(res);
         })
         .catch((err) => {
           this.$message.error("获取详情失败" + err.message)
@@ -337,7 +353,7 @@ export default {
           searchCount: true,
           typeEquals: "CENTER"
         }
-        BasicService.getWrhQuery(data)
+        ReseauService.getWrhQuery(data)
         .then((res) => {
           this.dcList = res.records
         })
@@ -350,7 +366,7 @@ export default {
           if (valid) {
             // 判断创建和更新
             if (this.status === 'create') {
-              BasicService.creatDc(this.form)
+              ReseauService.creatDc(this.form)
               .then(res => {
                 console.log(res)
                 this.$message.success("创建成功")
@@ -366,7 +382,7 @@ export default {
               } else {
                 this.form.status = "OFF"
               }
-              BasicService.updateDc(this.form)
+              ReseauService.updateDc(this.form)
               .then(res => {
                 console.log(res)
                 this.$message.success("更新成功")
@@ -388,6 +404,30 @@ export default {
         // this.form = Object.assign(this.form, this.dcInfo)
         // console.log(this.form)
         // this.getDcCenter()
+      },
+      remoteMethod(query) {
+          console.log(query);
+          if (query !== '') {
+            this.loading = true;
+            ReseauService.binQueryBin(query)
+            .then((res) => {
+              this.loading = false;
+              // res.records.forEach((ele, idx) => {
+              //     this.editData.forEach((item, index) => {
+              //         if (ele.id === item.userId) {
+              //             ele.disabled = true;
+              //         }
+              //     })
+              // })
+              console.log(res.records);
+              this.userAll = res.records;
+            })
+            .catch((err) => {
+              if (err) this.$message.error("获取所有用户失败" + err.message);
+            });
+          } else {
+            this.userAll = [];
+          }
       }
     },
     created() {
