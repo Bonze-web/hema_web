@@ -3,7 +3,7 @@
         <div class="select-head">
             <el-form ref="form" style="display:flex;flex-wrap:wrap" :model="form" label-width="110px" label-position="right">
                 <el-form-item label="用户">
-                    <el-input type='text' placeholder="请输入代码/名称" v-model="form.usernameLikes" class="input-width"></el-input>
+                    <el-input type='text' @change="onSubmit" placeholder="请输入代码/名称" v-model="form.usernameLikes" class="input-width"></el-input>
                 </el-form-item>
                 <el-form-item label="主要拣货分区">
                     <el-input type='text' placeholder="请输入代码/名称" v-model="form.firstCodeOrNameLikes" class="input-width"></el-input>
@@ -35,7 +35,7 @@
               </el-table-column> -->
               <el-table-column prop="code" label="用户代码" sortable>
                   <template slot-scope="scope">
-                      <span>{{ scope.row.userId }}</span>
+                      <span>{{ scope.row.userCode }}</span>
                   </template>
               </el-table-column>
               <el-table-column prop="username" label="用户姓名">
