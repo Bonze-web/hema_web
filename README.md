@@ -1,4 +1,5 @@
 # vueAdmin-template
+测试地址:http://101.133.169.189/#/login?redirect=%2Fdashboard
 
 > A minimal vue admin template with Element UI & axios & iconfont & permission control & lint
 
